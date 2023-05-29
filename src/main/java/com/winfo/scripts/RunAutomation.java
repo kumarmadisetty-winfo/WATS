@@ -124,7 +124,7 @@ public class RunAutomation {
 
 	@Async
 	public ResponseDto run(String testRunId) throws MalformedURLException {
-		logger.info(" Test Run Id : " + testRunId);
+		logger.info("Test Run Id : " + testRunId);
 
 		ResponseDto executeTestrunVo;
 		String checkPackage = dataBaseEntry.getPackage(testRunId);
@@ -153,18 +153,18 @@ public class RunAutomation {
 					dependentScriptMap);
 			// Independent
 			for (Entry<Integer, List<ScriptDetailsDto>> metaData : metaDataMap.entrySet()) {
-				logger.info(" Running Independent - " + metaData.getKey());
+				logger.info("Running Independent - " + metaData.getKey());
 				testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, true, customerDetails);
 			}
 
 			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
 			for (Entry<Integer, List<ScriptDetailsDto>> metaData : dependentScriptMap.entrySet()) {
-				logger.info(" Running Dependent - " + metaData.getKey());
+				logger.info("Running Dependent - " + metaData.getKey());
 				executordependent.execute(() -> {
-					logger.info(" Running Dependent in executor - " + metaData.getKey());
+					logger.info("Running Dependent in executor - " + metaData.getKey());
 					boolean run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
 							metaData.getValue().get(0).getDependencyScriptNumber());
-					logger.info(" Dependant Script run status" + metaData.getValue().get(0).getScriptId() + " " + run);
+					logger.info("Dependant Script run status " + metaData.getValue().get(0).getScriptId() + " " + run);
 					testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, run, customerDetails);
 				});
 			}
@@ -225,7 +225,7 @@ public class RunAutomation {
 							}
 							long i = System.currentTimeMillis() - starttimeIntermediate;
 							increment = increment + i;
-							logger.info(" Time  " + increment / 1000 % 60);
+							logger.info("Time  " + increment / 1000 % 60);
 						} catch (Exception e) {
 							logger.info("Exception occurred while executing Independent Script of " + scriptNumber);
 							e.printStackTrace();
@@ -244,13 +244,13 @@ public class RunAutomation {
 							.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
 
 					for (Entry<Integer, List<ScriptDetailsDto>> metaData : dependentScriptMap.entrySet()) {
-						logger.info(" Running Dependent - " + metaData.getKey());
+						logger.info("Running Dependent - " + metaData.getKey());
 						executordependent.execute(() -> {
-							logger.info(" Running Dependent in executor - " + metaData.getKey());
+							logger.info("Running Dependent in executor - " + metaData.getKey());
 							boolean run;
 							run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
 									metaData.getValue().get(0).getDependencyScriptNumber());
-							logger.info(" Dependant Script run status" + metaData.getValue().get(0).getScriptId() + " "
+							logger.info("Dependant Script run status " + metaData.getValue().get(0).getScriptId() + " "
 									+ run);
 
 							try {
@@ -258,7 +258,7 @@ public class RunAutomation {
 								if (flag.equalsIgnoreCase("STOPPED")) {
 									metaData.getValue().clear();
 									executor.shutdown();
-									logger.info(" Script Termination is Succeed");
+									logger.info("Script Termination is Succeed");
 								} else {
 									if (run) {
 										executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData,
@@ -379,7 +379,7 @@ public class RunAutomation {
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
 				+ fetchMetadataListsVO.get(0).getSeqNum() + "_" + fetchMetadataListsVO.get(0).getScriptNumber()
 				+ ".pdf";
-		logger.info(String.format(" Pass Url : %s , Fail Url : %s , Detailed Url : %s , Script Url : %s " , passUrl, failurl, detailurl, scripturl));
+		logger.info(String.format("Pass Url : %s , Fail Url : %s , Detailed Url : %s , Script Url : %s " , passUrl, failurl, detailurl, scripturl));
 		boolean isDriverError = true;
 		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
 				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListsVO.get(0).getExecutedBy())
@@ -482,14 +482,14 @@ public class RunAutomation {
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
 			String instanceName = fetchConfigVO.getInstance_name();
-			logger.info(" Instance Name " + instanceName);
+			logger.info("Instance Name " + instanceName);
 			seleniumFactory.getInstanceObjFromAbstractClass(instanceName)
 					.deleteOldScreenshotForScriptFrmObjStore(fetchMetadataListVO.get(0), customerDetails);
 
 			// XpathPerformance code for cases added
 			String scriptID = fetchMetadataListVO.get(0).getScriptId();
 			String checkValidScript = "Yes";
-			logger.info(" Valid script check " + checkValidScript);
+			logger.info("Valid script check " + checkValidScript);
 			Boolean validationFlag = null;
 			Map<String, String> accessTokenStorage = new HashMap<>();
 			ApiValidationVO api = new ApiValidationVO();
@@ -1525,10 +1525,10 @@ public class RunAutomation {
 							post.setP_exception_path(detailurl);
 							post.setP_test_set_line_path(scripturl);
 							long endTime = System.currentTimeMillis();
-							logger.info("End Time" + endTime);
+							logger.info("End Time " + endTime);
 
 							long gap = startTime - endTime;
-							logger.info(" Time difference " + gap);
+							logger.info("Time difference " + gap);
 
 							Date enddate = new Date();
 							fetchConfigVO.setEndtime(enddate);

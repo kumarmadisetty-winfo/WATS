@@ -219,11 +219,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", waittext);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickValidateXpath" + scripNumber);
+			logger.info("Sucessfully Clicked clickValidateXpath " + scripNumber);
 			// waittext.click();
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  clickValidateXpath" + scripNumber);
+			logger.error("Failed during  clickValidateXpath " + scripNumber);
 			e.printStackTrace();
 		}
 	}
@@ -263,7 +263,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 			return;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed to logout " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
@@ -385,7 +385,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info(" Successfully navigate to navigate Url " + scripNumber);
+			logger.info("Successfully navigate to navigate Url " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed to do navigate URl " + scripNumber);
@@ -530,7 +530,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			actions.moveToElement(waittext).click().build().perform();
 			Thread.sleep(15000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Navigated to menunavigation" + scripNumber);
+			logger.info("Successfully Navigated to menunavigation " + scripNumber);
 			String xpath = "//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]" + ">"
 					+ "//*[contains(@id,\"popup-container\")]//a[text()=\"Show Less\"]";
 			return xpath;
@@ -702,7 +702,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			logger.info("Successfully waited for 4 seconds " + scripNumber);
 		} catch (InterruptedException e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During meduim wait" + scripNumber);
+			logger.error("Failed During meduim wait " + scripNumber);
 			e.printStackTrace();
 			// Restore interrupted state...
 			Thread.currentThread().interrupt();
@@ -945,7 +945,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during paste a value " + e.getMessage());
 
 		}
 
@@ -996,7 +996,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Paste Method");
+			logger.error("Failed during paste a value " + e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -1043,7 +1043,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Paste Method");
+			logger.error("Failed during paste a value " + e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -1105,7 +1105,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 
-			logger.error(e.getMessage());
+			logger.error("Failed during paste a value " + e.getMessage());
 
 		}
 
@@ -1150,7 +1150,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Paste Method");
+			logger.error("Failed during paste a value " + e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 
@@ -1185,7 +1185,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						By.xpath("//label[normalize-space(text())=\"" + inputParam2 + "\"]/preceding-sibling::input[1]"));
 				clearMethod(driver, waittill);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Successfully Accounting Period Cleared" + scripNumber);
+				logger.info("Successfully Accounting Period Cleared " + scripNumber);
 				String xpath = "//label[normalize-space(text())=\"inputParam2\"]/preceding-sibling::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1194,7 +1194,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During Accounting Period Clear" + scripNumber);
+			logger.error("Failed During Accounting Period Clear " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1202,7 +1202,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					By.xpath("(//label[contains(text(),\"" + inputParam1 + "\")]/preceding-sibling::input)[1]"));
 			clearMethod(driver, waittill);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Cleared" + scripNumber);
+			logger.info("Successfully Cleared " + scripNumber);
 			String xpath = "(//label[contains(text(),\"inputParam1\")]/preceding-sibling::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1210,7 +1210,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During Clear" + scripNumber);
+			logger.error("Failed During Clear " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1219,7 +1219,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					.findElement(By.xpath("(//*[normalize-space(text())=\"" + inputParam1 + "\"]/following::input)[1]"));
 			clearMethod(driver, waittill);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Cleared" + scripNumber);
+			logger.info("Successfully Cleared " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"inputParam1\"]/following::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1228,13 +1228,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During Clear" + scripNumber);
+			logger.error("Failed During Clear " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,\"" + inputParam1 + "\")]"));
 			clearMethod(driver, waittill);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Cleared" + scripNumber);
+			logger.info("Successfully Cleared " + scripNumber);
 			String xpath = "//*[contains(@placeholder,\"inputParam1\")]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1242,7 +1242,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During Clear" + scripNumber);
+			logger.error("Failed During Clear " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1258,7 +1258,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During Clear" + scripNumber);
+			logger.error("Failed During Clear " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			logger.error(e.getMessage());
 			throw e;
@@ -1285,7 +1285,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					driver.close();
 					driver.switchTo().window(mainWindow);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Successfully Windowclosed" + scripNumber);
+					logger.info("Successfully Windowclosed " + scripNumber);
 				}
 			}
 		} catch (Exception e) {
@@ -1301,10 +1301,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		try {
 			driver.switchTo().activeElement();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Switched to Element Successfully" + scripNumber);
+			logger.info("Switched to Element Successfully " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During switchToActiveElement Action." + scripNumber);
+			logger.error("Failed During switchToActiveElement Action " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			logger.error(e.getMessage());
 			throw e;
@@ -1471,7 +1471,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully clicked SingnInSignOut" + scripNumber);
+			logger.info("Sucessfully clicked SingnInSignOut " + scripNumber);
 			String xpath = "//button[normalize-space(normalize-space(text())=\"param1\")]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1504,7 +1504,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Successfully Clicked NotificationLink" + scripNumber);
+				logger.info("Successfully Clicked NotificationLink " + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::input[@placeholder=\"param2\"]/following::a[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -1514,7 +1514,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During NotificationLink" + scripNumber);
+			logger.error("Failed During NotificationLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1530,7 +1530,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(2000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Clicked NotificationLink" + scripNumber);
+			logger.info("Successfully Clicked NotificationLink " + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::a[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -1539,7 +1539,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During NotificationLink" + scripNumber);
+			logger.error("Failed During NotificationLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1554,7 +1554,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(2000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Clicked NotificationLink" + scripNumber);
+			logger.info("Successfully Clicked NotificationLink " + scripNumber);
 			String params = param1;
 			String xpath = "//*[@placeholder=\"param1\"]/following::a[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -1564,7 +1564,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error(e.getMessage());
-			logger.error("Failed during NotificationLink" + scripNumber);
+			logger.error("Failed during NotificationLink " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -1589,7 +1589,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
+				logger.info("Successfully Clicked ClickButtonDropdown " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -1613,7 +1613,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
+				logger.info("Successfully Clicked ClickButtonDropdown " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -1641,7 +1641,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
+			logger.info("Successfully Clicked ClickButtonDropdown " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -1665,7 +1665,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
+				logger.info("Successfully Clicked ClickButtonDropdown " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -1687,7 +1687,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Successfully Clicked ClickButtonDropdown" + scripNumber);
+			logger.info("Successfully Clicked ClickButtonDropdown " + scripNumber);
 			return;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -1713,7 +1713,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			WebElement waittext = driver.findElement(By.xpath("//li[normalize-space(text())=\"" + keysToSend + "\"]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Clicked ClickButtonDropdownText" + scripNumber);
+			logger.info("Successfully Clicked ClickButtonDropdownText " + scripNumber);
 			String xpath = "//li[normalize-space(text())=\"keysToSend\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1789,12 +1789,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 							+ "\"]/following::*[@title=\"" + param2 + "\"])[1]"));
 					Expand.click();
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked Expanded or Collapsed" + scripNumber);
+					logger.info("Sucessfully Clicked Expanded or Collapsed " + scripNumber);
 
 				} catch (Exception e) {
 
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+					logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 				}
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
@@ -1803,12 +1803,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Process Monitor ClickExpand or Collapse" + scripNumber);
+				logger.info("Sucessfully Clicked Process Monitor ClickExpand or Collapse " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During Process Monitor ClickExpand or Collapse" + scripNumber);
+			logger.error("Failed During Process Monitor ClickExpand or Collapse " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1828,7 +1828,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						"(//h2[normalize-space(text())=\"" + param1 + "\"]/following::*[@title=\"" + param2 + "\"])[1]"));
 				Expand.click();
 			} catch (Exception e) {
-				logger.error("Failed During Process Monitor ClickExpand or Collapse" + e.getMessage());
+				logger.error("Failed During Process Monitor ClickExpand or Collapse " + e.getMessage());
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
@@ -1840,7 +1840,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+			logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1860,16 +1860,16 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						"(//h1[normalize-space(text())=\"" + param1 + "\"]/preceding::*[@title=\"" + param2 + "\"])[1]"));
 				Expand.click();
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+				logger.info("Sucessfully Clicked ClickExpand or Collapse " + scripNumber);
 
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+				logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 
 			}
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+			logger.info("Sucessfully Clicked ClickExpand or Collapse " + scripNumber);
 			String xpath = "(//h1[normalize-space(text())=\"param1\"]/preceding::*[@title=\"param2\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1878,7 +1878,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+			logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1894,7 +1894,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(1000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+			logger.info("Sucessfully Clicked ClickExpand or Collapse " + scripNumber);
 			String xpath = "(//span[contains(text(),\"param1\")])[1]/preceding::a[3][@title=\"param2\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -1903,7 +1903,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+			logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1922,11 +1922,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						"(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[@title=\"" + param2 + "\"])[1]"));
 				Expand.click();
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+				logger.info("Sucessfully Clicked ClickExpand or Collapse " + scripNumber);
 				xpath = xpath + ";" + "(//*[normalize-space(text())=\"param1\"]/following::*[@title=\"param2\"])[1]";
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+				logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
@@ -1937,7 +1937,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+			logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1960,11 +1960,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				xpath = xpath + ";" + "(//*[normalize-space(text())=\"param1\"]/preceding::*[@title=\"param2\"])[1]";
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+				logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+			logger.info("Sucessfully Clicked ClickExpand or Collapse " + scripNumber);
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -1972,7 +1972,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+			logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -1993,11 +1993,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+				logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+			logger.info("Sucessfully Clicked ClickExpand or Collapse " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/preceding::*[@title=\"param2\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2006,7 +2006,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+			logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2028,16 +2028,16 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 								+ "\"]/preceding::*[@title=\"Expand\" and @href and not(@style=\"display:none\")][1]"));
 				Expand.click();
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+				logger.info("Sucessfully Clicked ClickExpand or Collapse " + scripNumber);
 				xpath = xpath + ";"
 						+ "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"]/preceding::*[@title=\"Expand\" and @href and not(@style=\"display:none\")][1]";
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+				logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked ClickExpand or Collapse" + scripNumber);
+			logger.info("Sucessfully Clicked ClickExpand or Collapse " + scripNumber);
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -2045,7 +2045,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed During ClickExpand or Collapse" + scripNumber);
+			logger.error("Failed During ClickExpand or Collapse " + scripNumber);
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -2069,7 +2069,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(5000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::*[normalize-space(text())=\"keysToSend\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2079,7 +2079,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH 46
@@ -2096,7 +2096,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 				String xpath = "//*[contains(@data-afr-popupid,\"param1\")]//*[contains(normalize-space(text()),\"keysToSend\")][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2107,7 +2107,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 
@@ -2126,7 +2126,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked Review installments selectAValue " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::a[text()=\"keysToSend\" and not(@style)]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2135,7 +2135,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Review installments selectAValue" + scripNumber);
+			logger.error("Failed during Review installments selectAValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -2153,7 +2153,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked Review installments selectAValue " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::*[normalize-space(text())=\"keysToSend\"]//following::span[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2162,7 +2162,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Review installments selectAValue" + scripNumber);
+			logger.error("Failed during Review installments selectAValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -2180,7 +2180,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked Review installments selectAValue " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"keysToSend\"]/following::img[@title=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2189,7 +2189,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Review installments selectAValue" + scripNumber);
+			logger.error("Failed during Review installments selectAValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2206,7 +2206,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Review installments selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked Review installments selectAValue " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param2\")]/following::*[normalize-space(text())=\"keysToSend\"][1]/following::img/following::a[contains(@id,\"RecentlyCompletedPpr\")])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2215,7 +2215,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Review installments selectAValue" + scripNumber);
+			logger.error("Failed during Review installments selectAValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH 15
@@ -2234,7 +2234,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[text()=\"keysToSend\"]/following::img[contains(@title,\"param2\")][1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -2245,7 +2245,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -2262,7 +2262,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 				String xpath = "//*[contains(text(),\"keysToSend\")]/following::*[@title=\"param2\"][1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -2273,7 +2273,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -2290,7 +2290,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(5000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+			logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::span[normalize-space(text())=\"keysToSend\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2298,7 +2298,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2313,7 +2313,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(5000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+			logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::*[normalize-space(text())=\"keysToSend\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2321,7 +2321,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2336,7 +2336,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(2000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+			logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"param2\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2344,7 +2344,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2359,7 +2359,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(2000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+			logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"keysToSend\"]/following::*[normalize-space(text())=\"param1\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2368,7 +2368,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -2390,7 +2390,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				js.executeScript("arguments[0].click();", waittext);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "(//span[text()=\"param2\"])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2413,7 +2413,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			js.executeScript("arguments[0].click();", waittext);
 			Thread.sleep(15000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 			String xpath = "//span[text()=\"param1\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2421,7 +2421,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -2450,11 +2450,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked clickTableImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickTableImage " + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickTableImage" + scripNumber);
+			logger.error("Failed during clickTableImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2476,7 +2476,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked clickTableImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickTableImage " + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -2500,12 +2500,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked clickTableImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickTableImage " + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickTableImage" + scripNumber);
+			logger.error("Failed during clickTableImage " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -2633,7 +2633,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked clickImage " + scripNumber);
 
 				String xpath = "(//a[contains(@id,\"param1\")])[1]";
 
@@ -2649,7 +2649,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -2685,7 +2685,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2708,7 +2708,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -2734,7 +2734,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Provider or Receiver clickImag" + scripNumber);
+			logger.error("Failed during Provider or Receiver clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -2750,7 +2750,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked clickImage " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::img[@title=\"param2\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2759,7 +2759,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// label[contains(text(),\"Enter Cost Centre\")]/following::input[1]
@@ -2775,7 +2775,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Report clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked Report clickImage " + scripNumber);
 				String xpath = "//*[contains(text(),\"param2\")/following::input[1]]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2784,7 +2784,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Report clickImag" + scripNumber);
+			logger.error("Failed during Report clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2799,7 +2799,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(8000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked clickImage " + scripNumber);
 				String params = param1;
 				String xpath = "//img[@title=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -2809,7 +2809,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2824,7 +2824,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Customer clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked Customer clickImage " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::a[@title=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2833,7 +2833,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Clicked clickImag" + scripNumber);
+			logger.error("Failed during Clicked clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2847,7 +2847,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Add to Selected clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked Add to Selected clickImage " + scripNumber);
 				String xpath = "//a[@title=\"param1\"]//img[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2856,7 +2856,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Add to Selected clickImag" + scripNumber);
+			logger.error("Failed during Add to Selected clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2880,7 +2880,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Go to Member Selection clickImag" + scripNumber);
+			logger.error("Failed during Go to Member Selection clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2895,7 +2895,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked clickImage " + scripNumber);
 				String params = param1;
 				String xpath = "//img[contains(@id,\"param1\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -2905,7 +2905,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2920,7 +2920,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked clickImage " + scripNumber);
 				String params = param1;
 				String xpath = "//a[@title=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -2930,7 +2930,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2943,7 +2943,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Back clickImage" + scripNumber);
+				logger.info("Sucessfully Clicked Back clickImage " + scripNumber);
 				String xpath = "//h1[normalize-space(text())=\"param1\"]/preceding::a[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -2952,7 +2952,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Back clickImag" + scripNumber);
+			logger.error("Failed during Back clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2981,7 +2981,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -2995,7 +2995,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickImage " + scripNumber);
 			String xpath = "(//h1[normalize-space(text())=\"param1\"]/following::img[@title=\"param2\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3003,7 +3003,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -3018,7 +3018,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickImage " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::img[@title=\"param2\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3026,7 +3026,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -3044,7 +3044,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, add, fetchConfigVO, customerDetails);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickImage " + scripNumber);
 			String xpath1 = "(//*[normalize-space(text())=\"param1\"]/following::div[@role=\"button\"])[1]";
 			String xpath2 = "//*[normalize-space(text())=\"param1\"]/following::img[@title=\"param2\"]";
 			String xpath = xpath1 + ";" + xpath2;
@@ -3054,7 +3054,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -3070,7 +3070,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(2000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickImage " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::img[contains(@id,\"param2\")]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3078,7 +3078,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -3093,7 +3093,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			waittext.click();
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickImage " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"]/following::img[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3101,7 +3101,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -3115,7 +3115,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickImage" + scripNumber);
+			logger.info("Sucessfully Clicked clickImage " + scripNumber);
 			String xpath = "//*[contains(@aria-label,\"param1\")]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3123,7 +3123,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickImag" + scripNumber);
+			logger.error("Failed during clickImage " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -3145,7 +3145,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//a[@accessKey=\"m\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3155,7 +3155,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -3183,7 +3183,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(6000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Republish clickButton " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3192,7 +3192,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Republish clickButton" + scripNumber);
+			logger.error("Failed during Republish clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -3210,7 +3210,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//div[@class=\"masterMenu DropDownSearch\" and @style=\"display: block;\"]/span[text()=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3219,7 +3219,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -3237,7 +3237,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//button[text()=\"Sen\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3246,7 +3246,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -3266,7 +3266,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//table[contains(@id,\"warningPopup\")]//*[text()=\"param1\"]/following::*[text()=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3275,7 +3275,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -3293,7 +3293,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//span[text()=\"enerate Schedules\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3303,7 +3303,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -3326,7 +3326,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				// Thread.sleep(15000);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\" and @type=\"button\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3337,7 +3337,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -3357,7 +3357,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//h2[text()=\"param1\"]/following::*[text()=\"param2\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3368,8 +3368,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
-
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -3392,7 +3391,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Create Baseline clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Baseline clickButton " + scripNumber);
 
 				String xpath = "//*[text()=\"aseline\"]";
 
@@ -3408,7 +3407,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -3434,7 +3433,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Search clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Search clickButton " + scripNumber);
 
 				String xpath = "//*[text()=\"Sea\"]";
 
@@ -3450,7 +3449,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -3471,7 +3470,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//a[@accessKey=\"m\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3500,7 +3499,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//div[contains(@id,\"popup-container\")]//td[text()=\"param1\"]//preceding-sibling::td[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3511,7 +3510,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -3531,7 +3530,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "(//div[contains(@class,\"PopupMenuContent\")])[2]//td[text()=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3542,7 +3541,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -3571,7 +3570,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Done Button" + scripNumber);
+				logger.info("Sucessfully Clicked Done Button " + scripNumber);
 
 				String xpath = "//div[contains(@id,\"popup-container\")]//*[text()=\"param1\"]/following::button[text()=\"param2\"])[1]";
 
@@ -3588,7 +3587,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clicking Done Button" + scripNumber);
+			logger.error("Failed during clicking Done Button " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -3613,7 +3612,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 
 				String xpath = "//button[text()=\"ave and Close\"]";
 
@@ -3629,7 +3628,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -3656,7 +3655,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked OK clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked OK clickButton " + scripNumber);
 
 				String xpath = "(//div[contains(@id,\"popup-container\")]//button[@accesskey=\"K\"])[2]";
 
@@ -3672,7 +3671,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -3696,7 +3695,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked OK clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked OK clickButton " + scripNumber);
 
 				String xpath = "(//div[contains(@id,\"popup-container\")]//button[@accesskey=\"O\"])[1]";
 
@@ -3712,7 +3711,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -3739,7 +3738,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked OK clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked OK clickButton " + scripNumber);
 
 				String xpath = "(//div[contains(@id,\"popup-container\")]//button[@accesskey=\"K\"])[1]";
 
@@ -3755,7 +3754,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -3780,7 +3779,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.info("Sucessfully Clicked OK clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked OK clickButton " + scripNumber);
 
 			String xpath = "//div[contains(@class,\"PopupMenu\")]//*[text()=\"param1\"]";
 
@@ -3794,7 +3793,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -3812,7 +3811,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//span[text()=\"i\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3822,7 +3821,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 		}
 
 		try {
@@ -3837,7 +3836,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(15000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//input[@value=\"Apply\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3864,7 +3863,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//div[text()=\"param1\"]/following::*[text()=\"K\"]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3876,7 +3875,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Issue Refund ok clickButton" + scripNumber);
+			logger.error("Failed during Issue Refund ok clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -3891,7 +3890,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::*[text()=\"S\"]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3903,7 +3902,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Issue Refund ok clickButton" + scripNumber);
+			logger.error("Failed during Issue Refund ok clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -3918,7 +3917,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "(//span[text()=\"S\"])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -3929,7 +3928,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -3950,7 +3949,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(5000);
 				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked clickButton " + scripNumber);
 				String xpath = "//div[text()=\"param1\"]/following::button[text()=\"param2\"][1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3960,7 +3959,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -3976,7 +3975,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::span[text()=\"o\"]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath); return;
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -3985,7 +3984,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -4001,7 +4000,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::td[text()=\"param2\"][2]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -4013,7 +4012,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -4033,7 +4032,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Ok clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Ok clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"Create Address\"]/following::*[text()=\"K\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4043,7 +4042,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Ok clickButton" + scripNumber);
+			logger.error("Failed during Ok clickButton " + scripNumber);
 		}
 
 		try {
@@ -4058,7 +4057,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//*[text()=\"Submit or text()=\"S\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4069,7 +4068,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -4085,7 +4084,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//span[text()=\"S\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4095,7 +4094,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 		}
 		try {
 			if ((param1.equalsIgnoreCase("Manage Organization Trees")
@@ -4111,8 +4110,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Done clickButton" + scripNumber);
-				logger.info("Sucessfully Clicked Done clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Done clickButton " + scripNumber);
 				String xpath = "(//span[text()=\"o\"])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4121,7 +4119,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton Done" + scripNumber);
+			logger.error("Failed during clickButton Done " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4136,8 +4134,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Done clickButton" + scripNumber);
-				logger.info("Sucessfully Clicked Done clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Done clickButton " + scripNumber);
 				String xpath = "//span[text()=\"o\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4146,7 +4143,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton Done" + scripNumber);
+			logger.error("Failed during clickButton Done " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4164,7 +4161,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Members clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Members clickButton " + scripNumber);
 				String xpath = "//h1[normalize-space(text())=\"Notifications\"]/following::button[text()=\"param2\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4173,7 +4170,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Members clickButton" + scripNumber);
+			logger.error("Failed during Members clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4187,7 +4184,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//div[contains(@class,\"Overflow\")]//div[@role=\"button\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4198,7 +4195,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -4215,7 +4212,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card clickButton " + scripNumber);
 				String xpath = "//*[text()=\"Create Time Card\"]/following::span[text()=\"K\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4225,7 +4222,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -4244,7 +4241,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Edit Line clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Edit Line clickButton " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::span[normalize-space(text())=\"K\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4253,7 +4250,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Edit Line clickButton" + scripNumber);
+			logger.error("Failed during Edit Line clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4268,7 +4265,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(15000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Members clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Members clickButton " + scripNumber);
 				String xpath = "//button[@title=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4277,7 +4274,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Members clickButton" + scripNumber);
+			logger.error("Failed during Members clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4293,7 +4290,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Address Contacts clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Address Contacts clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::button[@title=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4302,7 +4299,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Address Contacts clickButton" + scripNumber);
+			logger.error("Failed during Address Contacts clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4322,7 +4319,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Ok clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Ok clickButton " + scripNumber);
 				String xpath = "//div[contains(@id,\"RejectPopup::content\")]//span[text()=\"K\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4331,7 +4328,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Ok clickButton" + scripNumber);
+			logger.error("Failed during Ok clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4351,7 +4348,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Ok clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Ok clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"Search\"]/following::*[normalize-space(text())=\"param1\"]/following::*[not (@aria-disabled) and text()=\"OK\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4361,7 +4358,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Ok clickButton" + scripNumber);
+			logger.error("Failed during Ok clickButton " + scripNumber);
 		}
 		try {
 			if (param2.equalsIgnoreCase("OK")) {
@@ -4377,7 +4374,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Ok clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Ok clickButton " + scripNumber);
 				String xpath = "//[contains(text(),\"param1\")]/following::span[text()=\"K\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4387,7 +4384,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Ok clickButton" + scripNumber);
+			logger.error("Failed during Ok clickButton " + scripNumber);
 		}
 		try {
 
@@ -4404,7 +4401,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Select clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Select clickButton " + scripNumber);
 				String xpath = "(//input[contains(@value,\"param1\") and (@type)]/following::button[contains(text(),\"param2\")])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4414,7 +4411,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Select clickButton" + scripNumber);
+			logger.error("Failed during Select clickButton " + scripNumber);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Done")) {
@@ -4429,7 +4426,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Done clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Done clickButton " + scripNumber);
 				String xpath = "//*[contains(@id,\"tAccountPopup::content\")]//*[text()=\"o\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4438,7 +4435,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Done clickButton" + scripNumber);
+			logger.error("Failed during Done clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4456,7 +4453,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Apply clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Apply clickButton " + scripNumber);
 				String xpath = "//input[@value=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4465,7 +4462,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Apply clickButton" + scripNumber);
+			logger.error("Failed during Apply clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -4481,8 +4478,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Done clickButton" + scripNumber);
-				logger.info("Sucessfully Clicked Done clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Done clickButton " + scripNumber);
 				String xpath = "//*[text()=\"ne\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4503,7 +4499,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Approval and Notification History or Done clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Approval and Notification History or Done clickButton " + scripNumber);
 				String xpath = "//div[contains(text(),\"param1\")]/following::span[text()=\"o\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4523,7 +4519,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Done clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Done clickButton " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::span[text()=\"o\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4541,7 +4537,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Submit clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Submit clickButton " + scripNumber);
 				String xpath = "//span[text()=\"m\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4562,7 +4558,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Submit clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Submit clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[text()=\"m\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4578,7 +4574,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Distributions clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Distributions clickButton " + scripNumber);
 				String xpath = "//span[text()=\"istributions\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4601,7 +4597,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Manage Holds or Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Manage Holds or Save and Close clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::button[text()=\"Save and Close\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4622,7 +4618,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[text()=\"S\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4640,7 +4636,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Next clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Next clickButton " + scripNumber);
 				String xpath = "//span[text()=\"x\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4660,7 +4656,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Next clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Next clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4685,7 +4681,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(6000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Yes clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Yes clickButton " + scripNumber);
 				String xpath = "//div[@class=\"AFDetectExpansion\"]/following::*[text()=\"param1\"]/following::span[text()=\"Y\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4705,7 +4701,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked OK clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked OK clickButton " + scripNumber);
 				String xpath = "//button[@_afrpdo=\"ok\" and @accesskey=\"K\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4737,7 +4733,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked OK clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked OK clickButton " + scripNumber);
 
 				String xpath = "//button[@accesskey=\"d\"]";
 
@@ -4757,7 +4753,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath = "//span[text()=\"S\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4774,7 +4770,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Continue clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Continue clickButton " + scripNumber);
 				String xpath = "//span[text()=\"u\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4791,7 +4787,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Continue clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Continue clickButton " + scripNumber);
 				String xpath = "//button[text()=\"Contin\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4806,7 +4802,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Close clickButton " + scripNumber);
 				String xpath = "//button[text()=\"Cl\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4824,7 +4820,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(5000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Adjustment clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Adjustment clickButton " + scripNumber);
 				String xpath = "(//span[text()=\"param1\"])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4839,7 +4835,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Cancel clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Cancel clickButton " + scripNumber);
 				String xpath = "//span[text()=\"C\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4856,7 +4852,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save clickButton " + scripNumber);
 				String xpath = "//span[text()=\"ave\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4874,7 +4870,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Apply clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Apply clickButton " + scripNumber);
 				String xpath = "//span[text()=\"l\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4896,7 +4892,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Apply clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Apply clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[text()=\"l\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4916,7 +4912,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Accept clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Accept clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[text()=\"p\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4925,7 +4921,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Apply clickButton" + scripNumber);
+			logger.error("Failed during Apply clickButton " + scripNumber);
 			logger.error(e.getMessage());
 
 		}
@@ -4944,7 +4940,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked OK clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked OK clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[text()=\"K\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4954,7 +4950,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during OK clickButton" + scripNumber);
+			logger.error("Failed during OK clickButton " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add Application")) {
@@ -4969,7 +4965,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked add Application clickButton" + scripNumber);
+					logger.info("Sucessfully Clicked add Application clickButton " + scripNumber);
 					String xpath = "//span[text()=\"A\"]";
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
@@ -4985,7 +4981,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during add Application clickButton" + scripNumber);
+					logger.error("Failed during add Application clickButton " + scripNumber);
 					String xpath = "//a[text()=\"Application\"]/following::div[@role=\"button\"][2]" + ";"
 							+ "//span[text()=\"A\"]";
 					String scriptID = fetchMetadataVO.getScriptId();
@@ -4996,7 +4992,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during add Application clickButton" + scripNumber);
+			logger.error("Failed during add Application clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5015,7 +5011,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 					Thread.sleep(4000);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked Unapply Application clickButton" + scripNumber);
+					logger.info("Sucessfully Clicked Unapply Application clickButton " + scripNumber);
 					String xpath = "//button[text()=\"param1\"]";
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5031,7 +5027,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					actions.moveToElement(waittext).build().perform();
 					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during Unapply Application clickButton" + scripNumber);
+					logger.error("Failed during Unapply Application clickButton " + scripNumber);
 					String xpath = "//a[text()=\"Application\"]/following::div[@role=\"button\"][2]" + ";"
 							+ "//button[text()=\"param1\"]";
 					String scriptID = fetchMetadataVO.getScriptId();
@@ -5042,7 +5038,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Unapply Application clickButton" + scripNumber);
+			logger.error("Failed during Unapply Application clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5059,7 +5055,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Submit clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Submit clickButton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[normalize-space(text())=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5069,7 +5065,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			// TODO: handle exception
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Submit clickButton" + scripNumber);
+			logger.error("Failed during Submit clickButton " + scripNumber);
 		}
 		try {
 			// Changed == to equals method
@@ -5085,7 +5081,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked clickButton " + scripNumber);
 				String xpath = "(//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5094,7 +5090,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5114,7 +5110,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  Columns or Show All clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked  Columns or Show All clickButton " + scripNumber);
 				String xpath = "(//td[normalize-space(text())=\"param1\"])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5123,7 +5119,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Columns or Show All clickButton" + scripNumber);
+			logger.error("Failed during Columns or Show All clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5139,7 +5135,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  Add to Document Builder clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked  Add to Document Builder clickButton " + scripNumber);
 				String xpath = "//button[text()=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5148,7 +5144,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Add to Document Builder clickButton" + scripNumber);
+			logger.error("Failed during Add to Document Builder clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5165,7 +5161,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  Freeze clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked  Freeze clickButton " + scripNumber);
 				String xpath = "//tr[contains(@id,\"HEADER_FREEZE\")]//td[text()=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5184,7 +5180,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  Unfreeze clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked  Unfreeze clickButton " + scripNumber);
 				String xpath = "//tr[contains(@id,\"HEADER_UNFREEZE\")]//td[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5203,7 +5199,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Close clickButton " + scripNumber);
 				String xpath = "//tr[contains(@id,\"HEADER_CLOSE\")]//td[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5222,7 +5218,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Reopen clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Reopen clickButton " + scripNumber);
 				String xpath = "//tr[contains(@id,\"HEADER_REOPEN\")]//td[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5241,7 +5237,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Edit clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Edit clickButton " + scripNumber);
 				String xpath = "//tr[contains(@id,\"HEADER_EDIT\")]//td[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5250,7 +5246,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5267,7 +5263,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(3000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Edit clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Edit clickButton " + scripNumber);
 				String xpath = "//tr[contains(@id,\"commandMenuItem\")]//td[text()=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5276,7 +5272,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Edit clickButton" + scripNumber);
+			logger.error("Failed during Edit clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5292,7 +5288,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Reverse clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Reverse clickButton " + scripNumber);
 				String xpath = "//div[@class=\"AFPopupMenuPopup\"]//td[(normalize-space(text())=\"param1\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5301,7 +5297,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Reverse clickButton" + scripNumber);
+			logger.error("Failed during Reverse clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5316,7 +5312,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(60000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  Columns or Show All clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked  Columns or Show All clickButton " + scripNumber);
 				String xpath = "//td[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5325,7 +5321,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Apply clickButton" + scripNumber);
+			logger.error("Failed during Apply clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5341,7 +5337,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(6000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Republish clickButton " + scripNumber);
 				String xpath = "//button[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5350,7 +5346,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Republish clickButton" + scripNumber);
+			logger.error("Failed during Republish clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5366,7 +5362,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(6000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Republish clickButton " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::*[text()=\"K\"][2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5375,7 +5371,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Republish clickButton" + scripNumber);
+			logger.error("Failed during Republish clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5393,7 +5389,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(5000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked  clickButton " + scripNumber);
 				String xpath = "//span[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5402,7 +5398,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5419,7 +5415,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked  clickButton " + scripNumber);
 				String xpath = "//td[(normalize-space(text())=\"param1\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5428,7 +5424,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5446,7 +5442,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked clickButton " + scripNumber);
 				String xpath = "//button[text()=\"param1\"and not(@style=\"display:none\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5455,7 +5451,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5472,7 +5468,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(5000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked clickButton " + scripNumber);
 				String xpath = "//div[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5481,7 +5477,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5498,7 +5494,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked  clickButton " + scripNumber);
 				String xpath = "//div[contains(@class,\"PopupMenu\")]/following::*[text()=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5507,7 +5503,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -5519,7 +5515,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(1000);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked clickButton " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\" and not(@_afrpdo)])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5527,7 +5523,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5540,7 +5536,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(3000);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked clickButton " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5548,7 +5544,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5561,7 +5557,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(3000);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked clickButton " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::*[@title=\"param2\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5569,7 +5565,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -5586,7 +5582,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(5000);
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked clickButton " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::*[normalize-space(text())=\"param2\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5594,7 +5590,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 		}
 //		   try {
 //	              String text = driver.findElement(By.xpath("//td[@class=\"AFNoteWindow\"]")).getText();
@@ -5621,7 +5617,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 //			screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 			Thread.sleep(1000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked clickButton " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5629,7 +5625,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -5652,14 +5648,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+			logger.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink " + scripNumber);
 			String xpath = "(//table[@summary=\"param2\"]//table[1]//a)[1]";
 			//service.saveXpathParams(param1, param2, scripNumber, xpath);
 			return;
 			}
 			} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+			logger.error("Failed during List of Processes Meeting Search Criteria clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 			}
 		try {
@@ -5677,7 +5673,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked Addresses clickTableLink " + scripNumber);
 				String xpath = "(//h1[normalize-space(text())=\"param1\"]/following::table[@summary=\"param2\"]//a[contains(@title,\"Blanket Purchase Agreement\") or contains(@title,\"Contract Purchase Agreement\")])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5687,7 +5683,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Addresses clickTableLink" + scripNumber);
+			logger.error("Failed during Addresses clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5703,14 +5699,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink " + scripNumber);
 				String xpath = "(//table[@summary=\"param1\"]//table[1]//a)[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+			logger.error("Failed during List of Processes Meeting Search Criteria clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5727,7 +5723,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickTableLink " + scripNumber);
 				String xpath = "(//h1[normalize-space(text())=\"param1\"]/following::table[@summary=\"param2\"]//a)[2]/parent::span";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5752,7 +5748,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::table[@summary=\"param2\"]//span[@title]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -5763,7 +5759,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+			logger.error("Failed during List of Processes Meeting Search Criteria clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5782,7 +5778,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickTableLink " + scripNumber);
 				String xpath = "(//h1[normalize-space(text())=\"param1\"]/following::table[@summary=\"param2\"]//a)[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5792,7 +5788,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickTableLink" + scripNumber);
+			logger.error("Failed during clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5807,7 +5803,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked Addresses clickTableLink " + scripNumber);
 				String xpath = "(//table[@summary=\"param1\"]//a)[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5817,7 +5813,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Addresses clickTableLink" + scripNumber);
+			logger.error("Failed during Addresses clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -5834,7 +5830,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Addresses clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked Addresses clickTableLink " + scripNumber);
 				String xpath = "(//table[@summary=\"param1\"]//a[not (contains(@title,\"Required information\"))])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5844,7 +5840,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Addresses clickTableLink" + scripNumber);
+			logger.error("Failed during Addresses clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5860,7 +5856,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.click(waittext).build().perform();
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Approved clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked Approved clickTableLink " + scripNumber);
 				String xpath = "(//table[@summary=\"param1\"]//*[normalize-space(text())=\"param2\"]/following::a)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5870,7 +5866,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Approved clickTableLink" + scripNumber);
+			logger.error("Failed during Approved clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5887,7 +5883,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Manage Orders clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked Manage Orders clickTableLink " + scripNumber);
 				String xpath = "//h1[normalize-space(text())=\"param1\"]/following::table[@summary=\"param2\"]//a[contains(@title,\"Purchase Order\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5896,7 +5892,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Manage Orders clickTableLink" + scripNumber);
+			logger.error("Failed during Manage Orders clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5912,7 +5908,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Manage Receipts clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked Manage Receipts clickTableLink " + scripNumber);
 				String xpath = "(//table[@summary=\"param2\"]//td)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5922,7 +5918,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Manage Receipts clickTableLink" + scripNumber);
+			logger.error("Failed during Manage Receipts clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// Adding Xpath for \"Checking the dashboard for unposted & journals in error for
@@ -5955,7 +5951,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Journals in Requiring Attention clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked Journals in Requiring Attention clickTableLink " + scripNumber);
 
 				String xpath = "//h2[text()=\"param1\"]//following::table[@summary=\"param2\"]//a[1]";
 
@@ -5971,7 +5967,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during Journals in Requiring Attention clickTableLink" + scripNumber);
+			logger.error("Failed during Journals in Requiring Attention clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -5987,7 +5983,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked List of Processes Meeting Search Criteria clickTableLink " + scripNumber);
 				String xpath = "(//table[@summary=\"param1\"]//td[2]//span)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -5996,7 +5992,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during List of Processes Meeting Search Criteria clickTableLink" + scripNumber);
+			logger.error("Failed during List of Processes Meeting Search Criteria clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6013,7 +6009,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  clickTableLink" + scripNumber);
+				logger.info("Sucessfully Clicked  clickTableLink " + scripNumber);
 				String params = param1;
 				String xpath = "(//table[@summary=\"param1\"]//a[not (@title)])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -6024,7 +6020,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickTableLink" + scripNumber);
+			logger.error("Failed during clickTableLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6039,7 +6035,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickTableLink" + scripNumber);
+			logger.info("Sucessfully Clicked clickTableLink " + scripNumber);
 			String xpath = "//h1[normalize-space(text())=\"param1\"]/following::img[@title=\"param2\"]/following-sibling::a[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6048,7 +6044,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickTableLink" + scripNumber);
+			logger.error("Failed during clickTableLink " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -6074,7 +6070,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(4000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableRowSelect" + scripNumber);
+				logger.info("Sucessfully Clicked tableRowSelect " + scripNumber);
 				String xpath = "(//div[@class=\"AFDetectExpansion\"]/following::span[normalize-space(text())=\"param1\"]/following::table//span[text()])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6084,7 +6080,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableRowSelect" + scripNumber);
+			logger.error("Failed during tableRowSelect " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6101,7 +6097,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(10000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked SecondLine tableRowSelect" + scripNumber);
+				logger.info("Sucessfully Clicked SecondLine tableRowSelect " + scripNumber);
 				String xpath = "(//table[@summary=\"param2\"]//tr[2]//td)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6110,7 +6106,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during SecondLine tableRowSelect" + scripNumber);
+			logger.error("Failed during SecondLine tableRowSelect " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6125,7 +6121,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			Thread.sleep(10000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked Here1 came tableRowSelect" + scripNumber);
+			logger.info("Sucessfully Clicked Here1 came tableRowSelect " + scripNumber);
 			String xpath = "(//table[@summary=\"param1\"]//td)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6134,7 +6130,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Here1 came tableRowSelect" + scripNumber);
+			logger.error("Failed during Here1 came tableRowSelect " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6148,7 +6144,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(4000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableRowSelect" + scripNumber);
+			logger.info("Sucessfully Clicked tableRowSelect " + scripNumber);
 			String xpath = "//h1[normalize-space(text())=\"param1\"]/following::table[@summary=\"param1\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6157,7 +6153,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableRowSelect" + scripNumber);
+			logger.error("Failed during tableRowSelect " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6171,7 +6167,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableRowSelect" + scripNumber);
+			logger.info("Sucessfully Clicked tableRowSelect " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"]/following::tr[1]/td[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6179,7 +6175,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableRowSelect" + scripNumber);
+			logger.error("Failed during tableRowSelect " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6192,7 +6188,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableRowSelect" + scripNumber);
+			logger.info("Sucessfully Clicked tableRowSelect " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"]/following::tr[1]/td[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6202,7 +6198,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableRowSelect" + scripNumber);
+			logger.error("Failed during tableRowSelect " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -6217,7 +6213,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableRowSelect" + scripNumber);
+			logger.info("Sucessfully Clicked tableRowSelect " + scripNumber);
 			String xpath = "//*[contains(@summary,\"param1\")]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6225,7 +6221,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableRowSelect" + scripNumber);
+			logger.error("Failed during tableRowSelect " + scripNumber);
 			logger.error(e.getMessage());
 			throw e;
 		}
@@ -6260,7 +6256,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 					String scripNumber = fetchMetadataVO.getScriptNumber();
 
-					logger.info("Sucessfully Clicked Approve clickLink" + scripNumber);
+					logger.info("Sucessfully Clicked Approve clickLink " + scripNumber);
 
 					String xpath = "//*[normalize-space(text())=\"param1\"]";
 
@@ -6278,7 +6274,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.error("Failed during Approve clickLink" + scripNumber);
+				logger.error("Failed during Approve clickLink " + scripNumber);
 
 			}
 			// Here adding code for Scanned invoices in AP.453
@@ -6307,7 +6303,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 					String scripNumber = fetchMetadataVO.getScriptNumber();
 
-					logger.info("Sucessfully Clicked Scanned clickLink" + scripNumber);
+					logger.info("Sucessfully Clicked Scanned clickLink " + scripNumber);
 
 					String xpath = "//span[text()=\"param2\"]/following::span[text() > \"0\"][1]";
 
@@ -6322,7 +6318,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.error("Failed during Scanned clickLink" + scripNumber);
+				logger.error("Failed during Scanned clickLink " + scripNumber);
 
 				logger.error(e.getMessage());
 
@@ -6343,7 +6339,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					waittext.click();
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked Export clickLink" + scripNumber);
+					logger.info("Sucessfully Clicked Export clickLink " + scripNumber);
 					String xpath = "//*[contains(text(),\"param1\")]/following::*[text()=\"param2\"][1]";
 					// service.saveXpathParams(param1, param2, scripNumber, xpath);
 					String scriptID = fetchMetadataVO.getScriptId();
@@ -6368,7 +6364,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(6000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String xpath = "//input[@value=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6378,7 +6374,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6393,7 +6389,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Home clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Home clickLink " + scripNumber);
 				String xpath = "(//a[contains(@id,\"UIShome\")])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6403,7 +6399,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Home clickLink" + scripNumber);
+			logger.error("Failed during Home clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6420,7 +6416,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Financials Details or Invoices clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Financials Details or Invoices clickLink " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::*[text()=\"param1\")[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6430,7 +6426,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Financials Details or Invoices  clickLink" + scripNumber);
+			logger.error("Failed during Financials Details or Invoices  clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6446,7 +6442,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Approve clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Approve clickLink " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6457,7 +6453,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Approve clickLink" + scripNumber);
+			logger.error("Failed during Approve clickLink " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Payables to Ledger Reconciliation Summary")
@@ -6477,7 +6473,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Summary clickLink " + scripNumber);
 				String xpath = "//label[normalize-space(text())=\"param1\"]/following::a[normalize-space(text())=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6487,7 +6483,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Payables to Ledger Reconciliation Summary clickLink" + scripNumber);
+			logger.error("Failed during Payables to Ledger Reconciliation Summary clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6504,7 +6500,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Export clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Export clickLink " + scripNumber);
 				String xpath = "//a[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6514,7 +6510,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Export clickLink" + scripNumber);
+			logger.error("Failed during Export clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6530,7 +6526,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Export clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Export clickLink " + scripNumber);
 				String xpath = "//a[normalize-space(text())=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6541,7 +6537,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Export clickLink" + scripNumber);
+			logger.error("Failed during Export clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6558,7 +6554,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					// refreshPage(driver, fetchMetadataVO, fetchConfigVO);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked Project clickLink" + scripNumber);
+					logger.info("Sucessfully Clicked Project clickLink " + scripNumber);
 					String xpath = "//a[normalize-space(text())=\"param1\"]";
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6577,7 +6573,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					actions.moveToElement(waittext).build().perform();
 					waittext.click();
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during Project clickLink" + scripNumber);
+					logger.error("Failed during Project clickLink " + scripNumber);
 					String xpath = "//span[text()=\"Allocate\"]/following::div[@role=\"button\"][2]" + ";"
 							+ "//a[normalize-space(text())=\"param1\"]";
 					String scriptID = fetchMetadataVO.getScriptId();
@@ -6590,7 +6586,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Financial Reporting Center")) {
@@ -6611,7 +6607,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(30000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Financial Reporting Center clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Financial Reporting Center clickLink " + scripNumber);
 				String xpath = "//a[normalize-space(text())=\"param2\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6621,7 +6617,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Financial Reporting Center clickLink" + scripNumber);
+			logger.error("Failed during Financial Reporting Center clickLink " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Receivables")) {
@@ -6642,7 +6638,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(30000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Receivables clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Receivables clickLink " + scripNumber);
 				String xpath = "//a[normalize-space(text())=\"param1\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6669,7 +6665,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Requisition Lines clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Requisition Lines clickLink " + scripNumber);
 				String xpath = "//h2[text()=\"param1\"]/following::a[text()=\"Actions\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6678,7 +6674,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Requisition Lines clickLink" + scripNumber);
+			logger.error("Failed during Requisition Lines clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -6695,7 +6691,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Requisition Lines clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Requisition Lines clickLink " + scripNumber);
 				String xpath = "//table[@summary=\"param1\"]//span[text()=\"Approved\"]/following::a[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6704,7 +6700,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Requisition Lines clickLink" + scripNumber);
+			logger.error("Failed during Requisition Lines clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6720,7 +6716,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Details" + scripNumber);
+				logger.info("Sucessfully Clicked Details " + scripNumber);
 
 				String xpath = "(//*[contains(text(),\"param1\")]/following::*[text()=\"param2\"])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -6730,7 +6726,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Details" + scripNumber);
+			logger.error("Failed during Details " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6753,7 +6749,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String xpath = "//h1[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"param2\"]/following::a[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6763,7 +6759,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6785,7 +6781,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Journal clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Journal clickLink " + scripNumber);
 				String xpath = "//h1[normalize-space(text())=\"param1\"]/following::a[normalize-space(text())=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6795,7 +6791,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Journal clickLink" + scripNumber);
+			logger.error("Failed during Journal clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6817,7 +6813,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Receipt Details clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Receipt Details clickLink " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6827,7 +6823,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Receipt Details clickLink" + scripNumber);
+			logger.error("Failed during Receipt Details clickLink " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("View")) {
@@ -6842,7 +6838,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked View clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked View clickLink " + scripNumber);
 				String xpath = "//a[text()=\"param1\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6852,7 +6848,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during View clickLink" + scripNumber);
+			logger.error("Failed during View clickLink " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Invoice Actions")) {
@@ -6869,7 +6865,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Invoice Actions clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Invoice Actions clickLink " + scripNumber);
 				String xpath = "//div[text()=\"Warning\"]/following::button[text()=\"Continue\"]" + ";"
 						+ "//a[normalize-space(text())=\"param1\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -6893,7 +6889,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					Thread.sleep(2000);
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked clickLink" + scripNumber);
+					logger.info("Sucessfully Clicked clickLink " + scripNumber);
 					String params = param1;
 					String xpath = "//a[text()=\"param1\"][1]";
 					String scriptID = fetchMetadataVO.getScriptId();
@@ -6903,7 +6899,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				}
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during clickLink" + scripNumber);
+				logger.error("Failed during clickLink " + scripNumber);
 				logger.error(e.getMessage());
 			}
 			try {
@@ -6921,7 +6917,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					Thread.sleep(2000);
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked clickLink" + scripNumber);
+					logger.info("Sucessfully Clicked clickLink " + scripNumber);
 					String params = param1;
 					String xpath = "//a[contains(text()=\"param1\")][1]";
 					String scriptID = fetchMetadataVO.getScriptId();
@@ -6931,12 +6927,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				}
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during clickLink" + scripNumber);
+				logger.error("Failed during clickLink " + scripNumber);
 				logger.error(e.getMessage());
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Invoice Actions clickLink" + scripNumber);
+			logger.error("Failed during Invoice Actions clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6954,7 +6950,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String params = param1;
 				String xpath = "//a[normalize-space(text())=\"param1\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -6964,7 +6960,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -6981,7 +6977,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Reports and Analytics clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Reports and Analytics clickLink " + scripNumber);
 				String xpath = "//h1[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -6991,7 +6987,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Reports and Analytics clickLink" + scripNumber);
+			logger.error("Failed during Reports and Analytics clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7009,7 +7005,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Attachment or Invoice Summary clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Attachment or Invoice Summary clickLink " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::a[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7019,7 +7015,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Attachment or Invoice Summary clickLink" + scripNumber);
+			logger.error("Failed during Attachment or Invoice Summary clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7043,7 +7039,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7058,7 +7054,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String params = param1;
 				String xpath = "//a[contains(text(),\"param1\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7068,7 +7064,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7083,7 +7079,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String params = param1;
 				String xpath = "(//a[contains(@id,\"param1\")])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7094,7 +7090,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7108,7 +7104,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String params = param1;
 				String xpath = "//div[@title=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7118,7 +7114,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7132,7 +7128,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 
 				String params = param1;
 				String xpath = "//a[@title=\"param1\"]";
@@ -7143,7 +7139,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7158,7 +7154,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String params = param1;
 				String xpath = "//*[contains(@title,\"param1\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7168,7 +7164,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// Need to check for what purpose
@@ -7184,7 +7180,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String params = param1;
 				String xpath = "(//div[contains(text(),\"param1\")])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7208,7 +7204,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked clickLink " + scripNumber);
 				String params = param1;
 				String xpath = "//a[@role=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7218,7 +7214,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7232,7 +7228,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			waittext.click();
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickLink" + scripNumber);
+			logger.info("Sucessfully Clicked clickLink " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::a[normalize-space(text())=\"param2\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7241,7 +7237,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLink" + scripNumber);
+			logger.error("Failed during clickLink " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -7258,7 +7254,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			waittext.click();
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickLink" + scripNumber);
+			logger.info("Sucessfully Clicked clickLink " + scripNumber);
 			String xpath = "//h1[contains(text(),\"param1\")]/following::*[text()=\"param2\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7295,7 +7291,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
+				logger.info("Sucessfully Clicked clickRadiobutton " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"keysToSend\"]/preceding::input[@type=\"radio\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7306,7 +7302,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickRadiobutton" + scripNumber);
+			logger.error("Failed during clickRadiobutton " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 
@@ -7330,7 +7326,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
+			logger.info("Sucessfully Clicked clickRadiobutton " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::label[text()=\"param2\"]/following::label[normalize-space(text())=\"keysToSend\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7339,7 +7335,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickRadiobutton" + scripNumber);
+			logger.error("Failed during clickRadiobutton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7353,7 +7349,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
+			logger.info("Sucessfully Clicked clickRadiobutton " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"keysToSend\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7362,7 +7358,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickRadiobutton" + scripNumber);
+			logger.error("Failed during clickRadiobutton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7376,7 +7372,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
+			logger.info("Sucessfully Clicked clickRadiobutton " + scripNumber);
 			String xpath = "//*[text()=\"param1\"]/following::*[text()=\"keysToSend\"]/following::label";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7385,7 +7381,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickRadiobutton" + scripNumber);
+			logger.error("Failed during clickRadiobutton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7398,7 +7394,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickRadiobutton" + scripNumber);
+			logger.info("Sucessfully Clicked clickRadiobutton " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::*[normalize-space(text())=\"keysToSend\"]/preceding-sibling::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7408,7 +7404,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickRadiobutton" + scripNumber);
+			logger.error("Failed during clickRadiobutton " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -7436,7 +7432,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(3000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"keysToSend\"]/following::label[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7446,7 +7442,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickCheckbox" + scripNumber);
+			logger.error("Failed during clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH 31
@@ -7465,7 +7461,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Address Purpose clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "(//*[text()=\"param1\"]/following::span[text()=\"keysToSend\"])[1]/preceding::label[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7476,7 +7472,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+			logger.error("Failed during Address Purpose clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -7496,7 +7492,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Address Purpose clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//h1[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"keysToSend\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7507,7 +7503,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+			logger.error("Failed during Address Purpose clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -7527,7 +7523,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Address Purpose clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"keysToSend\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7538,7 +7534,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+			logger.error("Failed during Address Purpose clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -7558,7 +7554,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Address Purpose clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "(//*[text()=\"param1\"]/following::span[text()=\"keysToSend\"])[2]/preceding::label[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7569,7 +7565,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+			logger.error("Failed during Address Purpose clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -7587,7 +7583,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "(//*[normalize-space(text())=\"param1\"]/following::input[@type=\"checkbox\"])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7597,7 +7593,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickCheckbox" + scripNumber);
+			logger.error("Failed during clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
@@ -7616,7 +7612,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "(//*[normalize-space(text())=\"param1\"]/following::input[@type=\"checkbox\"])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7626,7 +7622,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickCheckbox" + scripNumber);
+			logger.error("Failed during clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
@@ -7647,7 +7643,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Address Purpose clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//*[text()=\"param1\"]/following::span[text()=\"keysToSend\"]/following::label[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7658,7 +7654,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+			logger.error("Failed during Address Purpose clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -7682,7 +7678,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Item Description clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Item Description clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"keysToSend\"]/preceding::label[contains(@id,\"Label\")][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7693,7 +7689,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Item Description clickCheckbox" + scripNumber);
+			logger.error("Failed during Item Description clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7715,7 +7711,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Address Purpose clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"keysToSend\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7726,7 +7722,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+			logger.error("Failed during Address Purpose clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7747,7 +7743,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Scenario clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Scenario clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[normalize-space(text())=\"keysToSend\"]/preceding::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7757,7 +7753,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Scenario clickCheckbox" + scripNumber);
+			logger.error("Failed during Scenario clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7778,7 +7774,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Address Purpose clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"keysToSend\"]/preceding::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7788,7 +7784,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Address Purpose clickCheckbox" + scripNumber);
+			logger.error("Failed during Address Purpose clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7804,7 +7800,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Name clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Name clickCheckbox " + scripNumber);
 				String xpath = "//a[normalize-space(text())=\"param1\"]/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -7813,7 +7809,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Name clickCheckbox" + scripNumber);
+			logger.error("Failed during Name clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7833,7 +7829,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Match Invoice Lines clickCheckbox" + scripNumber);
+				logger.info("Sucessfully Clicked Match Invoice Lines clickCheckbox " + scripNumber);
 				String params = param1;
 				String xpath = "//*[normalize-space(text())=\"Match Invoice Lines\"]/following::*[normalize-space(text())=\"Match\"]/following::label[contains(@id,\"Label\")][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -7843,7 +7839,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Match Invoice Lines clickCheckbox" + scripNumber);
+			logger.error("Failed during Match Invoice Lines clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7860,7 +7856,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+			logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())=\"param1\"]/following::span[normalize-space(text())=\"keysToSend\"]/preceding::label[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -7869,7 +7865,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickCheckbox" + scripNumber);
+			logger.error("Failed during clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7890,7 +7886,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+			logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::span[normalize-space(text())=\"keysToSend\"]/preceding::label[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -7899,7 +7895,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickCheckbox" + scripNumber);
+			logger.error("Failed during clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7919,7 +7915,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+			logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"keysToSend\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -7928,7 +7924,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickCheckbox" + scripNumber);
+			logger.error("Failed during clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -7948,7 +7944,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(3000);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+			logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 			String params = param1;
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"keysToSend\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -7974,7 +7970,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+			logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 			String params = param1;
 			String xpath = "//label[normalize-space(text())=\"keysToSend\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -7983,7 +7979,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickCheckbox" + scripNumber);
+			logger.error("Failed during clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
@@ -8003,7 +7999,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Thread.sleep(500);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickCheckbox" + scripNumber);
+			logger.info("Sucessfully Clicked clickCheckbox " + scripNumber);
 			String params = param1;
 			String xpath = "(//*[contains(text(),\"param1\")]/following::input[@type=\"checkbox\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
@@ -8012,7 +8008,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickCheckbox" + scripNumber);
+			logger.error("Failed during clickCheckbox " + scripNumber);
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -8048,11 +8044,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked clickLinkAction" + scripNumber);
+			logger.info("Sucessfully Clicked clickLinkAction " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLinkAction" + scripNumber);
+			logger.error("Failed during clickLinkAction " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8072,12 +8068,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked clickLinkAction" + scripNumber);
+				logger.info("Sucessfully Clicked clickLinkAction " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLinkAction" + scripNumber);
+			logger.error("Failed during clickLinkAction " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8099,12 +8095,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked clickLinkAction" + scripNumber);
+				logger.info("Sucessfully Clicked clickLinkAction " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLinkAction" + scripNumber);
+			logger.error("Failed during clickLinkAction " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8125,11 +8121,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked clickLinkAction" + scripNumber);
+			logger.info("Sucessfully Clicked clickLinkAction " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLinkAction" + scripNumber);
+			logger.error("Failed during clickLinkAction " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8150,12 +8146,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked clickLinkAction" + scripNumber);
+			logger.info("Sucessfully Clicked clickLinkAction " + scripNumber);
 			return;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickLinkAction" + scripNumber);
+			logger.error("Failed during clickLinkAction " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -8181,7 +8177,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during Text Area" + e.getMessage());
+			logger.error("Failed during Text Area " + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Text")) {
@@ -8200,7 +8196,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during Text Area" + e.getMessage());
+			logger.error("Failed during Text Area " + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Text")) {
@@ -8219,7 +8215,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during Text Area" + e.getMessage());
+			logger.error("Failed during Text Area " + e.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Description for Internal Candidates")||(param1.equalsIgnoreCase("Qualifications for Internal Candidates"))) {
@@ -8238,7 +8234,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Text Area " + e.getMessage());
 		}
 		// HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
 		try {
@@ -8258,7 +8254,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Text Area " + e.getMessage());
 		}
 
 		// DH 20
@@ -8282,7 +8278,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Text Area " + e.getMessage());
 		}
 
 		try {
@@ -8311,7 +8307,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during textarea" + scripNumber);
+			logger.error("Failed during textarea " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// PROD
@@ -8337,7 +8333,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during textarea" + scripNumber);
+			logger.error("Failed during textarea " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8354,7 +8350,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked textarea" + scripNumber);
+			logger.info("Sucessfully Clicked textarea " + scripNumber);
 			String xpath = "//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::textarea[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8362,7 +8358,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during textarea" + scripNumber);
+			logger.error("Failed during textarea " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8380,7 +8376,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "(//h1[text()=\"param1\"]/following::label[text()=\"param2\"])[2]/following::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8389,7 +8385,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during textArea" + scripNumber);
+			logger.error("Failed during textArea " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -8404,7 +8400,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked textarea" + scripNumber);
+			logger.info("Sucessfully Clicked textarea " + scripNumber);
 			String xpath = "//body[@dir=\"ltr\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8413,7 +8409,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during textarea" + scripNumber);
+			logger.error("Failed during textarea " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -8440,7 +8436,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				WebElement selectvalue = driver.findElement(By.xpath("//*[text()=\"" + keysToSend + "\"]"));
 				clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Delegate to sendValue " + scripNumber);
 				String xpath = "(//h1[text()=\"param1\"]/following::label[text()=\"param2\"]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8450,7 +8446,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Delegate to sendValue" + scripNumber);
+			logger.error("Failed during Delegate to sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8471,7 +8467,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//div[@class=\"AFDetectExpansion\"]/following::div[text()=\"param1\"]/following::label[text()=\"param2\"][2]/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8480,7 +8476,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH
@@ -8501,7 +8497,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//*[@placeholder=\"param1\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8510,7 +8506,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8527,7 +8523,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked sendValue " + scripNumber);
 				String xpath = "(//label[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"param2\"]/following::input)[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				return keysToSend;
@@ -8535,7 +8531,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			// return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 			// throw e;
 		}
@@ -8554,7 +8550,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "(//h2[text()=\"param1\"]/following::label[text()=\"param2\"]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8563,7 +8559,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// prod
@@ -8582,7 +8578,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8591,7 +8587,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// prod
@@ -8608,7 +8604,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8617,7 +8613,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// prod
@@ -8634,7 +8630,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//div[text()=\"param1\"]/following::label[text()=\"param2\"]/following::input[@aria-live=\"off\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8643,7 +8639,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -8672,7 +8668,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Invoice Dates sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Invoice Dates sendValue " + scripNumber);
 
 				String xpath = "//*[text()=\"param1\"]/following::*[@placeholder=\"dd-mmm-yyyy\"][1]";
 
@@ -8688,7 +8684,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during Invoice Dates sendValue" + scripNumber);
+			logger.error("Failed during Invoice Dates sendValue " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -8708,7 +8704,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]//following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8717,7 +8713,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -8735,7 +8731,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//div[text()=\"param1\"]/following::label[text()=\"param2\"]/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8744,7 +8740,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -8765,7 +8761,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				WebElement selectvalue = driver.findElement(By.xpath("//*[text()=\"" + keysToSend + "\"]"));
 				clickValidateXpath(driver, fetchMetadataVO, selectvalue, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Delegate to sendValue " + scripNumber);
 				String xpath = "(//h2[text()=\"param1\"]//following::label[text()=\"param2\"]//following::input)[1]" + ";"
 						+ "//*[text()=\"keysToSend\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -8776,7 +8772,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Delegate to sendValue" + scripNumber);
+			logger.error("Failed during Delegate to sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -8798,7 +8794,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//div[text()=\"param1\"]/following::label[text()=\"Phone\"]/following::label[text()=\"param2\"]/preceding::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8807,7 +8803,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -8825,7 +8821,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 			String xpath = "//*[contains(@id,\"popup-container\")]//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::input[not (@type=\"hidden\")][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8833,7 +8829,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH 39 SCM.PM.509
@@ -8851,7 +8847,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::span[text()=\"param2\"]/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8861,7 +8857,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -8881,7 +8877,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input[not(@type=\"hidden\")])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8891,7 +8887,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -8905,7 +8901,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Password sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Password sendValue " + scripNumber);
 				String xpath = "//input[@type=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8917,7 +8913,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Password sendValue" + scripNumber);
+			logger.error("Failed during Password sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// Here Adding xpath for invoice dates AP.452
@@ -8946,7 +8942,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Invoice Dates sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Invoice Dates sendValue " + scripNumber);
 
 				String xpath = "//*[text()=\"param1\"]//following::*[contains(text(),\"param2\")]/preceding::input[2]";
 
@@ -8962,7 +8958,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during Invoice Dates  sendValue" + scripNumber);
+			logger.error("Failed during Invoice Dates  sendValue " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -8985,7 +8981,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue " + scripNumber);
 
 				String xpath = " //label[@title=\"param1\"]/following::input[1]";
 
@@ -9001,7 +8997,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
+			logger.error("Failed during Payables to Ledger Reconciliation Report sendValue " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -9020,7 +9016,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Delegate to sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Delegate to sendValue " + scripNumber);
 				String xpath = "//h1[text()=\"param1\"]//following::label[text()=\"param2\"]//following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9030,7 +9026,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Delegate to  sendValue" + scripNumber);
+			logger.error("Failed during Delegate to  sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -9052,7 +9048,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue " + scripNumber);
 
 				String xpath = " //label[@title=\"param1\"]/following::input[2]";
 
@@ -9068,7 +9064,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
+			logger.error("Failed during Payables to Ledger Reconciliation Report sendValue " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -9087,7 +9083,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Reports and Analytics or Search sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Reports and Analytics or Search sendValue " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\" param1 \"]/following::input[@placeholder=\" param2 \"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9097,7 +9093,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
+			logger.error("Failed during Reports and Analytics or Search  sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9112,7 +9108,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Report sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Report sendValue " + scripNumber);
 				String xpath = "//*[contains(text(),\"param2\")]/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9122,7 +9118,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Report sendValue" + scripNumber);
+			logger.error("Failed during Report sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9139,19 +9135,19 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				actions.moveToElement(waittill).build().perform();
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
+				String scripNumber = fetchMetadataVO.getScriptNumber(); 
+				logger.info("Sucessfully Clicked Create Expense Item sendValue " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[contains(text(),\"param2\")]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Create Expense Item sendValue " + scripNumber);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Expense Item sendValue" + scripNumber);
+			logger.error("Failed during Create Expense Item sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9168,20 +9164,20 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Create Expense Item sendValue " + scripNumber);
 
 				String xpath = "(//*[text()=\"param1\"]/following::label[text()=\"param2\"]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
-				logger.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Create Expense Item sendValue " + scripNumber);
 
 				return keysToSend;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Expense Item sendValue" + scripNumber);
+			logger.error("Failed during Create Expense Item sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -9197,7 +9193,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Phone or Mobile sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Phone or Mobile sendValue " + scripNumber);
 				String xpath = "(//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"]/following::input)[3]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9206,7 +9202,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Clicked Phone or Mobile sendValue" + scripNumber);
+			logger.error("Failed during Clicked Phone or Mobile sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9222,7 +9218,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Line or Name sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Create Line or Name sendValue " + scripNumber);
 				String xpath = "(//div[normalize-space(text())=\" param1 \"]/following::label[normalize-space(text())=\" param2 \"]/following::input)[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9232,7 +9228,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Line or Name  sendValue" + scripNumber);
+			logger.error("Failed during Create Line or Name  sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9251,7 +9247,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Time Card or Person Name sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Create Time Card or Person Name sendValue " + scripNumber);
 				String xpath = "//div[text()=\"param1\"]/following::span[text()=\"param2\"]//input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9262,7 +9258,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card or Person Name sendValue" + scripNumber);
+			logger.error("Failed during Create Time Card or Person Name sendValue " + scripNumber);
 			logger.error(e.getMessage());
 
 		}
@@ -9282,7 +9278,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(10000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Lines or Query By Example sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Lines or Query By Example sendValue " + scripNumber);
 				String xpath = "(//h1[normalize-space(text())=\"param1\"]/following::*[@title=\"param2\"]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9291,7 +9287,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Lines or Query By Example  sendValue" + scripNumber);
+			logger.error("Failed during Lines or Query By Example  sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -9315,7 +9311,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(8000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Unapply Accounting Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Unapply Accounting Date sendValue " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"param2\"]/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9324,7 +9320,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Unapply Accounting Date sendValue" + scripNumber);
+			logger.error("Failed during Unapply Accounting Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9355,7 +9351,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					Thread.sleep(2000);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during Accounting Period-Filter sendValue" + scripNumber);
+					logger.error("Failed during Accounting Period-Filter sendValue " + scripNumber);
 					String xpath = "//img[@title=\"Query By Example\"]" + ";"
 							+ "//*[contains(@id,\"PeriodName::content\")]";
 					String scriptID = fetchMetadataVO.getScriptId();
@@ -9367,7 +9363,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Accounting Period-Filter sendValue" + scripNumber);
+			logger.error("Failed during Accounting Period-Filter sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9387,7 +9383,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(2000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Manage Accounting Periods sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Manage Accounting Periods sendValue " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::*[@title=\"param2\"]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9397,7 +9393,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Manage Accounting Periods sendValue" + scripNumber);
+			logger.error("Failed during Manage Accounting Periods sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9413,7 +9409,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Reports and Analytics or Search sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Reports and Analytics or Search sendValue " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"param1\"]/following::input[@placeholder=\"param2\"][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9423,7 +9419,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Reports and Analytics or Search  sendValue" + scripNumber);
+			logger.error("Failed during Reports and Analytics or Search  sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9440,7 +9436,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(500);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Report sendValue " + scripNumber);
 
 				String xpath = "(//*[contains(text(),\"param2\")]/following::input)[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -9451,7 +9447,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Payables to Ledger Reconciliation Report sendValue" + scripNumber);
+			logger.error("Failed during Payables to Ledger Reconciliation Report sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9469,7 +9465,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Daily Rates  sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Daily Rates  sendValue " + scripNumber);
 				String xpath = "//a[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"param2\"]/preceding::input[not (@type=\"hidden\")][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9479,7 +9475,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  Daily Rates sendValue" + scripNumber);
+			logger.error("Failed during  Daily Rates sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9495,7 +9491,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked sendValue " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[normalize-space(text())=\"param2\"]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9506,7 +9502,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			// TODO: handle exception
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 		}
 		// DH 15
 		try {
@@ -9524,7 +9520,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked sendValue " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"]/following::label[text()=\"param2\"]/following::input[contains(@id,\"qry\") and not (@role)])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9535,7 +9531,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH 35
@@ -9564,7 +9560,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked sendValue " + scripNumber);
 
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 
@@ -9581,7 +9577,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			// return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 			// throw e;
 		}
@@ -9601,18 +9597,16 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(500);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Create Expense Item sendValue " + scripNumber);
 				String xpath = "(//h1[contains(text(),\"param1\")]/following::label[normalize-space(text())=\"param2\"]/following::input[@type=\"text\"])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Create Expense Item sendValue" + scripNumber);
-
 				return keysToSend;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Expense Item sendValue" + scripNumber);
+			logger.error("Failed during Create Expense Item sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9634,7 +9628,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "(//h2[contains(text(),\"param1\")]/following::label[normalize-space(text())=\"param2\"]/following::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9642,7 +9636,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9668,12 +9662,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			return keysToSend;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 		}
 		try {
 			// Changed == to equals method
@@ -9689,7 +9683,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked sendValue " + scripNumber);
 				String xpath = "//*[contains(@placeholder,\"param1\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9698,7 +9692,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9728,7 +9722,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9749,7 +9743,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "(//label[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"param2\"]/following::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9758,7 +9752,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9779,7 +9773,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(8000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"param2\"]/following::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9787,7 +9781,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -9803,7 +9797,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::*[normalize-space(text())=\"param2\"]/following::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9812,7 +9806,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -9831,7 +9825,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::img[@title=\"param2\"]/following::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9840,7 +9834,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -9859,7 +9853,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "//*[normalize-space(text())=\"param1\"]/following::img[@title=\"param2\"]/following::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9868,7 +9862,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -9888,7 +9882,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "(//h1[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/following::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9896,7 +9890,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			logger.error(e.getMessage());
 			throw e;
 		}
@@ -9952,7 +9946,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 					button.click();
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked Postal Code Legal Entity dropdownTexts" + scripNumber);
+					logger.info("Sucessfully Clicked Postal Code Legal Entity dropdownTexts " + scripNumber);
 					String xpath1 = "(//div[@class=\"AFDetectExpansion\"]/following::span[normalize-space(text())=\"param2\"]/following::table//span[text()])[1]"
 							+ ";"
 							+ "//*[text()=\"Search\"]/following::*[normalize-space(text())=\"param2\"]/following::*[text()=\"OK\"][1]";
@@ -9967,7 +9961,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Postal Code Legal Entity  dropdownTexts" + scripNumber);
+			logger.error("Failed during Postal Code Legal Entity  dropdownTexts " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -9987,7 +9981,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+			logger.info("Sucessfully Clicked dropdownTexts " + scripNumber);
 			String xpath = "(//div[contains(@id,\"popup-container\")]//*[normalize-space(text())=\"keysToSend\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -9995,7 +9989,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during dropdownTexts" + scripNumber);
+			logger.error("Failed during dropdownTexts " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10016,7 +10010,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(2000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+			logger.info("Sucessfully Clicked dropdownTexts " + scripNumber);
 			String xpath = "(//div[contains(@id,\"dropdownPopup::dropDownContent\")]//*[normalize-space(text())=\"keysToSend\"])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10024,7 +10018,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during dropdownTexts" + scripNumber);
+			logger.error("Failed during dropdownTexts " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10056,14 +10050,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 							"//div[@class=\"AFDetectExpansion\"]/following::span[text()=\"Name\"]/following::span[normalize-space(text())=\""
 									+ keysToSend + "\"]"));
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+					logger.info("Sucessfully Clicked dropdownTexts " + scripNumber);
 					text.click();
 					xpath = xpath + ";"
 							+ "//div[@class=\"AFDetectExpansion\"]/following::span[text()=\"Name\"]/following::span[normalize-space(text())=\"keysToSend\"]";
 
 				} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during dropdownTexts" + scripNumber);
+					logger.error("Failed during dropdownTexts " + scripNumber);
 					WebElement text = driver
 							.findElement(By.xpath("(//span[contains(text(),\"" + keysToSend + "\")])[1]"));
 					text.click();
@@ -10076,7 +10070,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 								+ "\"]/following::*[not (@aria-disabled) and text()=\"K\"][1]"));
 				button.click();
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+				logger.info("Sucessfully Clicked dropdownTexts " + scripNumber);
 				xpath = xpath + ";"
 						+ "//*[text()=\"Search\"]/following::*[normalize-space(text())=\"param2\"]/following::*[not (@aria-disabled) and text()=\"K\"][1]";
 			} catch (Exception e) {
@@ -10085,7 +10079,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 								+ "\"]/following::*[not (@aria-disabled) and text()=\"OK\"][1]"));
 				button.click();
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during dropdownTexts" + scripNumber);
+				logger.error("Failed during dropdownTexts " + scripNumber);
 				xpath = xpath + ";"
 						+ "//*[text()=\"Search\"]/following::*[normalize-space(text())=\"param2\"]/following::*[not (@aria-disabled) and text()=\"OK\"][1]";
 			}
@@ -10093,7 +10087,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during dropdownTexts" + scripNumber);
+			logger.error("Failed during dropdownTexts " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10123,7 +10117,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during dropdownTexts" + scripNumber);
+			logger.error("Failed during dropdownTexts " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10143,14 +10137,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			Thread.sleep(500);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+			logger.info("Sucessfully Clicked dropdownTexts " + scripNumber);
 			String xpath = "//h1[contains(text(),\"param1\")]/following::label[normalize-space(text())=\"keysToSend\"]/following::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during dropdownTexts" + scripNumber);
+			logger.error("Failed during dropdownTexts " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10166,7 +10160,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String xpath = "//div[@class=\"AFDetectExpansion\"]/following::a[contains(text(),\"Search\")][1]";
 			Thread.sleep(10000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked dropdownTexts" + scripNumber);
+			logger.info("Sucessfully Clicked dropdownTexts " + scripNumber);
 			try {
 				WebElement searchResult = driver.findElement(
 						By.xpath("//div[contains(@id,\"PopupId::content\")]//*[text()=\"Search\"]/following::*[text()=\""
@@ -10181,7 +10175,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						"//div[contains(@id,\"PopupId::content\")]//*[text()=\"Search\"]/following::*[text()=\"Name\"]/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, searchResult, fetchConfigVO, fetchMetadataVO);
 				String scripNumber1 = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during dropdownTexts" + scripNumber1);
+				logger.error("Failed during dropdownTexts " + scripNumber1);
 				xpath = xpath + ";"
 						+ "//div[contains(@id,\"PopupId::content\")]//*[text()=\"Search\"]/following::*[text()=\"Name\"]/following::input[1]";
 			}
@@ -10194,7 +10188,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 									+ keysToSend + "\"]"));
 					text.click();
 					String scripNumber1 = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked dropdownTexts" + scripNumber1);
+					logger.info("Sucessfully Clicked dropdownTexts " + scripNumber1);
 					xpath = xpath + ";"
 							+ "//div[@class=\"AFDetectExpansion\"]/following::span[text()=\"Name\"]/following::span[text()=\"keysToSend\"]";
 				} catch (Exception e) {
@@ -10202,7 +10196,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 							.findElement(By.xpath("(//span[contains(text(),\"" + keysToSend + "\")])[1]"));
 					text.click();
 					String scripNumber1 = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during dropdownTexts" + scripNumber1);
+					logger.error("Failed during dropdownTexts " + scripNumber1);
 					xpath = xpath + ";" + "(//span[contains(text(),\"keysToSend\")])[1]";
 				}
 			}
@@ -10211,7 +10205,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						.findElement(By.xpath("//*[text()=\"Search\"]/following::*[normalize-space(text())=\"" + param2
 								+ "\"]/following::*[not (@aria-disabled) and text()=\"K\"][1]"));
 				String scripNumber1 = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked dropdownTexts" + scripNumber1);
+				logger.info("Sucessfully Clicked dropdownTexts " + scripNumber1);
 				button.click();
 				xpath = xpath + ";"
 						+ "//*[text()=\"Search\"]/following::*[normalize-space(text())=\"param2\"]/following::*[not (@aria-disabled) and text()=\"K\"][1]";
@@ -10221,7 +10215,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 								+ "\"]/following::*[not (@aria-disabled) and text()=\"OK\"][1]"));
 				button.click();
 				String scripNumber1 = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during dropdownTexts" + scripNumber1);
+				logger.error("Failed during dropdownTexts " + scripNumber1);
 				xpath = xpath + ";"
 						+ "//*[text()=\"Search\"]/following::*[normalize-space(text())=\"param2\"]/following::*[not (@aria-disabled) and text()=\"OK\"][1]";
 			}
@@ -10232,7 +10226,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during dropdownTexts" + scripNumber);
+			logger.error("Failed during dropdownTexts " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -10263,14 +10257,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
-				logger.info("Sucessfully Clicked Time Entry multiplelinestableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Time Entry multiplelinestableSendKeys " + scripNumber);
 
 				return;
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Time Entry multiplelinestableSendKeys" + scripNumber);
+			logger.error("Failed during Time Entry multiplelinestableSendKeys " + scripNumber);
 			logger.error(e.getMessage());
 
 		}
@@ -10434,7 +10428,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 
-			logger.error("Failed during Time Entry multiplelinestableSendKeys" + e.getMessage());
+			logger.error("Failed during Time Entry multiple line stable SendKeys " + e.getMessage());
 		}
 
 		try {
@@ -10461,7 +10455,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Mon multiple line stable SendKeys " + scripNumber);
 
 				return;
 			}
@@ -10486,7 +10480,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Mon multiplelinestableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Mon multiple line stable SendKeys " + scripNumber);
 
 				return;
 			}
@@ -10601,7 +10595,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 
-			logger.error("Failed during Time Entry multiplelinestableSendKeys" + e.getMessage());
+			logger.error("Failed during Time Entry multiple line stable SendKeys " + e.getMessage());
 
 		}
 
@@ -10692,7 +10686,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Thu multiplelinestableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Thu multiple line stable SendKeys " + scripNumber);
 				return;
 			}
 			if (param1.equalsIgnoreCase("Fri")) {
@@ -10714,7 +10708,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Fri multiplelinestableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Fri multiple line stable SendKeys " + scripNumber);
 				return;
 			}
 			if (param1.equalsIgnoreCase("Sat")) {
@@ -10735,7 +10729,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Sat multiplelinestableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Sat multiple line stable SendKeys " + scripNumber);
 				return;
 			}
 			if (param1.equalsIgnoreCase("Sunday")) {
@@ -10756,12 +10750,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Sunday multiplelinestableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Sunday multiple line stable SendKeys " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  multiplelinestableSendKeys" + scripNumber);
+			logger.error("Failed during  multiple line stable SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 
 		}
@@ -10793,7 +10787,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO, customerDetails);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "(//h1[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input[not(@type=\"hidden\")])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10803,7 +10797,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10825,7 +10819,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO, customerDetails);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "(//h1[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input[not(@type=\"hidden\")])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10835,7 +10829,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10849,7 +10843,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding::input[1][not(@value)])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10858,7 +10852,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10873,7 +10867,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::*[text()=\"param2\"]/following::input[not(@value)][2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10882,7 +10876,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10894,7 +10888,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input[not(@title)])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10903,7 +10897,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10917,7 +10911,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::span[text()=\"param2\"]/following::a[@title=\"Select Date\"][2]/preceding-sibling::input";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10926,7 +10920,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -10940,7 +10934,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::span[text()=\"param2\"]/following::a[@title=\"Select Date\"][1]/preceding-sibling::input";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10949,7 +10943,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH 40
@@ -10963,7 +10957,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -10972,7 +10966,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -10994,7 +10988,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Provider or Receiver table SendKeys " + scripNumber);
 				String xpath = "//table[@summary=\"param1\"]//label[text()=\"Total\"]/preceding-sibling::input[contains(@id,\"tRCIN\")][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11004,7 +10998,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -11025,7 +11019,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Provider or Receiver table SendKeys " + scripNumber);
 				String xpath = "//table[@summary=\"param1\"]//label[text()=\"Total\"]/preceding-sibling::input[contains(@id,\"tRevIN\")][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11035,7 +11029,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -11053,7 +11047,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Provider or Receiver table SendKeys " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"])[1]/following::label[text()=\"param2\"]/preceding::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11063,7 +11057,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -11079,7 +11073,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::input[contains(@id,\"internalResponder\")][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11088,7 +11082,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -11103,7 +11097,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 				String xpath = "//span[text()=\"param2\"]/following::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11112,7 +11106,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// Dh changes 8
@@ -11342,7 +11336,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Time Entry tableSendKeys" + scripNumber);
+			logger.error("Failed during Time Entry table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11360,7 +11354,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Mon tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Mon table SendKeys " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding-sibling::input[1])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11382,7 +11376,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Tue tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Tue table SendKeys " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding-sibling::input[1])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11405,7 +11399,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Wed tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Wed table SendKeys " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding-sibling::input[1])[3]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11428,7 +11422,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Thu tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Thu table SendKeys " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding-sibling::input[1])[4]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11451,7 +11445,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Fri tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Fri table SendKeys " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding-sibling::input[1])[5]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11473,7 +11467,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Sat tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Sat table SendKeys " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding-sibling::input[1])[6]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11495,7 +11489,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Sunday tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Sunday table SendKeys " + scripNumber);
 				String xpath = "(//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding-sibling::input[1])[7]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11505,7 +11499,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 
 		}
@@ -11522,7 +11516,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.info("Sucessfully Clicked Quantity tableSendKeys" + scripNumber);
+					logger.info("Sucessfully Clicked Quantity table SendKeys " + scripNumber);
 					String xpath = "(//text()=\"param1\"]/preceding-sibling::input[ not (@value)])[1]";
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11537,7 +11531,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during Quantity tableSendKeys" + scripNumber);
+					logger.error("Failed during Quantity table SendKeys " + scripNumber);
 					String xpath = "//label[text()=\"param1\"]/preceding-sibling::input[1]";
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11562,7 +11556,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(4000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Lines or Price tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Lines or Price table SendKeys " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input[contains(@name,\"AmountAsPrice\")]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11571,7 +11565,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Clicked Lines or Price  tableSendKeys" + scripNumber);
+			logger.error("Failed during Clicked Lines or Price  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11585,7 +11579,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(4000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Lines or Expenditure Item Date tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Lines or Expenditure Item Date table SendKeys " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11595,7 +11589,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Lines or Expenditure Item Date tableSendKeys" + scripNumber);
+			logger.error("Failed during Lines or Expenditure Item Date table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11609,7 +11603,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(4000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Lines or Item table SendKeys " + scripNumber);
 				String xpath = "//*[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding::input[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11618,7 +11612,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Clicked Lines or Item  tableSendKeys" + scripNumber);
+			logger.error("Failed during Clicked Lines or Item  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH 12
@@ -11634,7 +11628,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(4000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Lines or Item tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Lines or Item table SendKeys " + scripNumber);
 				String xpath = "//*[contains(text(),\"param1\")]/following::th[@_d_index=\"param2\"][1]//input[1]";
 				// service.saveXpathParams(param1, param2, scripNumber, xpath);
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -11645,7 +11639,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Clicked Lines or Item tableSendKeys" + scripNumber);
+			logger.error("Failed during Clicked Lines or Item table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11658,7 +11652,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Application Reference tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Application Reference table SendKeys " + scripNumber);
 				String xpath = "(//h1[text()=\"param1\"]/following::*[text()=\"param2\"]/following::input)[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11668,7 +11662,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Application Reference tableSendKeys" + scripNumber);
+			logger.error("Failed during Application Reference table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// Add Xpath for "Register a mass promise to pay(AR.249)
@@ -11691,7 +11685,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 
 				String xpath = "(//span[text()=\"param1\"]/preceding::input[@type=\"text\"])[2]";
 
@@ -11707,7 +11701,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 
 			logger.error(e.getMessage());
 		}
@@ -11724,7 +11718,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Provider or Receiver tableSendKeys" + scripNumber);
+				logger.info("Sucessfully Clicked Provider or Receiver table SendKeys " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"]/following::*[text()=\"param2\"]/preceding-sibling::input)[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11734,7 +11728,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11751,7 +11745,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "(//h1[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input[not(@type=\"hidden\")])[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11760,7 +11754,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11771,7 +11765,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "//h1[text()=\"param1\"]/following::*[text()=\"param2\"]/preceding-sibling::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11780,7 +11774,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11791,7 +11785,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "//h1[text()=\"param1\"]/following::span[text()=\"param2\"]/preceding::input[contains(@id,\"descColumn::content\")]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11800,7 +11794,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -11814,7 +11808,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "//*[text()=\"param1\"]/following::span[text()=\"param2\"]/preceding::input[contains(@id,\"journalBatch::content\")]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11823,7 +11817,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableSendKeys" + scripNumber);
+			logger.error("Failed during table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11835,7 +11829,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(5000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "//h1[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11844,7 +11838,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11855,7 +11849,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "(//*[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11864,7 +11858,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11875,7 +11869,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "(//*[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::textarea)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11884,7 +11878,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11896,7 +11890,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "//*[text()=\"param1\"]/following::table[@summary=\"param2\"]//*[text()=\"param3\"]/following::input[contains(@id,\"NewBdgtPctLst\")][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11905,7 +11899,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH
@@ -11923,7 +11917,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11932,7 +11926,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11949,7 +11943,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::label[text()=\"param2\"]/preceding::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11958,7 +11952,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -11972,7 +11966,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+			logger.info("Sucessfully Clicked table SendKeys " + scripNumber);
 			String xpath = "(//table[@summary=\"param1\"]//label[text()=\"param2\"]/preceding-sibling::input)[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -11981,7 +11975,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableSendKeys" + scripNumber);
+			logger.error("Failed during  table SendKeys " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -12007,7 +12001,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownTexts" + scripNumber);
+			logger.error("Failed during  table Dropdown Texts " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12020,7 +12014,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					By.xpath("//table[@summary=\"" + param1 + "\"]/following::li[text()=\"" + keysToSend + "\"]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			logger.info("Sucessfully Clicked table Dropdown Texts " + scripNumber);
 			String xpath = "//table[@summary=\"param1\"]/following::li[text()=\"keysToSend\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -12029,7 +12023,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownTexts" + scripNumber);
+			logger.error("Failed during  table Dropdown Texts " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12041,7 +12035,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					.findElement(By.xpath("//*[text()=\"" + param1 + "\"]/following::li[text()=\"" + keysToSend + "\"]"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			logger.info("Sucessfully Clicked table Dropdown Texts " + scripNumber);
 			String xpath = "//*[text()=\"param1\"]/following::li[text()=\"keysToSend\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -12050,7 +12044,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownTexts" + scripNumber);
+			logger.error("Failed during  table Dropdown Texts " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12064,7 +12058,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			logger.info("Sucessfully Clicked table Dropdown Texts " + scripNumber);
 			String xpath = "//*[text()=\"param1\"]/following::td[text()=\"keysToSend\"]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -12073,7 +12067,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownTexts" + scripNumber);
+			logger.error("Failed during  table Dropdown Texts " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12114,7 +12108,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				WebElement button = driver.findElement(By.xpath(
 						"//*[text()=\"Search\"]/following::*[text()=\"" + param2 + "\"]/following::*[text()=\"OK\"][1]"));
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during  tableDropdownTexts" + scripNumber);
+				logger.error("Failed during  table Dropdown Texts " + scripNumber);
 				button.click();
 				xpath = xpath + ";" + "//*[text()=\"Search\"]/following::*[text()=\"param2\"]/following::*[text()=\"OK\"][1]";
 			}
@@ -12124,7 +12118,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownTexts" + scripNumber);
+			logger.error("Failed during  table Dropdown Texts " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -12137,7 +12131,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+				logger.info("Sucessfully Clicked table Dropdown Texts " + scripNumber);
 				xpath = "//*[text()=\"Search\"]/following::*[text()=\"Name\"]/following::input[1]";
 			} catch (Exception e) {
 				WebElement searchResult = driver
@@ -12146,7 +12140,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during  tableDropdownTexts" + scripNumber);
+				logger.error("Failed during  table Dropdown Texts " + scripNumber);
 				xpath = "//*[text()=\"Search\"]/following::*[text()=\"Value\"]/following::input[1]";
 			}
 
@@ -12159,13 +12153,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						By.xpath("//*[text()=\"Search\"]/following::*[text()=\"Name\"]/following::*[text()=\"OK\"][1]"));
 				button.click();
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+				logger.info("Sucessfully Clicked table Dropdown Texts " + scripNumber);
 				xpath = xpath + ";" + "//*[text()=\"Search\"]/following::*[text()=\"Name\"]/following::*[text()=\"OK\"][1]";
 			} catch (Exception e) {
 				WebElement button = driver.findElement(
 						By.xpath("//*[text()=\"Search\"]/following::*[text()=\"Value\"]/following::*[text()=\"OK\"][1]"));
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during  tableDropdownTexts" + scripNumber);
+				logger.error("Failed during  table Dropdown Texts " + scripNumber);
 				button.click();
 				xpath = xpath + ";" + "//*[text()=\"Search\"]/following::*[text()=\"Value\"]/following::*[text()=\"OK\"][1]";
 			}
@@ -12176,7 +12170,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownTexts" + scripNumber);
+			logger.error("Failed during  table Dropdown Texts " + scripNumber);
 		}
 		try {
 			WebElement button = driver
@@ -12184,7 +12178,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 							+ "\"]/following::*[text()=\"OK\"][1]"));
 			button.click();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tableDropdownTexts" + scripNumber);
+			logger.info("Sucessfully Clicked table Dropdown Texts " + scripNumber);
 			String xpath = "//*[text()=\"Search\"]/following::*[normalize-space(text())=\"param2\"]/following::*[text()=\"OK\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -12194,7 +12188,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownTexts" + scripNumber);
+			logger.error("Failed during  table Dropdown Texts " + scripNumber);
 			throw e;
 		}
 	}
@@ -12225,12 +12219,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name table dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name table dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// OB.9 DH
@@ -12257,12 +12251,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name table dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name table dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// dh 8
@@ -12287,7 +12281,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + e.getMessage());
+			logger.error("Failed during Schedule New Process or Name table dropdown Values " + e.getMessage());
 		}
 
 		try {
@@ -12306,13 +12300,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked table Dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownValues" + scripNumber);
+			logger.error("Failed during  table Dropdown Values " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12331,12 +12325,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked table Dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownValues" + scripNumber);
+			logger.error("Failed during  table Dropdown Values " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Billing")) {
@@ -12358,13 +12352,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Billing tableDropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Billing table Dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Billing tableDropdownValues" + scripNumber);
+			logger.error("Failed during Billing table Dropdown Values " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -12384,11 +12378,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked table Dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during tableDropdownValues" + scripNumber);
+			logger.error("Failed during table Dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -12408,11 +12402,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked table Dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownValues" + scripNumber);
+			logger.error("Failed during  table Dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -12432,12 +12426,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked tableDropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked table Dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tableDropdownValues" + scripNumber);
+			logger.error("Failed during  table Dropdown Values " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -12466,7 +12460,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
             clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO, customerDetails);
             screenshot(driver, fetchMetadataVO, customerDetails);
             String scripNumber = fetchMetadataVO.getScriptNumber();
-            logger.info("Sucessfully Clicked tableSendKeys" + scripNumber);
+            logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
             String xpath = "(//h1[text()=\"param1\"]/following::label[text()=\"param2\"]/preceding-sibling::input[not(@type=\"hidden\")])[1]";
             String scriptID = fetchMetadataVO.getScriptId();
             String lineNumber = fetchMetadataVO.getLineNumber();
@@ -12475,7 +12469,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
             return;
         } }catch (Exception e) {
             String scripNumber = fetchMetadataVO.getScriptNumber();
-            logger.error("Failed during  tableSendKeys" + scripNumber);
+            logger.error("Failed during  dropdown Values " + scripNumber);
             logger.error(e.getMessage());
         }
 		try {
@@ -12499,12 +12493,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -12528,12 +12522,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH
@@ -12580,12 +12574,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// HS2
@@ -12611,12 +12605,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -12652,13 +12646,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					button.click();
 
 				} catch (Exception e) {
-					logger.error(e.getMessage());
+					logger.error("Failed during dropdown Values " + e.getMessage());
 				}
 				return;
 			}
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during dropdownValues" + scripNumber);
+			logger.error("Failed during dropdown Values " + scripNumber);
 			logger.error(ex.getMessage());
 		}
 		try {
@@ -12681,12 +12675,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// OTL.004 DH
@@ -12713,12 +12707,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -12744,7 +12738,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -12796,7 +12790,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 
 			}
@@ -12833,7 +12827,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -12864,7 +12858,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -12890,12 +12884,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -12920,12 +12914,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -12987,12 +12981,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -13013,11 +13007,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Event Type dropdownValues" + scripNumber);
+			logger.error("Failed during Event Type dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -13066,12 +13060,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -13098,7 +13092,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -13145,12 +13139,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -13194,7 +13188,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
@@ -13257,7 +13251,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error("Failed during Schedule New Process or Name dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -13306,7 +13300,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				} catch (Exception e) {
 					// String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during Invoice Header or Business Unit  dropdownValues" + scripNumber);
+					logger.error("Failed during Invoice Header or Business Unit  dropdown Values " + scripNumber);
 					logger.error(e.getMessage());
 				}
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -13316,7 +13310,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(ex.getMessage());
 		}
 		// This is to select the dropdown and select \"All\" and deselect All then
@@ -13349,7 +13343,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Project Status or Draft dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception ex) {
@@ -13390,11 +13384,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 
-				logger.info("Sucessfully Clicked Project Status or Draft dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Project Status or Draft dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception ex) {
-			logger.error(ex.getMessage());
+			logger.error("Failed during dropdown Values " + ex.getMessage());
 		}
 
 		// --------------------------------------------(ends
@@ -13437,7 +13431,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception ex) {
-			logger.error(ex.getMessage());
+			logger.error("Failed during dropdown Values " + ex.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account") && param2.equalsIgnoreCase("Country")) {
@@ -13480,12 +13474,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Create Bank Account or Country dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Create Bank Account or Country dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Bank Account or Country dropdownValues" + scripNumber);
+			logger.error("Failed during Create Bank Account or Country dropdown Values" + scripNumber);
 			logger.error(ex.getMessage());
 		}
 		// for "PTP.PO.301 Request New Supplier" when exectuing in Fusion instance
@@ -13524,7 +13518,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception ex) {
-			logger.error(ex.getMessage());
+			logger.error("Failed during dropdown Values " + ex.getMessage());
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Address") && param2.equalsIgnoreCase("Country")) {
@@ -13568,12 +13562,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Create Address or Country dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Create Address or Country dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception ex) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Address or Country  dropdownValues" + scripNumber);
+			logger.error("Failed during Create Address or Country  dropdown Values" + scripNumber);
 			logger.error(ex.getMessage());
 		}
 		try {
@@ -13606,14 +13600,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Assets dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Assets dropdown Values " + scripNumber);
 				return;
 
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Assets dropdownValues" + scripNumber);
+			logger.error("Failed during Assets dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 
 		}
@@ -13637,12 +13631,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Create Request dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Create Request dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Request dropdownValues" + scripNumber);
+			logger.error("Failed during Create Request dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -13669,12 +13663,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked Payables to Ledger Reconciliation Report dropdown Values " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Payables to Ledger Reconciliation Report dropdownValues" + scripNumber);
+			logger.error("Failed during Payables to Ledger Reconciliation Report dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -13717,7 +13711,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Procurement BU or Business Unit dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Procurement BU or Business Unit dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Requisition BU")) {
 					Thread.sleep(2000);
@@ -13746,7 +13740,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Requisition BU dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Requisition BU dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Supplier Name")) {
 					if (keysToSend.equalsIgnoreCase("All")) {
@@ -13784,7 +13778,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
-						logger.info("Sucessfully  Supplier Name Clicked dropdownValues" + scripNumber);
+						logger.info("Sucessfully  Supplier Name Clicked dropdown Values " + scripNumber);
 
 						return;
 					}
@@ -13792,7 +13786,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -13832,7 +13826,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Period Name dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Period Name dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Legal Entity")) {
 					WebElement search = driver
@@ -13860,14 +13854,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Legal Entity dropdown Values " + scripNumber);
 					return;
 				}
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		// DH 27
@@ -13912,7 +13906,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Legal Entity dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Customer Name")) {
 					WebElement search1 = driver.findElement(
@@ -13942,7 +13936,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Customer Name dropdown Values " + scripNumber);
 					return;
 				}
 
@@ -13950,7 +13944,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -14076,7 +14070,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
-					logger.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Ledger dropdown Values " + scripNumber);
 
 					return;
 
@@ -14128,7 +14122,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
-					logger.info("Sucessfully Clicked Request Name dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Request Name dropdown Values " + scripNumber);
 
 					return;
 
@@ -14189,7 +14183,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
 
-					logger.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Ledger dropdown Values " + scripNumber);
 
 					return;
 
@@ -14201,7 +14195,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 
 			logger.error(e.getMessage());
 
@@ -14246,13 +14240,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 				return;
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -14292,7 +14286,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Report dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Report dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Ledger")) {
 					Thread.sleep(1000);
@@ -14319,7 +14313,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Request Name")) {
 					Thread.sleep(1000);
@@ -14346,7 +14340,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Requistion Business Unit")) {
 					Thread.sleep(1000);
@@ -14373,7 +14367,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Ledger dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Ledger dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Status")) {
 					WebElement search = driver.findElement(
@@ -14399,7 +14393,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Status dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Status dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Req. Business Unit") || param2.equalsIgnoreCase("Client BU")) {
 					WebElement search = driver.findElement(
@@ -14452,7 +14446,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Legal Entity dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Legal Entity dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Customer Name")) {
 					Thread.sleep(1000);
@@ -14479,7 +14473,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Customer Name dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Customer Name dropdown Values " + scripNumber);
 					return;
 				} else if (param2.equalsIgnoreCase("Business Unit")) {
 					if (keysToSend.equalsIgnoreCase("All")) {
@@ -14493,7 +14487,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
-						logger.info("Sucessfully Clicked Business Unit dropdownValues" + scripNumber);
+						logger.info("Sucessfully Clicked Business Unit dropdown Values " + scripNumber);
 						return;
 					} else {
 						WebElement search = driver.findElement(
@@ -14521,7 +14515,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
-						logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+						logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 						return;
 					}
 				} else if (param2.equalsIgnoreCase("Supplier Name")) {
@@ -14536,7 +14530,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
-						logger.info("Sucessfully Clicked Supplier Name dropdownValues" + scripNumber);
+						logger.info("Sucessfully Clicked Supplier Name dropdown Values " + scripNumber);
 						return;
 					} else {
 						WebElement search = driver.findElement(
@@ -14565,14 +14559,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 						String scriptID = fetchMetadataVO.getScriptId();
 						String lineNumber = fetchMetadataVO.getLineNumber();
 						service.saveXpathParams(scriptID, lineNumber, xpath);
-						logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+						logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 						return;
 					}
 				}
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -14623,10 +14617,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked Basic Options or Ledger dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked Basic Options or Ledger dropdown Values " + scripNumber);
 				} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during Basic Options or Ledger dropdownValues" + scripNumber);
+					logger.error("Failed during Basic Options or Ledger dropdown Values "  + scripNumber);
 
 					for (int i = 0; i <= 2; i++) {
 						try {
@@ -14672,10 +14666,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 					String scriptID = fetchMetadataVO.getScriptId();
 					String lineNumber = fetchMetadataVO.getLineNumber();
 					service.saveXpathParams(scriptID, lineNumber, xpath);
-					logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+					logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 				} catch (Exception e) {
 					String scripNumber = fetchMetadataVO.getScriptNumber();
-					logger.error("Failed during  dropdownValues" + scripNumber);
+					logger.error("Failed during  dropdown Values " + scripNumber);
 
 					for (int i = 0; i <= 2; i++) {
 						try {
@@ -14724,7 +14718,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -14749,10 +14743,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			} catch (Exception ex) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during  dropdownValues" + scripNumber);
+				logger.error("Failed during  dropdown Values " + scripNumber);
 
 				try {
 					try {
@@ -14797,7 +14791,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception exe) {
 			logger.error(exe.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -14822,10 +14816,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during  dropdownValues" + scripNumber);
+				logger.error("Failed during  dropdown Values " + scripNumber);
 				for (int i = 0; i <= 2; i++) {
 					try {
 						actions.click(waittext).build().perform();
@@ -14855,10 +14849,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+				logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during  dropdownValues" + scripNumber);
+				logger.error("Failed during  dropdown Values " + scripNumber);
 				for (int i = 0; i <= 2; i++) {
 					try {
 						actions.click(waittext).build().perform();
@@ -14877,7 +14871,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -14897,11 +14891,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -14920,11 +14914,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -14942,12 +14936,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 		}
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -14989,11 +14983,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -15019,11 +15013,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -15037,12 +15031,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -15067,10 +15061,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		
@@ -15093,11 +15087,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked Schedule New Process or Name dropdown Values " + scripNumber);
 			return;
 			} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Event Type dropdownValues" + scripNumber);
+			logger.error("Failed during Event Type dropdown Values " + scripNumber);
 			logger.error(e.getMessage());
 			}
 
@@ -15118,11 +15112,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
+			logger.info("Sucessfully Clicked dropdown Values " + scripNumber);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  dropdownValues" + scripNumber);
+			logger.error("Failed during  dropdown Values " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -15134,11 +15128,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", waittext);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked clickValidateXpath" + scripNumber);
+			logger.info("Sucessfully Clicked click Validate Xpath " + scripNumber);
 			// waittext.click();
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  clickValidateXpath" + scripNumber);
+			logger.error("Failed during  click Validate Xpath " + scripNumber);
 			e.printStackTrace();
 		}
 	}
@@ -15161,7 +15155,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickFilter" + scripNumber);
+			logger.error("Failed during clickFilter " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 
@@ -15179,7 +15173,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  clickFilter" + scripNumber);
+			logger.error("Failed during  clickFilter " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
@@ -15199,7 +15193,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  clickFilter" + scripNumber);
+			logger.error("Failed during  clickFilter " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -15221,7 +15215,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  clickFilter" + scripNumber);
+			logger.error("Failed during  clickFilter " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -15233,7 +15227,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,\"" + inputParam + "\")]"));
 			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked password" + scripNumber);
+			logger.info("Sucessfully Clicked password " + scripNumber);
 			String xpath = "//*[contains(@placeholder,\"inputParam\")]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -15241,7 +15235,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return keysToSend;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  password" + scripNumber);
+			logger.error("Failed during  password " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			logger.error(e.getMessage());
 			throw e;
@@ -15257,11 +15251,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			jse.executeScript("arguments[0].value=\"" + keysToSend + "\";", waittill);
 			logger.info("clear and typed the given Data");
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked typeIntoValidxpath" + scripNumber);
+			logger.info("Sucessfully Clicked typeIntoValidxpath " + scripNumber);
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  typeIntoValidxpath" + scripNumber);
+			logger.error("Failed during  typeIntoValidxpath " + scripNumber);
 			e.printStackTrace();
 		}
 	}
@@ -15281,7 +15275,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittill).build().perform();
 		String scripNumber = fetchMetadataVO.getScriptNumber();
-		logger.info("Sucessfully Clicked moveToElement" + scripNumber);
+		logger.info("Sucessfully Clicked moveToElement " + scripNumber);
 		String xpath = "//*[normalize-space(text())=\"inputParam\"][1]";
 		String scriptID = fetchMetadataVO.getScriptId();
 		String lineNumber = fetchMetadataVO.getLineNumber();
@@ -15302,11 +15296,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//a[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15316,11 +15310,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//h1[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15330,11 +15324,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Field during scrollUsingElement" + scripNumber);
+			logger.error("Field during scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//h2[normalize-space(text())=\"" + inputParam + "\"])"));
@@ -15344,11 +15338,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver
@@ -15359,7 +15353,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			logger.error("Failed during scrollUsingElement " + e.getMessage());
@@ -15372,7 +15366,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			logger.error("Failed during scrollUsingElement " + e.getMessage());
@@ -15385,11 +15379,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//table[@summary=\"" + inputParam + "\"]//td//a)[1]"));
@@ -15399,11 +15393,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(
@@ -15414,7 +15408,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			logger.error("Failed during scrollUsingElement " + e.getMessage());
@@ -15427,11 +15421,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//li[normalize-space(text())=\"" + inputParam + "\"]"));
@@ -15441,11 +15435,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver
@@ -15456,11 +15450,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver
@@ -15471,11 +15465,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("//img[@title=\"" + inputParam + "\"]"));
@@ -15485,11 +15479,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 		}
 		try {
 			WebElement waittill = driver.findElement(By.xpath("(//*[@title=\"" + inputParam + "\"])[1]"));
@@ -15499,11 +15493,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked scrollUsingElement" + scripNumber);
+			logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  scrollUsingElement" + scripNumber);
+			logger.error("Failed during  scrollUsingElement " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -15520,7 +15514,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
 		screenshot(driver, fetchMetadataVO, customerDetails);
 		String scripNumber = fetchMetadataVO.getScriptNumber();
-		logger.info("Sucessfully Clicked scrollMethod" + scripNumber);
+		logger.info("Sucessfully Clicked scrollMethod " + scripNumber);
 	}
 
 	public void tab(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
@@ -15531,10 +15525,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			action.sendKeys(Keys.TAB).build().perform();
 			Thread.sleep(8000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked tab" + scripNumber);
+			logger.info("Sucessfully Clicked tab " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  tab" + scripNumber);
+			logger.error("Failed during  tab " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -15560,11 +15554,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked mousehover" + scripNumber);
+			logger.info("Sucessfully Clicked mousehover " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  mousehover" + scripNumber);
+			logger.error("Failed during  mousehover " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -15579,11 +15573,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked mousehover" + scripNumber);
+			logger.info("Sucessfully Clicked mousehover " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  mousehover" + scripNumber);
+			logger.error("Failed during  mousehover " + scripNumber);
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -15598,10 +15592,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			actionObject.sendKeys(Keys.ENTER).build().perform();
 			Thread.sleep(8000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked enter" + scripNumber);
+			logger.info("Sucessfully Clicked enter " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  enter" + scripNumber);
+			logger.error("Failed during  enter " + scripNumber);
 			logger.error(e.getMessage());
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
@@ -15628,10 +15622,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				element.click();
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked selectCheckBox" + scripNumber);
+			logger.info("Sucessfully Clicked selectCheckBox " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectCheckBox" + scripNumber);
+			logger.error("Failed during selectCheckBox " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -15653,12 +15647,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked selectByText" + scripNumber);
+				logger.info("Sucessfully Clicked selectByText " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectByText" + scripNumber);
+			logger.error("Failed during selectByText " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Holds")) {
@@ -15673,12 +15667,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Holds selectByText" + scripNumber);
+				logger.info("Sucessfully Clicked Holds selectByText " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Holds selectByText" + scripNumber);
+			logger.error("Failed during Holds selectByText " + scripNumber);
 		}
 		try {
 			if (param2.equalsIgnoreCase("Batch Status")) {
@@ -15692,13 +15686,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Batch Status selectByText" + scripNumber);
+				logger.info("Sucessfully Clicked Batch Status selectByText " + scripNumber);
 				return;
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Batch Status selectByText" + scripNumber);
+			logger.error("Failed during Batch Status selectByText " + scripNumber);
 		}
 		try {
 			if (param1.equalsIgnoreCase("Release") && param2.equalsIgnoreCase("Name")) {
@@ -15713,12 +15707,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked Release selectByText" + scripNumber);
+				logger.info("Sucessfully Clicked Release selectByText " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Release selectByText" + scripNumber);
+			logger.error("Failed during Release selectByText " + scripNumber);
 		}
 		try {
 			Thread.sleep(2000);
@@ -15735,7 +15729,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectByText" + scripNumber);
+			logger.error("Failed during selectByText " + scripNumber);
 		}
 		try {
 			Thread.sleep(2000);
@@ -15748,11 +15742,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked selectByText" + scripNumber);
+			logger.info("Sucessfully Clicked selectByText " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectByText" + scripNumber);
+			logger.error("Failed during selectByText " + scripNumber);
 		}
 		try {
 			Thread.sleep(2000);
@@ -15765,11 +15759,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked selectByText" + scripNumber);
+			logger.info("Sucessfully Clicked selectByText " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectByText" + scripNumber);
+			logger.error("Failed during selectByText " + scripNumber);
 		}
 		try {
 			Thread.sleep(2000);
@@ -15782,11 +15776,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked selectByText" + scripNumber);
+			logger.info("Sucessfully Clicked selectByText " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectByText" + scripNumber);
+			logger.error("Failed during selectByText " + scripNumber);
 		}
 		try {
 			if (param2 == "") {
@@ -15799,12 +15793,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked selectCheckBox" + scripNumber);
+				logger.info("Sucessfully Clicked selectCheckBox " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectByText" + scripNumber);
+			logger.error("Failed during selectByText " + scripNumber);
 		}
 		try {
 			WebElement waittext = driver
@@ -15816,11 +15810,11 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
-			logger.info("Sucessfully Clicked selectByText" + scripNumber);
+			logger.info("Sucessfully Clicked selectByText " + scripNumber);
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectByText" + scripNumber);
+			logger.error("Failed during selectByText " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -15833,7 +15827,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		Select selectBox = new Select(waittext);
 		selectBox.selectByVisibleText(inputData);
 		String scripNumber = fetchMetadataVO.getScriptNumber();
-		logger.info("Sucessfully Clicked selectMethod" + scripNumber);
+		logger.info("Sucessfully Clicked selectMethod " + scripNumber);
 		screenshot(driver, fetchMetadataVO, customerDetails);
 		return;
 	}
@@ -15845,10 +15839,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			Select selectBox = new Select(webElement);
 			selectBox.selectByValue(inputData);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked selectByValue" + scripNumber);
+			logger.info("Sucessfully Clicked selectByValue " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectByValue" + scripNumber);
+			logger.error("Failed during selectByValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -15954,7 +15948,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
@@ -15962,7 +15956,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 
 		}
 		
@@ -15985,14 +15979,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 		}
 
 		// Dh 611
@@ -16020,7 +16014,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
@@ -16028,7 +16022,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 
 		}
 		try {
@@ -16055,7 +16049,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
@@ -16063,7 +16057,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 
 		}
 
@@ -16091,14 +16085,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked Totals or Total copynumber " + scripNumber);
 				return value;
 
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Totals or Total copynumber" + scripNumber);
+			logger.error("Failed during Totals or Total copynumber " + scripNumber);
 
 		}
 
@@ -16131,7 +16125,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
@@ -16139,7 +16133,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 		}
 
 		try {
@@ -16160,14 +16154,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 		}
 
 		// DH 31
@@ -16192,14 +16186,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked Totals or Total copynumber " + scripNumber);
 				return value;
 
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Totals or Total copynumber" + scripNumber);
+			logger.error("Failed during Totals or Total copynumber " + scripNumber);
 
 		}
 
@@ -16226,14 +16220,14 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked Totals or Total copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked Totals or Total copynumber " + scripNumber);
 				return value;
 
 			}
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Totals or Total copynumber" + scripNumber);
+			logger.error("Failed during Totals or Total copynumber " + scripNumber);
 
 		}
 		try {
@@ -16260,7 +16254,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked  copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked  copynumber " + scripNumber);
 
 				return value;
 
@@ -16268,7 +16262,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during  copynumber" + scripNumber);
+			logger.error("Failed during  copynumber " + scripNumber);
 
 		}
 
@@ -16302,7 +16296,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked  copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked  copynumber " + scripNumber);
 
 				return value;
 
@@ -16310,7 +16304,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 
 		}
 
@@ -16335,7 +16329,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
@@ -16343,7 +16337,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 
 		}
 
@@ -16367,7 +16361,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
@@ -16375,7 +16369,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 
 		}
 		try {
@@ -16400,7 +16394,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
@@ -16408,7 +16402,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 
 		}
 
@@ -16430,7 +16424,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String testParamId = fetchMetadataVO.getTestScriptParamId();
 				String testSetId = fetchMetadataVO.getTestSetLineId();
 				dynamicnumber.saveCopyNumber(value, testParamId, testSetId);
-				logger.info("Sucessfully Clicked copynumber" + scripNumber);
+				logger.info("Sucessfully Clicked copynumber " + scripNumber);
 
 				return value;
 
@@ -16439,7 +16433,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copynumber" + scripNumber);
+			logger.error("Failed during copynumber " + scripNumber);
 
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 
@@ -16568,7 +16562,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			StringSelection stringSelection = new StringSelection(num);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked copyy" + scripNumber);
+			logger.info("Sucessfully Clicked copyy " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during copyy" + scripNumber);
@@ -16592,10 +16586,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				}
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked copytext" + scripNumber);
+			logger.info("Sucessfully Clicked copytext " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during copytext" + scripNumber);
+			logger.error("Failed during copytext " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -16607,10 +16601,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		try {
 			driver.manage().window().maximize();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked maximize" + scripNumber);
+			logger.info("Sucessfully Clicked maximize " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during maximize" + scripNumber);
+			logger.error("Failed during maximize " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -16622,10 +16616,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		try {
 			driver.switchTo().window(Main_Window);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked switchWindow" + scripNumber);
+			logger.info("Sucessfully Clicked switchWindow " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during switchWindow" + scripNumber);
+			logger.error("Failed during switchWindow " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 
@@ -16645,10 +16639,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(4000);
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked switchDefaultContent" + scripNumber);
+			logger.info("Sucessfully Clicked switchDefaultContent " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during switchDefaultContent" + scripNumber);
+			logger.error("Failed during switchDefaultContent " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -16709,13 +16703,13 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				driver.switchTo().window(childWindow);
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
+			logger.info("Sucessfully Clicked switchToParentWindow " + scripNumber);
 			
 			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during switchToParentWindow" + scripNumber);
+			logger.error("Failed during switchToParentWindow " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -16733,7 +16727,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			// Action dragDrop = action.dragAndDrop(fromElement, webElement).build();
 			action.dragAndDrop(fromElement, toElement).build().perform();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Drag and drop the values" + scripNumber);
+			logger.info("Successfully Drag and drop the values " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed During dragAnddrop Action." + scripNumber);
@@ -16796,10 +16790,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				}
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Handeled the window" + scripNumber);
+			logger.info("Successfully Handeled the window " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed to Handle the window" + scripNumber);
+			logger.error("Failed to Handle the window " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -16987,10 +16981,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		try {
 			driver.navigate().refresh();
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked refreshPage" + scripNumber);
+			logger.info("Sucessfully Clicked refreshPage " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during refreshPage" + scripNumber);
+			logger.error("Failed during refreshPage " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
 			throw e;
@@ -17366,7 +17360,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath1 = "(//*[text()=\"WATS Inbound Inv Transactions\"])[1]/following::*[text()=\"Scheduled Orchestration\"][1]";
 				String xpath2 = "(//*[text()=\"WATS Inbound Inv Transactions\"])[1]/following::*[text()=\"Scheduled Orchestration\"]/following::*[@title=\"Run\"][1]";
 				String xpath = xpath1 + ";" + xpath2;
@@ -17377,7 +17371,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -17394,7 +17388,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath1 = "(//*[text()=\"Oracle ERP OPERA Trigger Synchronization\"])[1]/following::*[text()=\"Scheduled Orchestration\"][1]";
 				String xpath2 = "(//*[text()=\"Oracle ERP OPERA Trigger Synchronization\"])[1]/following::*[text()=\"Scheduled Orchestration\"]/following::*[@title=\"Run\"][1]";
 				String xpath = xpath1 + ";" + xpath2;
@@ -17405,7 +17399,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton "  + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17423,7 +17417,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 
 				String xpath1 = "(//*[text()=\"Oracle OPERA ERP Trigger Invoice Upload\"])[1]/following::*[text()=\"Scheduled Orchestration\"]";
 				String xpath2 = "(//*[text()=\"Oracle OPERA ERP Trigger Invoice Upload\"])[1]/following::*[text()=\"Scheduled Orchestration\"]/following::*[@title=\"Run\"][1]";
@@ -17436,7 +17430,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17466,7 +17460,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17495,7 +17489,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17520,7 +17514,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Create Time Card clickButton" + scripNumber);
+			logger.error("Failed during Create Time Card clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17544,7 +17538,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17575,7 +17569,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		/*
@@ -17624,7 +17618,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17675,7 +17669,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17705,7 +17699,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17729,7 +17723,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -17751,7 +17745,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -17774,7 +17768,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17797,7 +17791,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -17820,7 +17814,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -17840,7 +17834,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
 		try {
@@ -17852,7 +17846,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(15000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 			String xpath = "//*[@class=\"opaas-toolbar__search-icon\"][1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -17909,7 +17903,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//input[@placeholder=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -17935,7 +17929,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "//input[@placeholder=\"param1\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -17945,7 +17939,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
@@ -17974,7 +17968,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath1 = "//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
 				String xpath2 = "//span[text()=\"keysToSend\"]";
 				String xpath = xpath1 + ";" + xpath2;
@@ -17986,7 +17980,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
@@ -18003,7 +17997,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 			String xpath1 = "//*[text()=\"param1\"]/following::*[text()=\"param2\"]/following::a[1]";
 			String xpath2 = "//span[text()=\"keysToSend\"]";
 			String xpath = xpath1 + ";" + xpath2;
@@ -18014,7 +18008,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
@@ -18029,7 +18023,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(1000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+			logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::*[text()=\"param2\"]/following::input[1]";
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
@@ -18038,7 +18032,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during sendValue" + scripNumber);
+			logger.error("Failed during sendValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -18065,12 +18059,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
-				logger.info("Sucessfully Clicked mousehover" + scripNumber);
+				logger.info("Sucessfully Clicked mousehover " + scripNumber);
 				return;
 			}
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during mousehover" + scripNumber);
+			logger.error("Failed during mousehover " + scripNumber);
 			logger.error(e.getMessage());
 		}
 
@@ -18096,7 +18090,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during Mouse movement" + scripNumber);
+			logger.error("Failed during Mouse movement " + scripNumber);
 
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 
@@ -18389,7 +18383,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath1 = "(//*[text()=\"param1\"])[1]";
 				String xpath2 = "(//*[text()=\"param1\"])[1]";
 				String xpath = xpath1 + ";" + xpath2;
@@ -18401,7 +18395,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -18433,7 +18427,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -18453,7 +18447,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(5000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+				logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 				String xpath1 = "//span[text()=\"param1\"]";
 				String xpath2 = "//span[text()=\"param1\"]";
 				String xpath = xpath1 + ";" + xpath2;
@@ -18465,7 +18459,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			// throw e;
 		}
@@ -18484,7 +18478,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			Thread.sleep(5000);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked Save and Close clickButton" + scripNumber);
+			logger.info("Sucessfully Clicked Save and Close clickButton " + scripNumber);
 			String xpath1 = "//*[text()=\"param1\"]";
 			String xpath2 = "//*[text()=\"param1\"]";
 			String xpath = xpath1 + ";" + xpath2;
@@ -18495,7 +18489,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during clickButton" + scripNumber);
+			logger.error("Failed during clickButton " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -18518,7 +18512,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				logger.info("Sucessfully Clicked Close Date sendValue " + scripNumber);
 				String xpath = "(//input[@placeholder=\"param1\"])[2]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -18528,7 +18522,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			return null;
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
+			logger.error("Failed during Close Date sendValue " + scripNumber);
 			logger.error(e.getMessage());
 			throw e;
 		}
@@ -18563,7 +18557,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
-				logger.info("Sucessfully Clicked Approve clickLink" + scripNumber);
+				logger.info("Sucessfully Clicked Approve clickLink " + scripNumber);
 
 				String xpath = "//*[normalize-space(text())=\"param1\"]";
 
@@ -18581,7 +18575,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
-			logger.error("Failed during Approve clickLink" + scripNumber);
+			logger.error("Failed during Approve clickLink " + scripNumber);
 
 		}
 
@@ -18604,7 +18598,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				Thread.sleep(2000);
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked selectAValue" + scripNumber);
+				logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 				String xpath = "(//*[text()=\"param1\"])[1]/following::*[text()=\"keysToSend\"]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -18614,7 +18608,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during selectAValue" + scripNumber);
+			logger.error("Failed during selectAValue " + scripNumber);
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -18643,7 +18637,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Informatica Click Image " +e.getMessage());
 			throw e;
 		}
 

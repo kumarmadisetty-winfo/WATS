@@ -236,7 +236,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
-			logger.info("Successfully Navigate to the Navigate URL ");
+			logger.info("Successfully Navigate to the Navigate URL " +fetchMetadataVO.getScriptNumber());
 		} catch (Exception e) {
 			logger.error("Failed During Navigation " +fetchMetadataVO.getScriptNumber());
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
@@ -1251,7 +1251,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during clickButton Dropdown" + e.getMessage());
+			logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1283,7 +1283,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during clickButton Dropdown" + e.getMessage());
+			logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1313,7 +1313,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during clickButton Dropdown" + e.getMessage());
+			logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1339,7 +1339,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during clickButton Dropdown" + e.getMessage());
+			logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1362,7 +1362,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 			} catch (Exception e) {
-				logger.error("Failed during clickButton Dropdown" + e.getMessage());
+				logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1383,7 +1383,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} catch (Exception e) {
-				logger.error("Failed during clickButton Dropdown" + e.getMessage());
+				logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1405,7 +1405,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during clickButton Dropdown" + e.getMessage());
+			logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1461,7 +1461,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			logger.error("Failed during clickButton Dropdown" + e.getMessage());
+			logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1486,7 +1486,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return keysToSend;
 		} catch (Exception e) {
-			logger.error("Failed during clickButton Dropdown" + e.getMessage());
+			logger.error("Failed during clickButton Dropdown " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1542,7 +1542,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1565,7 +1565,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1585,7 +1585,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1604,7 +1604,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1633,7 +1633,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1656,7 +1656,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1678,7 +1678,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1705,7 +1705,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1727,7 +1727,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1749,7 +1749,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1772,7 +1772,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1813,7 +1813,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -1836,7 +1836,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2265,7 +2265,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2293,7 +2293,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2323,7 +2323,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2349,7 +2349,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2375,7 +2375,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2400,7 +2400,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2426,7 +2426,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2448,7 +2448,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2471,7 +2471,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2496,7 +2496,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2518,7 +2518,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2541,7 +2541,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2564,7 +2564,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2587,7 +2587,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Image" + e.getMessage());
+			logger.error("Failed during click Image " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2641,7 +2641,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click Button" + e.getMessage());
+			logger.error("Failed during click Button " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2779,7 +2779,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Link " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2808,7 +2808,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Link " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -2980,7 +2980,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Link " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -3001,7 +3001,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Link " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -3022,7 +3022,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Link " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		// Need to check for what purpose
@@ -3143,10 +3143,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Link " + e.getMessage());
 			Thread.currentThread().interrupt();
-
-			logger.error("Failed during Click Link");
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -3435,7 +3433,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click check box " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -3463,7 +3461,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click check box " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -3556,7 +3554,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during click Link Action " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -3588,7 +3586,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click check box " + e.getMessage());
+			logger.error("Failed during click Link Action " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -3610,7 +3608,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 			return;
 		} catch (Exception e) {
-			logger.error("Failed during click check box " + e.getMessage());
+			logger.error("Failed during click Link Action " + e.getMessage());
 			Thread.currentThread().interrupt();
 
 		}
@@ -3658,9 +3656,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
 			Thread.currentThread().interrupt();
-			logger.error("Failed during Click check box ");
+			logger.error("Failed during click Link Action " + e.getMessage());
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
@@ -4087,7 +4084,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return keysToSend;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during send value " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -4404,7 +4401,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Dropdown text " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -5308,7 +5305,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during table dropdown values " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -5356,7 +5353,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during table dropdown values " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -5379,7 +5376,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during table dropdown values " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -5434,7 +5431,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during table dropdown values " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -5853,7 +5850,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.info("clear and typed the given Data");
 
 		} catch (Exception e) {
-			logger.error("Failed during type into valid xpath" + e.getMessage());
+			logger.error("Failed during type into valid xpath " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -6352,7 +6349,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				String[] text = element.getText().split(":");
 				if (text.length == 2) {
 					texts.add(text[1].trim().toString());
-					logger.info(texts.get(0));
 					StringSelection stringSelection = new StringSelection(texts.get(0));
 					Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, null);
 				}
@@ -6546,7 +6542,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switch to Frame " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -6565,7 +6561,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				return;
 			}
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error("Failed during Switch to Frame " + e.getMessage());
 			Thread.currentThread().interrupt();
 		}
 		try {
@@ -6579,9 +6575,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
 			Thread.currentThread().interrupt();
-			logger.error("Failed During switchToFrame Action");
+			logger.error("Failed during Switch to Frame " + e.getMessage());
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
