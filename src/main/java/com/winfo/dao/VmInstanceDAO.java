@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 @Transactional
 @Repository
 public class VmInstanceDAO {
-	public static final Logger log = Logger.getLogger(VmInstanceDAO.class);
+	public static final Logger logger = Logger.getLogger(VmInstanceDAO.class);
 
 	@Autowired
 	private EntityManager entityManager;
@@ -33,7 +33,7 @@ public class VmInstanceDAO {
 		List<BigDecimal> results = query.list();
 		Integer id = 0;
 		if (results != null && !results.isEmpty()) {
-			log.info("**result " + results.get(0));
+			logger.info("Get Inprogress and Inqueue status count " + results.get(0));
 			BigDecimal bigDecimal = results.get(0);
 			id = Integer.parseInt(bigDecimal.toString());
 		}
@@ -50,7 +50,7 @@ public class VmInstanceDAO {
 		List<BigDecimal> results = query.list();
 		Integer id = 0;
 		if (results != null && !results.isEmpty()) {
-			log.info("result " + results.get(0));
+			logger.info("Count of number of scripts in the test run " + results.get(0));
 
 			BigDecimal bigDecimal = results.get(0);
 			id = Integer.parseInt(bigDecimal.toString());
@@ -77,7 +77,7 @@ public class VmInstanceDAO {
 		List<BigDecimal> results = query.list();
 		Integer id = 0;
 		if (results != null && !results.isEmpty()) {
-			log.info("result" + results.get(0));
+			logger.info("Maximum Number Of browser count " + results.get(0));
 			BigDecimal bigDecimal = results.get(0);
 			id = Integer.parseInt(bigDecimal.toString());
 		}
@@ -92,13 +92,13 @@ public class VmInstanceDAO {
 			Query<?> query = session.createSQLQuery(sql);
 			List<Object[]> results = (List<Object[]>) query.list();
 			for (Object[] user : results) {
-				log.info("result" + results.get(0));
+				logger.info("Get start time and execution duration time " + results.get(0));
 				BigDecimal bigDecimal = (BigDecimal) user[1];
 				long id = Long.parseLong(bigDecimal.toString());
 				timeslist.put((Date) user[0], id);
 			}
 		} catch (Exception e) {
-			log.error(e);
+			logger.info("Failed to get start time and execution duration time " + e.getMessage());
 
 		}
 		return timeslist;
@@ -114,7 +114,7 @@ public class VmInstanceDAO {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			log.error(e);
+			logger.error("Failed during update test run start, end and duration time " +e.getMessage());
 
 		}
 	}
@@ -128,7 +128,7 @@ public class VmInstanceDAO {
 			query.executeUpdate();
 
 		} catch (Exception e) {
-			log.error(e);
+			logger.error("Failed during update test run end time and duration time " +e.getMessage());
 
 		}
 	}

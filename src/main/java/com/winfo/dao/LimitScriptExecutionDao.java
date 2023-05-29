@@ -38,7 +38,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 		List<BigDecimal> results = query.list();
 		Integer id = 0;
 		if (results != null && !results.isEmpty()) {
-			logger.info("Result {}" + results.get(0));
+			logger.info("TestSet Lines Status count " + results.get(0));
 			BigDecimal bigDecimal = results.get(0);
 			id = Integer.parseInt(bigDecimal.toString());
 		}
@@ -60,7 +60,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 		List<BigDecimal> results = query.list();
 		Integer id = 0;
 		if (results != null && !results.isEmpty()) {
-			logger.info("Result {}" + results.get(0));
+			logger.info("Passed script count " + results.get(0));
 			BigDecimal bigDecimal = results.get(0);
 			id = Integer.parseInt(bigDecimal.toString());
 		}
@@ -90,7 +90,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 		List<String> results = query.list();
 		String mailId = null;
 		if (results != null && !results.isEmpty()) {
-			logger.info(" Result {}" + results.get(0));
+			logger.info(" Project Manager Mail id " + results.get(0));
 			mailId = results.get(0);
 		}
 		return mailId;
@@ -106,11 +106,12 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 
 			List<BigDecimal> results = query.list();
 			if (results != null && !results.isEmpty()) {
-				logger.info("result {}" + results.get(0));
+				logger.info("Get failed script run count " + results.get(0));
 				BigDecimal bigDecimal = results.get(0);
 				id = Integer.parseInt(bigDecimal.toString());
 			}
 		} catch (Exception e) {
+			logger.error("Failed to get failed script run count " +e.getMessage());
 			e.printStackTrace();
 		}
 		int failedScriptRunCount = id + 1;
@@ -121,6 +122,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 			query.executeUpdate();
 
 		} catch (Exception e) {
+			logger.error("Failed to update failed script run count " +e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -137,6 +139,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 			query.executeUpdate();
 
 		} catch (Exception e) {
+			logger.error("Failed to update failed script run count " +e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -152,11 +155,12 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 
 			List<BigDecimal> results = query.list();
 			if (results != null && !results.isEmpty()) {
-				logger.info("result {}" + results.get(0));
+				logger.info("Get Failed Script run count " + results.get(0));
 				BigDecimal bigDecimal = results.get(0);
 				id = bigDecimal != null ? Integer.parseInt(bigDecimal.toString()) : 0;
 			}
 		} catch (Exception e) {
+			logger.error("Failed to get Failed Script run count " + e.getMessage());
 			throw new WatsEBSCustomException(500,
 					"Exception occured while selecting the run count for Script level pdf", e);
 		}
@@ -172,6 +176,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 			query.executeUpdate();
 
 		} catch (Exception e) {
+			logger.error("Failed to update Failed Script run count " + e.getMessage());
 			throw new WatsEBSCustomException(500,
 					"Exception occured while updating the fail run count for script level pdf", e);
 		}
@@ -205,6 +210,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 			Query query = session.createSQLQuery(sql1);
 			count = (BigDecimal) query.getSingleResult();
 		} catch (Exception e) {
+			logger.error("Failed to get Counts Of Execution Audit Records " + e.getMessage());
 			e.printStackTrace();
 		}
 		return count;

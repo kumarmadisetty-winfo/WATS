@@ -45,7 +45,7 @@ public class CopyTestRunDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("TestSet Id " +results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -60,10 +60,10 @@ public class CopyTestRunDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("TestSet line id " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
-			logger.info("id" + id);
+			logger.info("TestSet line id " + id);
 			return id;
 		} else {
 			return 0;
@@ -77,7 +77,7 @@ public class CopyTestRunDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Script Line Id " +results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -102,7 +102,7 @@ public class CopyTestRunDao {
 		SQLQuery<?> query = session.createSQLQuery(sql);
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Product version " +results.get(0));
 			return (String) results.get(0);
 		}
 		return null;

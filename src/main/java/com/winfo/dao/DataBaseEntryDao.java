@@ -271,8 +271,7 @@ public class DataBaseEntryDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " +results.get(0));
-
+			logger.info("Execution Id " +results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -1557,9 +1556,9 @@ public class DataBaseEntryDao {
 				.setParameter("SYSDATE2", date).setParameter("APP_USER1", executedBy)
 				.setParameter("APP_USER2", executedBy).executeUpdate();
 		if(listOfSetAttr > 0) {
-			logger.info("Records Updated Successfully ");
+			logger.info("TestSet Attribute Records Updated Successfully ");
 		} else {
-			logger.info("Some issue occured while inserting records ");
+			logger.info("Some issue occured while inserting TestSet Attribute Records ");
 		}
 	}
 

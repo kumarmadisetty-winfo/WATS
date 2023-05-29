@@ -71,7 +71,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " + results.get(0));
+			logger.info("Verify EndDate for USER " + results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -88,7 +88,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " + results.get(0));
+			logger.info("Verify Password Expire for user " + results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -105,7 +105,7 @@ public class WatsPluginDao {
 
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " + results.get(0));
+			logger.info("Verify User Active " + results.get(0));
 			return results.get(0);
 		} else {
 			return null;
@@ -148,7 +148,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " + results.get(0));
+			logger.info("TestSet Id " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -163,10 +163,10 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " + results.get(0));
+			logger.info("TestSet Line Id " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
-			logger.info("id" + id);
+			logger.info("TestSet Line Id " + id);
 			return id;
 		} else {
 			return 0;
@@ -180,7 +180,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " + results.get(0));
+			logger.info("Get Param Id " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -195,10 +195,9 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " + results.get(0));
+			logger.info("Get Master Script Id " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
-			logger.info("id" + id);
 			return id;
 		} else {
 			return 0;
@@ -212,7 +211,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("Result " + results.get(0));
+			logger.info("Get MetaData Id " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -232,7 +231,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Get TestSet Id " + results.get(0));
 
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
@@ -249,7 +248,7 @@ public class WatsPluginDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
+			logger.info("Get sequence number " +results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {

@@ -63,7 +63,7 @@ public class CustomerToCentralGetDao {
 			int customerId = 0;
 
 			Integer scriptId = scriptIds.get(i);
-			logger.info(scriptId);
+			logger.debug("Script Id " +scriptId);
 			Query<?> query3 = session
 					.createQuery("select product_version from ScriptMaster where script_id=" + scriptId);
 			List<String> result2 = (List<String>) query3.list();
