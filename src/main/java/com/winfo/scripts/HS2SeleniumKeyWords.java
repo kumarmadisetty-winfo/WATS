@@ -15818,22 +15818,32 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		
 		try {
+//			Actions actions = new Actions(driver);
+//			actions.moveToElement(waittext).build().perform();
+//			logger.info("before selectBox step");
+//			Select selectBox = new Select(waittext);
+//			logger.info("before selectBox step");
+//			selectBox.selectByVisibleText(inputData);
+//			logger.info("after selectBox step");
+//			String scripNumber = fetchMetadataVO.getScriptNumber();
+//			log.info("Sucessfully Clicked selectMethod" + scripNumber);
+//			screenshot(driver, fetchMetadataVO, customerDetails);
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
-			logger.info("before selectBox step");
+			WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(5)); // Adjust the timeout as needed
+			wait.until(ExpectedConditions.elementToBeClickable(waittext));
 			Select selectBox = new Select(waittext);
-			logger.info("before selectBox step");
 			selectBox.selectByVisibleText(inputData);
-			logger.info("after selectBox step");
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Sucessfully Clicked selectMethod" + scripNumber);
+			String scriptNumber = fetchMetadataVO.getScriptNumber();
+			log.info("Successfully clicked selectMethod" + scriptNumber);
 			screenshot(driver, fetchMetadataVO, customerDetails);
+			return;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 		
-		return;
+//		return;
 	}
 
 	public void selectByValue(WebDriver driver, String xpath, String inputData, ScriptDetailsDto fetchMetadataVO,

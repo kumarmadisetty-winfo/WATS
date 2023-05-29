@@ -14816,12 +14816,22 @@ public class CAMDENSeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	private void selectMethod(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+//		Actions actions = new Actions(driver);
+//		actions.moveToElement(waittext).build().perform();
+//		Select selectBox = new Select(waittext);
+//		selectBox.selectByVisibleText(inputData);
+//		String scripNumber = fetchMetadataVO.getScriptNumber();
+//		log.info("Sucessfully Clicked selectMethod" + scripNumber);
+//		screenshot(driver, fetchMetadataVO, customerDetails);
+//		return;
 		Actions actions = new Actions(driver);
 		actions.moveToElement(waittext).build().perform();
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(5)); // Adjust the timeout as needed
+		wait.until(ExpectedConditions.elementToBeClickable(waittext));
 		Select selectBox = new Select(waittext);
 		selectBox.selectByVisibleText(inputData);
-		String scripNumber = fetchMetadataVO.getScriptNumber();
-		log.info("Sucessfully Clicked selectMethod" + scripNumber);
+		String scriptNumber = fetchMetadataVO.getScriptNumber();
+		log.info("Successfully clicked selectMethod" + scriptNumber);
 		screenshot(driver, fetchMetadataVO, customerDetails);
 		return;
 	}
