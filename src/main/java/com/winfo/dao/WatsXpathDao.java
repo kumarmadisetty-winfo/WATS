@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class WatsXpathDao {
 
-	Logger log = Logger.getLogger(WatsXpathDao.class);
+	public static final Logger logger = Logger.getLogger(WatsXpathDao.class);
 
 	private static final String SCRIPT_ID = "scriptID";
 
@@ -70,10 +70,10 @@ public class WatsXpathDao {
 		SQLQuery<?> query = session.createSQLQuery(sql);
 		query.setParameter(SCRIPT_ID, scriptID);
 		List<?> results = query.list();
-		log.info("results1:::" + results);
+		logger.info("Result " + results);
 		if (!results.isEmpty()) {
 			java.sql.Timestamp obj = (java.sql.Timestamp) results.get(0);
-			log.info("executionDate::::::" + obj);
+			logger.info(" Execution Date " + obj);
 			return obj;
 		} else {
 			return null;
@@ -86,10 +86,10 @@ public class WatsXpathDao {
 		SQLQuery<?> query = session.createSQLQuery(sql);
 		query.setParameter(SCRIPT_ID, scriptID);
 		List<?> results = query.list();
-		log.info("results1:;:" + results);
+		logger.info("Result " + results);
 		if (!results.isEmpty()) {
 			java.sql.Timestamp obj = (java.sql.Timestamp) results.get(0);
-			log.info("executionDate::::::" + obj);
+			logger.info("Execution Date " + obj);
 			return obj;
 		} else {
 			return null;
@@ -102,10 +102,10 @@ public class WatsXpathDao {
 		SQLQuery<?> query = session.createSQLQuery(sql);
 		query.setParameter(SCRIPT_ID, scriptID);
 		List<?> results = query.list();
-		log.info("results1:;:" + results);
+		logger.info(" Result " + results);
 		if (!results.isEmpty()) {
 			java.sql.Timestamp obj = (java.sql.Timestamp) results.get(0);
-			log.info("UpdateDate::::::" + obj);
+			logger.info(" Update Date " + obj);
 			return obj;
 		} else {
 			return null;

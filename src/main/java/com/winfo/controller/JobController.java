@@ -46,7 +46,7 @@ public class JobController {
 			BindingResult bindingResult) throws Exception {
 
 		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
-			logger.info("Start of Test Script Run # : " + testScriptDto.getTestScriptNo());
+			logger.info(String.format("Test Script Run ID : %s ",  testScriptDto.getTestScriptNo()));
 			ResponseDto responseDto = healthCheck.sanityCheckMethod(testScriptDto.getTestScriptNo());
 			if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
 				runAutomation.run(testScriptDto.getTestScriptNo());

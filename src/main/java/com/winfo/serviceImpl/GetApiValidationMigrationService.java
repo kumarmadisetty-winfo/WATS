@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,8 @@ import com.winfo.vo.ResponseDto;
 public class GetApiValidationMigrationService {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
-
+	public static final Logger logger = Logger.getLogger(GetApiValidationMigrationService.class);
+	
 	public ResponseDto apiValidationMigration(ApiValidationDto lookUpCodeVOData) {
 		try {
 			
@@ -45,6 +47,7 @@ public class GetApiValidationMigrationService {
 							id = dataBaseEntry.getExistingLookupListByValidationId(apiValidationId,String.valueOf(ele.getLookUpCode()));
 						} catch (Exception e) {
 							e.printStackTrace();
+							logger.error("Failed to get existing lookup " + e.getMessage());
 						}
 						LookUpCode lookUpCode = listOfLookUpCodes;
 						lookUpCode.setLookUpCodeId(id.get(0).getLookUpCodeId());
@@ -79,8 +82,10 @@ public class GetApiValidationMigrationService {
 			}
 			
 		}catch(Exception e) {
+			logger.error("Failed during ApI validation migration " + e.getMessage());
 			return new ResponseDto(500, Constants.ERROR, "Migration Failed.");
 		}
+		logger.info("Successfully Migrated APi validation");
 		return new ResponseDto(200, Constants.SUCCESS, "Migration Completed.");
 	}
 }

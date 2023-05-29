@@ -27,10 +27,8 @@ import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.QueryException;
+import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
@@ -71,7 +69,7 @@ public class DataBaseEntryDao {
 	@PersistenceContext
 	EntityManager em;
 	
-	public final Logger logger = LogManager.getLogger(DataBaseEntryDao.class);
+	public static final Logger logger = Logger.getLogger(DataBaseEntryDao.class);
 
 	private static final String NULL_STRING = "null";
 
@@ -115,8 +113,7 @@ public class DataBaseEntryDao {
 			query.setParameter("testSetId", Integer.parseInt(testSetId));
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("cant update start time and end time in TestSet");
-			logger.error(e);
+			logger.error("Failed to update start time and end time in TestSet " + e.getMessage());
 		}
 		
 	}
@@ -201,8 +198,7 @@ public class DataBaseEntryDao {
 			testSetScriptParam.setLineExecutionStatus(status);
 			em.merge(testSetScriptParam);
 		} catch (Exception e) {
-			logger.info("cant update passed script line status");
-			logger.error(e);
+			logger.error("Failed to update passed script line status " + e.getMessage());
 		}
 	}
 
@@ -215,8 +211,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			productVersion = (String) query.getResultList().get(0);
 		} catch (Exception e) {
-			logger.info("cant get product version.");
-			logger.error(e);
+			logger.error("Failed to get product version " + e.getMessage());
 		}
 
 		return productVersion;
@@ -236,8 +231,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			errorMessage = (String) query.getResultList().get(0);
 		} catch (Exception e) {
-			logger.info("cant get error message");
-			logger.error(e);
+			logger.error("Failed to get error message " + e.getMessage());
 		}
 
 		return errorMessage;
@@ -251,8 +245,7 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			logger.info("cant update in progress script status");
-			logger.error(e);
+			logger.error(" Failed to update in progress script status " + e.getMessage());
 		}
 	}
 
@@ -267,9 +260,8 @@ public class DataBaseEntryDao {
 							+ " AND TEST_SET_LINE_ID = " + lineId);
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("cant update starttime");
-			logger.error(e);
-		}
+			logger.error("Failed to update start time " + e.getMessage());
+	}
 	}
 
 	public int getNextExecutionNum() {
@@ -279,8 +271,7 @@ public class DataBaseEntryDao {
 
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info(results.get(0));
-
+			logger.info("Execution Id " +results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
@@ -309,7 +300,7 @@ public class DataBaseEntryDao {
 		File file = new File(jpgFile).exists() ? new File(jpgFile) : new File(pngFile);
 		byte[] screenshotArray = new byte[(int) file.length()];
 		try (FileInputStream fileInputStream = new FileInputStream(file);) {
-			logger.info(fileInputStream.read(screenshotArray));
+			logger.debug("File Input Stream " + fileInputStream.read(screenshotArray));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -556,8 +547,7 @@ public class DataBaseEntryDao {
 					"Update TestSet set pdfGenerationEnabled='" + enabled + "' where testRunId='" + testSetId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("Error Updation PDF Generation Status");
-			logger.error(e);
+			logger.error("Error Updation PDF Generation Status " + e.getMessage());
 		}
 	}
 
@@ -1037,8 +1027,7 @@ public class DataBaseEntryDao {
 					+ testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("cant update passed script line status");
-			logger.error(e);
+			logger.error("Failed to update passed script line status " + e.getMessage());
 		}
 	}
 
@@ -1062,8 +1051,7 @@ public class DataBaseEntryDao {
 				em.merge(scriptParam);
 			}
 		} catch (Exception e) {
-			logger.info("cant update inprogress scriptLine status");
-			logger.error(e);
+			logger.error(" Failed update inprogress scriptLine status " + e.getMessage());
 		}
 	}
 
@@ -1077,8 +1065,7 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			logger.info("cant update in progress script status");
-			logger.error(e);
+			logger.error("Failed to update script status to In-progress " + e.getMessage());
 		}
 	}
 
@@ -1095,8 +1082,7 @@ public class DataBaseEntryDao {
 			}
 
 		} catch (Exception e) {
-			logger.info("cant update script status to - " + FAIL);
-			logger.info(e.getMessage());
+			logger.error("Failed to update script status to fail " + e.getMessage());
 		}
 	}
 
@@ -1108,8 +1094,8 @@ public class DataBaseEntryDao {
 				em.merge(testLines);
 			}
 		} catch (Exception e) {
-			logger.info(String.format("cant update script status to - %s", status));
-			logger.error(e);
+			logger.error(String.format("Failed to update script status to - %s", status));
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -1133,7 +1119,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlStr);
 			password = (String) query.getSingleResult();
 		} catch (Exception e) {
-			logger.info("________NO_Password________");
+			logger.error("Failed to get Password from DB");
 		}
 		return password;
 
@@ -1150,8 +1136,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
-			logger.info("cannot update endTime");
-			logger.error(e);
+			logger.error("Failed to update endTime " + e.getMessage());
 		}
 	}
 
@@ -1571,9 +1556,9 @@ public class DataBaseEntryDao {
 				.setParameter("SYSDATE2", date).setParameter("APP_USER1", executedBy)
 				.setParameter("APP_USER2", executedBy).executeUpdate();
 		if(listOfSetAttr > 0) {
-			logger.info("Reocrds Updated Successfully..");
+			logger.info("TestSet Attribute Records Updated Successfully ");
 		} else {
-			logger.info("Some issue occured while inserting records...");
+			logger.info("Some issue occured while inserting TestSet Attribute Records ");
 		}
 	}
 
@@ -1635,7 +1620,7 @@ public class DataBaseEntryDao {
 			int data = em.createQuery("delete from TestSetLine where testRunScriptId = :testSetLineId")
 					.setParameter("testSetLineId", testSetLine.getTestRunScriptId()).executeUpdate();
 			
-			logger.info("deleted count {}", data);
+			logger.info("deleted count {}" + data);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1648,7 +1633,7 @@ public class DataBaseEntryDao {
 			int data = em
 					.createQuery("delete from TestSetScriptParam where testSetLine.testRunScriptId = :testSetLineId")
 					.setParameter("testSetLineId", testRunScriptId).executeUpdate();
-			logger.info("deleted count {}", data);
+			logger.info("deleted count {}" + data);
 
 		} catch (Exception e) {
 			e.printStackTrace();
