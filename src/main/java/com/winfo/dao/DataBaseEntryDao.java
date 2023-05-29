@@ -300,7 +300,7 @@ public class DataBaseEntryDao {
 		File file = new File(jpgFile).exists() ? new File(jpgFile) : new File(pngFile);
 		byte[] screenshotArray = new byte[(int) file.length()];
 		try (FileInputStream fileInputStream = new FileInputStream(file);) {
-			logger.info("File Input Stream " + fileInputStream.read(screenshotArray));
+			logger.debug("File Input Stream " + fileInputStream.read(screenshotArray));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
