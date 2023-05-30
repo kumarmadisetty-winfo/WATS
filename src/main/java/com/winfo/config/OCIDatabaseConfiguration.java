@@ -1,9 +1,12 @@
 package com.winfo.config;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -31,8 +34,10 @@ import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
 
 @Configuration
 @ConfigurationProperties(prefix = "spring.datasource")
-public class DbConfig {
+public class OCIDatabaseConfiguration {
 	
+	public final Logger log = LogManager.getLogger(OCIDatabaseConfiguration.class);
+
 	@Value("${oci.config.path}")
 	private String ociConfigPath;
 
@@ -47,80 +52,69 @@ public class DbConfig {
 
 	@Bean
 	@Primary
-	public DataSource getDataSource() {
+	public DataSource getDataSource() throws IOException {
 		final String vaultId = getVaultId();
-		return DataSourceBuilder.create()
-				.url(getOracleUrl("Hostname", "SID", "Port", vaultId))
-				.username(getSecretFromVault("db_user", vaultId))
-				.password(getSecretFromVault("db_password", vaultId))
+		return DataSourceBuilder.create().url(getOracleUrl("Hostname", "SID", "Port", vaultId))
+				.username(getSecretFromVault("db_user", vaultId)).password(getSecretFromVault("db_password", vaultId))
 				.build();
 	}
 
-	private String getOracleUrl(String hostNameKey, String sidKey, String portKey, String vaultId) {
+	private String getOracleUrl(String hostNameKey, String sidKey, String portKey, String vaultId) throws IOException {
 		String url = "jdbc:oracle:thin:@" + getSecretFromVault(hostNameKey, vaultId) + ":"
 				+ getSecretFromVault(portKey, vaultId) + ":" + getSecretFromVault(sidKey, vaultId);
 		return url;
 	}
 
-	private String getSecretFromVault(String secretName, String vaultId) {
+	private String getSecretFromVault(String secretName, String vaultId) throws IOException {
 		GetSecretBundleByNameResponse getSecretBundleByNameResponse;
 		SecretsClient secretsClient = null;
 		try {
 			secretsClient = SecretsClient.builder()
 					.build(new ConfigFileAuthenticationDetailsProvider(ociConfigPath, ociConfigName));
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Authentication failed for keyvault");
+			throw e;
 		}
-		{
-			getSecretBundleByNameResponse = secretsClient.getSecretBundleByName(
-					GetSecretBundleByNameRequest.builder().secretName(secretName).vaultId(vaultId).build());
-		}
+		getSecretBundleByNameResponse = secretsClient.getSecretBundleByName(
+				GetSecretBundleByNameRequest.builder().secretName(secretName).vaultId(vaultId).build());
 		Base64SecretBundleContentDetails base64SecretBundleContentDetails = (Base64SecretBundleContentDetails) getSecretBundleByNameResponse
 				.getSecretBundle().getSecretBundleContent();
 		byte[] secretValueDecoded = Base64.decodeBase64(base64SecretBundleContentDetails.getContent());
 		return new String(secretValueDecoded).replace("\n", "");
 	}
 
-	private String getVaultId() {
-		String vaultId = null;
+	private String getVaultId() throws IOException {
 		AuthenticationDetailsProvider provider = null;
 		try {
 			provider = new ConfigFileAuthenticationDetailsProvider(ociConfigPath, ociConfigName);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Authentication failed for keyvault");
+			throw e;
 		}
-		Identity identityClient =
-                IdentityClient.builder().region(Region.UK_LONDON_1).build(provider);
-		String nextPageToken = null;
-		ListCompartmentsResponse response = null;
-		Compartment compartment = null;
-		do {
-            response =
-                    identityClient.listCompartments(
-                            ListCompartmentsRequest.builder()
-                                    .limit(5)
-                                    .compartmentId(provider.getTenantId())
-                                    .page(nextPageToken)
-                                    .build());
-
-            for (Compartment compart : response.getItems()) {
-            	if(compartmentName.equalsIgnoreCase(compart.getName())) {
-            		compartment = compart;
-            		break;
-            	}
-            }
-            nextPageToken = response.getOpcNextPage();
-        } while (compartment == null && nextPageToken != null);
+		Identity identityClient = IdentityClient.builder().build(provider);
+		Compartment compartment = getCompartment(identityClient, provider);
 		KmsVaultClient kmsValueClient = KmsVaultClient.builder().build(provider);
 		ListVaultsRequest listRequest = ListVaultsRequest.builder().compartmentId(compartment.getId()).build();
 		ListVaultsResponse listResponse = kmsValueClient.listVaults(listRequest);
-		for (VaultSummary vault : listResponse.getItems()) {
-			if (vaultName.equalsIgnoreCase(vault.getDisplayName())) {
-				vaultId = vault.getId();
-				break;
-			}
-		}
-		return vaultId;
+		Optional<VaultSummary> vaultSummary = listResponse.getItems().stream().filter(vault -> vaultName.equalsIgnoreCase(vault.getDisplayName()))
+				.findFirst();
+		
+		return vaultSummary.get().getId();
 	}
-	
+
+	private Compartment getCompartment(Identity identityClient, AuthenticationDetailsProvider provider) {
+		Optional<Compartment> compartment = null;
+		String nextPageToken = null;
+		ListCompartmentsResponse response = null;
+		do {
+			response = identityClient.listCompartments(ListCompartmentsRequest.builder().limit(5)
+					.compartmentId(provider.getTenantId()).page(nextPageToken).build());
+
+			compartment = response.getItems().stream().filter(compart -> compartmentName.equalsIgnoreCase(compart.getName()))
+					.findFirst();
+			nextPageToken = response.getOpcNextPage();
+		} while (compartment == null && nextPageToken != null);
+		return compartment.get();
+	}
+
 }
