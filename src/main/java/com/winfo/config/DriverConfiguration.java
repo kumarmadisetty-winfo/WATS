@@ -2,6 +2,7 @@ package com.winfo.config;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -100,10 +101,11 @@ public class DriverConfiguration {
 		}
 		if (driver != null) {
 			driver.manage().window().maximize();
-//			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			
 			try {
 				logger.info("need to wait for 10 seconds");
-				driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+//				driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 				logger.info("waited for 10 seconds");
 			} catch (Exception e) {
 				e.printStackTrace();
