@@ -105,7 +105,6 @@ public class DriverConfiguration {
 			try {
 				logger.info("need to wait for 10 seconds");
 				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-//				driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 				logger.info("waited for 10 seconds");
 			} catch (Exception e) {
 				e.printStackTrace();
