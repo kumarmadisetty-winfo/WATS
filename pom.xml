@@ -320,11 +320,10 @@
 				jfreechart</artifactId>
 			<version>1.0.19</version>
 		</dependency>
-				<dependency>
-			<groupId>
-				io.appium</groupId>
+		<dependency>
+			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>
-			<version>5.0.0-BETA9</version>
+			<version>8.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>
