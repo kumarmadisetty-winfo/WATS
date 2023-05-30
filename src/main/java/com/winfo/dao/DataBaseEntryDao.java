@@ -27,11 +27,13 @@ import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.hibernate.QueryException;
+
 import org.apache.log4j.Logger;
+import org.hibernate.QueryException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -43,6 +45,7 @@ import com.winfo.model.ApplicationProperties;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.AuditStageLookup;
 import com.winfo.model.Customer;
+import com.winfo.model.LogDetailsTable;
 import com.winfo.model.LookUp;
 import com.winfo.model.LookUpCode;
 import com.winfo.model.Project;
@@ -52,6 +55,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.LogDetailsRepository;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
@@ -98,6 +102,8 @@ public class DataBaseEntryDao {
 	private static final String NEW = "New";
 	private static final String STATUS = "status";
 	private static final String IN_QUEUE = "In-Queue";
+	@Autowired
+	private LogDetailsRepository logDetailsRepository;
 
 	public TestSet getTestSetObjByTestSetId(Integer testSetId) {
 		Session session = em.unwrap(Session.class);
@@ -1617,6 +1623,8 @@ public class DataBaseEntryDao {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteTestSetLinesRecordsByTestSetLineId(TestSetLine testSetLine) {
 		try {
+			LogDetailsTable logDetailsTable = createLogDetailsTable(testSetLine);
+	        logDetailsRepository.save(logDetailsTable);
 			int data = em.createQuery("delete from TestSetLine where testRunScriptId = :testSetLineId")
 					.setParameter("testSetLineId", testSetLine.getTestRunScriptId()).executeUpdate();
 			
@@ -1676,6 +1684,27 @@ public class DataBaseEntryDao {
 		}
 	}
 	
+	private LogDetailsTable createLogDetailsTable(TestSetLine testSetLine) {
+	    LogDetailsTable logDetailsTable = new LogDetailsTable();
+	    logDetailsTable.setLogLevel("Info");
+	    logDetailsTable.setLogTable("WIN_TA_TEST_SET_LINES");
+	    logDetailsTable.setLogAction("Deleting");
+	    logDetailsTable.setLogTime(new Date());
+	    logDetailsTable.setExecutedBy(testSetLine.getLastUpdatedBy());
+
+	    Integer testSetId = testSetLine.getTestRun().getTestRunId();
+	    String scriptNumber = testSetLine.getScriptNumber();
+	    Integer testSetLineId = testSetLine.getTestRunScriptId();
+	    String lastUpdatedBy = testSetLine.getLastUpdatedBy();
+	    int sequenceNumber = testSetLine.getSeqNum();
+
+	    String logDescription = String.format(
+	            "Test Set Id: %d, Script Number: %s, Test Set Line Id: %d, Last Updated By: %s, Sequence Number: %d is Deleted",
+	            testSetId, scriptNumber, testSetLineId, lastUpdatedBy, sequenceNumber);
+
+	    logDetailsTable.setLogDescription(logDescription);
+	    return logDetailsTable;
+	}
 }
 	
 	

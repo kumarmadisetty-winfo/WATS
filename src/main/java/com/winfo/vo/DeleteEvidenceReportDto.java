@@ -14,5 +14,6 @@ public class DeleteEvidenceReportDto {
 	
 	@JsonProperty("isTestRunDelete")
 	private boolean isTestRunDelete;
+	private String updatedBy;
 
 }
