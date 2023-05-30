@@ -1379,7 +1379,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 					driver.switchTo().window(childWindow);
 					System.out.println(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
-					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 					driver.switchTo().window(childWindow);
 					driver.close();
 					driver.switchTo().window(mainWindow);
@@ -15818,24 +15818,12 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		
 		try {
-//			Actions actions = new Actions(driver);
-//			actions.moveToElement(waittext).build().perform();
-//			logger.info("before selectBox step");
-//			Select selectBox = new Select(waittext);
-//			logger.info("before selectBox step");
-//			selectBox.selectByVisibleText(inputData);
-//			logger.info("after selectBox step");
-//			String scripNumber = fetchMetadataVO.getScriptNumber();
-//			log.info("Sucessfully Clicked selectMethod" + scripNumber);
-//			screenshot(driver, fetchMetadataVO, customerDetails);
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
-			WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(5)); // Adjust the timeout as needed
-			wait.until(ExpectedConditions.elementToBeClickable(waittext));
 			Select selectBox = new Select(waittext);
 			selectBox.selectByVisibleText(inputData);
-			String scriptNumber = fetchMetadataVO.getScriptNumber();
-			log.info("Successfully clicked selectMethod" + scriptNumber);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.info("Sucessfully Clicked selectMethod" + scripNumber);
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			return;
 		} catch (Exception e) {
@@ -16975,7 +16963,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
 					screenshot(driver, fetchMetadataVO, customerDetails);
-					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 					driver.switchTo().window(childWindow);
 				}
 			}
