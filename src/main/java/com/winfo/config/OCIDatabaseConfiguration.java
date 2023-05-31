@@ -49,12 +49,18 @@ public class OCIDatabaseConfiguration {
 	@Value("${keyVault.compartment.name}")
 	private String compartmentName;
 
+	public static final String HOSTNAME = "Hostname";
+	public static final String SID = "SID";
+	public static final String PORT = "Port";
+	public static final String DB_USERNAME = "db_user";
+	public static final String DB_PASSWORD = "db_password";
+
 	@Bean
 	@Primary
 	public DataSource getDataSource() throws Exception {
 		final String vaultId = getVaultId();
-		return DataSourceBuilder.create().url(getOracleUrl("Hostname", "SID", "Port", vaultId))
-				.username(getSecretFromVault("db_user", vaultId)).password(getSecretFromVault("db_password", vaultId))
+		return DataSourceBuilder.create().url(getOracleUrl(HOSTNAME, SID, PORT, vaultId))
+				.username(getSecretFromVault(DB_USERNAME, vaultId)).password(getSecretFromVault(DB_PASSWORD, vaultId))
 				.build();
 	}
 
@@ -87,7 +93,7 @@ public class OCIDatabaseConfiguration {
 		if (secretValueDecoded != null)
 			return new String(secretValueDecoded).replace("\n", "");
 		else {
-			log.error("Value is not present in vault with secret name {}",secretName);
+			log.error("Value is not present in vault with secret name {}", secretName);
 			throw new Exception(String.format("Value is not present in the vault with secret name %s", secretName));
 		}
 	}
