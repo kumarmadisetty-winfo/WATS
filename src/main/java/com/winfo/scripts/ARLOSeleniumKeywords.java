@@ -644,7 +644,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					driver.switchTo().window(childWindow);
 					logger.info(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
-					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 					driver.switchTo().window(childWindow);
 					driver.close();
 					driver.switchTo().window(mainWindow);
@@ -6462,7 +6462,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
 					fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
-					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 					driver.switchTo().window(childWindow);
 				}
 			}

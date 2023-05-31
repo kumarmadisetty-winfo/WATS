@@ -1379,7 +1379,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 					driver.switchTo().window(childWindow);
 					System.out.println(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
-					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 					driver.switchTo().window(childWindow);
 					driver.close();
 					driver.switchTo().window(mainWindow);
@@ -15777,6 +15777,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			if (param2 == "") {
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[contains(text(),\"" + param1 + "\")]/following::select[1]")));
+				logger.info("started selectByText");
 				selectMethod(driver, inputData, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 
@@ -15815,14 +15816,22 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	private void selectMethod(WebDriver driver, String inputData, ScriptDetailsDto fetchMetadataVO, WebElement waittext,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		Actions actions = new Actions(driver);
-		actions.moveToElement(waittext).build().perform();
-		Select selectBox = new Select(waittext);
-		selectBox.selectByVisibleText(inputData);
-		String scripNumber = fetchMetadataVO.getScriptNumber();
-		log.info("Sucessfully Clicked selectMethod" + scripNumber);
-		screenshot(driver, fetchMetadataVO, customerDetails);
-		return;
+		
+		try {
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittext).build().perform();
+			Select selectBox = new Select(waittext);
+			selectBox.selectByVisibleText(inputData);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			log.info("Sucessfully Clicked selectMethod" + scripNumber);
+			screenshot(driver, fetchMetadataVO, customerDetails);
+			return;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		
+//		return;
 	}
 
 	public void selectByValue(WebDriver driver, String xpath, String inputData, ScriptDetailsDto fetchMetadataVO,
@@ -16954,7 +16963,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 					driver.manage().window().maximize();
 					Thread.sleep(2000);
 					screenshot(driver, fetchMetadataVO, customerDetails);
-					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 					driver.switchTo().window(childWindow);
 				}
 			}
