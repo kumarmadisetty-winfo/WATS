@@ -1187,7 +1187,7 @@ public class WATS03SeleniumKeyWords extends AbstractSeleniumKeywords implements 
 					driver.switchTo().window(childWindow);
 					System.out.println(driver.switchTo().window(childWindow).getTitle());
 					driver.manage().window().maximize();
-					driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 					driver.switchTo().window(childWindow);
 					driver.close();
 					driver.switchTo().window(mainWindow);
