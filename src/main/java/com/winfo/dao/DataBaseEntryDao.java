@@ -1685,25 +1685,19 @@ public class DataBaseEntryDao {
 	}
 	
 	private LogDetailsTable createLogDetailsTable(TestSetLine testSetLine) {
-	    LogDetailsTable logDetailsTable = new LogDetailsTable();
-	    logDetailsTable.setLogLevel("Info");
-	    logDetailsTable.setLogTable("WIN_TA_TEST_SET_LINES");
-	    logDetailsTable.setLogAction("Deleting");
-	    logDetailsTable.setLogTime(new Date());
-	    logDetailsTable.setExecutedBy(testSetLine.getLastUpdatedBy());
-
-	    Integer testSetId = testSetLine.getTestRun().getTestRunId();
-	    String scriptNumber = testSetLine.getScriptNumber();
-	    Integer testSetLineId = testSetLine.getTestRunScriptId();
-	    String lastUpdatedBy = testSetLine.getLastUpdatedBy();
-	    int sequenceNumber = testSetLine.getSeqNum();
-
-	    String logDescription = String.format(
-	            "Test Set Id: %d, Script Number: %s, Test Set Line Id: %d, Last Updated By: %s, Sequence Number: %d is Deleted",
-	            testSetId, scriptNumber, testSetLineId, lastUpdatedBy, sequenceNumber);
-
-	    logDetailsTable.setLogDescription(logDescription);
-	    return logDetailsTable;
+		LogDetailsTable logDetailsTable = new LogDetailsTable();
+		logDetailsTable.setLogLevel("Info");
+		logDetailsTable.setLogTable("WIN_TA_TEST_SET_LINES");
+		logDetailsTable.setLogAction("Delete");
+		logDetailsTable.setLogTime(new Date());
+		logDetailsTable.setExecutedBy(testSetLine.getLastUpdatedBy());
+		String logDescription = String.format(
+				"Test Set Id: %d, Script Number: %s, Test Set Line Id: %d, Last Updated By: %s, Sequence Number: %d is Deleted",
+				testSetLine.getTestRun().getTestRunId(), testSetLine.getScriptNumber(),
+				testSetLine.getTestRunScriptId(), testSetLine.getLastUpdatedBy(), testSetLine.getSeqNum());
+		logger.info(logDescription);
+		logDetailsTable.setLogDescription(logDescription);
+		return logDetailsTable;
 	}
 }
 	
