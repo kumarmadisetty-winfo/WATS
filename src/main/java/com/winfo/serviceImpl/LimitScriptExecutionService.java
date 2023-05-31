@@ -33,7 +33,7 @@ import com.winfo.vo.ScriptDetailsDto;
 @Service
 @RefreshScope
 public class LimitScriptExecutionService {
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger logger = Logger.getLogger(LimitScriptExecutionService.class);
 
 	@Autowired
 	private LimitScriptExecutionDao limitScriptExecutionDao;
@@ -52,8 +52,6 @@ public class LimitScriptExecutionService {
 
 	@Transactional
 	public int getLimitedCountForConfiguration(String testRunNo) {
-		log.info("goto limitScriptExecutionDao class");
-		System.out.println("goto limitScriptExecutionDao class");
 		return limitScriptExecutionDao.getLimitedCountForConfiguration();
 	}
 
@@ -71,12 +69,10 @@ public class LimitScriptExecutionService {
 			executionAudit.setExecutionEndTime(endDate);
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
-			System.out.println("data added successfully");
-			log.info("data added successfully");
+			logger.info("Data added successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("testrun data not added " + e);
-			log.error("testrun data not added " + e);
+			logger.error("Testrun data not added " + e.getMessage());
 		}
 	}
 
@@ -103,8 +99,7 @@ public class LimitScriptExecutionService {
 			message.setSentDate(new Date());
 			Transport.send(message);
 		} catch (Exception e) {
-			System.out.println("respect alert mail not sent  " + e);
-			log.error("respect alert mail not sent" + e);
+			logger.error("Failed to send alert mail " + e.getMessage());
 		}
 	}
 
@@ -131,8 +126,7 @@ public class LimitScriptExecutionService {
 			message.setSentDate(new Date());
 			Transport.send(message);
 		} catch (Exception e) {
-			System.out.println("respect execuption mail not sent " + e);
-			log.error("respect execuption mail not sent  " + e);
+			logger.error("Failed to send execution mail " + e);
 		}
 	}
 
@@ -148,10 +142,10 @@ public class LimitScriptExecutionService {
 			Date date2 = inputFormat.parse(endDate);
 			startDate1 = outputFormat.format(date1);
 			endDate1 = outputFormat.format(date2);
-			System.out.println(startDate1 + "enddate" + endDate1);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("Failed to get passed scripts count " +e.getMessage());
 		}
 		return limitScriptExecutionDao.getPassedScriptsCount(startDate1, endDate1);
 	}
@@ -205,9 +199,9 @@ public class LimitScriptExecutionService {
 			executionAudit.setExecutionEndTime(endDate);
 			executionAudit.setStatus(status);
 			limitScriptExecutionDao.insertTestrundata(executionAudit);
-			log.info("data added successfully");
+			logger.info("data added successfully");
 		} catch (Exception e) {
-			log.error("testrun data not added " + e);
+			logger.error("testrun data not added " + e);
 			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
 		}
 	}

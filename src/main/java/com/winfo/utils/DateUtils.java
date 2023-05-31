@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 import com.winfo.constants.DateConstants;
 
@@ -39,10 +39,10 @@ public class DateUtils {
 
 	public static String convertMiliSecToDayFormat(long diffInTime) {
 		long time = 0;
-		String days = (time = diffInTime / (1000 * 60 * 60 * 24) % 365) > 0 ? time + "days " : "";
-		String hr = (time = (diffInTime / (1000 * 60 * 60)) % 24) > 0 || !days.equals("") ? time + "hr " : "";
-		String min = (time = (diffInTime / (1000 * 60)) % 60) > 0 || !hr.equals("") ? time + "min " : "";
-		String sec = (time = (diffInTime / 1000) % 60) > 0 ? time + "sec" : "";
+		String days = (time = TimeUnit.MILLISECONDS.toDays(diffInTime)) > 0 ? time + "days " : "";
+		String hr = (time = TimeUnit.MILLISECONDS.toHours(diffInTime) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diffInTime))) > 0 || !days.equals("") ? time + "hr " : "";
+		String min = (time = TimeUnit.MILLISECONDS.toMinutes(diffInTime) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffInTime))) > 0 || !hr.equals("") ? time + "min " : "";
+		String sec = (time = TimeUnit.MILLISECONDS.toSeconds(diffInTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(diffInTime))) > 0 ? time + "sec" : "";
 
 		return days + hr + min + sec;
 	}

@@ -31,7 +31,7 @@ import com.winfo.vo.WatsPluginMasterVO;
 @RestController
 public class WatsPlugInRest {
 
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger logger = Logger.getLogger(WatsPlugInRest.class);
 
 	@Autowired
 	WatsPluginService service;
@@ -56,10 +56,9 @@ public class WatsPlugInRest {
 	@GetMapping("/testrunNames/{productverson}")
 	@ApiOperation( value="Wats Login",notes = " We should pass productVersion to get testRun names")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
-	public List<String> getTestrunData(@PathVariable String productverson) {
-		log.info(productverson);
-		log.info(service.getTestrunDataPVerson(productverson));
-		return service.getTestrunDataPVerson(productverson);
+	public List<String> getTestrunData(@PathVariable String productversion) {
+		logger.info("Product Version " + productversion);
+		return service.getTestrunDataPVerson(productversion);
 	}
 
 	@PostMapping("/testrunData")

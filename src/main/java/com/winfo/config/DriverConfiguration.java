@@ -2,6 +2,7 @@ package com.winfo.config;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +43,6 @@ public class DriverConfiguration {
 	 */
 
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO, String operatingSystem) throws MalformedURLException {
-		logger.info("Start of get web driver method");
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
 		os = operatingSystem == null ? os : operatingSystem;
@@ -53,12 +53,12 @@ public class DriverConfiguration {
 			MutableCapabilities cap = new MutableCapabilities();
 			if (os.contains("win")) {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
-				logger.info("Windows location");
+				logger.info("Script Running on  Windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
 			} else  {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
-				logger.info("linux location");
+				logger.info("Script Running on Linux Location");
 				options.setBinary("/usr/bin/google-chrome");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
 			}
@@ -85,7 +85,7 @@ public class DriverConfiguration {
 			if (os.contains("win")) {
 				options.setBinary("/Program Files/Mozilla Firefox/firefox.exe");
 			} else {
-				logger.info("linux location");
+				logger.info("Script Running on linux location");
 				options.setBinary("/usr/bin/firefox");
 			}
 			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());
@@ -100,10 +100,10 @@ public class DriverConfiguration {
 		}
 		if (driver != null) {
 			driver.manage().window().maximize();
-//			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			
 			try {
 				logger.info("need to wait for 10 seconds");
-				driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+				driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 				logger.info("waited for 10 seconds");
 			} catch (Exception e) {
 				e.printStackTrace();

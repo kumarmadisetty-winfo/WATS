@@ -11,8 +11,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -48,7 +47,7 @@ import reactor.core.publisher.Mono;
 @RefreshScope
 public class JiraTicketBugService {
 	
-	public final Logger log = LogManager.getLogger(RunAutomation.class);
+	public static final Logger logger = Logger.getLogger(JiraTicketBugService.class);
 	private static final String TRANSITIONS = "transitions";
 	@Autowired
 	private TestCaseDataService testRunService;
@@ -96,7 +95,7 @@ public class JiraTicketBugService {
 					.bodyToMono(String.class);
 			response = result.block();
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error("Failed to create Jira ticket " +e.getMessage());
 		}
 		return response;
 
@@ -121,10 +120,10 @@ public class JiraTicketBugService {
 			File filenew = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");
 
-			System.out.println("jira pdf path= " + filenew);
+			logger.info("jira pdf path= " + filenew);
 			builder.part("file", new FileSystemResource(filenew));
 		} catch (Exception e) {
-			System.out.println(e);
+			logger.error("Fail during Multi Value Map " +e.getMessage());
 		}
 		return builder.build();
 	}
@@ -265,7 +264,7 @@ public class JiraTicketBugService {
 						if (entry.getKey().equals("key")) {
 							issuekey = entry.getValue().toString();
 						}
-						System.out.println(entry.getKey() + "=" + entry.getValue());
+						logger.info(entry.getKey() + "=" + entry.getValue());
 
 					}
 
@@ -300,7 +299,7 @@ public class JiraTicketBugService {
 
 		}
 
-		System.out.println(count + " Record(s) Updated.");
+		logger.info(count + " Record(s) Updated.");
 		String finalIssuekey=String.join("','", issueKeyList);
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		if (count > 0) {
@@ -321,7 +320,7 @@ public class JiraTicketBugService {
 			response.setStatusMessage("ERROR");
 			response.setDescription(messageUtil.getJiraTicketBugService().getError().getNotAbleToCreateIssue());
 			bean.add(response);
-			log.error(e);
+			logger.error("Failed during create jira ticket " +e.getMessage());
 //			throw new WatsEBSCustomException(500, MessageUtil.getMessage("JiraTicketBugService.Error.NotAbleToCreateIssue"));
 		}
 		return bean;
@@ -331,7 +330,7 @@ public class JiraTicketBugService {
 	@SuppressWarnings("serial")
 	public void jiraIssueFixed(String jiraIssueKey,String jiraIssueUrl,String jiraIssueTransitions) throws JsonMappingException, JsonProcessingException {
 		try{
-			log.info("changing status of Passed script in jira");
+			logger.info("changing status of Passed script in jira");
 			String[] jiraIssueTransitionsArray = jiraIssueTransitions.split(",");
 			List <String> jiraIssueTransitionsList = Arrays.asList(jiraIssueTransitionsArray);
 			for(int j = 0 ; j < jiraIssueTransitionsList.size() ; j++){
@@ -354,9 +353,9 @@ public class JiraTicketBugService {
 					}
 				}
 			}
-			log.info("Status of Passed script in jira Successfully changed.");
+			logger.info("Status of Passed script in jira Successfully changed.");
 		}catch (Exception e) {
-			log.error("Error occured while updating status of "+jiraIssueKey+" issue in jira");
+			logger.error("Error occured while updating status of "+jiraIssueKey+" issue in jira");
 		}
 	}
 
