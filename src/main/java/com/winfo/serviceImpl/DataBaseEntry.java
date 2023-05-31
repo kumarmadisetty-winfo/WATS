@@ -577,7 +577,7 @@ public class DataBaseEntry {
 	public void getTestRunLinesDataByTestSetLineId(TestSetLine testSetLineObj) {
 	
 		TestSetLine newTestSetLineObj = dao.getTestSetLine(testSetLineObj.getTestRunScriptId().toString());
-		
+		newTestSetLineObj.setLastUpdatedBy(testSetLineObj.getLastUpdatedBy());
 		appContext.getBean(this.getClass()).deleteScriptFromTestRun(newTestSetLineObj);
 	}
 	

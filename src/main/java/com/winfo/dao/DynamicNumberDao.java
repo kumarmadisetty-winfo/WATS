@@ -27,7 +27,7 @@ public class DynamicNumberDao {
 		query.setParameter("testParamId", testParamId);
 		query.setParameter("testSetId", testSetId);
 		int i = query.executeUpdate();
-		logger.info("DynamicValueUpdate::::: " + i);
+		logger.info(" Dynamic Value Update " + i);
 	}
 
 	public String getCopynumber(String testRunName, String seq, String lineNumber) {
@@ -40,7 +40,7 @@ public class DynamicNumberDao {
 		query.setParameter("line_number", lineNumber);
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("getCopyNumber:::::: " + results.get(0));
+			logger.info(" Copy Number  " + results.get(0));
 			return (String) results.get(0);
 		} else {
 			return null;
@@ -56,7 +56,7 @@ public class DynamicNumberDao {
 		query.setParameter("testSetLineId", testSetLineId);
 		query.setParameter("key", key);
 		int i = query.executeUpdate();
-		logger.info("DynamicValueupdate::::: " + i);
+		logger.info(" Dynamic Value update " + i);
 	}
 
 	public String getCopynumberInputParameter(String testrunName, String seq, String lineNumber) {
@@ -69,7 +69,7 @@ public class DynamicNumberDao {
 		query.setParameter("line_number", lineNumber);
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
-			logger.info("getCopyNumber:::::: " + results.get(0));
+			logger.info(" Copy Number " + results.get(0));
 			return (String) results.get(0);
 		} else {
 			return null;
@@ -84,7 +84,7 @@ public class DynamicNumberDao {
 		query.setParameter("test_set_id", testSetId);
 		List<String> results = (List<String>) query.list();
 		if (!results.isEmpty()) {
-			logger.info("getCopyNumber::::::" + results.get(0));
+			logger.info(" CopyNumber " + results.get(0));
 			return results;
 		} else {
 			return Collections.emptyList();

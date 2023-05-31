@@ -47,7 +47,7 @@ import com.winfo.vo.WatsScriptAssistantVO;
 @Service
 public class WatsPluginService {
 	
-	Logger log = Logger.getLogger("Logger");
+	public static final Logger logger = Logger.getLogger(WatsPluginService.class);
 	
 	@Value("${oci.config.name.common}")
 	private String ociConfigName;
@@ -281,7 +281,7 @@ public class WatsPluginService {
 		// Write into the file
 		try (FileWriter file = new FileWriter(directoryPath+"/WinfoTest-Auto-Recording/properties.json")) {
 			file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root));
-			log.info("Successfully updated json object to file...!!");
+			logger.info("Successfully updated json object to file...!!");
 		}
 	}
 	

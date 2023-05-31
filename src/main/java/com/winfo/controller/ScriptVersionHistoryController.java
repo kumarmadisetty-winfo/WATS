@@ -17,6 +17,7 @@ import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.serviceImpl.ScriptVersionHistoryService;
 import com.winfo.vo.ResponseDto;
+import com.winfo.vo.ScriptMaterVO;
 import com.winfo.vo.VersionHistoryDto;
 
 import io.swagger.annotations.ApiOperation;
@@ -52,7 +53,7 @@ public class ScriptVersionHistoryController {
 	@PostMapping(value = "/getVersionHistory")
 	@ApiOperation( value="Get Version History ",notes = " <B>scriptId and Version Number</B> is to pass to get the version history")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
-	public ScriptMaster getVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
+	public ScriptMaterVO getVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
 		if (!(Objects.isNull(versionHistoryDto.getVersionNumber()) || versionHistoryDto.getVersionNumber().isEmpty())) {
 			return versionHistoryService.getVersionHistory(versionHistoryDto);
 		} else {

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class CustomerToCentralGetService {
-
+	public static final Logger logger = Logger.getLogger(GetApiValidationMigrationService.class);
+	
 	@Autowired
 	private EntityManager entityManager;
 
@@ -31,6 +33,7 @@ public class CustomerToCentralGetService {
 		String response;
 		if (customerUri.equals("")) {
 			response = "[{\"status\":500,\"statusMessage\":\"Invalid URL\",\"description\":\"Invalid URL!!\"}]";
+			logger.error("Invalid URL " + customerUri);
 		} else {
 			String uri = customerUri + "/centralToCustomerScriptMigrate";
 			WebClient webClient = WebClient.create(uri);
@@ -38,6 +41,7 @@ public class CustomerToCentralGetService {
 			response = result.block();
 			if ("[]".equals(response)) {
 				response = "[{\"status\":404,\"statusMessage\":\"PV_ERROR\",\"description\":\"Wrong Product Version\"}]";
+				logger.error("Invalid Product Version ");
 			}
 		}
 		return response;

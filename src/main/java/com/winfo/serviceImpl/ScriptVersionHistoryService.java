@@ -22,10 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ResponseDto;
+import com.winfo.vo.ScriptMaterVO;
 import com.winfo.vo.VersionHistoryDto;
 
 @Service
@@ -39,9 +41,13 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 
 	public ResponseDto saveVersionHistory(VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
 
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
+			ObjectMapper objectMapper = new ObjectMapper();
+			ScriptMaterVO scriptMasterVO = objectMapper.readValue(objectMapper.writeValueAsString(scriptMaster),
+					ScriptMaterVO.class);
 			Timestamp instant = Timestamp.from(Instant.now());
 
 			Integer newNumber = null;
@@ -64,7 +70,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 					new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8), "UTF-8");
 			// Write into the file
 			try (FileWriter file = new FileWriter(localPath + FORWARD_SLASH + encodedName)) {
-				file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMaster));
+				file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMasterVO));
 				logger.info("Successfully saved details in file...!!");
 			} catch (IOException e) {
 				throw new WatsEBSCustomException(500, "Not able to save the file!", e);
@@ -117,7 +123,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public ScriptMaster getVersionHistory(@Valid VersionHistoryDto versionHistoryDto) throws Exception {
+	public ScriptMaterVO getVersionHistory(@Valid VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
 			String directoryPath = dataBaseEntry.getDirectoryPath();
 			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId();
@@ -129,7 +135,10 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			downloadObjectFromObjectStore(localPath + FORWARD_SLASH + fileName + JSON, objectStorePath,
 					fileName + JSON);
 			ObjectMapper mapper = new ObjectMapper();
-			return mapper.readValue(new File(localPath + FORWARD_SLASH + fileName + JSON), ScriptMaster.class);
+			ScriptMaterVO scriptMaterVO = mapper.readValue(new File(localPath + FORWARD_SLASH + fileName + JSON),
+					ScriptMaterVO.class);
+			scriptMaterVO.updateFieldIfNotNull(dataBaseEntry);
+			return scriptMaterVO;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new WatsEBSCustomException(500, "Not able to get the history!", e);
