@@ -49,11 +49,11 @@ public class OCIDatabaseConfiguration {
 	@Value("${keyVault.compartment.name}")
 	private String compartmentName;
 
-	public static final String HOSTNAME = "Hostname";
-	public static final String SID = "SID";
-	public static final String PORT = "Port";
-	public static final String DB_USERNAME = "db_user";
-	public static final String DB_PASSWORD = "db_password";
+	private static final String HOSTNAME = "Hostname";
+	private static final String SID = "SID";
+	private static final String PORT = "Port";
+	private static final String DB_USERNAME = "db_user";
+	private static final String DB_PASSWORD = "db_password";
 
 	@Bean
 	@Primary
