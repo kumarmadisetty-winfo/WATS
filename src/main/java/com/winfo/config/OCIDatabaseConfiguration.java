@@ -30,6 +30,7 @@ import com.oracle.bmc.secrets.SecretsClient;
 import com.oracle.bmc.secrets.model.Base64SecretBundleContentDetails;
 import com.oracle.bmc.secrets.requests.GetSecretBundleByNameRequest;
 import com.oracle.bmc.secrets.responses.GetSecretBundleByNameResponse;
+import com.winfo.exception.WatsEBSCustomException;
 
 @Configuration
 @ConfigurationProperties(prefix = "spring.datasource")
@@ -85,16 +86,16 @@ public class OCIDatabaseConfiguration {
 			secretValueDecoded = Base64.decodeBase64(base64SecretBundleContentDetails.getContent());
 		} catch (IOException e) {
 			log.error("Authentication failed for keyvault {}", e.getMessage());
-			throw e;
+			throw new WatsEBSCustomException(400, "Authentication failed for keyvault", e);
 		} catch (Exception e) {
 			log.error("Failed while fetching the value {}", e.getMessage());
-			throw e;
+			throw new WatsEBSCustomException(400, "Failed while fetching the value", e);
 		}
 		if (secretValueDecoded != null)
 			return new String(secretValueDecoded).replace("\n", "");
 		else {
 			log.error("Value is not present in vault with secret name {}", secretName);
-			throw new Exception(String.format("Value is not present in the vault with secret name %s", secretName));
+			throw new WatsEBSCustomException(400, String.format("Value is not present in the vault with secret name %s", secretName));
 		}
 	}
 
@@ -113,15 +114,16 @@ public class OCIDatabaseConfiguration {
 				return vaultSummary.get().getId();
 			else {
 				log.error("Vault is not present in the compartment ::" + compartment.getName());
-				throw new Exception(
+				throw new WatsEBSCustomException(400, 
 						String.format("Vault is not present in the compartment %s ", compartment.getName()));
+				
 			}
 		} catch (IOException e) {
 			log.error("Authentication failed for keyvault {}", e.getMessage());
-			throw e;
+			throw new WatsEBSCustomException(400, "Authentication failed for keyvault", e);
 		} catch (Exception e) {
 			log.error("Not able to get vault id {}", e.getMessage());
-			throw e;
+			throw new WatsEBSCustomException(400, "Not able to get vault id", e);
 		}
 	}
 
@@ -142,7 +144,7 @@ public class OCIDatabaseConfiguration {
 			return compartment.get();
 		else {
 			log.error("Compartment is not present in OCI keyvault");
-			throw new Exception("Compartment is not present in OCI keyvault");
+			throw new WatsEBSCustomException(400, "Compartment is not present in OCI keyvault");
 		}
 	}
 
