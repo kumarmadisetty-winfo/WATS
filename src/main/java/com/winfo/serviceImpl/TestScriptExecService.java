@@ -23,14 +23,12 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -74,7 +72,7 @@ import com.winfo.vo.UpdateScriptStepStatus;
 @Service
 public class TestScriptExecService extends AbstractSeleniumKeywords {
 
-	public final Logger logger = LogManager.getLogger(TestScriptExecService.class);
+	public static final Logger logger = Logger.getLogger(TestScriptExecService.class);;
 
 	public static final String BACK_SLASH = "\\\\";
 	public static final String topic = "test-script-run";
@@ -868,7 +866,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 		String screenShotFolderPath = SCREENSHOT + BACK_SLASH + customerDetails.getCustomerName()
 				+ BACK_SLASH + customerDetails.getTestSetName() + BACK_SLASH;
-
+		logger.info(" ScreenShot Folder Path " + screenShotFolderPath);
 		for (ScriptDetailsDto fetchMetadataVO : fetchMetadataListVO) {
 
 			testScriptParamId = fetchMetadataVO.getTestScriptParamId();

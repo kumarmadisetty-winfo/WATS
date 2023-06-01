@@ -4,6 +4,8 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.scripts.RunAutomation;
 import com.winfo.serviceImpl.HealthCheck;
 import com.winfo.vo.ResponseDto;
@@ -32,21 +35,33 @@ public class JobController {
 	@Autowired
 	HealthCheck healthCheck;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ResponseBody
 	@PostMapping(value = "/executeTestScript")
-	@ApiOperation( value="Test Script Execution ",notes = " <B>TestScriptNo:</B> TestsetId is to pass to start the script execution")
-	@ApiResponses( value = { @ApiResponse( code=200,message="Script execution completed")})
-	public ResponseDto executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto, BindingResult bindingResult)
-			throws Exception {
+	@ApiOperation(value = "Test Script Execution ", notes = " <B>TestScriptNo:</B> TestsetId is to pass to start the script execution")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Script execution completed"),
+			@ApiResponse(code = 400, message = "Bad request"),
+			@ApiResponse(code = 500, message = "Internal server error") })
+	public ResponseEntity executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto,
+			BindingResult bindingResult) throws Exception {
 
-		ResponseDto status = null;
 		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
-			logger.info("Start of Test Script Run # : " + testScriptDto.getTestScriptNo());
-			status = healthCheck.sanityCheckMethod(testScriptDto.getTestScriptNo());
-			runAutomation.run(testScriptDto.getTestScriptNo());
-
+			logger.info(String.format("Test Script Run ID : %s ",  testScriptDto.getTestScriptNo()));
+			ResponseDto responseDto = healthCheck.sanityCheckMethod(testScriptDto.getTestScriptNo());
+			if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
+				runAutomation.run(testScriptDto.getTestScriptNo());
+			} else {
+				return new ResponseEntity(
+						new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Sanity check fail"),
+						HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			return ResponseEntity.ok(responseDto);
+		} else {
+			return new ResponseEntity(
+					new WatsEBSCustomException(HttpStatus.BAD_REQUEST.value(), "Enter valid test set id"),
+					HttpStatus.BAD_REQUEST);
 		}
-		return status;
+
 	}
 
 }
