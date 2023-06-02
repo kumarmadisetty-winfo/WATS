@@ -370,16 +370,16 @@ public class RunAutomation {
 		String scriptId = fetchMetadataListsVO.get(0).getScriptId();
 		String passUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-		String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
+		String failUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-		String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
+		String detailUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
 				+ "Detailed_Report.pdf";
-		String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
+		String scriptUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
 				+ fetchMetadataListsVO.get(0).getSeqNum() + "_" + fetchMetadataListsVO.get(0).getScriptNumber()
 				+ ".pdf";
-		logger.info(String.format("Pass Url : %s , Fail Url : %s , Detailed Url : %s , Script Url : %s " , passUrl, failurl, detailurl, scripturl));
+		logger.info(String.format("Pass Url : %s , Fail Url : %s , Detailed Url : %s , Script Url : %s " , passUrl, failUrl, detailUrl, scriptUrl));
 		boolean isDriverError = true;
 		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
 				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListsVO.get(0).getExecutedBy())
@@ -389,7 +389,7 @@ public class RunAutomation {
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passurl, failurl, detailurl, scripturl);
+			switchActions(testRunId, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passUrl, failUrl, detailUrl, scriptUrl);
 
 		}
 		catch (WebDriverException e) {
@@ -409,9 +409,9 @@ public class RunAutomation {
 				post.setP_script_id(scriptId);
 				post.setP_test_set_line_id(testSetLineId);
 				post.setP_pass_path(passUrl);
-				post.setP_fail_path(failurl);
-				post.setP_exception_path(detailurl);
-				post.setP_test_set_line_path(scripturl);
+				post.setP_fail_path(failUrl);
+				post.setP_exception_path(detailUrl);
+				post.setP_test_set_line_path(scriptUrl);
 
 //				dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
