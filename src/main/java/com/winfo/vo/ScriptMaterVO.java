@@ -49,7 +49,7 @@ public class ScriptMaterVO {
 	@JsonAlias("role")
 	private String role;
 
-	@JsonProperty("Standard")
+	@JsonProperty("Type Of Script")
 	@JsonAlias("standardCustom")
 	private String standardCustom;
 
