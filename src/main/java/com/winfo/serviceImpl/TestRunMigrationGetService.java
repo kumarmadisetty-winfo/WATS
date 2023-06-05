@@ -253,9 +253,9 @@ public class TestRunMigrationGetService {
 				Integer newNextValueProject = Integer.parseInt(nextValueProject.toString());
 
 				session.createNativeQuery(
-						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,CUSTOMER_ID,PRODUCT_VERSION, WATS_PACKAGE) VALUES("
+						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,START_DATE,CUSTOMER_ID,PRODUCT_VERSION, WATS_PACKAGE) VALUES("
 								+ newNextValueProject + "," + newNextValueProjectNumber + ",'"
-								+ testRunMigrateDto.getProjectName() + "'," + customerId + ",'"
+								+ testRunMigrateDto.getProjectName() +"',SYSDATE," + customerId + ",'"
 								+ testRunMigrateDto.getScriptMasterData().get(0).getProductVersion() + "','"
 								+ testRunMigrateDto.getWatsPackage() + "')")
 						.executeUpdate();
