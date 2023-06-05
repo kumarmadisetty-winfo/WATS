@@ -26,6 +26,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -571,7 +572,9 @@ public class RunAutomation {
 									break;
 								}
 							} else {
-								break;
+								seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
+										customerDetails);
+								throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Failed during login because input value is null");
 							}
 						case "Login into SFApplication":
 							userName = fetchMetadataVO.getInputValue();
