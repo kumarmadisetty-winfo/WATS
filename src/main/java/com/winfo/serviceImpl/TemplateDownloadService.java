@@ -265,7 +265,7 @@ public class TemplateDownloadService {
 					valueCell.setCellStyle(styleForScriptMetaData);
 
 					String value = "";
-					String key = row[i - 1].replace("TEST CASE", "SCENARIO").replace(" ", "_");
+					String key = row[i - 1].replace("TEST CASE", "SCENARIO").replace("TYPE OF SCRIPT", "STANDARD CUSTOM").replace(" ", "_");
 					if (!row[i - 1].isEmpty() && scriptId.isPresent()) {
 						Object result = getValueByColumnName(scriptMasterData, key);
 						if ("PROCESS AREA".equalsIgnoreCase(row[i - 1]) || "MODULE".equalsIgnoreCase(row[i - 1])
@@ -281,7 +281,7 @@ public class TemplateDownloadService {
 					valueCell.setCellValue(value);
 
 					if (listOfDropdownKeys.contains(row[i - 1])) {
-						map.put(key, i + "," + column);
+						map.put(key.replace("STANDARD_CUSTOM", "TYPE_OF_SCRIPT"), i + "," + column);
 					}
 
 					column--;
