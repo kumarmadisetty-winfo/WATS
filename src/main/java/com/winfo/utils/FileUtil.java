@@ -8,17 +8,17 @@ public class FileUtil {
 	public static final Logger logger = Logger.getLogger(FileUtil.class);
 	
 	public static void createDir(String path) {
-		File folder1 = new File(path);
-		if (!folder1.exists()) {
-			logger.info("creating directory: " + folder1.getName());
+		File folder = new File(path);
+		if (!folder.exists()) {
+			logger.info("creating directory: " + folder.getName());
 			try {
-				folder1.mkdirs();
+				folder.mkdirs();
 			} catch (SecurityException se) {
 				se.printStackTrace();
 				logger.error("Failed to create directory " + se.getMessage());
 			}
 		} else {
-			logger.info("Folder exist " + folder1);
+			logger.info("Folder exist " + folder);
 		}
 	}
 
