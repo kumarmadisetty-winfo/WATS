@@ -55,6 +55,7 @@ import com.itextpdf.text.DocumentException;
 import com.winfo.service.SeleniumKeyWordsInterface;
 import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 import com.winfo.serviceImpl.ScriptXpathService;
+import com.winfo.utils.FileUtil;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -393,7 +394,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				+ customerDetails.getTestSetName() + File.separator + name);
 		String folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + File.separator
 				+ customerDetails.getTestSetName() + File.separator);
-		createDir(folder);
+		FileUtil.createDir(folder);
 		OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
 		FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(vidPath, 1366, 614);
 		String str = null;

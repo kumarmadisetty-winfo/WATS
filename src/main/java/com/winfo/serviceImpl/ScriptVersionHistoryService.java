@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.utils.Constants;
+import com.winfo.utils.FileUtil;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptMaterVO;
 import com.winfo.vo.VersionHistoryDto;
@@ -55,7 +56,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
 					+ versionHistoryDto.getScriptId();
 			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId();
-			createDir(localPath);
+			FileUtil.createDir(localPath);
 			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath + FORWARD_SLASH);
 			if (!listOfFiles.isEmpty()) {
 				listOfSortedFiles(listOfFiles);
