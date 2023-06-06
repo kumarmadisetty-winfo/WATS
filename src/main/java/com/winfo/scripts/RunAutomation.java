@@ -574,7 +574,9 @@ public class RunAutomation {
 							} else {
 								seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
 										customerDetails);
-								throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Failed during login because input value is null");
+								logger.error("Failed during " + instanceName + " login because input value is null");
+								throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+										"Failed during " + instanceName + " login because input value is null");
 							}
 						case "Login into SFApplication":
 							userName = fetchMetadataVO.getInputValue();
