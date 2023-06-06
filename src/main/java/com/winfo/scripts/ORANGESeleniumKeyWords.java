@@ -110,6 +110,7 @@ import com.winfo.serviceImpl.LimitScriptExecutionService;
 import com.winfo.serviceImpl.ScriptXpathService;
 import com.winfo.utils.ArithmeticUtils;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.FileUtil;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -18856,8 +18857,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
 					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
-			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
-			
+			FileUtil.createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
 			try (PrintWriter out = new PrintWriter(fileName)) {
 			    out.println(api.getResponse());
 			}

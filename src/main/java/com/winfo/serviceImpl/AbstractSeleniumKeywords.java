@@ -116,6 +116,7 @@ import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.FileUtil;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -128,7 +129,7 @@ import reactor.core.publisher.Mono;
 public abstract class AbstractSeleniumKeywords {
 
 	public static final Logger logger = Logger.getLogger(AbstractSeleniumKeywords.class);
-
+	
 	@Value("${oci.config.path}")
 	private String ociConfigPath;
 	@Value("${oci.config.name}")
@@ -306,7 +307,7 @@ public abstract class AbstractSeleniumKeywords {
 			return e.getMessage();
 		}
 	}
-
+	
 	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
 		try {
@@ -401,7 +402,7 @@ public abstract class AbstractSeleniumKeywords {
 				objNames = response.getListObjects().getObjects().stream().map(objSummary -> objSummary.getName())
 						.collect(Collectors.toList());
 				ListIterator<String> listIt = objNames.listIterator();
-				createDir(screenshotPath);
+				FileUtil.createDir(screenshotPath);
 				while (listIt.hasNext()) {
 					String objectName = listIt.next();
 					GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder()
@@ -439,22 +440,8 @@ public abstract class AbstractSeleniumKeywords {
 
 	}
 
-	public void createDir(String path) {
-		File folder1 = new File(path);
-		if (!folder1.exists()) {
-			logger.info("creating directory: " + folder1.getName());
-			try {
-				folder1.mkdirs();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-			}
-		} else {
-			logger.info("Folder exist");
-		}
-	}
-
 	public void findPassAndFailCount(FetchConfigVO fetchConfigVO, String testSetId) {
-
+		
 		List<String> testLineStatusList = dataBaseEntry.getStatusByTestSetId(testSetId);
 		fetchConfigVO.setSeqNumAndStatus(dataBaseEntry.getStatusAndSeqNum(testSetId));
 		int passCount = 0;
@@ -683,7 +670,7 @@ public abstract class AbstractSeleniumKeywords {
 				fileNameList = getFileNameListNew(fetchMetadataListVO, fetchConfigVO, customerDetails);
 			}
 			String executedBy = fetchMetadataListVO.get(0).getExecutedBy();
-			createDir(folder);
+			FileUtil.createDir(folder);
 			Document document = new Document();
 			String report = EXECUTION_REPORT;
 			Font font23 = FontFactory.getFont(ARIAL, 23);
@@ -1605,7 +1592,6 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (IOException e) {
 			throw new WatsEBSCustomException(500, "Not able to read object store config");
 		}
-
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			List<String> objNames = null;
@@ -2095,7 +2081,7 @@ public abstract class AbstractSeleniumKeywords {
 
 			String name = nameBuffer.toString();
 
-			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName());
+			FileUtil.createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName());
 
 			try (PrintWriter out = new PrintWriter(fileName)) {
 				out.println(api.getResponse());
