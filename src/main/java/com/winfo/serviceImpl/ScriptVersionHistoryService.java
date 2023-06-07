@@ -45,8 +45,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
-			ObjectMapper objectMapper = new ObjectMapper();
-			ScriptMaterVO scriptMasterVO = objectMapper.readValue(objectMapper.writeValueAsString(scriptMaster),
+			ScriptMaterVO scriptMasterVO = mapper.readValue(mapper.writeValueAsString(scriptMaster),
 					ScriptMaterVO.class);
 			Timestamp instant = Timestamp.from(Instant.now());
 
