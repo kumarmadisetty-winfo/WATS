@@ -19078,7 +19078,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				String lastDate = lastDateCell!=null ? lastDateCell.getStringValue() : null;
 				String invoicedAmount = invoicedAmountCell.getStringValue().replace("EUR", "").replace(",", "");
 				
-				if(Double.parseDouble(invoicedAmount) > 0 && !("".equals(lastDate)) && lastDate!=null && !("null".equalsIgnoreCase(lastDate))) {
+				if(Double.parseDouble(invoicedAmount) > 0 && ("".equals(lastDate)) && lastDate==null && ("null".equalsIgnoreCase(lastDate))) {
 					
 					//Enter Contract Number
 					WebDriverWait waitForNumber = new WebDriverWait(driver, fetchConfigVO.getWait_time());
