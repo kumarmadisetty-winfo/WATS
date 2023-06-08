@@ -19064,6 +19064,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			int invoicedAmountColumnIndex = 6; // Adjust the column index as per your Excel file
 			int startRow = 2;
 			List<ExcelRecordsVO> listOfexcelRecordsVO = new ArrayList<>();
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			for (int i = startRow; i <= sheet.getCells().getMaxDataRow(); i++) {
 			    com.aspose.cells.Row row = sheet.getCells().getRow(i);
 			    com.aspose.cells.Cell contractNumberCell = row.getCellOrNull(contractNumberColumnIndex);
@@ -19172,7 +19173,9 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			workbook.dispose();
 //			System.out.println(listOfexcelRecordsVO);
 		} catch (IOException e) {
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 			e.printStackTrace();
+			throw e;
 		}		
 	}
 	}
