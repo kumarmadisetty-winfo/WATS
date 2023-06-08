@@ -328,7 +328,11 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.16</version>
 		</dependency>
-
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>3.16</version>
+		</dependency>
 
 		<!-- dependency> <groupId>org.json</groupId> <artifactId>json</artifactId> 
 			<version>20090211</version> </dependency> -->
@@ -529,7 +533,7 @@
 		<profile>
 			<id>dev</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
@@ -1122,7 +1126,7 @@
 		<profile>
 			<id>tst</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
 				<finalName>wats</finalName>
