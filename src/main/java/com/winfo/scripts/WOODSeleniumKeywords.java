@@ -19100,8 +19100,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					actionForLineNumber.moveToElement(waittillforLineNumber).build().perform();
 					if(contractLineNumber.contains("5") || contractLineNumber.contains("6")) {
 						JavascriptExecutor jse2 = (JavascriptExecutor) driver;
-						jse.executeScript("arguments[0].value=\"" + contractLineNumber+" " + "\";", waittillforLineNumber);
-						waittillforLineNumber.sendKeys(Keys.BACK_SPACE);
+						jse.executeScript("arguments[0].value=\"" + contractLineNumber + "\";", waittillforLineNumber);
+						waittillforLineNumber.sendKeys(Keys.TAB);
 					}else {
 						waittillforLineNumber.sendKeys(contractLineNumber);
 					}
