@@ -35,11 +35,9 @@ import javax.imageio.stream.FileImageOutputStream;
 //import blank.OpenCVFrameConverter;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
@@ -61,6 +59,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.aspose.cells.Worksheet;
 import com.itextpdf.text.DocumentException;
 import com.winfo.service.SeleniumKeyWordsInterface;
 import com.winfo.serviceImpl.AbstractSeleniumKeywords;
@@ -19050,13 +19049,13 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 //				.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
 //				.append(customerDetails.getTestSetName()).append("_Passed");
 //		String newName = newNameBuffer.toString();
-		try {
-			FileInputStream file = new FileInputStream(fetchConfigVO.getDownlod_file_path() + fileName);
-//			POIFSFileSystem fs = new POIFSFileSystem(file);
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
-			
-//            XSSFWorkbook wb = new XSSFWorkbook(fs);
-			Sheet sheet = workbook.getSheetAt(0); // Assuming the data is in the first sheet
+		try  {
+			File file = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+
+			logger.info(file.exists());
+
+			com.aspose.cells.Workbook workbook = new com.aspose.cells.Workbook(file.getPath());
+			com.aspose.cells.Worksheet sheet = workbook.getWorksheets().get(0); // Assuming the data is in the first sheet
 
 			// Fetch the Contract Number and ITD Invoiced Amount columns
 			int contractNumberColumnIndex = 1;
@@ -19064,16 +19063,16 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			int invoicedAmountColumnIndex = 6; // Adjust the column index as per your Excel file
 			int startRow = 2;
 			List<ExcelRecordsVO> listOfexcelRecordsVO = new ArrayList<>();
-			for (int i = startRow; i <= sheet.getLastRowNum(); i++) {
-				Row row = sheet.getRow(i);
-				Cell contractNumberCell = row.getCell(contractNumberColumnIndex);
-				Cell contractLineNumberCell = row.getCell(contractLineNumberColumnIndex);
-				Cell invoicedAmountCell = row.getCell(invoicedAmountColumnIndex);
+			for (int i = startRow; i <= sheet.getCells().getMaxDataRow(); i++) {
+			    com.aspose.cells.Row row = sheet.getCells().getRow(i);
+			    com.aspose.cells.Cell contractNumberCell = row.getCellOrNull(contractNumberColumnIndex);
+			    com.aspose.cells.Cell contractLineNumberCell = row.getCellOrNull(contractLineNumberColumnIndex);
+			    com.aspose.cells.Cell invoicedAmountCell = row.getCellOrNull(invoicedAmountColumnIndex);
 
 				// Fetch the values as strings
-				String contractNumber = contractNumberCell.getStringCellValue();
-				String contractLineNumber = contractLineNumberCell.getStringCellValue();
-				String invoicedAmount = invoicedAmountCell.getStringCellValue().replace("EUR", "").replace(",", "");
+				String contractNumber = contractNumberCell.getStringValue();
+				String contractLineNumber = contractLineNumberCell.getStringValue();
+				String invoicedAmount = invoicedAmountCell.getStringValue().replace("EUR", "").replace(",", "");
 				
 				if(Double.parseDouble(invoicedAmount) > 0) {
 
@@ -19164,11 +19163,10 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				
 			}
 
-			workbook.close();
+			workbook.dispose();
 //			System.out.println(listOfexcelRecordsVO);
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw e;
 		}		
 	}
 	}
