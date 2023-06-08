@@ -18744,4 +18744,12 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
+
+	@Override
+	public void enterMultipleTransaction(WebDriver driver, FetchConfigVO fetchConfigVO,
+			ScriptDetailsDto fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
+			String param3, String keysToSend, String value, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

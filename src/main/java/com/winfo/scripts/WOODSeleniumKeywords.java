@@ -14,16 +14,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +35,11 @@ import javax.imageio.stream.FileImageOutputStream;
 //import blank.OpenCVFrameConverter;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
@@ -70,6 +71,7 @@ import com.winfo.serviceImpl.ScriptXpathService;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.ExcelRecordsVO;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
@@ -18969,5 +18971,183 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
 
+	}
+	
+	public void enterMultipleTransaction(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
+			String value, CustomerProjectDto customerDetails) throws Exception {
+		
+		//Click Search Button
+		WebDriverWait waitForSearch1 = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		waitForSearch1.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()='Search'][1]")));
+		Thread.sleep(5000);
+		WebElement waittillforSearch1 = driver.findElement(By.xpath("//button[text()='Search'][1]"));
+		Actions actionsForSearch1 = new Actions(driver);
+		actionsForSearch1.moveToElement(waittillforSearch1).build().perform();
+		waittillforSearch1.click();
+		
+		//Click Yes on Warning Button
+		WebDriverWait waitForWarning1 = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		waitForWarning1.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Warning']/following::*[text()='Y']")));
+		Thread.sleep(5000);
+		WebElement waittillforWarning1 = driver.findElement(By.xpath("//*[text()='Warning']/following::*[text()='Y']"));
+		Actions actionsForWarning1 = new Actions(driver);
+		actionsForWarning1.moveToElement(waittillforWarning1).build().perform();
+		waittillforWarning1.click();
+		
+		//Download File Rename
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("window.open()");
+		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+		String fileName = null;
+		driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
+		/* Download Window Open */
+		Thread.sleep(3000);
+		fileName = (String) jse.executeScript(
+				"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
+		driver.close();
+		driver.switchTo().window(tabs.get(0));
+		logger.info("File Name*** " + fileName);
+	
+		if (fileName != null) {
+			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+			StringBuffer newNameBuffer = new StringBuffer();
+			newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
+					.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
+					.append(customerDetails.getTestSetName()).append("_Passed");
+			String newName = newNameBuffer.toString();
+
+			if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".xls").exists())
+				new File(fetchConfigVO.getDownlod_file_path() + newName + ".xls").delete();
+
+			if (oldFile.exists()) {
+				if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".xlsx"))) {
+					logger.info("File name changed succesful");
+				} else {
+					logger.info("Rename failed");
+				}
+			}
+		}
+		
+		StringBuffer newNameBuffer = new StringBuffer();
+		newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
+				.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
+				.append(customerDetails.getTestSetName()).append("_Passed");
+		String newName = newNameBuffer.toString();
+		try (FileInputStream file = new FileInputStream(new File(fetchConfigVO.getDownlod_file_path() + newName + ".xlsx"))) {
+			Workbook workbook = WorkbookFactory.create(file);
+			Sheet sheet = workbook.getSheetAt(0); // Assuming the data is in the first sheet
+
+			// Fetch the Contract Number and ITD Invoiced Amount columns
+			int contractNumberColumnIndex = 1;
+			int contractLineNumberColumnIndex = 2;// Adjust the column index as per your Excel file
+			int invoicedAmountColumnIndex = 6; // Adjust the column index as per your Excel file
+			int startRow = 2;
+			List<ExcelRecordsVO> listOfexcelRecordsVO = new ArrayList<>();
+			for (int i = startRow; i <= sheet.getLastRowNum(); i++) {
+				Row row = sheet.getRow(i);
+				Cell contractNumberCell = row.getCell(contractNumberColumnIndex);
+				Cell contractLineNumberCell = row.getCell(contractLineNumberColumnIndex);
+				Cell invoicedAmountCell = row.getCell(invoicedAmountColumnIndex);
+
+				// Fetch the values as strings
+				String contractNumber = contractNumberCell.getStringCellValue();
+				String contractLineNumber = contractLineNumberCell.getStringCellValue();
+				String invoicedAmount = invoicedAmountCell.getStringCellValue().replace("EUR", "").replace(",", "");
+				
+				if(Double.parseDouble(invoicedAmount) > 0) {
+
+					
+					//Enter Contract Number
+					WebDriverWait waitForNumber = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					waitForNumber.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='Search']/following::*[text()='Contract Number']/following::input[not (@type='hidden')])[1]")));
+					Thread.sleep(5000);
+					WebElement waittillforNumber = driver.findElement(By.xpath("(//*[text()='Search']/following::*[text()='Contract Number']/following::input[not (@type='hidden')])[1]"));
+					Actions actionsForNumber = new Actions(driver);
+					actionsForNumber.moveToElement(waittillforNumber).build().perform();
+//					waittillforNumber.sendKeys(contractNumber);
+					JavascriptExecutor jse1 = (JavascriptExecutor) driver;
+					jse.executeScript("arguments[0].value=\"" + contractNumber + "\";", waittillforNumber);
+					
+					//Enter Contract Line Number
+					WebDriverWait waitForLineNumber = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					waitForLineNumber.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='Search']/following::*[text()='Contract Line Number']/following::input[not (@type='hidden')])[1]")));
+					Thread.sleep(5000);
+					WebElement waittillforLineNumber = driver.findElement(By.xpath("(//*[text()='Search']/following::*[text()='Contract Line Number']/following::input[not (@type='hidden')])[1]"));
+					Actions actionForLineNumber = new Actions(driver);
+					actionForLineNumber.moveToElement(waittillforLineNumber).build().perform();
+//					waittillforLineNumber.sendKeys(contractLineNumber);
+					JavascriptExecutor jse2 = (JavascriptExecutor) driver;
+					jse.executeScript("arguments[0].value=\"" + contractLineNumber+" " + "\";", waittillforLineNumber);
+					waittillforLineNumber.sendKeys(Keys.BACK_SPACE);
+					
+					
+					//Click Search Button
+					WebDriverWait waitForSearch = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					waitForSearch.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()='Search'][1]")));
+					Thread.sleep(5000);
+					WebElement waittillforSearch = driver.findElement(By.xpath("//button[text()='Search'][1]"));
+					Actions actionsForSearch = new Actions(driver);
+					actionsForSearch.moveToElement(waittillforSearch).build().perform();
+					waittillforSearch.click();
+					
+					//Click Yes on Warning Button
+					WebDriverWait waitForWarning = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					waitForWarning.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Warning']/following::*[text()='Y']")));
+					Thread.sleep(5000);
+					WebElement waittillforWarning = driver.findElement(By.xpath("//*[text()='Warning']/following::*[text()='Y']"));
+					Actions actionsForWarning = new Actions(driver);
+					actionsForWarning.moveToElement(waittillforWarning).build().perform();
+					waittillforWarning.click();
+					
+					//Click Create Accounting Transaction Button
+					WebDriverWait waitForTransaction = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					waitForTransaction.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='Create Accounting Transaction']")));
+					Thread.sleep(5000);
+					WebElement waittillforTransaction = driver.findElement(By.xpath("//span[text()='Create Accounting Transaction']"));
+					Actions actionsForTransaction = new Actions(driver);
+					actionsForTransaction.moveToElement(waittillforTransaction).build().perform();
+					waittillforTransaction.click();
+					
+					//Enter Invoice Amount
+					WebDriverWait waitForEnterAmount = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					waitForEnterAmount.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='Create Accounting Transaction']/following::*[text()='Transaction Amount']/following::input[not (@type='hidden')])[1]")));
+					Thread.sleep(5000);
+					WebElement waittillforEnterAmount = driver.findElement(By.xpath("(//*[text()='Create Accounting Transaction']/following::*[text()='Transaction Amount']/following::input[not (@type='hidden')])[1]"));
+					Actions actionForEnterAmount = new Actions(driver);
+					actionForEnterAmount.moveToElement(waittillforEnterAmount).build().perform();
+//					waittillforEnterAmount.sendKeys(invoicedAmount);
+//					JavascriptExecutor jse = (JavascriptExecutor) driver;
+					jse.executeScript("arguments[0].value=\"\";", waittillforLineNumber);
+					jse.executeScript("arguments[0].value=\"" + invoicedAmount + "\";", waittillforLineNumber);
+					
+					//Click On Save and Close
+					WebDriverWait waitForSaveAndClose = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					waitForSaveAndClose.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='S']")));
+					Thread.sleep(5000);
+					WebElement waittillforSaveAndClose = driver.findElement(By.xpath("//*[text()='S']"));
+					Actions actionsForSaveAndClose = new Actions(driver);
+					actionsForSaveAndClose.moveToElement(waittillforSaveAndClose).build().perform();
+					waittillforSaveAndClose.click();
+					
+//					ExcelRecordsVO excelRecordsVO = new ExcelRecordsVO();
+//					excelRecordsVO.setContractNumber(Integer.parseInt(contractNumber));
+//					excelRecordsVO.setContractLineNumber(Integer.parseInt(contractLineNumber));
+//					excelRecordsVO.setInvoicedAmount(Double.parseDouble(invoicedAmount));
+//					listOfexcelRecordsVO.add(excelRecordsVO);
+					// Print the Contract Number and ITD Invoiced Amount for each row
+					System.out.println("Contract Number: " + contractNumber);
+					System.out.println("Contract Line Number: " + contractLineNumber);
+					System.out.println("ITD Invoiced Amount: " + invoicedAmount);
+					System.out.println("-----------------------");
+				}
+				
+			}
+
+			workbook.close();
+//			System.out.println(listOfexcelRecordsVO);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
 	}
 	}

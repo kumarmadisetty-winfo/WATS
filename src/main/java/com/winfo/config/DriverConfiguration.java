@@ -51,7 +51,7 @@ public class DriverConfiguration {
 			Map<String, Object> prefs = new HashMap<>();
 			ChromeOptions options = new ChromeOptions();
 			MutableCapabilities cap = new MutableCapabilities();
-			if (os.contains("win")) {
+			if (!os.contains("win")) {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
 				logger.info("Script Running on  Windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
