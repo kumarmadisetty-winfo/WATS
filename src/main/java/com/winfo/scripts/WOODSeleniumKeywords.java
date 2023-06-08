@@ -19144,8 +19144,8 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					actionForEnterAmount.moveToElement(waittillforEnterAmount).build().perform();
 //					waittillforEnterAmount.sendKeys(invoicedAmount);
 //					JavascriptExecutor jse = (JavascriptExecutor) driver;
-					jse.executeScript("arguments[0].value=\"\";", waittillforLineNumber);
-					jse.executeScript("arguments[0].value=\"" + invoicedAmount + "\";", waittillforLineNumber);
+					jse.executeScript("arguments[0].value=\"\";", waittillforEnterAmount);
+					jse.executeScript("arguments[0].value=\"" + invoicedAmount + "\";", waittillforEnterAmount);
 					
 					//Click On Save and Close
 					WebDriverWait waitForSaveAndClose = new WebDriverWait(driver, fetchConfigVO.getWait_time());
