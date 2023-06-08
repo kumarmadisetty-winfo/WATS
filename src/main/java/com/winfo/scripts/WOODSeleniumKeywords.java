@@ -35,11 +35,11 @@ import javax.imageio.stream.FileImageOutputStream;
 //import blank.OpenCVFrameConverter;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
@@ -19050,8 +19050,9 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 //				.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
 //				.append(customerDetails.getTestSetName()).append("_Passed");
 //		String newName = newNameBuffer.toString();
-		try (FileInputStream file = new FileInputStream(new File(fetchConfigVO.getDownlod_file_path() + fileName))) {
-			Workbook workbook = new HSSFWorkbook(file);
+		try {
+			File file = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+			Workbook workbook = WorkbookFactory.create(file);
 			Sheet sheet = workbook.getSheetAt(0); // Assuming the data is in the first sheet
 
 			// Fetch the Contract Number and ITD Invoiced Amount columns
@@ -19164,6 +19165,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 //			System.out.println(listOfexcelRecordsVO);
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw e;
 		}		
 	}
 	}
