@@ -19060,6 +19060,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			// Fetch the Contract Number and ITD Invoiced Amount columns
 			int contractNumberColumnIndex = 1;
 			int contractLineNumberColumnIndex = 2;// Adjust the column index as per your Excel file
+			int lastDateIndex = 3;
 			int invoicedAmountColumnIndex = 6; // Adjust the column index as per your Excel file
 			int startRow = 2;
 			List<ExcelRecordsVO> listOfexcelRecordsVO = new ArrayList<>();
@@ -19067,15 +19068,16 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			    com.aspose.cells.Row row = sheet.getCells().getRow(i);
 			    com.aspose.cells.Cell contractNumberCell = row.getCellOrNull(contractNumberColumnIndex);
 			    com.aspose.cells.Cell contractLineNumberCell = row.getCellOrNull(contractLineNumberColumnIndex);
+			    com.aspose.cells.Cell lastDateCell = row.getCellOrNull(lastDateIndex);
 			    com.aspose.cells.Cell invoicedAmountCell = row.getCellOrNull(invoicedAmountColumnIndex);
 
 				// Fetch the values as strings
 				String contractNumber = contractNumberCell.getStringValue();
 				String contractLineNumber = contractLineNumberCell.getStringValue();
+				String lastDate = lastDateCell!=null ? lastDateCell.getStringValue() : null;
 				String invoicedAmount = invoicedAmountCell.getStringValue().replace("EUR", "").replace(",", "");
 				
-				if(Double.parseDouble(invoicedAmount) > 0) {
-
+				if(Double.parseDouble(invoicedAmount) > 0 && !("".equals(lastDate)) && lastDate!=null && !("null".equalsIgnoreCase(lastDate))) {
 					
 					//Enter Contract Number
 					WebDriverWait waitForNumber = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -19095,10 +19097,14 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					WebElement waittillforLineNumber = driver.findElement(By.xpath("(//*[text()='Search']/following::*[text()='Contract Line Number']/following::input[not (@type='hidden')])[1]"));
 					Actions actionForLineNumber = new Actions(driver);
 					actionForLineNumber.moveToElement(waittillforLineNumber).build().perform();
-//					waittillforLineNumber.sendKeys(contractLineNumber);
-					JavascriptExecutor jse2 = (JavascriptExecutor) driver;
-					jse.executeScript("arguments[0].value=\"" + contractLineNumber+" " + "\";", waittillforLineNumber);
-					waittillforLineNumber.sendKeys(Keys.BACK_SPACE);
+					if(contractLineNumber.contains("5") || contractLineNumber.contains("6")) {
+						JavascriptExecutor jse2 = (JavascriptExecutor) driver;
+						jse.executeScript("arguments[0].value=\"" + contractLineNumber+" " + "\";", waittillforLineNumber);
+						waittillforLineNumber.sendKeys(Keys.BACK_SPACE);
+					}else {
+						waittillforLineNumber.sendKeys(contractLineNumber);
+					}
+//					
 					
 					
 					//Click Search Button
