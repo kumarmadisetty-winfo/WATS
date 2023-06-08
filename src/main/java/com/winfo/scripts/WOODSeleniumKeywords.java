@@ -3186,6 +3186,39 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		
+		try {
+			if (param1.equalsIgnoreCase("Search") && param2.equalsIgnoreCase("Search")) {
+				WebDriverWait waitForSearch1 = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				waitForSearch1.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()='Search'][1]")));
+				Thread.sleep(5000);
+				WebElement waittillforSearch1 = driver.findElement(By.xpath("//button[text()='Search'][1]"));
+				Actions actionsForSearch1 = new Actions(driver);
+				actionsForSearch1.moveToElement(waittillforSearch1).build().perform();
+				waittillforSearch1.click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during Republish clickButton " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+			if (param1.equalsIgnoreCase("Yes")) {
+				WebDriverWait waitForWarning1 = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				waitForWarning1.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Warning']/following::*[text()='Y']")));
+				Thread.sleep(5000);
+				WebElement waittillforWarning1 = driver.findElement(By.xpath("//*[text()='Warning']/following::*[text()='Y']"));
+				Actions actionsForWarning1 = new Actions(driver);
+				actionsForWarning1.moveToElement(waittillforWarning1).build().perform();
+				waittillforWarning1.click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during Republish clickButton " + scripNumber);
+			logger.error(e.getMessage());
+		}
 		try {
 			if (param1.equalsIgnoreCase("Primary Mailing") && param2.equalsIgnoreCase("Edit")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -18977,24 +19010,6 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
-		//Click Search Button
-		WebDriverWait waitForSearch1 = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		waitForSearch1.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()='Search'][1]")));
-		Thread.sleep(5000);
-		WebElement waittillforSearch1 = driver.findElement(By.xpath("//button[text()='Search'][1]"));
-		Actions actionsForSearch1 = new Actions(driver);
-		actionsForSearch1.moveToElement(waittillforSearch1).build().perform();
-		waittillforSearch1.click();
-		
-		//Click Yes on Warning Button
-		WebDriverWait waitForWarning1 = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-		waitForWarning1.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Warning']/following::*[text()='Y']")));
-		Thread.sleep(5000);
-		WebElement waittillforWarning1 = driver.findElement(By.xpath("//*[text()='Warning']/following::*[text()='Y']"));
-		Actions actionsForWarning1 = new Actions(driver);
-		actionsForWarning1.moveToElement(waittillforWarning1).build().perform();
-		waittillforWarning1.click();
-		
 		//Download File Rename
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		jse.executeScript("window.open()");
@@ -19021,7 +19036,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				new File(fetchConfigVO.getDownlod_file_path() + newName + ".xls").delete();
 
 			if (oldFile.exists()) {
-				if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".xlsx"))) {
+				if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".xls"))) {
 					logger.info("File name changed succesful");
 				} else {
 					logger.info("Rename failed");
@@ -19034,7 +19049,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
 				.append(customerDetails.getTestSetName()).append("_Passed");
 		String newName = newNameBuffer.toString();
-		try (FileInputStream file = new FileInputStream(new File(fetchConfigVO.getDownlod_file_path() + newName + ".xlsx"))) {
+		try (FileInputStream file = new FileInputStream(new File(fetchConfigVO.getDownlod_file_path() + newName + ".xls"))) {
 			Workbook workbook = WorkbookFactory.create(file);
 			Sheet sheet = workbook.getSheetAt(0); // Assuming the data is in the first sheet
 
