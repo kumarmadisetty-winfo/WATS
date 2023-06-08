@@ -19088,6 +19088,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					Actions actionsForNumber = new Actions(driver);
 					actionsForNumber.moveToElement(waittillforNumber).build().perform();
 //					waittillforNumber.sendKeys(contractNumber);
+					waittillforNumber.clear();
 					JavascriptExecutor jse1 = (JavascriptExecutor) driver;
 					jse.executeScript("arguments[0].value=\"" + contractNumber + "\";", waittillforNumber);
 					
@@ -19098,13 +19099,11 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					WebElement waittillforLineNumber = driver.findElement(By.xpath("(//*[text()='Search']/following::*[text()='Contract Line Number']/following::input[not (@type='hidden')])[1]"));
 					Actions actionForLineNumber = new Actions(driver);
 					actionForLineNumber.moveToElement(waittillforLineNumber).build().perform();
-					if(contractLineNumber.contains("5") || contractLineNumber.contains("6")) {
-						JavascriptExecutor jse2 = (JavascriptExecutor) driver;
-						jse.executeScript("arguments[0].value=\"" + contractLineNumber + "\";", waittillforLineNumber);
-						waittillforLineNumber.sendKeys(Keys.TAB);
-					}else {
-						waittillforLineNumber.sendKeys(contractLineNumber);
-					}
+					waittillforLineNumber.clear();
+					JavascriptExecutor jse2 = (JavascriptExecutor) driver;
+					jse.executeScript("arguments[0].value=\"" + contractLineNumber + "\";", waittillforLineNumber);
+					waittillforLineNumber.sendKeys(Keys.TAB);
+
 //					
 					
 					
