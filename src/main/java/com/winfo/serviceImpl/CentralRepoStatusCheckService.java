@@ -14,9 +14,7 @@ public class CentralRepoStatusCheckService {
 	
 	@Autowired
 	DataBaseEntry dataBaseEntry;
-	
-	@Autowired
-	private LookUpCodeRepository lookUpCodeJpaRepository;
+
 	
 	public ResponseDto centralRepoStatus() {
 		try {
