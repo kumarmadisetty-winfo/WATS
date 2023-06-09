@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ApiValidationDto;
 import com.winfo.vo.ApiValidationMigrationDto;
@@ -26,7 +27,9 @@ public class PostApiValidationMigrationService {
 	public static final Logger logger = Logger.getLogger(PostApiValidationMigrationService.class);
 	@Autowired
 	DataBaseEntry dataBaseEntry;
-
+	
+	@Autowired
+	private LookUpCodeRepository lookUpCodeJpaRepository;
 	public ResponseDto webClientService(ApiValidationDto listOfLookUpCodesData, String customerUrl) throws JsonMappingException, JsonProcessingException {
 		if (customerUrl.equals("")) {
 			logger.error("Invalid URL " +customerUrl);
@@ -56,7 +59,7 @@ public class PostApiValidationMigrationService {
 			ApiValidationDto apiDto =new ApiValidationDto();
 			apiDto.setLookupCodes(Arrays.asList(listOfLookUpCodesData));
 			apiDto.setFlag(apiValidationMigration.isFlag());
-			String customerUrl = dataBaseEntry.getCentralRepoUrl(apiValidationMigration.getTargetEnvironment());
+			String customerUrl = lookUpCodeJpaRepository.getCustomerURLByCustomerName(apiValidationMigration.getTargetEnvironment());
 			return webClientService(apiDto, customerUrl);
 		} catch (Exception e) {
 			e.printStackTrace();

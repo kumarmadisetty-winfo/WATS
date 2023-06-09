@@ -22,6 +22,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.vo.ExistTestRunDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -44,7 +45,10 @@ public class TestRunMigrationService {
 	public static final Logger logger = Logger.getLogger(TestRunMigrationService.class);
 	@Autowired
 	private DataBaseEntryDao dataBaseEntryDao;
-
+	
+	@Autowired
+	private LookUpCodeRepository lookUpCodeJpaRepository;
+	
 	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customerUri)
 			throws JsonMappingException, JsonProcessingException {
 
@@ -65,8 +69,7 @@ public class TestRunMigrationService {
 	public String testRunMigration(TestRunDetails testRunDetails) throws ParseException, JsonProcessingException {
 
 		List<TestRunMigrationDto> testRunMigrationDto = new ArrayList<>();
-
-		String customerURI = dataBaseEntryDao.getCentralRepoUrl(testRunDetails.getCustomerName());
+		String customerURI = lookUpCodeJpaRepository.getCustomerURLByCustomerName(testRunDetails.getCustomerName());
 		logger.info("Customer URI " + customerURI);
 		for (ExistTestRunDto id : testRunDetails.getListOfTestRun()) {
 			int testRunId = id.getTestSetId();
