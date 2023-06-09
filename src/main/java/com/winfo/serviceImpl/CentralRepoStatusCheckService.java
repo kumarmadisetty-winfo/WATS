@@ -21,7 +21,7 @@ public class CentralRepoStatusCheckService {
 	public ResponseDto centralRepoStatus() {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			String url = lookUpCodeJpaRepository.getCustomerURLByCustomerName(Constants.WATS_CENTRAL);
+			String url = dataBaseEntry.getCentralRepoUrl(Constants.WATS_CENTRAL);
 			restTemplate.getForObject(url, String.class);
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Central repo is not accessible");

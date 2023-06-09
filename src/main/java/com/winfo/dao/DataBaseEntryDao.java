@@ -1438,6 +1438,16 @@ public class DataBaseEntryDao {
 		return Integer.parseInt(result.toString());
 	}
 	
+	public String getCentralRepoUrl(String name) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<String> cq = cb.createQuery(String.class);
+		Root<ApplicationProperties> from = cq.from(ApplicationProperties.class);
+		Predicate condition = cb.equal(from.get("keyName"), name);
+		cq.multiselect(from.get("valueName")).where(condition);
+		List<String> result = em.createQuery(cq).getResultList();
+		return result.get(0);
+	}
+	
 	public void updateTestSetLineStatusForSanity(String testSetId) {
 		String updateQry = "UPDATE win_ta_test_set_lines SET status = 'Fail' where test_set_id = " + testSetId
 				+ " and enabled = 'Y' and status in ('New','Fail','IN-QUEUE','IN-PROGRESS','NEW','FAIL')";

@@ -501,6 +501,10 @@ public class DataBaseEntry {
 	public List<Object[]> findStartAndEndTimeForTestRun(String testRunId, String scriptStatus) {
 		return dao.findStartAndEndTimeForTestRun(testRunId, scriptStatus);
 	}
+	
+	public String getCentralRepoUrl(String customerName) {
+		return dao.getCentralRepoUrl(customerName);
+	}
 
 	public void updateTestSetLineStatusForSanity(String testSetId) {
 		dao.updateTestSetLineStatusForSanity(testSetId);

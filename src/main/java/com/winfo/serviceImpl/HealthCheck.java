@@ -245,7 +245,7 @@ public class HealthCheck {
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSharePointAccess());
 		}
-		return acessToken;
+		return acessToken;	
 	}
 
 }
