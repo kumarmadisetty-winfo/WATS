@@ -14,7 +14,6 @@ public class CentralRepoStatusCheckService {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 
-	
 	public ResponseDto centralRepoStatus() {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
