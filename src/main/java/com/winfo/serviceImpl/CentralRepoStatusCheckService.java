@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ResponseDto;
 
@@ -13,11 +14,14 @@ public class CentralRepoStatusCheckService {
 	
 	@Autowired
 	DataBaseEntry dataBaseEntry;
-
+	
+	@Autowired
+	private LookUpCodeRepository lookUpCodeJpaRepository;
+	
 	public ResponseDto centralRepoStatus() {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			String url = dataBaseEntry.getCentralRepoUrl(Constants.WATS_CENTRAL);
+			String url = lookUpCodeJpaRepository.getCustomerURLByCustomerName(Constants.WATS_CENTRAL);
 			restTemplate.getForObject(url, String.class);
 		} catch (Exception e) {
 			throw new WatsEBSCustomException(500, "Central repo is not accessible");
