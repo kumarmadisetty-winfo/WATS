@@ -19060,7 +19060,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			// Fetch the Contract Number and ITD Invoiced Amount columns
 			int contractNumberColumnIndex = 1;
 			int contractLineNumberColumnIndex = 2;// Adjust the column index as per your Excel file
-//			int lastDateIndex = 3;
+			int lastDateIndex = 3;
 			int invoicedAmountColumnIndex = 6; // Adjust the column index as per your Excel file
 			int startRow = 2;
 			List<ExcelRecordsVO> listOfexcelRecordsVO = new ArrayList<>();
@@ -19069,16 +19069,16 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			    com.aspose.cells.Row row = sheet.getCells().getRow(i);
 			    com.aspose.cells.Cell contractNumberCell = row.getCellOrNull(contractNumberColumnIndex);
 			    com.aspose.cells.Cell contractLineNumberCell = row.getCellOrNull(contractLineNumberColumnIndex);
-//			    com.aspose.cells.Cell lastDateCell = row.getCellOrNull(lastDateIndex);
+			    com.aspose.cells.Cell lastDateCell = row.getCellOrNull(lastDateIndex);
 			    com.aspose.cells.Cell invoicedAmountCell = row.getCellOrNull(invoicedAmountColumnIndex);
 
 				// Fetch the values as strings
 				String contractNumber = contractNumberCell.getStringValue();
 				String contractLineNumber = contractLineNumberCell.getStringValue();
-//				String lastDate = lastDateCell!=null ? lastDateCell.getStringValue() : null;
+				String lastDate = lastDateCell.getStringValue();
 				String invoicedAmount = invoicedAmountCell.getStringValue().replace("EUR", "").replace(",", "");
 				
-				if(Double.parseDouble(invoicedAmount) > 0) {
+				if(Double.parseDouble(invoicedAmount) > 0 && lastDate.isEmpty()) {
 					
 					//Enter Contract Number
 					WebDriverWait waitForNumber = new WebDriverWait(driver, fetchConfigVO.getWait_time());
