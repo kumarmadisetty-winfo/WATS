@@ -1477,9 +1477,7 @@ public class RunAutomation {
 
 						case "Enter Multiple Transactions":
 							seleniumFactory.getInstanceObj(instanceName).enterMultipleTransaction(driver, fetchConfigVO,
-									fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-									fetchMetadataVO.getInputValue(),
-									"", customerDetails);
+									fetchMetadataVO, customerDetails);
 							break;
 						default:
 							logger.info("Action Name is not matched with " + "" + actionName);

@@ -18875,8 +18875,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	@Override
 	public void enterMultipleTransaction(WebDriver driver, FetchConfigVO fetchConfigVO,
-			ScriptDetailsDto fetchMetadataVO, String type1, String type2, String type3, String param1, String param2,
-			String param3, String keysToSend, String value, CustomerProjectDto customerDetails) throws Exception {
+			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
