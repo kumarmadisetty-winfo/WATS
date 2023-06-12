@@ -461,6 +461,7 @@ public class CopyTestRunService {
 	@Transactional
 	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		TestSet getTestrun = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+		logger.info("Test run Data " + getTestrun.getTestRunName());
 		for (TestSetLine getScriptdata : getTestrun.getTestRunScriptDatalist()) {
 			String status = getScriptdata.getStatus();
 			if (status.equalsIgnoreCase("fail")) {
