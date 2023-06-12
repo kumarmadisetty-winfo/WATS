@@ -9,6 +9,9 @@
 	<packaging>war</packaging>
 	<name>wats</name>
 	<description>Demo project for Spring Boot</description>
+	<build>
+  		<finalName>wats</finalName>
+	</build>
 
 
 	<url>http://maven.apache.org</url>
