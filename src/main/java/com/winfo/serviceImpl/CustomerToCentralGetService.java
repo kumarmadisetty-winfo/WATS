@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.winfo.dao.CustomerToCentralGetDao;
+import com.winfo.model.LookUpCode;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.vo.ScriptDtlsDto;
 import com.winfo.vo.WatsMasterDataVOList;
@@ -33,14 +34,14 @@ public class CustomerToCentralGetService {
 	@Autowired
 	private LookUpCodeRepository lookUpCodeJpaRepository;
 
-	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUri) {
+	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUrl) {
 		String response;
-		if (customerUri.equals("")) {
+		if (customerUrl.equals("")) {
 			response = "[{\"status\":500,\"statusMessage\":\"Invalid URL\",\"description\":\"Invalid URL!!\"}]";
-			logger.error("Invalid URL " + customerUri);
+			logger.error("Invalid URL " + customerUrl);
 		} else {
-			String uri = customerUri + "/centralToCustomerScriptMigrate";
-			WebClient webClient = WebClient.create(uri);
+			String url = customerUrl + "/centralToCustomerScriptMigrate";
+			WebClient webClient = WebClient.create(url);
 			Mono<String> result = webClient.post().syncBody(watsMasterDataVO).retrieve().bodyToMono(String.class);
 			response = result.block();
 			if ("[]".equals(response)) {
@@ -55,10 +56,12 @@ public class CustomerToCentralGetService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String scriptMetaData(ScriptDtlsDto scriptDtls) {
 		List<ScriptMasterDto> watsMasterVOList = dao.fecthMetaDataList(scriptDtls);
-		String customerUri = lookUpCodeJpaRepository.getCustomerURLByCustomerName(scriptDtls.getCustomerName());
+		String lookUpName="TARGET CLIENT";
+		LookUpCode lookUpCode = lookUpCodeJpaRepository.findBylookUpNameAndLookUpCode(lookUpName,scriptDtls.getCustomerName());
+		logger.info("LookUpCode Data " + lookUpCode);
 		WatsMasterDataVOList watsMasterDataVO = new WatsMasterDataVOList();
 		watsMasterDataVO.setData(watsMasterVOList);
-		return webClientService(watsMasterDataVO, customerUri);
+		return webClientService(watsMasterDataVO, lookUpCode.getTargetCode());
 	}
 
 }

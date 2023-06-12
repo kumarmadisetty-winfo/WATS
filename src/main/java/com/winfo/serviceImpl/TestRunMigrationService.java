@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.winfo.controller.JobController;
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -49,13 +50,13 @@ public class TestRunMigrationService {
 	@Autowired
 	private LookUpCodeRepository lookUpCodeJpaRepository;
 	
-	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customerUri)
+	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customerUrl)
 			throws JsonMappingException, JsonProcessingException {
 
-		System.out.println("json data**" + listOfTestRunMigrate);
+		logger.info("TestRun Migrate json data " + listOfTestRunMigrate);
 
-		String uri = customerUri + "/testRunMigrationToCustomer";
-		WebClient webClient = WebClient.create(uri);
+		String url = customerUrl + "/testRunMigrationToCustomer";
+		WebClient webClient = WebClient.create(url);
 		Mono<String> result = webClient.post().syncBody(listOfTestRunMigrate).retrieve().bodyToMono(String.class);
 		String response = result.block();
 		if ("[]".equals(response)) {
@@ -69,8 +70,9 @@ public class TestRunMigrationService {
 	public String testRunMigration(TestRunDetails testRunDetails) throws ParseException, JsonProcessingException {
 
 		List<TestRunMigrationDto> testRunMigrationDto = new ArrayList<>();
-		String customerURI = lookUpCodeJpaRepository.getCustomerURLByCustomerName(testRunDetails.getCustomerName());
-		logger.info("Customer URI " + customerURI);
+		String lookUpName="TARGET CLIENT";
+		LookUpCode lookUpCode = lookUpCodeJpaRepository.findBylookUpNameAndLookUpCode(lookUpName,testRunDetails.getCustomerName());
+		logger.info("LookUpCode Data " + lookUpCode);
 		for (ExistTestRunDto id : testRunDetails.getListOfTestRun()) {
 			int testRunId = id.getTestSetId();
 
@@ -101,7 +103,7 @@ public class TestRunMigrationService {
 
 			for (int testSetLineID : testSetLineIDs) {
 				TestSetLine scriptsData = dataBaseEntryDao.getScriptDataByLineID(testSetLineID);
-				System.out.println("scriptsData " + scriptsData.getTestRunScriptId());
+				logger.debug("scriptsData " + scriptsData.getTestRunScriptId());
 				TestSetLineDto testSetLineDto = new TestSetLineDto(scriptsData);
 
 				List<WatsTestSetParamVO> ScriptParamMetaData = new ArrayList<>();
@@ -174,7 +176,7 @@ public class TestRunMigrationService {
 			testRunMigrateDto.setLookUpData(lookUpDataMap);
 			testRunMigrationDto.add(testRunMigrateDto);
 			logger.info("Succesfully added migration data");		}
-		return webClientService(testRunMigrationDto, customerURI);
+		return webClientService(testRunMigrationDto, lookUpCode.getTargetCode());
 
 	}
 
