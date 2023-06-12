@@ -11,6 +11,15 @@
 	<description>Demo project for Spring Boot</description>
 	<build>
   		<finalName>wats</finalName>
+  		<resources>
+		    <resource>
+		        <directory>src/main/resources</directory>
+		        <filtering>true</filtering>
+		        <includes>
+		            <include>bootstrap.properties</include>
+		        </includes>
+		    </resource>
+		</resources>
 	</build>
 
 
