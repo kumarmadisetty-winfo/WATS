@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.winfo.dao.CustomerToCentralGetDao;
 import com.winfo.model.LookUpCode;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.utils.Constants;
 import com.winfo.vo.ScriptDtlsDto;
 import com.winfo.vo.WatsMasterDataVOList;
 import com.winfo.vo.ScriptMasterDto;
@@ -40,8 +41,7 @@ public class CustomerToCentralGetService {
 			response = "[{\"status\":500,\"statusMessage\":\"Invalid URL\",\"description\":\"Invalid URL!!\"}]";
 			logger.error("Invalid URL " + customerUrl);
 		} else {
-			String url = customerUrl + "/centralToCustomerScriptMigrate";
-			WebClient webClient = WebClient.create(url);
+			WebClient webClient = WebClient.create(customerUrl + "/apiValidationMigrationReceiver");
 			Mono<String> result = webClient.post().syncBody(watsMasterDataVO).retrieve().bodyToMono(String.class);
 			response = result.block();
 			if ("[]".equals(response)) {
@@ -56,8 +56,7 @@ public class CustomerToCentralGetService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String scriptMetaData(ScriptDtlsDto scriptDtls) {
 		List<ScriptMasterDto> watsMasterVOList = dao.fecthMetaDataList(scriptDtls);
-		String lookUpName="TARGET CLIENT";
-		LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(lookUpName,scriptDtls.getCustomerName());
+		LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(Constants.Look_Up_Name,scriptDtls.getCustomerName());
 		logger.info("LookUpCode Data " + lookUpCode);
 		WatsMasterDataVOList watsMasterDataVO = new WatsMasterDataVOList();
 		watsMasterDataVO.setData(watsMasterVOList);

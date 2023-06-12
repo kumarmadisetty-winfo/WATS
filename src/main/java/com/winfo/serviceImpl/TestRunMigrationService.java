@@ -24,6 +24,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.utils.Constants;
 import com.winfo.vo.ExistTestRunDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -54,9 +55,7 @@ public class TestRunMigrationService {
 			throws JsonMappingException, JsonProcessingException {
 
 		logger.info("TestRun Migrate json data " + listOfTestRunMigrate);
-
-		String url = customerUrl + "/testRunMigrationToCustomer";
-		WebClient webClient = WebClient.create(url);
+		WebClient webClient = WebClient.create(customerUrl + "/testRunMigrationToCustomer");
 		Mono<String> result = webClient.post().syncBody(listOfTestRunMigrate).retrieve().bodyToMono(String.class);
 		String response = result.block();
 		if ("[]".equals(response)) {
@@ -70,8 +69,7 @@ public class TestRunMigrationService {
 	public String testRunMigration(TestRunDetails testRunDetails) throws ParseException, JsonProcessingException {
 
 		List<TestRunMigrationDto> testRunMigrationDto = new ArrayList<>();
-		String lookUpName="TARGET CLIENT";
-		LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(lookUpName,testRunDetails.getCustomerName());
+		LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(Constants.Look_Up_Name,testRunDetails.getCustomerName());
 		logger.info("LookUpCode Data " + lookUpCode);
 		for (ExistTestRunDto id : testRunDetails.getListOfTestRun()) {
 			int testRunId = id.getTestSetId();

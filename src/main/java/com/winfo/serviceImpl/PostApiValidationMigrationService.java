@@ -36,8 +36,7 @@ public class PostApiValidationMigrationService {
 			logger.error("Invalid URL " +customerUrl);
 			return new ResponseDto(500,"Invalid URL","Invalid URL!!");
 		} else {
-			String url = customerUrl + "/apiValidationMigrationReceiver";
-			WebClient webClient = WebClient.create(url);
+			WebClient webClient = WebClient.create(customerUrl + "/apiValidationMigrationReceiver");
 			Mono<String> result = webClient.post().syncBody(listOfLookUpCodesData).retrieve().bodyToMono(String.class);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String finalResult = result.block();
@@ -60,8 +59,7 @@ public class PostApiValidationMigrationService {
 			ApiValidationDto apiDto =new ApiValidationDto();
 			apiDto.setLookupCodes(Arrays.asList(listOfLookUpCodesData));
 			apiDto.setFlag(apiValidationMigration.isFlag());
-			String lookUpName="TARGET CLIENT";
-			LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(lookUpName,apiValidationMigration.getTargetEnvironment());
+			LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(Constants.Look_Up_Name,apiValidationMigration.getTargetEnvironment());
 			logger.info("LookUpCode Data " + lookUpCode);
 			return webClientService(apiDto, lookUpCode.getTargetCode());
 		} catch (Exception e) {
