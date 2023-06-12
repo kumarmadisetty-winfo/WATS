@@ -1621,9 +1621,9 @@ public class DataBaseEntryDao {
 		}
 	}
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void deleteTestSetLinesRecordsByTestSetLineId(TestSetLine testSetLine) {
+	public void deleteTestSetLinesRecordsByTestSetLineId(TestSetLine testSetLine, String string) {
 		try {
-			LogDetailsTable logDetailsTable = createLogDetailsTable(testSetLine);
+			LogDetailsTable logDetailsTable = createLogDetailsTable(testSetLine,string);
 	        logDetailsRepository.save(logDetailsTable);
 			int data = em.createQuery("delete from TestSetLine where testRunScriptId = :testSetLineId")
 					.setParameter("testSetLineId", testSetLine.getTestRunScriptId()).executeUpdate();
@@ -1684,13 +1684,13 @@ public class DataBaseEntryDao {
 		}
 	}
 	
-	private LogDetailsTable createLogDetailsTable(TestSetLine testSetLine) {
+	private LogDetailsTable createLogDetailsTable(TestSetLine testSetLine, String string) {
 		LogDetailsTable logDetailsTable = new LogDetailsTable();
 		logDetailsTable.setLogLevel("Info");
 		logDetailsTable.setLogTable("WIN_TA_TEST_SET_LINES");
 		logDetailsTable.setLogAction("Delete");
 		logDetailsTable.setLogTime(new Date());
-		logDetailsTable.setExecutedBy(testSetLine.getLastUpdatedBy());
+		logDetailsTable.setExecutedBy(string);
 		String logDescription = String.format(
 				"Test Set Id: %d, Script Number: %s, Test Set Line Id: %d, Last Updated By: %s, Sequence Number: %d is Deleted",
 				testSetLine.getTestRun().getTestRunId(), testSetLine.getScriptNumber(),
