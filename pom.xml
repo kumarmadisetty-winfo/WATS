@@ -26,7 +26,7 @@
 		<selenium.version>4.5.3</selenium.version>
 	    <config.server.uri>http://winfodevops01.winfosolutions.com:8085/config-server/</config.server.uri>
 	    <app.name>application</app.name>
-	    <spring.profiles.active>${spring.profiles.active}</spring.profiles.active>
+	    <spring.profiles.active>${profiles}</spring.profiles.active>
 	</properties>
 
 
