@@ -389,7 +389,7 @@ public class RunAutomation {
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(testRunId, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passUrl,failurl, detailurl, scripturl);
+			switchActions(args, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passurl, failurl, detailurl, scripturl);
 
 		}
 		catch (WebDriverException e) {
