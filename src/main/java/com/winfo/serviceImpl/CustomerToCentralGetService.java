@@ -57,7 +57,7 @@ public class CustomerToCentralGetService {
 	public String scriptMetaData(ScriptDtlsDto scriptDtls) {
 		List<ScriptMasterDto> watsMasterVOList = dao.fecthMetaDataList(scriptDtls);
 		String lookUpName="TARGET CLIENT";
-		LookUpCode lookUpCode = lookUpCodeJpaRepository.findBylookUpNameAndLookUpCode(lookUpName,scriptDtls.getCustomerName());
+		LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(lookUpName,scriptDtls.getCustomerName());
 		logger.info("LookUpCode Data " + lookUpCode);
 		WatsMasterDataVOList watsMasterDataVO = new WatsMasterDataVOList();
 		watsMasterDataVO.setData(watsMasterVOList);

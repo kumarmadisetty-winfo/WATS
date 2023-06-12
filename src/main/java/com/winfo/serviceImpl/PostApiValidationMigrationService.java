@@ -61,7 +61,7 @@ public class PostApiValidationMigrationService {
 			apiDto.setLookupCodes(Arrays.asList(listOfLookUpCodesData));
 			apiDto.setFlag(apiValidationMigration.isFlag());
 			String lookUpName="TARGET CLIENT";
-			LookUpCode lookUpCode = lookUpCodeJpaRepository.findBylookUpNameAndLookUpCode(lookUpName,apiValidationMigration.getTargetEnvironment());
+			LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(lookUpName,apiValidationMigration.getTargetEnvironment());
 			logger.info("LookUpCode Data " + lookUpCode);
 			return webClientService(apiDto, lookUpCode.getTargetCode());
 		} catch (Exception e) {

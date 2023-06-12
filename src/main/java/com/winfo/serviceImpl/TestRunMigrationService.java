@@ -71,7 +71,7 @@ public class TestRunMigrationService {
 
 		List<TestRunMigrationDto> testRunMigrationDto = new ArrayList<>();
 		String lookUpName="TARGET CLIENT";
-		LookUpCode lookUpCode = lookUpCodeJpaRepository.findBylookUpNameAndLookUpCode(lookUpName,testRunDetails.getCustomerName());
+		LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(lookUpName,testRunDetails.getCustomerName());
 		logger.info("LookUpCode Data " + lookUpCode);
 		for (ExistTestRunDto id : testRunDetails.getListOfTestRun()) {
 			int testRunId = id.getTestSetId();
