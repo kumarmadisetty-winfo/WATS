@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.controller.MigrationReceiver;
 import com.winfo.dao.CopyTestRunDao;
+import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.dao.TestRunMigrationGetDao;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
@@ -50,6 +51,9 @@ public class TestRunMigrationGetService {
 
 	@Autowired
 	private EntityManager entityManager;
+	
+	@Autowired
+	DataBaseEntryDao dataBaseEntryDao;
 
 	@Transactional
 	@SuppressWarnings("unchecked")
@@ -60,6 +64,7 @@ public class TestRunMigrationGetService {
 		DomGenericResponseBean domGenericResponseBean = null;
 		String testrunName=null;
 		String description=null;
+//		int customerId=dataBaseEntryDao.getCustomerId(customerName);
 		
 		for (TestRunMigrationDto testRunMigrateDto : listOfTestRunDto) {
 			Session session = entityManager.unwrap(Session.class);
@@ -182,7 +187,7 @@ public class TestRunMigrationGetService {
 				master.setSubProcessArea(masterdata.getSubProcessArea());
 				master.setStandardCustom(masterdata.getStandardCustom());
 				master.setTestScriptStatus(masterdata.getTestScriptStatus());
-				master.setCustomerId(masterdata.getCustomerId());
+				master.setCustomerId(masterdata.getCustomerId());//------------------------------------------------------------
 				master.setDependency(masterdata.getDependency());
 				master.setEnd2endScenario(masterdata.getEnd2endScenario());
 				master.setExpectedResult(masterdata.getExpectedResult());
@@ -228,7 +233,7 @@ public class TestRunMigrationGetService {
 				}
 				listOfScriptMaster.add(master);
 			}
-			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew);
+			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew, customerId);
 
 			List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config")
 					.getResultList();
@@ -386,19 +391,35 @@ public class TestRunMigrationGetService {
 
 	public int dependentScript(Integer id, List<ScriptMaster> listOfScriptMaster, int insertedScriptaId,
 			Map<Integer, Integer> mapOfNewToOld, Map<Integer, Integer> mapOfOldToNew,
-			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew,int customerId) {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
+			int scriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
+					scriptMaster.getScriptNumber(),customerId);
+			
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
 					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
 				if (id.equals(scriptMaster.getScriptId())) {
+					String newCustomScriptNumber="";
+					if(scriptMasterCustomerId==1) {
+						newCustomScriptNumber=scriptMaster.getScriptNumber()+"C.";
+						String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber,scriptMaster.getProductVersion());
+						if("".equals(maxScriptNumber)) {
+							newCustomScriptNumber=newCustomScriptNumber+"1";
+						}
+						else {
+							newCustomScriptNumber=newCustomScriptNumber+(Integer.parseInt(maxScriptNumber.substring(newCustomScriptNumber.length()))+1);								
+						}
+						scriptMaster.setScriptNumber(newCustomScriptNumber);
+					}
 					if (scriptMaster.getDependency() == null) {
 						int originalId = scriptMaster.getScriptId();
 						insertedScriptaId = dao.insertScriptMaster(scriptMaster);
 						for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
 							int oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 							scriptMetaData.setScriptMaster(scriptMaster);
+							if(!"".equals(newCustomScriptNumber)) scriptMetaData.setScriptNumber(newCustomScriptNumber);
 							int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
 							mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
 						}
@@ -407,7 +428,7 @@ public class TestRunMigrationGetService {
 						return insertedScriptaId;
 					} else {
 						insertedScriptaId = dependentScript(scriptMaster.getDependency(), listOfScriptMaster,
-								insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
+								insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId);
 						scriptMaster.setDependency(insertedScriptaId);
 						int originalId = scriptMaster.getScriptId();
 						insertedScriptaId = dao.insertScriptMaster(scriptMaster);
@@ -432,27 +453,43 @@ public class TestRunMigrationGetService {
 	}
 
 	public Map<Integer, Integer> independentScript(List<ScriptMaster> listOfScriptMaster,
-			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew, int customerId) {
 		Map<Integer, Integer> mapOfNewToOld = new HashMap<>();
 		Map<Integer, Integer> mapOfOldToNew = new HashMap<>();
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
-
+			int scriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
+					scriptMaster.getScriptNumber(),customerId);
+			
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
 					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
+				String newCustomScriptNumber="";
+				
 				if (scriptMaster.getDependency() != null) {
 					int insertedScriptaId = 0;
 					dependentScript(scriptMaster.getScriptId(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld,
-							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
+							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId);
 				} else {
+					if(scriptMasterCustomerId==1) {
+						newCustomScriptNumber=scriptMaster.getScriptNumber()+"C.";
+						String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber,scriptMaster.getProductVersion());
+						if("".equals(maxScriptNumber)) {
+							newCustomScriptNumber=newCustomScriptNumber+"1";
+						}
+						else {
+							newCustomScriptNumber=newCustomScriptNumber+(Integer.parseInt(maxScriptNumber.substring(newCustomScriptNumber.length()))+1);								
+						}
+						scriptMaster.setScriptNumber(newCustomScriptNumber);
+					}
 					int originalId = scriptMaster.getScriptId();
 					scriptMaster.setScriptId(null);
 					int id = dao.insertScriptMaster(scriptMaster);
 					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
 						Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 						scriptMetaData.setScriptMaster(scriptMaster);
+						if(!"".equals(newCustomScriptNumber)) scriptMetaData.setScriptNumber(newCustomScriptNumber);
 						int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
 						mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
 					}

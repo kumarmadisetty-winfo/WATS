@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.winfo.dao.CentralToCustomerPostDao;
+import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.LookUp;
 import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
@@ -28,12 +29,15 @@ public class CentralToCustomerPostService {
 	public static final Logger logger = Logger.getLogger(CentralToCustomerPostService.class);
 	@Autowired
 	CentralToCustomerPostDao dao;
+	@Autowired
+	DataBaseEntryDao dataBaseEntryDao;
 
 	@Transactional
-	public List<DomGenericResponseBean> saveScriptMasterDtls(WatsMasterDataVOList mastervolist) {
+	public List<DomGenericResponseBean> saveScriptMasterDtls(WatsMasterDataVOList mastervolist, String customerName) {
 
 		List<DomGenericResponseBean> bean = new ArrayList<>();
-
+		int customerId=dataBaseEntryDao.getCustomerId(customerName);
+		
 		for (ScriptMasterDto masterdata : mastervolist.getData()) {
 			List<String> result = dao.getExistScriptDetailsByScriptNumberAndProductVersion(masterdata.getScriptNumber(), masterdata.getProductVersion());
 			DomGenericResponseBean response = new DomGenericResponseBean();
@@ -50,7 +54,7 @@ public class CentralToCustomerPostService {
 			master.setSubProcessArea(masterdata.getSubProcessArea());
 			master.setStandardCustom(masterdata.getStandardCustom());
 			master.setTestScriptStatus(masterdata.getTestScriptStatus());
-			master.setCustomerId(masterdata.getCustomerId());
+			master.setCustomerId(customerId);
 			master.setDependency(masterdata.getDependency());
 			master.setDependentScriptNum(masterdata.getDependentScriptNum());
 			master.setEnd2endScenario(masterdata.getEnd2endScenario());

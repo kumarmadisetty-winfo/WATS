@@ -29,13 +29,13 @@ public class CustomerToCentralGetService {
 	@Autowired
 	CustomerToCentralGetDao dao;
 
-	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUri) {
+	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUri, String customerName) {
 		String response;
 		if (customerUri.equals("")) {
 			response = "[{\"status\":500,\"statusMessage\":\"Invalid URL\",\"description\":\"Invalid URL!!\"}]";
 			logger.error("Invalid URL " + customerUri);
 		} else {
-			String uri = customerUri + "/centralToCustomerScriptMigrate";
+			String uri = customerUri + "/centralToCustomerScriptMigrate/"+customerName;
 			WebClient webClient = WebClient.create(uri);
 			Mono<String> result = webClient.post().syncBody(watsMasterDataVO).retrieve().bodyToMono(String.class);
 			response = result.block();
@@ -51,15 +51,16 @@ public class CustomerToCentralGetService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String scriptMetaData(ScriptDtlsDto scriptDtls) {
 		List<ScriptMasterDto> watsMasterVOList = dao.fecthMetaDataList(scriptDtls);
+		String customerName=scriptDtls.getCustomerName();
 		Session session = entityManager.unwrap(Session.class);
 		Query query4 = session.createQuery(
-				"select valueName from ApplicationProperties where keyName='" + scriptDtls.getCustomerName() + "'");
+				"select valueName from ApplicationProperties where keyName='" + customerName + "'");
 		List<String> result4 = query4.list();
 //		String customerUri = result4.isEmpty() ? "http://localhost:38081/wats" : result4.get(0);
 		String customerUri = result4.isEmpty() ? "" : result4.get(0);
 		WatsMasterDataVOList watsMasterDataVO = new WatsMasterDataVOList();
 		watsMasterDataVO.setData(watsMasterVOList);
-		return webClientService(watsMasterDataVO, customerUri);
+		return webClientService(watsMasterDataVO, "http://localhost:38081/wats", customerName);
 	}
 
 }

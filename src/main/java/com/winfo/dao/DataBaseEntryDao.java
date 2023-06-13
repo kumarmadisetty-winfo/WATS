@@ -1699,6 +1699,16 @@ public class DataBaseEntryDao {
 		logDetailsTable.setLogDescription(logDescription);
 		return logDetailsTable;
 	}
+	
+	public int getCustomerId(String customerName) {
+		String customerId = "select customer_id from WATS_PROD.win_ta_customers where customer_name="+customerName;
+		try {
+			Session session = em.unwrap(Session.class);
+			return (int) session.createSQLQuery(customerId).getSingleResult();	
+			} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while fetching customer ID.", e);
+		}
+	}
 }
 	
 	

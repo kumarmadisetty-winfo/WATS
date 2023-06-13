@@ -3,9 +3,11 @@ package com.winfo.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,9 +35,9 @@ public class MigrationReceiver {
 	@Autowired
 	TestRunMigrationGetService testRunMigrateGetService;
 
-	@PostMapping("/centralToCustomerScriptMigrate")
-	public List<DomGenericResponseBean> scriptMetaDataListFromCentral(@RequestBody WatsMasterDataVOList mastervolist) {
-		return service.saveScriptMasterDtls(mastervolist);
+	@PostMapping("/centralToCustomerScriptMigrate/{customerName}")
+	public List<DomGenericResponseBean> scriptMetaDataListFromCentral(@RequestBody WatsMasterDataVOList mastervolist,@PathVariable String customerName) {
+		return service.saveScriptMasterDtls(mastervolist,customerName);
 
 	}
 
