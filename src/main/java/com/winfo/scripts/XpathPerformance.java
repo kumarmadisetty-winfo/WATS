@@ -33,7 +33,7 @@ import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
 import com.winfo.serviceImpl.ScriptXpathService;
 import com.winfo.vo.CustomerProjectDto;
@@ -1975,10 +1975,10 @@ public class XpathPerformance {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage..", e);
 		}
 	}
 	
