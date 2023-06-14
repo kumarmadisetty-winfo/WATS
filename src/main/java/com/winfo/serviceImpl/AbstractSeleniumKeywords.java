@@ -919,7 +919,7 @@ public abstract class AbstractSeleniumKeywords {
 							.append(customerDetails.getTestSetName()).append("_Passed");
 					String docName = docNameBuffer.toString();
 					StringBuffer fileBuffer = new StringBuffer();
-					fileBuffer.append(fetchConfigVO.getDownlod_file_path()).append(docName).append(".pdf");
+					fileBuffer.append(fetchConfigVO.getDOWNLOD_FILE_PATH()).append(docName).append(".pdf");
 					File file = new File(fileBuffer.toString());
 					if (file.exists()) {
 						PdfContentByte contentByte = writer.getDirectContent();
@@ -1403,10 +1403,10 @@ public abstract class AbstractSeleniumKeywords {
 				if (!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
 					String docName = (metaDataVO.getSeqNum() + "_" + metaDataVO.getScenarioName() + "_"
 							+ metaDataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
-					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					File file = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + docName + ".pdf");
 					if (file.exists()) {
 						PdfContentByte contentByte = writer.getDirectContent();
-						PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+						PdfReader pdfReader = new PdfReader(fetchConfigVO.getDOWNLOD_FILE_PATH() + docName + ".pdf");
 						for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
 							PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
 							document.newPage();
@@ -2115,7 +2115,7 @@ public abstract class AbstractSeleniumKeywords {
 		jse.executeScript("window.open()");
 		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
 		String fileName = null;
-		if (fetchConfigVO.getBrowser().equalsIgnoreCase("chrome")) {
+		if (fetchConfigVO.getBROWSER().equalsIgnoreCase("chrome")) {
 			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
 			/* Download Window Open */
 			Thread.sleep(3000);
@@ -2125,7 +2125,7 @@ public abstract class AbstractSeleniumKeywords {
 			driver.switchTo().window(tabs.get(0));
 			logger.info("File Name*** " + fileName);
 
-		} else if (fetchConfigVO.getBrowser().equalsIgnoreCase("firefox")) {
+		} else if (fetchConfigVO.getBROWSER().equalsIgnoreCase("firefox")) {
 			driver.switchTo().window(tabs.get(1)).get("about:downloads");
 			/* Download Window Open */
 			Thread.sleep(3000);
@@ -2137,18 +2137,18 @@ public abstract class AbstractSeleniumKeywords {
 		}
 
 		if (fileName != null) {
-			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+			File oldFile = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
 			StringBuffer newNameBuffer = new StringBuffer();
 			newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
 					.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
 					.append(customerDetails.getTestSetName()).append("_Passed");
 			String newName = newNameBuffer.toString();
 
-			if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
-				new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
+			if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
+				new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
 
 			if (oldFile.exists()) {
-				if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
+				if (oldFile.renameTo(new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"))) {
 					logger.info("File name changed succesful");
 				} else {
 					logger.info("Rename failed");
@@ -2264,7 +2264,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			String accessToken = getSharepointAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
-			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+			File imageDir = new File(fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getTestSetName() + "/");
 			logger.info("Image Directory : " + imageDir);
 			RestTemplate restTemplate = new RestTemplate();
@@ -2381,13 +2381,13 @@ public abstract class AbstractSeleniumKeywords {
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			map.add("grant_type", "client_credentials");
-			map.add("client_id", fetchConfigVO.getClient_id());
-			map.add("client_secret", fetchConfigVO.getClient_secret());
+			map.add("client_id", fetchConfigVO.getCLIENT_ID());
+			map.add("client_secret", fetchConfigVO.getCLIENT_SECRET());
 			map.add("scope", "https://graph.microsoft.com/.default");
 
 			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 			ResponseEntity<Object> response = restTemplate.exchange(
-					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
+					"https://login.microsoftonline.com/" + fetchConfigVO.getTENANT_ID() + "/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
 
 			@SuppressWarnings("unchecked")

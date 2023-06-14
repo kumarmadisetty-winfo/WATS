@@ -2,17 +2,11 @@ package com.winfo.vo;
 
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class FetchScriptListVO {
 	
 	private List<FetchScriptVO> items;
-
-	public List<FetchScriptVO> getItems() {
-		return items;
-	}
-
-	public void setItems(List<FetchScriptVO> items) {
-		this.items = items;
-	}
-	
 
 }

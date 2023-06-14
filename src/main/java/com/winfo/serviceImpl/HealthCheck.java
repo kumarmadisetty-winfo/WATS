@@ -230,13 +230,13 @@ public class HealthCheck {
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			map.add("grant_type", "client_credentials");
-			map.add("client_id", fetchConfigVO.getClient_id());
-			map.add("client_secret", fetchConfigVO.getClient_secret());
+			map.add("client_id", fetchConfigVO.getCLIENT_ID());
+			map.add("client_secret", fetchConfigVO.getCLIENT_SECRET());
 			map.add("scope", "https://graph.microsoft.com/.default");
 
 			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 			ResponseEntity<Object> response = restTemplate.exchange(
-					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
+					"https://login.microsoftonline.com/" + fetchConfigVO.getTENANT_ID() + "/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()

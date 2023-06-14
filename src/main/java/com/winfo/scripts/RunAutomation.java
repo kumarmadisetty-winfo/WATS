@@ -158,7 +158,7 @@ public class RunAutomation {
 				testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, true, customerDetails);
 			}
 
-			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
+			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getPARALLEL_DEPENDENT());
 			for (Entry<Integer, List<ScriptDetailsDto>> metaData : dependentScriptMap.entrySet()) {
 				logger.info("Running Dependent - " + metaData.getKey());
 				executordependent.execute(() -> {
@@ -205,7 +205,7 @@ public class RunAutomation {
 
 			Date date = new Date();
 			fetchConfigVO.setStarttime1(date);
-			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getParallel_independent());
+			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getPARALLEL_INDEPENDENT());
 			try {
 				for (Entry<Integer, List<ScriptDetailsDto>> metaData : metaDataMap.entrySet()) {
 
@@ -242,7 +242,7 @@ public class RunAutomation {
 				executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 				if (executor.isTerminated() && dependentScriptMap.size() > 0) {
 					ExecutorService executordependent = Executors
-							.newFixedThreadPool(fetchConfigVO.getParallel_dependent());
+							.newFixedThreadPool(fetchConfigVO.getPARALLEL_DEPENDENT());
 
 					for (Entry<Integer, List<ScriptDetailsDto>> metaData : dependentScriptMap.entrySet()) {
 						logger.info("Running Dependent - " + metaData.getKey());
@@ -265,17 +265,17 @@ public class RunAutomation {
 										executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData,
 												scriptStatus, customerDetails);
 									} else {
-										String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName()
+										String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
 												+ "/" + customerDetails.getProjectName() + "/"
 												+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-										String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName()
+										String failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
 												+ "/" + customerDetails.getProjectName() + "/"
 												+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-										String detailurl = fetchConfigVO.getImg_url()
+										String detailurl = fetchConfigVO.getIMG_URL()
 												+ customerDetails.getCustomerName() + "/"
 												+ customerDetails.getProjectName() + "/"
 												+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
-										String scripturl = fetchConfigVO.getImg_url()
+										String scripturl = fetchConfigVO.getIMG_URL()
 												+ customerDetails.getCustomerName() + "/"
 												+ customerDetails.getProjectName() + "/"
 												+ customerDetails.getTestSetName() + "/"
@@ -328,11 +328,11 @@ public class RunAutomation {
 				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry.getScriptDetailsListVO(testSetId,
 						null, true, false);
 
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
 						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", customerDetails);
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
 						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Failed_Report.pdf", customerDetails);
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
+				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).createPdf(
 						fetchMetadataListVOforEvidence, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
 
 				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(), fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
@@ -340,7 +340,7 @@ public class RunAutomation {
 				increment = 0;
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-					seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name())
+					seleniumFactory.getInstanceObj(fetchConfigVO.getINSTANCE_NAME())
 							.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
 				executeTestrunVo.setStatusCode(200);
@@ -369,14 +369,14 @@ public class RunAutomation {
 		String testSetLineId = fetchMetadataListsVO.get(0).getTestSetLineId();
 
 		String scriptId = fetchMetadataListsVO.get(0).getScriptId();
-		String passUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
+		String passUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-		String failUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
+		String failUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-		String detailUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
+		String detailUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
 				+ "Detailed_Report.pdf";
-		String scriptUrl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() + "/"
+		String scriptUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
 				+ fetchMetadataListsVO.get(0).getSeqNum() + "_" + fetchMetadataListsVO.get(0).getScriptNumber()
 				+ ".pdf";
@@ -463,7 +463,7 @@ public class RunAutomation {
 			String globalValueForSteps = null;
 			Date startdate = new Date();
 			fetchConfigVO.setStarttime(startdate);
-			String instanceName = fetchConfigVO.getInstance_name();
+			String instanceName = fetchConfigVO.getINSTANCE_NAME();
 			logger.info("Instance Name " + instanceName);
 			seleniumFactory.getInstanceObjFromAbstractClass(instanceName)
 					.deleteOldScreenshotForScriptFrmObjStore(fetchMetadataListVO.get(0), customerDetails);
@@ -1319,7 +1319,7 @@ public class RunAutomation {
 									globalValueForSteps, customerDetails);
 							break;
 						case "uploadFileAutoIT":
-								seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(driver,fetchConfigVO.getUpload_file_path(), param1, param2, param3, fetchMetadataVO, customerDetails);
+								seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(driver,fetchConfigVO.getUPLOAD_FILE_PATH(), param1, param2, param3, fetchMetadataVO, customerDetails);
 							break;
 						case "windowclose":
 							seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO,
@@ -1466,17 +1466,17 @@ public class RunAutomation {
 							}
 							
 						case "apiAccessToken":
-							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).apiAccessToken(fetchMetadataVO,
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).apiAccessToken(fetchMetadataVO,
 									accessTokenStorage, customerDetails);
 							break;
 
 						case "apiValidationResponse":
-							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).apiValidationResponse(fetchMetadataVO,
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).apiValidationResponse(fetchMetadataVO,
 									accessTokenStorage, api,customerDetails,fetchConfigVO);
 							break;
 
 						case "validation":
-							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).validation(fetchMetadataVO, api);
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).validation(fetchMetadataVO, api);
 							break;
 
 						default:
@@ -1548,7 +1548,7 @@ public class RunAutomation {
 							limitScriptExecutionService.updateFaileScriptscount(testSetLineId, testSetId);
 							downloadScreenShot(fetchConfigVO, fetchMetadataVO, customerDetails, false);
 							fetchMetadataVO.setStatus("Pass");
-							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).createPdf(
 									fetchMetadataListVO, fetchConfigVO, seqNum + "_" + scriptNumber + ".pdf",
 									customerDetails);
 							if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
@@ -1560,15 +1560,15 @@ public class RunAutomation {
 								graphQLService.addAttachmentToScript(passScriptKey,b64,file.getName());
 							}
 							if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-								seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+								seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
 										.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 							}
-							if(StringUtils.isNotBlank(fetchMetadataVO.getIssueKey())){
+							if(StringUtils.isNotBlank(fetchMetadataVO.getIssueKey())){ 
 								fetchConfigVO.getJIRA_ISSUE_URL();
-								jiraTicketBugService.jiraIssueFixed(fetchMetadataVO.getIssueKey(),fetchConfigVO.getJiraIssueUpdateStatusURL(),fetchConfigVO.getJiraIssueUpdateTransitions());
+								jiraTicketBugService.jiraIssueFixed(fetchMetadataVO.getIssueKey(),fetchConfigVO.getJIRA_ISSUE_UPDATE_STATUS_URL(),fetchConfigVO.getJIRA_ISSUE_UPDATE_TRANSITIONS());
 							}
 							if (Constants.smartBear.YES.toString().equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
-									&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+									&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getINSTANCE_NAME())) {
 								String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/",
 										File.separator) + customerDetails.getCustomerName() + File.separator
 										+ customerDetails.getTestSetName() + File.separator) + seqNum + "_"
@@ -1627,7 +1627,7 @@ public class RunAutomation {
 
 						fetchConfigVO.setStatus1("Fail");
 						downloadScreenShot(fetchConfigVO, fetchMetadataVO, customerDetails, false);
-						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name()).createPdf(
+						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).createPdf(
 								fetchMetadataListVO, fetchConfigVO,
 								seqNum + "_" + scriptNumber + "_RUN" + failedScriptRunCount + ".pdf",
 								customerDetails);
@@ -1640,11 +1640,11 @@ public class RunAutomation {
 							graphQLService.addAttachmentToScript(failScriptKey,b64,file.getName());
 						}
 						if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
-							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
 									.uploadPdfToSharepoint(fetchMetadataListVO, fetchConfigVO, customerDetails);
 						}
 						if (Constants.smartBear.YES.toString().equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
-								&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+								&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getINSTANCE_NAME())) {
 							String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/",
 									File.separator) + customerDetails.getCustomerName() + File.separator
 									+ customerDetails.getTestSetName() + File.separator) + seqNum + "_" + scriptNumber
@@ -1669,7 +1669,7 @@ public class RunAutomation {
 		String seqNumber = evidenceReport ? null : fetchMetadataVO.getSeqNum();
 		String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
 				+ File.separator + customerDetails.getTestSetName() + File.separator;
-		seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+		seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
 				.downloadScreenshotsFromObjectStore(screenShotFolder, customerDetails.getCustomerName(),
 						customerDetails.getTestSetName(), seqNumber);
 		logger.info("Successfully downloaded ScreenShots");

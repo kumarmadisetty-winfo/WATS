@@ -179,7 +179,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			String value, CustomerProjectDto customerDetails) throws Exception {
 
 		navigateUrl(driver, fetchConfigVO, fetchMetadataVO, customerDetails);
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//button[text()=\"Company Single Sign-On\"]")));
 		WebElement waittill = driver.findElement(By.xpath("//button[text()=\"Company Single Sign-On\"]"));
 		waittill.click();
@@ -256,7 +256,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			Thread.sleep(4000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//img[@title=\"User\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//img[@title=\"User\"])[1]"));
 			Actions actions = new Actions(driver);
@@ -318,7 +318,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(4000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//td[@data-afr-adfday=\"cm\" and text()=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions
@@ -412,7 +412,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getAPPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -447,7 +447,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("password")) {
 				String title1 = driver.getTitle();
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type=\"" + param1 + "\"]")));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("document.getElementById(\"password\").value = \"" + keysToSend + "\";");
@@ -473,7 +473,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error("Failed to enter password " + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::input[1]")));
 			WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::input[1]"));
@@ -506,7 +506,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("password")) {
 				String title1 = driver.getTitle();
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type=\"" + param1 + "\"]")));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("document.getElementById(\"password\").value = \"" + keysToSend + "\";");
@@ -533,7 +533,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,\"" + param1 + "\")]")));
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,\"" + param1 + "\")]"));
@@ -564,7 +564,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(4000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//a[@title=\"" + param1 + "\"]"));
@@ -591,7 +591,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Expenses")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"])[2]")));
 				wait.until(ExpectedConditions.elementToBeClickable(
@@ -618,7 +618,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[contains(@id,\"popup-container\")]//*[@title=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(
@@ -692,7 +692,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			} else {
 				// try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//div[@style=\"visibility: visible;\"]//span[normalize-space(text())=\"" + param2 + "\"]")));
 				wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
@@ -735,7 +735,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			throws Exception {
 		try {
 			Thread.sleep(7000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@title=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//img[@title=\"" + param1 + "\"]"));
@@ -764,7 +764,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		String xpath = null;
 		try {
 			Thread.sleep(2000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//div[contains(@class,\"AFVertical\")]//a[normalize-space(text())=\"" + param1 + "\"]")));
 			wait.until(ExpectedConditions.elementToBeClickable(
@@ -852,10 +852,10 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name, CustomerProjectDto customerDetails) {
-		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+		String vidPath = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/" + name);
 		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
-		String Folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+		String Folder = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/");
 		File theDir = new File(Folder);
 		if (!theDir.exists()) {
@@ -907,7 +907,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	
 	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName()
+		File folder = new File(fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customerDetails.getCustomerName()
 				+ "\\" + customerDetails.getTestSetName() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -930,7 +930,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	public void compress(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName, CustomerProjectDto customerDetails)
 			throws IOException {
-		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName()
+		String Folder = (fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customerDetails.getCustomerName()
 				+ "\\" + customerDetails.getTestSetName() + "\\");
 		List<String> fileNameList = null;
 		String customer_Name = customerDetails.getCustomerName();
@@ -940,7 +940,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		for (String image : fileNameList) {
 
 			FileInputStream inputStream = new FileInputStream(
-					fetchConfigVO.getScreenshot_path() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
+					fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
 			BufferedImage inputImage = ImageIO.read(inputStream);
 
 			JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
@@ -1599,7 +1599,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("(//div[normalize-space(text())=\"" + param1 + "\"])[2]"))));
 				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(("(//div[text()=\""
@@ -1626,7 +1626,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@title=\"" + param1 + "\"]")));
 			Thread.sleep(4000);
 			WebElement waittext = driver.findElement(By.xpath("//div[@title=\"" + param1 + "\"]"));
@@ -1648,7 +1648,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//a[normalize-space(text())=\"" + param1 + "\"]"))));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -1672,7 +1672,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					("//div[contains(@style,\"display: block\")]//div[normalize-space(text())=\"" + param1 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(
@@ -1696,7 +1696,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//div[normalize-space(text())=\"" + param1 + "\"]"))));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -1719,7 +1719,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//div[contains(@id,\"" + param1 + "\")])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//div[contains(@id,\"" + param1 + "\")])[1]"));
@@ -1747,7 +1747,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void clickSignInSignOut(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("//button[normalize-space(normalize-space(text())=\"" + param1 + "\")]"))));
 			WebElement waittext = driver
@@ -1845,7 +1845,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Items to Approve")){
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::a[text()='"+keysToSend+"']")));
 				WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::a[text()='"+keysToSend+"']"));
 				Thread.sleep(2000);
@@ -1870,7 +1870,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Account Information")){
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='"+param1+"']/following::*[text()='"+param2+"']/following::div[@title='"+keysToSend+"']")));
 				WebElement waittext = driver.findElement(By.xpath("//span[text()='"+param1+"']/following::*[text()='"+param2+"']/following::div[@title='"+keysToSend+"']"));
 				Thread.sleep(2000);
@@ -1895,7 +1895,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Expense Reports")){
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='"+param1+"']/following::*[contains(text(),'"+keysToSend+"')]")));
 				WebElement waittext = driver.findElement(By.xpath("//h1[text()='"+param1+"']/following::*[contains(text(),'"+keysToSend+"')]"));
 				Thread.sleep(2000);
@@ -1920,7 +1920,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Project/Assignment Lookup")||(param1.equalsIgnoreCase("Expense Reports"))){
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()='"+param1+"']/following::a[contains(text(),'"+keysToSend+"')])[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//*[text()='"+param1+"']/following::a[contains(text(),'"+keysToSend+"')])[1]"));
 				Thread.sleep(2000);
@@ -1945,7 +1945,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("My Assignments")||(param1.equalsIgnoreCase("Project/Assignment Lookup"))){
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+keysToSend+"']")));
 				WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+keysToSend+"']"));
 				Thread.sleep(2000);
@@ -1970,7 +1970,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Search: All")){
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@data-value='Search: All']/following::input/following::span[@title='"+keysToSend+"']/following::*[text()='Project'][1]")));
 				WebElement waittext = driver.findElement(By.xpath("//input[@data-value='Search: All']/following::input/following::span[@title='"+keysToSend+"']/following::*[text()='Project'][1]"));
 				Thread.sleep(2000);
@@ -1995,7 +1995,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Search Setup")){
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@title=\""+param1+"\"]/following::div[text()=\""+keysToSend+"\"][1]")));
 				WebElement waittext = driver.findElement(By.xpath("//input[@title=\""+param1+"\"]/following::div[text()=\""+keysToSend+"\"][1]"));
 				Thread.sleep(2000);
@@ -2020,7 +2020,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Project Details")||(param1.equalsIgnoreCase("Opportunity Details")||(param1.equalsIgnoreCase("Information")))){
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[text()=\""+param2+"\"]/following::*[contains(@title,\""+keysToSend+"\")]")));
 				WebElement waittext = driver.findElement(By.xpath("//label[text()=\""+param2+"\"]/following::*[contains(@title,\""+keysToSend+"\")]"));
 				Thread.sleep(2000);
@@ -2045,7 +2045,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Mon")) {
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//input[@placeholder=\"Project / Assignment\"]/following::div[contains(@class,\"search\") and not(@style)])[1]/following::td[@data-columnid=\"weekDay3\"][1]/div")));
 				WebElement waittext = driver.findElement(By.xpath("(//input[@placeholder=\"Project / Assignment\"]/following::div[contains(@class,\"search\") and not(@style)])[1]/following::td[@data-columnid=\"weekDay3\"][1]/div"));
 				Thread.sleep(2000);
@@ -2070,7 +2070,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Project/Assignment Lookup")) {
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+keysToSend+"\"][1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+keysToSend+"\"][1]"));
 				Thread.sleep(2000);
@@ -2095,7 +2095,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Locations")) {
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),\"" + param1
 						+ "\")]/following::*[normalize-space(text())=\"" + keysToSend + "\"][1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),\"" + param1
@@ -2121,7 +2121,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 46
 		try {
 			if (param1.equalsIgnoreCase("shopByCategoryPopup")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@data-afr-popupid,\""
 						+ param1 + "\")]//*[contains(normalize-space(text()),\"" + keysToSend + "\")][1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[contains(@data-afr-popupid,\"" + param1
@@ -2150,7 +2150,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 39
 		try {
 			if (param1.equalsIgnoreCase("Assignment Number")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),\"" + param1
 						+ "\")]/following::a[text()=\"" + keysToSend + "\" and not(@style)]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),\"" + param1
@@ -2178,7 +2178,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 32
 		try {
 			if (param1.equalsIgnoreCase("Plan")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),\"" + param1
 						+ "\")]/following::*[normalize-space(text())=\"" + keysToSend + "\"]//following::span[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),\"" + param1
@@ -2205,7 +2205,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Review installments") || param1.equalsIgnoreCase("Review proposed payments")
 					|| param1.equalsIgnoreCase("Record print status")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"" + keysToSend + "\"]/following::img[@title=\"" + param1 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -2230,7 +2230,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Payment Process Requests") && param1.equalsIgnoreCase("Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[contains(text(),\"" + param2 + "\")]/following::*[normalize-space(text())=\"" + keysToSend
 								+ "\"][1]/following::img/following::a[contains(@id,\"RecentlyCompletedPpr\")])[2]")));
@@ -2257,7 +2257,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 15
 		try {
 			if (param1.equalsIgnoreCase("Absences") && param2.equalsIgnoreCase("Absence Type")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"" + keysToSend
 								+ "\"]/following::img[contains(@title,\"" + param2 + "\")][1]")));
@@ -2287,7 +2287,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Action")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath("//*[contains(text(),\"" + keysToSend + "\")]/following::*[@title=\"" + param2 + "\"][1]")));
 				WebElement waittext = driver.findElement(By
@@ -2316,7 +2316,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH
 		try {
 			Thread.sleep(3000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),\"" + param1
 					+ "\")]/following::span[normalize-space(text())=\"" + keysToSend + "\"][1]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),\"" + param1
@@ -2339,7 +2339,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			Thread.sleep(3000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),\"" + param1
 					+ "\")]/following::*[normalize-space(text())=\"" + keysToSend + "\"][1]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),\"" + param1
@@ -2361,7 +2361,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -2384,7 +2384,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + keysToSend
 					+ "\"]/following::*[normalize-space(text())=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + keysToSend
@@ -2469,7 +2469,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Icon")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//div[@class='slds-icon-waffle']")));
 				WebElement waittext = driver.findElement(
@@ -2493,7 +2493,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Expense Report")&&(param2.equalsIgnoreCase("Approval History"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//*[text()='"+param1+"']/following::span[text()='"+param2+"'])[1]/following::*[text()='Show more actions']/preceding::lightning-primitive-icon[1]")));
 				WebElement waittext = driver.findElement(
@@ -2517,7 +2517,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("attachmentImage")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//img[@class='attachmentImage']")));
 				WebElement waittext = driver.findElement(
@@ -2541,7 +2541,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project / Assignment")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//*[text()='"+param1+"']/following::input/following::div/following::div)[1]")));
 				WebElement waittext = driver.findElement(
@@ -2565,7 +2565,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Edit Project Manager")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"'][1]/following::*[text()='"+param2+"']/preceding::span[1]")));
 				WebElement waittext = driver.findElement(
@@ -2589,7 +2589,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Log a Call")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//span[text()='"+param1+"']/preceding::lightning-primitive-icon[1]")));
 				WebElement waittext = driver.findElement(
@@ -2613,7 +2613,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project / Assignment")&&(param2.equalsIgnoreCase("search"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//input[@placeholder=\""+param1+"\"]/following::div[contains(@class,\""+param2+"\") and not(@style)])[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//input[@placeholder=\""+param1+"\"]/following::div[contains(@class,\""+param2+"\") and not(@style)])[1]"));
 				Actions actions = new Actions(driver);
@@ -2634,7 +2634,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// prod
 		try {
 			if (param2.equalsIgnoreCase("General Journals Report")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
 						+ "\")]/following::img[@class=\"promptComboBoxButtonMoz\"])[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
@@ -2657,7 +2657,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// prod
 		try {
 			if (param2.equalsIgnoreCase("General Journals Report")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath("(//*[text()=\"" + param1 + "\"]/following::img[@class=\"promptComboBoxButtonMoz\"])[1]")));
 				WebElement waittext = driver.findElement(
@@ -2680,7 +2680,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 43
 		try {
 			if (param1.equalsIgnoreCase("Plan Balances") || param1.equalsIgnoreCase("Existing Absences")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()=\"" + param1 + "\"]/following::div[@role=\"button\"][1]")));
 				WebElement waittext = driver
@@ -2705,7 +2705,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 15
 		try {
 			if (param2.equalsIgnoreCase("Back")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h1[normalize-space(text())=\"" + param1 + "\"]/preceding::a[1]")));
 				WebElement waittext = driver
@@ -2731,7 +2731,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("move")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 
@@ -2776,7 +2776,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 19
 		try {
 			if (param1.equalsIgnoreCase("Existing Absences") && param2.equalsIgnoreCase("Add")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath("(//h1[normalize-space(text())=\"" + param1 + "\"]/following::div[@role=\"button\"])[1]")));
 				Thread.sleep(2000);
@@ -2826,7 +2826,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Project Billing")||(param1.equalsIgnoreCase("Release"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()='"+param1+"']")));
 				WebElement waittext = driver.findElement(By
@@ -2852,7 +2852,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Complete Billing Document")&&(param2.equalsIgnoreCase("Complete"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']/following::input[@value='"+param2+"'][1]")));
 				WebElement waittext = driver.findElement(
@@ -2879,7 +2879,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Billing Document")&&(param2.equalsIgnoreCase("Calculate Tax"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//div[text()='"+param1+"']/following::*[text()='"+param2+"']")));
 				WebElement waittext = driver.findElement(
@@ -2906,7 +2906,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Submit for Approval")||(param2.equalsIgnoreCase("Complete"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']")));
 				WebElement waittext = driver.findElement(
@@ -2933,7 +2933,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Done")||(param1.equalsIgnoreCase("Submit")||(param1.equalsIgnoreCase("Create Billing Document")||(param1.equalsIgnoreCase("Run Calculation Batch")||(param1.equalsIgnoreCase("Run Revenue Forecast")))))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']")));
 				WebElement waittext = driver.findElement(
@@ -2960,7 +2960,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Mark as Current Stage")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']")));
 				WebElement waittext = driver.findElement(
@@ -2987,7 +2987,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Approve")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h2[text()='"+param1+"']/following::*[text()='"+param2+"']")));
 				WebElement waittext = driver.findElement(
@@ -3014,7 +3014,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Save")||(param1.equalsIgnoreCase("Request Project Resources")||(param1.equalsIgnoreCase("Clear")||(param1.equalsIgnoreCase("Apply")||(param1.equalsIgnoreCase("Assign")))))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//button[text()='"+param1+"']")));
 				WebElement waittext = driver.findElement(
@@ -3042,7 +3042,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		//button[text()=\""+param1+"\"]
 		try {
 			if (param1.equalsIgnoreCase("Mark as Current Stage")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']")));
 				WebElement waittext = driver.findElement(
@@ -3069,7 +3069,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if  (param2.equalsIgnoreCase("More")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//*[text()='"+param1+"']/following::*[contains(@class,'slds-button slds-button_icon-border-filled')])[1]")));
 				WebElement waittext = driver.findElement(
@@ -3096,7 +3096,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("New")||(param1.equalsIgnoreCase("Save")||(param1.equalsIgnoreCase("Release")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//button[text()='"+param1+"'])[1]")));
 				WebElement waittext = driver.findElement(
@@ -3123,7 +3123,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("New")||(param1.equalsIgnoreCase("Save"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//button[text()='"+param1+"']")));
 				WebElement waittext = driver.findElement(
@@ -3150,7 +3150,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Expense Report")&&(param2.equalsIgnoreCase("Approval History"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//*[text()='"+param1+"']/following::span[text()='"+param2+"'])[1]/following::*[text()='Show more actions']/preceding::lightning-primitive-icon[1]")));
 				WebElement waittext = driver.findElement(
@@ -3177,7 +3177,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Recall Approval Request")||(param1.equalsIgnoreCase("Approve Expense Report"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']/following::span[text()='"+param2+"']")));
 				WebElement waittext = driver.findElement(
@@ -3203,7 +3203,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Recall")||(param1.equalsIgnoreCase("Approve"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//div[@title='"+param1+"']")));
 				WebElement waittext = driver.findElement(
@@ -3229,7 +3229,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Approval History")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//span[text()='"+param1+"']/following::*[text()='Show actions for Approval History']/preceding::lightning-primitive-icon[1]")));
 				WebElement waittext = driver.findElement(
@@ -3256,7 +3256,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Attach File")||(param1.equalsIgnoreCase("Close")||(param1.equalsIgnoreCase("Save All")||(param1.equalsIgnoreCase("Submit")||(param1.equalsIgnoreCase("Add")||(param1.equalsIgnoreCase("Continue")||(param1.equalsIgnoreCase("Calculate Tax")||(param1.equalsIgnoreCase("Back")||(param1.equalsIgnoreCase("Confirm")))))))))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//input[@value='"+param1+"'])[1]")));
 				WebElement waittext = driver.findElement(
@@ -3282,7 +3282,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project / Assignment")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']/following::input[@id='assignmentInputComponent'][1]")));
 				WebElement waittext = driver.findElement(
@@ -3308,7 +3308,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project / Assignment")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//input[@placeholder='Project / Assignment']/following::div[contains(@class,'search') and not(@style)])[1]")));
 				WebElement waittext = driver.findElement(
@@ -3334,7 +3334,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Mon")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//input[@placeholder='Project / Assignment']/following::div[contains(@class,'search') and not(@style)])[1]/following::td[@data-columnid='weekDay3'][1]/div")));
 				WebElement waittext = driver.findElement(
@@ -3360,7 +3360,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Save")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']")));
 				WebElement waittext = driver.findElement(
@@ -3386,7 +3386,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Search...")||(param1.equalsIgnoreCase("New"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//button[text()='"+param1+"']")));
 				WebElement waittext = driver.findElement(
@@ -3412,7 +3412,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("New Project")||(param1.equalsIgnoreCase("New Account"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']")));
 				WebElement waittext = driver.findElement(
@@ -3438,7 +3438,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//td[contains(@id,\"contentContainer\")]/following::*[text()=\"" + param1 + "\"]")));
 				WebElement waittext = driver.findElement(
@@ -3463,7 +3463,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Primary Mailing") && param2.equalsIgnoreCase("Edit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a)[1]")));
 				WebElement waittext = driver.findElement(By
@@ -3489,7 +3489,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Search...")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(
 						By.xpath(("//div[@class=\"masterMenu DropDownSearch\" and @style=\"display: block;\"]/span[text()=\""
 								+ param1 + "\"]")));// screenshot(driver,
@@ -3519,7 +3519,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// HCM.ADM.1132 HS2 (click button)
 		try {
 			if (param1.equalsIgnoreCase("Send")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath(("//button[text()=\"Sen\"]")));// screenshot(driver,
 				// "",
 				// fetchMetadataVO,
@@ -3548,7 +3548,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Warning") && param2.equalsIgnoreCase("Yes")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//table[contains(@id,\"warningPopup\")]//*[text()=\"" + param1
 								+ "\"]/following::*[text()=\"" + param2 + "\"]"))));
@@ -3578,7 +3578,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// Dh 39
 		try {
 			if (param1.equalsIgnoreCase("Generate Schedules")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath("//span[text()=\"enerate Schedules\"]"));// screenshot(driver,
 				// "",
 				// fetchMetadataVO,
@@ -3609,7 +3609,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Warning") && param2.equalsIgnoreCase("Yes")) {
 				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\" and @type=\"button\"][1]")));// screenshot(driver,
@@ -3643,7 +3643,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// Dh 39
 		try {
 			if (param1.equalsIgnoreCase("Addresses") && param2.equalsIgnoreCase("Edit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(
 						By.xpath(("//h2[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"][1]")));// screenshot(driver,
 				// "",
@@ -3677,7 +3677,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Create Baseline")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				WebElement waittext = driver.findElement(By.xpath(("//*[text()=\"aseline\"]")));
 
@@ -3719,7 +3719,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Search")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				WebElement waittext = driver.findElement(By.xpath(("//*[text()=\"Sea\"]")));
 
@@ -3760,7 +3760,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 29
 		try {
 			if (param1.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath(("//a[@accessKey=\"m\"]")));// screenshot(driver,
 				// "",
 				// fetchMetadataVO,
@@ -3789,7 +3789,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 29
 		try {
 			if (param1.equalsIgnoreCase("Approval") || param1.equalsIgnoreCase("Respond to Questionnaire")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath(("//div[contains(@id,\"popup-container\")]//td[text()=\""
 						+ param1 + "\"]//preceding-sibling::td[1]")));// screenshot(driver,
 				// "",
@@ -3822,7 +3822,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Initiate") || param1.equalsIgnoreCase("Supplier")
 					|| param1.equalsIgnoreCase("Internal")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(
 						By.xpath(("(//div[contains(@class,\"PopupMenuContent\")])[2]//td[text()=\"" + param1 + "\"]")));// screenshot(driver,
 				// "",
@@ -3855,7 +3855,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param2.equalsIgnoreCase("Done")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				WebElement waittext = driver
 
@@ -3902,7 +3902,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Save and Close")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				WebElement waittext = driver.findElement(By.xpath(("//button[text()=\"ave and Close\"]")));
 
@@ -3944,7 +3944,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Update Address") && param2.equalsIgnoreCase("OK")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				WebElement waittext = driver
 						.findElement(By.xpath(("(//div[contains(@id,\"popup-container\")]//button[@accesskey=\"K\"])[2]")));
@@ -3984,7 +3984,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param2.equalsIgnoreCase("OK")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				WebElement waittext = driver
 						.findElement(By.xpath(("(//div[contains(@id,\"popup-container\")]//button[@accesskey=\"O\"])[1]")));
@@ -4027,7 +4027,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param2.equalsIgnoreCase("OK")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				WebElement waittext = driver
 						.findElement(By.xpath(("(//div[contains(@id,\"popup-container\")]//button[@accesskey=\"K\"])[1]")));
@@ -4068,7 +4068,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 			WebElement waittext = driver
 					.findElement(By.xpath(("//div[contains(@class,\"PopupMenu\")]//*[text()=\"" + param1 + "\"]")));
@@ -4107,7 +4107,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Finish")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()=\"i\"][1]")));
 				// screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
@@ -4132,7 +4132,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 
 			if (param1.equalsIgnoreCase("Applied Receipts Register") && param2.equalsIgnoreCase("Apply")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath("//input[@value=\"Apply\"]"));
 //                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
@@ -4158,7 +4158,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH changes 6
 		try {
 			if (param1.equalsIgnoreCase("Issue Refund")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver
 						.findElement(By.xpath("//div[text()=\"" + param1 + "\"]/following::*[text()=\"K\"]"));
 				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -4187,7 +4187,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH changes 6
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver
 						.findElement(By.xpath("//*[text()=\"" + param1 + "\"]/following::*[text()=\"S\"]"));
 				Actions actions = new Actions(driver);
@@ -4215,7 +4215,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if ((param2.equalsIgnoreCase("Save and Close") && param1.equalsIgnoreCase("Manage Expenditure Types"))
 					|| param1.equalsIgnoreCase("Manage Rate Schedules") || param2.equalsIgnoreCase("Save and Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath(("(//span[text()=\"S\"])[2]")));
 //                screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
@@ -4243,7 +4243,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				// wait.until(ExpectedConditions
 				// .presenceOfElementLocated(By.xpath(("//div[text()=\"" + param1 +
@@ -4273,7 +4273,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH fix 4
 		try {
 			if (param1.equalsIgnoreCase("Transactions")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver
 						.findElement(By.xpath(("//*[text()=\"" + param1 + "\"]/following::span[text()=\"o\"]")));
 				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -4299,7 +4299,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH fix4
 		try {
 			if (param1.equalsIgnoreCase("Accounts")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(
 						By.xpath("//*[contains(text(),\"" + param1 + "\")]/following::td[text()=\"" + param2 + "\"][2]"));
 				// //screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -4328,7 +4328,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// for "PTP.PO.212 Split requisition lines" when exectuing in Fusion instance
 		try {
 			if (param1.equalsIgnoreCase("Create Address") && param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(8000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"Create Address\"]/following::*[text()=\"K\"][1]"))));
@@ -4357,7 +4357,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath(("//*[text()=\"Submit\" or text()=\"S\"]")));// screenshot(driver,
 																											// "",
 																											// fetchMetadataVO,
@@ -4387,7 +4387,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param2.equalsIgnoreCase("Save and Close") && !param1.equalsIgnoreCase("Unapply Application")
 					&& !param1.equalsIgnoreCase("Manage Distributions") && !param1.equalsIgnoreCase("Manage Holds")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()=\"S\"]")));
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
 				Actions actions = new Actions(driver);
@@ -4412,7 +4412,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if ((param1.equalsIgnoreCase("Manage Organization Trees")
 					|| param1.equalsIgnoreCase("Edit Project Template")
 					|| param1.equalsIgnoreCase("Manage Project Templates")) && param2.equalsIgnoreCase("Done")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("(//span[text()=\"o\"])[2]"))));
 
 				WebElement waittext = driver.findElement(By.xpath(("(//span[text()=\"o\"])[2]")));
@@ -4437,7 +4437,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
 				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(5000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"o\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()=\"o\"]")));
@@ -4461,7 +4461,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Notifications")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//h1[normalize-space(text())=\"Notifications\"]/following::button[text()=\"" + param2
 								+ "\"][1]"))));
@@ -4489,7 +4489,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Expend")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver
 						.findElement(By.xpath(("//div[contains(@class,\"Overflow\")]//div[@role=\"button\"]")));
 //				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
@@ -4516,7 +4516,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Time Card") && param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[text()=\"Create Time Card\"]/following::span[text()=\"K\"]"))));
 				WebElement waittext = driver
@@ -4544,7 +4544,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit Line")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(8000);
 				System.out.println("here1234");
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
@@ -4573,7 +4573,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Members") || param1.equalsIgnoreCase("Complete Report")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(
 						ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[@title=\"" + param2 + "\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//button[@title=\"" + param2 + "\"]")));
@@ -4598,7 +4598,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Address Contacts") && param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"" + param1 + "\"]/following::button[@title=\"" + param2 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -4625,7 +4625,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			Thread.sleep(2000);
 			if (param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(8000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//div[contains(@id,\"RejectPopup::content\")]//span[text()=\"K\"]"))));
@@ -4654,7 +4654,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(8000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"Search\"]/following::*[normalize-space(text())=\""
@@ -4684,7 +4684,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(8000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//[contains(text(),\"" + param1 + "\")]/following::span[text()=\"K\"]"))));
@@ -4713,7 +4713,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param2.equalsIgnoreCase("Select")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("(//input[contains(@value,\"" + param1
 						+ "\") and (@type)]/following::button[contains(text(),\"" + param2 + "\")])[1]"))));
 				WebElement waittext = driver.findElement(By.xpath(("(//input[contains(@value,\"" + param1
@@ -4739,7 +4739,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Done")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(8000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[contains(@id,\"tAccountPopup::content\")]//*[text()=\"o\"]"))));
@@ -4766,7 +4766,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Apply")) {
 				Thread.sleep(8000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@value=\"" + param1 + "\"]")));
 				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"l\"]"),
 				// "l"));
@@ -4794,7 +4794,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
 				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(5000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[text()=\"ne\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[text()=\"ne\"]"), "ne"));
@@ -4814,7 +4814,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			} else if (param1.equalsIgnoreCase("Approval and Notification History")
 					&& param2.equalsIgnoreCase("Done")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(5000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//div[contains(text(),\"" + param1 + "\")]/following::span[text()=\"o\"]"))));
@@ -4834,7 +4834,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Done")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(5000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[contains(text(),\"" + param1 + "\")]/following::span[text()=\"o\"]"))));
@@ -4854,7 +4854,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"m\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"m\"]"), "m"));
 				Thread.sleep(20000);
@@ -4872,7 +4872,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"m\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -4893,7 +4893,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Distributions")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()=\"istributions\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//span[text()=\"istributions\"]"));
 				screenshot(driver, fetchMetadataVO, customerDetails);
@@ -4910,7 +4910,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			} else if ((param1.equalsIgnoreCase("Manage Distributions") || param1.equalsIgnoreCase("Manage Holds"))
 					&& param2.equalsIgnoreCase("Save and Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						("//*[normalize-space(text())=\"" + param1 + "\"]/following::button[text()=\"Save and Close\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(
@@ -4933,7 +4933,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Save and Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"S\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -4955,7 +4955,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Next")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"x\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"x\"]"), "x"));
 				Thread.sleep(4000);
@@ -4974,7 +4974,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Next")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]")));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[normalize-space(text())=\""
@@ -4995,7 +4995,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Yes")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//div[@class=\"AFDetectExpansion\"]/following::*[text()=\""
 								+ param1 + "\"]/following::span[text()=\"Y\"]"))));
@@ -5021,7 +5021,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//button[@_afrpdo=\"ok\" and @accesskey=\"K\"]")));
 				wait.until(ExpectedConditions
@@ -5045,7 +5045,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			else if (param1.equalsIgnoreCase("Advanced")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions
 
@@ -5077,7 +5077,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				return;
 			} else if (param1.equalsIgnoreCase("Save and Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"S\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"S\"]"), "S"));
 				Thread.sleep(4000);
@@ -5095,7 +5095,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Continue")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"u\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"u\"]"), "u"));
 				Thread.sleep(4000);
@@ -5113,7 +5113,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Continue")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[text()=\"Contin\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//button[text()=\"Contin\"]"),
 						"Contin"));
@@ -5131,7 +5131,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[text()=\"Cl\"]"))));
 				Thread.sleep(5000);
 				WebElement waittext = driver.findElement(By.xpath(("//button[text()=\"Cl\"]")));
@@ -5148,7 +5148,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Adjustment")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("(//span[text()=\"" + param1 + "\"])[1]"))));
@@ -5166,7 +5166,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Cancel")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()=\"C\"]")));
 				Thread.sleep(5000);
 				WebElement waittext = driver.findElement(By.xpath("//span[text()=\"C\"]"));
@@ -5182,7 +5182,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Save")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"ave\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"ave\"]"), "ave"));
 				Thread.sleep(4000);
@@ -5201,7 +5201,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			} else if (param1.equalsIgnoreCase("Apply")) {
 				Thread.sleep(8000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"l\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"l\"]"), "l"));
 				Thread.sleep(4000);
@@ -5220,7 +5220,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			} else if (param2.equalsIgnoreCase("Apply")) {
 				Thread.sleep(4000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"l\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -5242,7 +5242,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Accept")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"p\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -5271,7 +5271,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"K\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -5300,7 +5300,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Add Application")) {
 				try {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"A\"]"))));
 					wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"A\"]"), "A"));
 					Thread.sleep(4000);
@@ -5344,7 +5344,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Unapply Application")) {
 				try {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 					wait.until(ExpectedConditions
 							.presenceOfElementLocated(By.xpath(("//button[text()=\"" + param1 + "\"]"))));
 					wait.until(ExpectedConditions
@@ -5391,7 +5391,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::span[normalize-space(text())=\"" + param2 + "\"]"))));
@@ -5419,7 +5419,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (!param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"])[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -5446,7 +5446,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Columns") || param1.equalsIgnoreCase("Show All")) {
 				Thread.sleep(4000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//td[normalize-space(text())=\"" + param1 + "\"])[2]")));
 				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"l\"]"),
@@ -5475,7 +5475,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add to Document Builder")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(
 						ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[text()=\"" + param1 + "\"]"))));
@@ -5501,7 +5501,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Freeze")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//tr[contains(@id,\"HEADER_FREEZE\")]//td[text()=\"" + param1 + "\"]"))));
@@ -5521,7 +5521,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Unfreeze")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						("//tr[contains(@id,\"HEADER_UNFREEZE\")]//td[normalize-space(text())=\"" + param1 + "\"]"))));
@@ -5541,7 +5541,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath(("//tr[contains(@id,\"HEADER_CLOSE\")]//td[normalize-space(text())=\"" + param1 + "\"]"))));
@@ -5561,7 +5561,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Reopen")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath(("//tr[contains(@id,\"HEADER_REOPEN\")]//td[normalize-space(text())=\"" + param1 + "\"]"))));
@@ -5581,7 +5581,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Edit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//tr[contains(@id,\"HEADER_EDIT\")]//td[normalize-space(text())=\"" + param1 + "\"]"))));
@@ -5608,7 +5608,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//tr[contains(@id,\"commandMenuItem\")]//td[text()=\"" + param1 + "\"]"))));
@@ -5635,7 +5635,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reverse")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath(("//div[@class=\"AFPopupMenuPopup\"]//td[(normalize-space(text())=\"" + param1 + "\")]"))));
 				WebElement waittext = driver.findElement(
@@ -5660,7 +5660,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//td[normalize-space(text())=\"" + param1 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//td[normalize-space(text())=\"" + param1 + "\"]"));
@@ -5684,7 +5684,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Republish")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//button[normalize-space(text())=\"" + param1 + "\"]")));
 				WebElement waittext = driver
@@ -5709,7 +5709,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Match Invoice Lines") && param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()=\"" + param1 + "\"]/following::*[text()=\"K\"][2]")));
 				WebElement waittext = driver
@@ -5735,7 +5735,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//span[normalize-space(text())=\"" + param1 + "\"]"))));
@@ -5762,7 +5762,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//td[(normalize-space(text())=\"" + param1 + "\")]"))));
 				WebElement waittext = driver
@@ -5788,7 +5788,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//button[text()=\"" + param1 + "\"and not(@style=\"display:none\")]"))));
 				WebElement waittext = driver
@@ -5815,7 +5815,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//div[normalize-space(text())=\"" + param1 + "\"]"))));
@@ -5840,7 +5840,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//div[contains(@class,\"PopupMenu\")]/following::*[text()=\"" + param1 + "\"]"))));
 				WebElement waittext = driver.findElement(
@@ -5863,7 +5863,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error("Failed during clickButton" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\" and not(@_afrpdo)])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -5884,7 +5884,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -5905,7 +5905,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[@title=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath(
@@ -5927,7 +5927,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			Thread.sleep(3000);
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[contains(text(),\"" + param1
 					+ "\")]/following::*[normalize-space(text())=\"" + param2 + "\"][1]"))));
@@ -5963,7 +5963,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 //	            logger.error(e.getMessage());
 //	        }
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -5995,7 +5995,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Name")||(param1.equalsIgnoreCase("Document Number"))) {
 				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::a[@data-special-link=\"true\"][1]")));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::a[@data-special-link=\"true\"][1]"));
@@ -6018,7 +6018,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Manage Receipts") || param1.equalsIgnoreCase("Manage Customers")) {
 				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::table[@summary=\"" + param2 + "\"]//a)[2]/parent::span")));
 				Thread.sleep(4000);
@@ -6043,7 +6043,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// new DH Script 4
 		try {
 			if (param1.equalsIgnoreCase("Accounts")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),\"" + param1
 						+ "\")]/following::table[@summary=\"" + param2 + "\"]//span[@title]")));
 				Thread.sleep(4000);
@@ -6073,7 +6073,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					|| param1.equalsIgnoreCase("Manage Transactions") || param1.equalsIgnoreCase("Prepare Source lines")
 					|| param1.equalsIgnoreCase("Contracts")) {
 				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::table[@summary=\"" + param2 + "\"]//a)[2]")));
 				Thread.sleep(4000);
@@ -6099,7 +6099,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Addresses")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//table[@summary=\"" + param1 + "\"]//a)[2]")));
 				Thread.sleep(4000);
@@ -6125,7 +6125,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Source Lines")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//table[@summary=\"" + param1 + "\"]//a[not (contains(@title,\"Required information\"))])[1]")));
 				Thread.sleep(4000);
@@ -6151,7 +6151,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Approved")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//table[@summary=\"" + param1
 						+ "\"]//*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
 				Thread.sleep(4000);
@@ -6177,7 +6177,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Orders")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h1[normalize-space(text())=\"" + param1 + "\"]/following::table[@summary=\"" + param2
 								+ "\"]//a[contains(@title,\"Purchase Order\")]")));
@@ -6203,7 +6203,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Manage Receipts")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//table[@summary=\"" + param2 + "\"]//td)[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//table[@summary=\"" + param2 + "\"]//td)[1]"));
@@ -6233,7 +6233,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Journals") && param2.equalsIgnoreCase("Requiring Attention")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions
 
@@ -6278,7 +6278,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("List of Processes Meeting Search Criteria")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//table[@summary=\"" + param1 + "\"]//td[2]//span)[1]")));
 				Thread.sleep(4000);
@@ -6304,7 +6304,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//table[@summary=\"" + param1 + "\"]//a[not (@title)])[1]")));
 				Thread.sleep(4000);
@@ -6330,7 +6330,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\"" + param1
 					+ "\"]/following::img[@title=\"" + param2 + "\"]/following-sibling::a[1]")));
 			Thread.sleep(4000);
@@ -6366,7 +6366,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Items to Approve")) {
 				Thread.sleep(6000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()='"+param1+"']/following::*[text()='"+param2+"']")));
 				WebElement waittext = driver.findElement(By
@@ -6393,7 +6393,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Document Number")) {
 				Thread.sleep(6000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()='"+param1+"']/following::span[starts-with(text(),'BD')]")));
 				WebElement waittext = driver.findElement(By
@@ -6420,7 +6420,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param2.equalsIgnoreCase("Show quick filters")) {
 				Thread.sleep(6000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()='"+param1+"']/following::button[@title='"+param2+"']")));
 				WebElement waittext = driver.findElement(By
@@ -6447,7 +6447,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Billing Events")) {
 				Thread.sleep(6000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()='"+param1+"']/following::*[starts-with(text(),'BE-')])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6474,7 +6474,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Log out as")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[contains(text(),'"+param1+"')]")));
 				WebElement waittext = driver.findElement(By
@@ -6500,7 +6500,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Items to Approve")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[starts-with(text(),'Con-')][1]")));
 				WebElement waittext = driver.findElement(By
@@ -6526,7 +6526,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Agreements ID")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//span[starts-with(text(),'Con-')])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6552,7 +6552,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resource Request")&&(param2.equalsIgnoreCase("Resources"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()='"+param1+"']/following::*[text()='"+param2+"'][1]")));
 				WebElement waittext = driver.findElement(By
@@ -6578,7 +6578,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resource Request Id")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//span[starts-with(text(),'RR-')])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6604,7 +6604,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resources")||(param1.equalsIgnoreCase("Agreements")||(param1.equalsIgnoreCase("Clear")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()='"+param1+"'])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6630,7 +6630,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Approval History")||(param1.equalsIgnoreCase("Project"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()='"+param1+"'])[1]/following::*[text()='"+param2+"'][1]")));
 				WebElement waittext = driver.findElement(By
@@ -6656,7 +6656,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Related List Quick Links")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()='"+param1+"'])[1]/following::span[contains(text(),'"+param2+"')][1]")));
 				WebElement waittext = driver.findElement(By
@@ -6682,7 +6682,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Save All")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//input[@value='"+param1+"'])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6708,7 +6708,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Milestones")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//button[contains(@title,'Open Milestone')]/preceding::span[contains(text(),'"+param1+"')][1]")));
 				WebElement waittext = driver.findElement(By
@@ -6735,7 +6735,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		
 		try {
 			if (param1.equalsIgnoreCase("Show All")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//a[contains(text(),'"+param1+"')])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6761,7 +6761,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Assignments")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[contains(text(),'"+param1+"')])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6787,7 +6787,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Recently Viewed")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//span[text()=\""+param1+"\"])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6813,7 +6813,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Billing Event")||(param1.equalsIgnoreCase("Billing Document")&&(param2.equalsIgnoreCase("More")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::lightning-button-menu[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6839,7 +6839,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project")&&(param2.equalsIgnoreCase("Show more actions"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()='"+param1+"']/following::*[text()='"+param2+"'][1]/preceding::lightning-primitive-icon[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6865,7 +6865,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("--None--") ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::span[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6891,7 +6891,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Merge & Download") ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -6917,7 +6917,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Approval Request")&&(param2.equalsIgnoreCase("Approve")) ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -6944,7 +6944,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		
 		try {
 			if (param1.equalsIgnoreCase("Billing Events")||(param1.equalsIgnoreCase("Billing Documents")) ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[contains(text(),\""+param1+"\")])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -6970,7 +6970,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Billing Document")&&(param2.equalsIgnoreCase("Complete")||(param2.equalsIgnoreCase("Submit for Approval")||(param2.equalsIgnoreCase("Calculate Tax")||(param2.equalsIgnoreCase("Print Billing Document PDF"))))) ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -6996,7 +6996,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Items to Approve")&&(param2.equalsIgnoreCase("Approve")) ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"][1]")));
 				WebElement waittext = driver.findElement(By
@@ -7023,7 +7023,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Items to Approve") ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\""+param1+"\"]/following::button)[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7050,7 +7050,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Notifications") ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\""+param1+"\"])[1]/preceding::div[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7075,7 +7075,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Comments")&&(param2.equalsIgnoreCase("Submit")||(param2.equalsIgnoreCase("Approve"))) ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7101,7 +7101,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Billing Document")&&(param2.equalsIgnoreCase("Edit")) ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::button[text()=\""+param2+"\"]/following::button[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7126,7 +7126,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Continue")||(param1.equalsIgnoreCase("Calculate Tax")||(param1.equalsIgnoreCase("Complete"))) ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//input[@value=\""+param1+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7152,7 +7152,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Billing Document")||(param1.equalsIgnoreCase("Submit for Approval")||(param1.equalsIgnoreCase("Calculate Tax"))) ) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7178,7 +7178,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Release")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//button[text()=\""+param2+"\"]/following::button[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7203,7 +7203,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Generate Billing Event")||(param1.equalsIgnoreCase("Confirm"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//input[@value=\""+param1+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7229,7 +7229,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Billing")||(param1.equalsIgnoreCase("Release"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7255,7 +7255,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Planner")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::button[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7280,7 +7280,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Edit Project Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()='"+param1+"'][1]/following::*[text()='"+param2+"']/preceding::span[1]")));
 				//(//span[text()=\"Veidehi Patel\"])[2]/following::span[2]
@@ -7306,7 +7306,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Comments")&&(param2.equalsIgnoreCase("Save"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()='"+param1+"']/following::*[text()='"+param2+"']")));
 				WebElement waittext = driver.findElement(By
@@ -7332,7 +7332,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add")||(param1.equalsIgnoreCase("Services & Offerings"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\""+param1+"\"])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7357,7 +7357,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Projects")&&(param2.equalsIgnoreCase("Recently Viewed"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\"Recently Viewed\"]/following::div[1]")));
 				//(//span[text()=\""+param1+"\"]/following::span[text()=\""+param2+"\"])[2]
@@ -7383,7 +7383,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resources")&&(param2.equalsIgnoreCase("Add"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::input[@value=\""+param2+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7409,7 +7409,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Update Schedule")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//input[@value=\""+param1+"\"])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7435,7 +7435,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Assignment")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7461,7 +7461,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resources")||(param1.equalsIgnoreCase("Assign Resource")||(param1.equalsIgnoreCase("Operations")||(param1.equalsIgnoreCase("New Project Milestone")||(param1.equalsIgnoreCase("Request Project Resources")))))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7488,7 +7488,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"][1]")));
 				WebElement waittext = driver.findElement(By
@@ -7514,7 +7514,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//input[@value=\""+param1+"\"])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7540,7 +7540,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Save")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//button[text()=\""+param1+"\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7566,7 +7566,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("New Project")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\"New Project\"]/following::*[text()=\"Next\"]")));
 				WebElement waittext = driver.findElement(By
@@ -7592,7 +7592,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("New")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\"New\"])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7618,7 +7618,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Projects")||(param1.equalsIgnoreCase("Expense Reports"))||(param1.equalsIgnoreCase("Multiple Expense Entry UI"))||(param1.equalsIgnoreCase("Timecards"))||(param1.equalsIgnoreCase("Time Entry")||(param1.equalsIgnoreCase("Accounts")||(param1.equalsIgnoreCase("Accounts")) ))){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\""+param1+"\"])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7644,7 +7644,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Login")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//input[@title=\"Login\"])[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7671,7 +7671,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Setups")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//div[contains(@class,\"popupTargetContainer \")])[2]/div/ul/li[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7698,7 +7698,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Setup")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\"Salesforce Help\"]/following::li[1]")));
 				WebElement waittext = driver.findElement(By
@@ -7724,7 +7724,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("AR Reconciliation")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\"" + param1 + "\"]/following::span[@class=\"AppsXLargeFontSize text-red\"][1]")));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -7754,7 +7754,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				if (param1.equalsIgnoreCase("drop")) {
 
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 					wait.until(ExpectedConditions
 
@@ -7803,7 +7803,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				if (param1.equalsIgnoreCase("Invoices")) {
 
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 					wait.until(ExpectedConditions.presenceOfElementLocated(
 							By.xpath("//span[text()=\"" + param2 + "\"]/following::span[text() > \"0\"][1]")));
@@ -7848,7 +7848,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			try {
 				if (param1.equalsIgnoreCase("Accounts")) {
 					Thread.sleep(70000);
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 					// wait.until(ExpectedConditions
 					// .presenceOfElementLocated(By.xpath("//a[normalize-space(text())=\"" + param1 +
 					// "\"]")));
@@ -7876,7 +7876,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				logger.error(e.getMessage());
 			}
 			if (param1.equalsIgnoreCase("Report") && param2.equalsIgnoreCase("Apply")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@value=\"" + param2 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//input[@value=\"" + param2 + "\"]"));
 				Actions actions = new Actions(driver);
@@ -7900,7 +7900,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Home")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//a[contains(@id,\"UIShome\")])[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,\"UIShome\")])[1]"));
 				Actions actions = new Actions(driver);
@@ -7925,7 +7925,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Financials Details") && param2.equalsIgnoreCase("Invoices")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[contains(text(),\"" + param1 + "\")]/following::*[text()=\"" + param1 + "\")[1]")));
 				WebElement waittext = driver.findElement(
@@ -7952,7 +7952,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Approve")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]"));
@@ -7980,7 +7980,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("Payables to Ledger Reconciliation Summary")
 					&& param2.equalsIgnoreCase("Export")) {
 				Thread.sleep(8000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[normalize-space(text())=\""
 						+ param1 + "\"]/following::a[normalize-space(text())=\"" + param2 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//label[normalize-space(text())=\"" + param1
@@ -8010,7 +8010,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Export")) {
 				Thread.sleep(70000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//a[normalize-space(text())=\"" + param1 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//a[normalize-space(text())=\"" + param1 + "\"]"));
@@ -8037,7 +8037,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Export")) {
 				Thread.sleep(70000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//a[normalize-space(text())=\"" + param1 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//a[normalize-space(text())=\"" + param1 + "\"]"));
@@ -8065,7 +8065,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("Project")) {
 				try {
 					Thread.sleep(70000);
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 					wait.until(ExpectedConditions
 							.presenceOfElementLocated(By.xpath("//a[normalize-space(text())=\"" + param1 + "\"]")));
 					WebElement waittext = driver.findElement(By.xpath("//a[normalize-space(text())=\"" + param1 + "\"]"));
@@ -8112,7 +8112,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Financial Reporting Center")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//a[normalize-space(text())=\"" + param2 + "\"][1]"))));
 				WebElement waittext = driver
@@ -8143,7 +8143,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Receivables")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//a[normalize-space(text())=\"" + param1 + "\"][1]"))));
 				WebElement waittext = driver
@@ -8175,7 +8175,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// for "PTP.PO.212 Split requisition lines" when exectuing in Fusion instance
 		try {
 			if (param1.equalsIgnoreCase("Requisition Lines") && param2.equalsIgnoreCase("Actions")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h2[text()=\"" + param1 + "\"]/following::a[text()=\"Actions\"]")));
 				WebElement waittext = driver
@@ -8201,7 +8201,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Requisition Lines")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//table[@summary=\"" + param1 + "\"]//span[text()=\"Approved\"]/following::a[1]")));
 				WebElement waittext = driver.findElement(
@@ -8226,7 +8226,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Details")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//*[contains(text(),\"" + param1 + "\")]/following::*[text()=\"" + param2 + "\"])[1]")));
 				WebElement waittext = driver.findElement(
@@ -8253,7 +8253,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (!param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
 				Thread.sleep(4000);
@@ -8285,7 +8285,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Journal")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::a[normalize-space(text())=\"" + param2 + "\"]")));
 				Thread.sleep(4000);
@@ -8317,7 +8317,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Receipt Details") || param1.equalsIgnoreCase("General Information")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"][1]")));
 				Thread.sleep(4000);
@@ -8349,7 +8349,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("View")) {
 				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[text()=\"" + param1 + "\"][1]"))));
 				WebElement waittext = driver.findElement(By.xpath("//a[text()=\"" + param1 + "\"][1]"));
 				Actions actions = new Actions(driver);
@@ -8373,7 +8373,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Invoice Actions")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(4000);
 				WebElement Continue = driver
 						.findElement(By.xpath("//div[text()=\"Warning\"]/following::button[text()=\"Continue\"]"));
@@ -8399,7 +8399,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// Changed == to equals method
 				if (param2.equals("")) {
 					Thread.sleep(3000);
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 					wait.until(
 							ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[text()=\"" + param1 + "\"][1]"))));
 					WebElement waittext = driver.findElement(By.xpath("//a[text()=\"" + param1 + "\"][1]"));
@@ -8427,7 +8427,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				// Changed == to equals method
 				if (param2.equals("")) {
 					Thread.sleep(3000);
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 					wait.until(ExpectedConditions
 							.presenceOfElementLocated(By.xpath(("//a[contains(text(),\"" + param1 + "\")][1]"))));
 					WebElement waittext = driver.findElement(By.xpath("//a[contains(text(),\"" + param1 + "\")][1]"));
@@ -8460,7 +8460,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			// Changed == to equals method
 			if (param2.equals("")) {
 				Thread.sleep(3000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//a[normalize-space(text())=\"" + param1 + "\"][1]"))));
 				WebElement waittext = driver.findElement(By.xpath("//a[normalize-space(text())=\"" + param1 + "\"][1]"));
@@ -8486,7 +8486,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reports and Analytics")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//h1[normalize-space(text())=\"" + param1
@@ -8514,7 +8514,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Attachment") || param1.equalsIgnoreCase("Invoice Summary")
 					|| param1.equalsIgnoreCase("Attachments")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::a[1]"))));
 				WebElement waittext = driver
@@ -8540,7 +8540,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::span)[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())=\"" + param1
@@ -8566,7 +8566,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//a[contains(text(),\"" + param1 + "\")]")));
 				WebElement waittext = driver.findElement(By.xpath("//a[contains(text(),\"" + param1 + "\")]"));
@@ -8591,7 +8591,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//a[contains(@id,\"" + param1 + "\")])[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,\"" + param1 + "\")])[1]"));
@@ -8617,7 +8617,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@title=\"" + param1 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//div[@title=\"" + param1 + "\"]"));
 				Actions actions = new Actions(driver);
@@ -8641,7 +8641,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title=\"" + param1 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//a[@title=\"" + param1 + "\"]"));
 				Actions actions = new Actions(driver);
@@ -8666,7 +8666,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[contains(@title,\"" + param1 + "\")]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[contains(@title,\"" + param1 + "\")]"));
@@ -8692,7 +8692,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//div[contains(text(),\"" + param1 + "\")])[2]")));
 				WebElement waittext = driver.findElement(By.xpath("(//div[contains(text(),\"" + param1 + "\")])[2]"));
@@ -8717,7 +8717,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[@role=\"" + param1 + "\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//a[@role=\"" + param1 + "\"]")));
 				Actions actions = new Actions(driver);
@@ -8739,7 +8739,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::a[normalize-space(text())=\"" + param2 + "\"][1]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())=\"" + param1
@@ -8765,7 +8765,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		// DH 29
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("//h1[contains(text(),\"" + param1 + "\")]/following::*[text()=\"" + param2 + "\"][1]"))));
 			WebElement waittext = driver.findElement(
@@ -8796,7 +8796,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("New Project")||(param1.equalsIgnoreCase("New Account"))) {
 
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[text()='"+param1+"']/following::*[text()='"+keysToSend+"']/preceding::span[1]"))));
 				WebElement waittext = driver.findElement(
@@ -8826,7 +8826,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("Select Learning Item")) {
 
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 								+ keysToSend + "\"]/preceding::input[@type=\"radio\"]"))));
@@ -8855,7 +8855,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("(//*[normalize-space(text())=\"" + param1 + "\"]/following::label[text()=\"" + param2
 							+ "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"])[1]"))));
@@ -8887,7 +8887,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"])[1]"))));
 			WebElement waittext = driver.findElement(By.xpath(("(//*[normalize-space(text())=\"" + param1
@@ -8911,7 +8911,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			WebElement waittext = driver.findElement(By.xpath(("//*[contains(text(),\"" + param1
 					+ "\")]/following::*[normalize-space(text())=\"" + keysToSend + "\"]/preceding-sibling::input[1]")));
 			Actions actions = new Actions(driver);
@@ -8941,7 +8941,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				try {
 					if (param1.equalsIgnoreCase("Name")) {
 						Thread.sleep(2000);
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::lightning-base-formatted-text[text()='"+keysToSend+"']/preceding::span[1]/preceding::span[1]")));
 
 						WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::lightning-base-formatted-text[text()='"+keysToSend+"']/preceding::span[1]/preceding::span[1]"));
@@ -8968,7 +8968,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				try {
 					if (param1.equalsIgnoreCase("Project Billing")) {
 						Thread.sleep(2000);
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='"+param1+"']/following::*[text()='"+keysToSend+"']/preceding::input[1]")));
 
 						WebElement waittext = driver.findElement(By.xpath("//h1[text()='"+param1+"']/following::*[text()='"+keysToSend+"']/preceding::input[1]"));
@@ -8995,7 +8995,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				try {
 					if (param1.equalsIgnoreCase("Project / Assignment")) {
 						Thread.sleep(2000);
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/preceding::input[1]")));
 
 						WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/preceding::input[1]"));
@@ -9022,7 +9022,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 					if (param1.equalsIgnoreCase("Name")) {
 						Thread.sleep(2000);
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\"Select item 1\"]/preceding::span[1]")));
 
 						WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\"Select item 1\"]/preceding::span[1]"));
@@ -9049,7 +9049,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 					if (param1.equalsIgnoreCase("Name")) {
 						Thread.sleep(2000);
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+keysToSend+"\"]/preceding::input[1]")));
 
 						WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+keysToSend+"\"]/preceding::input[1]"));
@@ -9076,7 +9076,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				try {
 					if (param1.equalsIgnoreCase("Billable")) {
 						
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\"Project Attributes\"]/following::*[text()=\""+param1+"\"]/following::input[1]")));
 
 						WebElement waittext = driver.findElement(By.xpath("//*[text()=\"Project Attributes\"]/following::*[text()=\""+param1+"\"]/following::input[1]"));
@@ -9102,7 +9102,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				}
 				if (param1.equalsIgnoreCase("Project Attributes")) {
 					Thread.sleep(1000);
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+keysToSend+"\"]/following::input[1]")));
 
 					WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+keysToSend+"\"]/following::input[1]"));
@@ -9132,7 +9132,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("New Project")) {
 				
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+keysToSend+"\"]/preceding::span[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+keysToSend+"\"]/preceding::span[1]"));
@@ -9159,7 +9159,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Project / Assignment")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/preceding::input[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/preceding::input[1]"));
@@ -9188,7 +9188,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Bank Statement Lines")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1
 						+ "\"]/following::span[text()=\"" + keysToSend + "\"])[1]/preceding::label[1]")));
 
@@ -9219,7 +9219,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Create Expense Item") && keysToSend.equalsIgnoreCase("Receipt missing")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"]")));
 
@@ -9250,7 +9250,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Receipt Verification") && keysToSend.equalsIgnoreCase("Receipt Verified")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"]")));
 
@@ -9281,7 +9281,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("System Transactions")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1
 						+ "\"]/following::span[text()=\"" + keysToSend + "\"])[2]/preceding::label[1]")));
 
@@ -9311,7 +9311,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 25
 		try {
 			if (param1.equalsIgnoreCase("Supplier Contact")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						("(//*[normalize-space(text())=\"" + param1 + "\"]/following::input[@type=\"checkbox\"])[1]"))));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -9340,7 +9340,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// po.511
 		try {
 			if (param1.equalsIgnoreCase("Internal Responder")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						("(//*[normalize-space(text())=\"" + param1 + "\"]/following::input[@type=\"checkbox\"])[2]"))));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -9370,7 +9370,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Correct Unmatched Invoices")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\"" + param1
 						+ "\"]/following::span[text()=\"" + keysToSend + "\"]/following::label[1]")));
 
@@ -9399,7 +9399,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Item Description")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 								+ keysToSend + "\"]/preceding::label[contains(@id,\"Label\")][1]")));
@@ -9434,7 +9434,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Address Purpose")) {
 				Thread.sleep(2000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]")));
 				wait.until(
@@ -9466,7 +9466,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Scenario")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::span[normalize-space(text())=\"" + keysToSend + "\"]/preceding::input[1]")));
 				wait.until(
@@ -9497,7 +9497,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Address Purpose")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"]/preceding::input[1]")));
 				wait.until(
@@ -9528,7 +9528,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//a[normalize-space(text())=\"" + param1 + "\"]/following::input[1]")));
 				WebElement waittext = driver
@@ -9554,7 +9554,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Match Invoice Lines")
 					|| param1.equalsIgnoreCase("Correct Unmatched Invoices")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 								+ keysToSend + "\"]/following::label[contains(@id,\"Label\")][1]")));
@@ -9582,7 +9582,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//label[text()=\"" + param1
 					+ "\"]/following::span[text()=\"" + keysToSend + "\"]/preceding::label[1]"))));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//label[text()=\"" + param1 + "\"]"),
@@ -9608,7 +9608,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::span[normalize-space(text())=\"" + keysToSend + "\"]/preceding::label[1]"))));
 			wait.until(
@@ -9638,7 +9638,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//label[normalize-space(text())=\""
 					+ param1 + "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"]"))));
 			wait.until(
@@ -9667,7 +9667,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]"))));
 			wait.until(
@@ -9696,7 +9696,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//label[normalize-space(text())=\"" + keysToSend + "\"]"))));
@@ -9725,7 +9725,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		// New code for PTP.Ex.111
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("(//*[contains(text(),\"" + param1 + "\")]/following::input[@type=\"checkbox\"])[1]"))));
@@ -9763,7 +9763,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Opportunity Details")||(param1.equalsIgnoreCase("Expense Entry")||(param1.equalsIgnoreCase("Information")||(param1.equalsIgnoreCase("Account Information")||(param1.equalsIgnoreCase("Resources")||(param1.equalsIgnoreCase("Submit for Approval"))))))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::textarea[1]")));
 				
@@ -9783,7 +9783,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Description")||(param1.equalsIgnoreCase("Comments"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::textarea[1]")));
 				Thread.sleep(1000);
@@ -9803,7 +9803,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// HCM.ADM.1141 HCM.ADM.1142 HCM.ADM.1144 HS2 (textarea)
 		try {
 			if (param1.equalsIgnoreCase("Compose")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//body[contains(@id,\"MessageContent\")]")));
 				Thread.sleep(1000);
@@ -9824,7 +9824,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 20
 		try {
 			if (param1.equalsIgnoreCase("Create Note")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//body[@dir=\"ltr\"]")));
 				Thread.sleep(1000);
 				WebElement waittill = driver.findElement(By.xpath("//body[@dir=\"ltr\"]"));
@@ -9846,7 +9846,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::textarea)[1]")));
 			Thread.sleep(1000);
@@ -9876,7 +9876,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		// PROD
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
 					+ "\")]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::textarea)[1]")));
 			Thread.sleep(1000);
@@ -9901,7 +9901,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//body[@dir=\"ltr\"]")));
 			Thread.sleep(1000);
 			WebElement waittill = driver.findElement(By.xpath("//body[@dir=\"ltr\"]"));
@@ -9930,7 +9930,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Account")||(param2.equalsIgnoreCase("Office Location")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(
 					By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, waittext, fetchConfigVO, fetchMetadataVO);
@@ -9954,7 +9954,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Search apps and items...")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@placeholder='"+param1+"']")));
 				WebElement waittill = driver.findElement(By.xpath("//input[@placeholder='"+param1+"']"));
 				Actions actions = new Actions(driver);
@@ -9980,7 +9980,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Name")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[text()='"+param1+"']/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//label[text()='"+param1+"']/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10006,7 +10006,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resource Filter")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10032,7 +10032,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resources")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h3[text()='"+param1+"']/following::label[contains(text(),'"+param2+"')]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//h3[text()='"+param1+"']/following::label[contains(text(),'"+param2+"')]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10057,7 +10057,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Search: All")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@data-value='"+param1+"']/following::input")));
 				WebElement waittill = driver.findElement(By.xpath("//input[@data-value='"+param1+"']/following::input"));
 				Actions actions = new Actions(driver);
@@ -10084,7 +10084,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		
 		try {
 			if (param1.equalsIgnoreCase("Expense Entry")&&(param2.equalsIgnoreCase("Total Amount"))){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='Expense Entry']/following::*[text()='Description']/following::textarea[1]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()='Expense Entry']/following::*[text()='Description']/following::textarea[1]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10110,7 +10110,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	
 		try {
 			if (param1.equalsIgnoreCase("Search: All")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(
 						By.xpath("//input[@data-value='"+param1+"']/following::input"));
 						//waittext.sendKeys(keysToSend);
@@ -10138,7 +10138,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Opportunity Details")&&(param2.equalsIgnoreCase("Date Opportunity Identified"))){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10166,7 +10166,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Account Information")&&(param2.equalsIgnoreCase("Account Name")||(param2.equalsIgnoreCase("Customer Code")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittext = driver.findElement(
 						By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
@@ -10194,7 +10194,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Opportunity Details")&&(param2.equalsIgnoreCase("Yellow Lights")||(param2.equalsIgnoreCase("Total Projected Revenue")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittext = driver.findElement(
 						By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
@@ -10222,7 +10222,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Opportunity Details")||(param1.equalsIgnoreCase("Account Information"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittext = driver.findElement(
 						By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
@@ -10251,7 +10251,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Office Location"))||(param2.equalsIgnoreCase("Legal Entity"))||(param2.equalsIgnoreCase("Cost Centre"))||(param2.equalsIgnoreCase("Project Manager")||(param2.equalsIgnoreCase("Account")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(
 					By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, waittext, fetchConfigVO, fetchMetadataVO);
@@ -10277,7 +10277,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Financials")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::label[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::label[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10302,7 +10302,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		
 		try {
 			if (param1.equalsIgnoreCase("Edit Services & Offerings")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10328,7 +10328,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Week Ending")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\""+param1+"\"]/following::input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//*[text()=\""+param1+"\"]/following::input)[1]"));
 				Actions actions = new Actions(driver);
@@ -10354,7 +10354,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resources")&&(param1.equalsIgnoreCase("Start Date")||(param1.equalsIgnoreCase("End Date")))){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::label[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::label[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10377,7 +10377,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Information")&&(param2.equalsIgnoreCase("Target Date")||(param2.equalsIgnoreCase("Start Date")||(param2.equalsIgnoreCase("Actual Date")||(param2.equalsIgnoreCase("Effective Date")||(param2.equalsIgnoreCase("End Date"))))))){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10404,7 +10404,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Information")||(param1.equalsIgnoreCase("Resources")||(param1.equalsIgnoreCase("Project/Assignment Lookup")))){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10428,7 +10428,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Assignment Information")&&(param2.equalsIgnoreCase("resource"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\""+param1+"\"]/following::label[contains(@for,\""+param2+"\")]/following::span/input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//*[text()=\""+param1+"\"]/following::label[contains(@for,\""+param2+"\")]/following::span/input)[1]"));
 				Actions actions = new Actions(driver);
@@ -10451,7 +10451,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Assignment Information")||(param1.equalsIgnoreCase("Schedule Details")||(param1.equalsIgnoreCase("Resources")) )) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\""+param1+"\"]/following::label[contains(@for,\""+param2+"\")]/following::Input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//*[text()=\""+param1+"\"]/following::label[contains(@for,\""+param2+"\")]/following::Input)[1]"));
 				Actions actions = new Actions(driver);
@@ -10476,7 +10476,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		
 		try {
 			if (param1.equalsIgnoreCase("Search this list...")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO,
@@ -10500,7 +10500,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Opportunity Details")&&(param2.equalsIgnoreCase("Yellow Lights")||(param2.equalsIgnoreCase("Total Projected Revenue")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10523,7 +10523,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		
 		try {
 			if (param1.equalsIgnoreCase("Opportunity Details")&&(param2.equalsIgnoreCase("Date Opportunity Identified"))) {
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 						WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 						Actions actions = new Actions(driver);
@@ -10550,7 +10550,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				}
 		try {
 			if (param1.equalsIgnoreCase("Opportunity Details")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10578,7 +10578,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Week Ending")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\""+param1+"\"]/following::input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//*[text()=\""+param1+"\"]/following::input)[1]"));
 				Actions actions = new Actions(driver);
@@ -10604,7 +10604,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Mon")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//input[@placeholder=\"Project / Assignment\"]/following::div[contains(@class,\"search\") and not(@style)])[1]/following::td[@data-columnid=\"weekDay3\"][1]/div")));
 				WebElement waittill = driver.findElement(By.xpath("(//input[@placeholder=\"Project / Assignment\"]/following::div[contains(@class,\"search\") and not(@style)])[1]/following::td[@data-columnid=\"weekDay3\"][1]/div"));
 				Actions actions = new Actions(driver);
@@ -10629,7 +10629,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project/Assignment Lookup")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10654,7 +10654,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Total Amount")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param2+"\"]/following::input[6]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param2+"\"]/following::input[6]"));
 				Actions actions = new Actions(driver);
@@ -10679,7 +10679,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Expenses")&&(param2.equalsIgnoreCase("Project / Assignment"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\"Expenses\"]/following::*[text()=\"Project / Assignment\"]/following::img[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\"Expenses\"]/following::*[text()=\"Project / Assignment\"]/following::img[1]"));
 				Actions actions = new Actions(driver);
@@ -10720,7 +10720,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		//dates
 		try {
 		if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Start Date"))||(param2.equalsIgnoreCase("End Date")||(param2.equalsIgnoreCase("Won/Loss Date")))) {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]")));
 					WebElement waittill = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::input[1]"));
 					Actions actions = new Actions(driver);
@@ -10752,7 +10752,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	
 		try {
 			if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Office Location (Test)"))||(param2.equalsIgnoreCase("Legal Entity"))||(param2.equalsIgnoreCase("Cost Centre"))||(param2.equalsIgnoreCase("Project Manager"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10786,7 +10786,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Project Name"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				Actions actions = new Actions(driver);
@@ -10812,7 +10812,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Account"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
 				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
@@ -10842,7 +10842,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Search Setup")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@placeholder=\"Search Setup\"]")));
 				WebElement waittill = driver.findElement(By.xpath("//input[@placeholder=\"Search Setup\"]"));
 				Actions actions = new Actions(driver);
@@ -10872,7 +10872,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH
 		try {
 			if (param1.equalsIgnoreCase("Search for proposed manager")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@placeholder=\"" + param1 + "\"]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[@placeholder=\"" + param1 + "\"]"));
 				Actions actions = new Actions(driver);
@@ -10898,7 +10898,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// prod
 		try {
 			if (param1.equalsIgnoreCase("Maintain Managers") || (param1.equalsIgnoreCase("People"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1
 						+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input[not(@type=\"hidden\")])[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//*[text()=\"" + param1 + "\"]/following::*[text()=\""
@@ -10927,7 +10927,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("Start Time"))
 					|| (param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("Start Time")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h2[text()=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//h2[text()=\"" + param1
@@ -10953,7 +10953,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// prod
 		try {
 			if (param1.equalsIgnoreCase("Maintain Managers") || (param1.equalsIgnoreCase("Position Details"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath(
@@ -10981,7 +10981,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// prod
 		try {
 			if (param1.equalsIgnoreCase("Add Activities")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[contains(text(),\"" + param1 + "\")]/following::input[1]")));
 				WebElement waittill = driver
@@ -11007,7 +11007,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// prod
 		try {
 			if (param1.equalsIgnoreCase("Create Line") && (param2.equalsIgnoreCase("Name"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::input[@aria-live=\"off\"][1]")));
 				WebElement waittill = driver.findElement(By.xpath("//div[text()=\"" + param1
@@ -11036,7 +11036,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Initial Due Date Option")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()=\"" + param1 + "\"]/following::*[@placeholder=\"dd/mm/yyyy\"][1]")));
@@ -11082,7 +11082,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("DH Transaction Detail Report")
 					&& (param2.equalsIgnoreCase("Business Unit") || param2.equalsIgnoreCase("Customer Name"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[text()=\"" + param1 + "\"]//following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\"" + param1 + "\"]//following::input[1]"));
@@ -11108,7 +11108,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 39 OTC.AR.236
 		try {
 			if (param1.equalsIgnoreCase("Create Contact Point") && param2.equalsIgnoreCase("Phone")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//div[text()=\"" + param1
@@ -11133,7 +11133,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Delegate To") && param1.equalsIgnoreCase("Approval Delegations")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h2[text()=\"" + param1
 						+ "\"]//following::label[text()=\"" + param2 + "\"]//following::input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//h2[text()=\"" + param1
@@ -11169,7 +11169,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("Create Address")
 					&& (param2.equalsIgnoreCase("Phone Country Code") || param2.equalsIgnoreCase("Phone Area Code")
 							|| param2.equalsIgnoreCase("Phone") || param2.equalsIgnoreCase("Phone Extension"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//div[text()=\"" + param1 + "\"]/following::label[text()=\"Phone\"]/following::label[text()=\""
 								+ param2 + "\"]/preceding::input[1]")));
@@ -11197,7 +11197,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		// DH 32
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//*[contains(@id,\"popup-container\")]//*[text()=\"" + param1
 							+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input[not (@type=\"hidden\")][1]")));
@@ -11224,7 +11224,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Security")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[text()=\"" + param1 + "\"]/following::span[text()=\"" + param2 + "\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath(
@@ -11252,7 +11252,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 12
 		try {
 			if (param2.equalsIgnoreCase("Close Date: Fixed")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1 + "\"]/following::label[text()=\""
 								+ param2 + "\"]/preceding-sibling::input[not(@type=\"hidden\")])[1]")));
@@ -11281,7 +11281,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Password")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type=\"" + param1 + "\"]")));
 				WebElement waittill = driver.findElement(By.xpath("//input[@type=\"" + param1 + "\"]"));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
@@ -11310,7 +11310,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Invoice Date")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\"" + param1
 						+ "\"]//following::*[contains(text(),\"" + param2 + "\")]/preceding::input[2]")));
@@ -11393,7 +11393,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param2.equalsIgnoreCase("Delegate to: ") || param1.equalsIgnoreCase("Search: Invoice")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()=\"" + param1
 						+ "\"]//following::label[text()=\"" + param2 + "\"]//following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//h1[text()=\"" + param1
@@ -11460,7 +11460,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Reports and Analytics")
 					|| param1.equalsIgnoreCase("Notifications") && param2.equalsIgnoreCase("Search")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::input[@placeholder=\"" + param2 + "\"][1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -11486,7 +11486,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Report")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[contains(text(),\"" + param2 + "\")]/following::input[1]")));
 				WebElement waittill = driver
@@ -11513,7 +11513,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("Create Bank Account")
 					&& (param2.equalsIgnoreCase("Account Number") || param2.equalsIgnoreCase("IBAN"))
 					|| param2.equalsIgnoreCase("Delegate to")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
 						+ "\")]/following::label[contains(text(),\"" + param2 + "\")]/following::input)[1]")));
 				Thread.sleep(1000);
@@ -11540,7 +11540,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account")
 					&& (param2.equalsIgnoreCase("Bank") || param2.equalsIgnoreCase("Bank Branch"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()=\"Create Bank Account\"]/following::label[text()=\"" + param2 + "\"][2]")));
 				Thread.sleep(1000);
@@ -11567,7 +11567,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param2.equalsIgnoreCase("Phone") || param2.equalsIgnoreCase("Mobile")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::input)[3]")));
 				WebElement waittill = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -11591,7 +11591,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Line") && param2.equalsIgnoreCase("Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//div[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 								+ param2 + "\"]/following::input)[2]")));
@@ -11650,7 +11650,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Lines") && param2.equalsIgnoreCase("Query By Example")) {
 				Thread.sleep(8000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[@title=\"" + param2 + "\"]/following::input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//h1[normalize-space(text())=\"" + param1
@@ -11677,7 +11677,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Driver\"s Licenses") || param2.equalsIgnoreCase("Unapply Accounting Date")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 								+ param2 + "\"]/following::input[@type=\"text\"])[1]")));
@@ -11711,7 +11711,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 
 			if (param1.equalsIgnoreCase("Accounting Period-Filter")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				try {
 					WebElement waittill = driver.findElement(By.xpath("//*[contains(@id,\"PeriodName::content\")]"));
 					Actions actions = new Actions(driver);
@@ -11756,7 +11756,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 					|| param1.equalsIgnoreCase("Edit Accounting Period Statuses")
 					|| param2.equalsIgnoreCase("Query By Example")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
 						+ "\")]/following::*[@title=\"" + param2 + "\"]/following::input)[1]")));
 				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[contains(text(),\""+param1+"\")]/following::*[@title=\""+param2+"\"]"),
@@ -11783,7 +11783,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Reports and Analytics") && param2.equalsIgnoreCase("Search")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::input[@placeholder=\"" + param2 + "\"][1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -11809,7 +11809,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Payables to Ledger Reconciliation Report")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//*[contains(text(),\"" + param2 + "\")]/following::input)[2]")));
 				Thread.sleep(1000);
@@ -11837,7 +11837,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Daily Rates")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//a[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 								+ param2 + "\"]/preceding::input[not (@type=\"hidden\")][1]")));
@@ -11865,7 +11865,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit Line") && param2.equalsIgnoreCase("Category Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
 						+ "\")]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 				WebElement waittill = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
@@ -11892,7 +11892,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 15
 		try {
 			if (param1.equalsIgnoreCase("Manage Divisions")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1 + "\"]/following::label[text()=\""
 								+ param2 + "\"]/following::input[contains(@id,\"qry\") and not (@role)])[1]")));
@@ -11924,7 +11924,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("When") && param2.equalsIgnoreCase("End Date")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::input[contains(@id,\"Ed\")]")));
@@ -11964,7 +11964,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Create Expense Item") && param2.equalsIgnoreCase("Amount")) {
 				Thread.sleep(10000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//h1[contains(text(),\"" + param1 + "\")]/following::label[normalize-space(text())=\""
 								+ param2 + "\"]/following::input[@type=\"text\"])[2]")));
@@ -11993,7 +11993,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			Thread.sleep(10000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h2[contains(text(),\"" + param1
 					+ "\")]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 			Thread.sleep(1000);
@@ -12022,7 +12022,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
 					+ "\")]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 			Thread.sleep(1000);
@@ -12054,7 +12054,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Changed == to equals method
 			if (param2.equals("")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,\"" + param1 + "\")]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,\"" + param1 + "\")]"));
@@ -12078,7 +12078,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1
 					+ "\")]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 			Thread.sleep(1000);
@@ -12108,7 +12108,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//label[normalize-space(text())=\""
 					+ param1 + "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 			Thread.sleep(1000);
@@ -12138,7 +12138,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 			Thread.sleep(5000);
@@ -12167,7 +12167,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[normalize-space(text())=\""
@@ -12194,7 +12194,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			Thread.sleep(5000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::img[@title=\"" + param2 + "\"]/following::input)[1]")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -12222,7 +12222,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			Thread.sleep(5000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::input)[1]")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -12252,7 +12252,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// PPM.PA.002 DH
 		try {
 			Thread.sleep(10000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1
 					+ "\")]/following::label[text()=\"" + param2 + "\"]/following::input)[1]")));
 			Thread.sleep(1000);
@@ -12285,7 +12285,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 
 			if (param2.equalsIgnoreCase("Postal Code") || param2.equalsIgnoreCase("Legal Entity")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//div[contains(@id,\"dropdownPopup::popup-container\")]//a[contains(text(),\"Search\")][1]")));
 				Thread.sleep(4000);
@@ -12338,7 +12338,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//div[contains(@id,\"popup-container\")]//*[normalize-space(text())=\"" + keysToSend + "\"])[1]")));
 			Thread.sleep(4000);
@@ -12360,7 +12360,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			System.out.println(e);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//div[contains(@id,\"dropdownPopup::dropDownContent\")]//*[normalize-space(text())=\""
 							+ keysToSend + "\"])[1]")));
@@ -12385,7 +12385,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			System.out.println(e);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//div[contains(@id,\"dropdownPopup::dropDownContent\")]/following::a[contains(text(),\"Search\")][1]")));
 //		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[contains(text(),\"Search\")]"), "Search"));
@@ -12441,7 +12441,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			System.out.println(e);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//div[contains(@id,\"PopupId::content\")]/following::*[normalize-space(text())=\"Search\"]/following::*[text()=\"Name\"]/following::input[@type=\"text\"][1]")));
 			WebElement searchResult = driver.findElement(By.xpath(
@@ -12464,7 +12464,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			System.out.println(e);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1
 					+ "\")]/following::label[text()=\"" + keysToSend + "\"]/following::input)[1]")));
 			Thread.sleep(1000);
@@ -12487,7 +12487,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			System.out.println(e);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//div[@class=\"AFDetectExpansion\"]/following::a[contains(text(),\"Search\")][1]")));
 //			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[contains(text(),\"Search\")]"), "Search"));
@@ -12580,7 +12580,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Calculate Percentage Complete for Revenue Recognition")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::button[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::button[1]"));
@@ -12615,7 +12615,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Resources")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h3[text()='"+param1+"']/following::label[contains(text(),'"+param2+"')]/following::select[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//h3[text()='"+param1+"']/following::label[contains(text(),'"+param2+"')]/following::select[1]"));
@@ -12650,7 +12650,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Account Information")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::span[text()='"+param2+"']/following::a[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::span[text()='"+param2+"']/following::a[1]"));
@@ -12685,7 +12685,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Expense Entry")&&param2.equalsIgnoreCase("Type")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='"+param1+"']/following::*[text()='"+param2+"']/following::select[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//h1[text()='"+param1+"']/following::*[text()='"+param2+"']/following::select[1]"));
@@ -12719,7 +12719,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Details")&&param2.equalsIgnoreCase("Outcome")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::button[1]/following::button[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::button[1]/following::button[1]"));
@@ -12752,7 +12752,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Outcome")||(param2.equalsIgnoreCase("Stage") ) )){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::button[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::label[text()='"+param2+"']/following::button[1]"));
@@ -12785,7 +12785,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Information") ){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::label[text()=\""+param2+"\"]/following::button[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::button[1]"));
@@ -12818,7 +12818,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Details")||(param1.equalsIgnoreCase("Opportunity Details") )){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::label[text()=\""+param2+"\"]/following::button[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::button[1]"));
@@ -12851,7 +12851,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Project Attributes") && param2.equalsIgnoreCase("Billing Type")||param2.equalsIgnoreCase("Fixed Price Recognition Type")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::button[1]")));
 
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::button[1]"));
@@ -12884,7 +12884,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Schedule New Process") && param2.equalsIgnoreCase("Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//table[@role=\"presentation\"]/following::div[text()=\"" + param1
 								+ "\"]/following::*[text()=\"" + param2 + "\"][1]/following::a[@title=\"Search: Name\"]")));
@@ -12939,7 +12939,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Request Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(15000);
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[text()=\"* Request Name\"]/following::img[1]")));
@@ -12974,7 +12974,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Ledger")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(15000);
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[text()=\"* Ledger\"]/following::img[1]")));
@@ -13007,7 +13007,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Request Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(15000);
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[text()=\"* Request Name\"]/following::img[1]")));
@@ -13040,7 +13040,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param2.equalsIgnoreCase("Ledger")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(15000);
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//*[text()=\"* Ledger\"]/following::img[1]")));
@@ -13073,7 +13073,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Add Enrollment") && (param2.equalsIgnoreCase("Select Plan"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a)[1]")));
 				WebElement waittext = driver.findElement(By
@@ -13103,7 +13103,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH
 		try {
 			if (param1.equalsIgnoreCase("Create Contract") && param2.equalsIgnoreCase("Primary Party")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"][1]/following::a[@title=\"Name\"]")));
 
@@ -13156,7 +13156,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("Start Time"))
 					|| (param1.equalsIgnoreCase("job Details") && (param2.equalsIgnoreCase("End Time")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//h2[text()=\"" + param1 + "\"]/following::label[text()=\"" + param2 + "\"]/following::a)[1]")));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -13186,7 +13186,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// HS2 may
 		try {
 			if (param1.equalsIgnoreCase("Personal Info") && (param2.equalsIgnoreCase("Title"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath("//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]")));
 				WebElement waittext = driver.findElement(
@@ -13214,7 +13214,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Element Entry") && param2.equalsIgnoreCase("Element Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::a[@title=\"" + param2 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -13256,7 +13256,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Relationship Information") && (param2.equalsIgnoreCase("Contact Type"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//h1[normalize-space(text())=\"" + param1
@@ -13286,7 +13286,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 
 			if (param1.equalsIgnoreCase("Create Shift") && (param2.equalsIgnoreCase("Resource"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a)[1]")));
 				WebElement waittext = driver.findElement(By
@@ -13317,7 +13317,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		// DH 32
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//*[contains(@id,\"popup-container\")]//*[text()=\"" + param1
 							+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input[not (@type=\"hidden\")][1]")));
@@ -13345,7 +13345,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()=\"" + param1 + "\"]/following::a[@title=\"" + param2 + "\"]")));
 
@@ -13401,7 +13401,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("Ledger Name")) {
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\"" + param2 + "\"]//following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
@@ -13432,7 +13432,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("DH Account Analysis Report")
 					&& param2.equalsIgnoreCase("From Accounting Period")) {
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\"" + param2 + "\"]//following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
@@ -13463,7 +13463,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("DH Account Analysis Report")
 					&& param2.equalsIgnoreCase("To Accounting Period")) {
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\"" + param2 + "\"]//following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
@@ -13493,7 +13493,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("DH Account Analysis Report") && param2.equalsIgnoreCase("Account")) {
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\"" + param2 + "\"]//following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
@@ -13524,7 +13524,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("DH Account Analysis Report")
 					&& param2.equalsIgnoreCase("Sub Ledger Application")) {
 				Thread.sleep(5000);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\"" + param2 + "\"]//following::a[1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
@@ -13555,7 +13555,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if ((param1.equalsIgnoreCase("Adjust Balance") && param2.equalsIgnoreCase("Reason"))
 					|| (param1.equalsIgnoreCase("Update Employment") && param2.equalsIgnoreCase("Action"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//div[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::a[1]")));
 
@@ -13589,7 +13589,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		// DH 32
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//*[contains(@id,\"popup-container\")]//*[text()=\"" + param1
 							+ "\"]/following::*[text()=\"" + param2 + "\"]/following::input[not (@type=\"hidden\")][1]")));
@@ -13613,7 +13613,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Emirate") && param2.equalsIgnoreCase("Emirate")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()=\"" + param1 + "\"]/following::a[@title=\"" + param2 + "\"]")));
 
@@ -13669,7 +13669,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 29
 		try {
 			if (param1.equalsIgnoreCase("Create Event") && (param2.equalsIgnoreCase("Event Type"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h1[normalize-space(text())=\"" + param1 + "\"]/following::label[text()=\"" + param2
 								+ "\"]/following::a[contains(@id,\"eventType\")]")));
@@ -13701,7 +13701,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 14 SCP.512
 		try {
 			if (param1.equalsIgnoreCase("Search") && param2.equalsIgnoreCase("Order Type")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::label[text()=\"" + param2 + "\"]/following::input)[1]")));
@@ -13748,7 +13748,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// DH 24
 		try {
 			if (param1.equalsIgnoreCase("Pay Groups") || param1.equalsIgnoreCase("Sources")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()=\"" + param1 + "\"]/following::*[@title=\"" + param2 + "\"]")));
 				WebElement waittext = driver
@@ -13853,7 +13853,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Schedule New Process") && param2.equalsIgnoreCase("Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//div[@class=\"AFDetectExpansion\"]/following::*[text()=\"" + param1
 								+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
@@ -13911,7 +13911,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Invoice Header") && param2.equalsIgnoreCase("Business Unit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::a[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -13974,7 +13974,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (((param2.equalsIgnoreCase("Project Status") && keysToSend.equalsIgnoreCase("Draft"))
 					|| (param1.equalsIgnoreCase("Basic Options") && param2.equalsIgnoreCase("Template"))
 					|| param2.equalsIgnoreCase("Campaign Purpose"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::a[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -14007,7 +14007,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// here)<------------------------------
 		try {
 			if (param1.equalsIgnoreCase("Create Order") && param2.equalsIgnoreCase("Search: Bill-to Account")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[contains(text(),\"" + param1 + "\")]/following::a[@title=\"" + param2 + "\"][1]")));
 				WebElement waittext = driver.findElement(
@@ -14050,7 +14050,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 		try {
 			if (param1.equalsIgnoreCase("Create Contract in Wizard") && param2.equalsIgnoreCase("Primary Party")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::a[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -14089,7 +14089,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Bank Account") && param2.equalsIgnoreCase("Country")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::a[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -14139,7 +14139,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		// for "PTP.PO.301 Request New Supplier" when exectuing in Fusion instance
 		try {
 			if (param1.equalsIgnoreCase("Company Details") && param2.equalsIgnoreCase("Tax Country")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::a[@title=\"Search: Tax Country\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -14176,7 +14176,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Address") && param2.equalsIgnoreCase("Country")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 						+ "\"]/following::label[text()=\"" + param2 + "\"]/following::a[@title=\"Search: Country\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -14228,7 +14228,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("Assets")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()=\"" + param1 + "\"]/following::a[@role=\"button\"][1]")));
@@ -14268,7 +14268,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Create Request") || param2.equalsIgnoreCase("CIP Budget Code")
 					|| param1.equalsIgnoreCase("Demographic Info")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
 						+ "\")]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
@@ -14296,7 +14296,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Payables to Ledger Reconciliation Report")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(10000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("(//span[contains(text(),\"" + param2 + "\")]/following::img)[1]")));
@@ -14329,7 +14329,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			if (param1.equalsIgnoreCase("P2P-3031-Spend Detail by Invoice Number")
 					|| param1.equalsIgnoreCase("P2P-3026-Payment Terms by Supplier vs Actual Days Paid")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(10000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())=\"" + param2 + "\"]/following::input[1]")));
@@ -14445,7 +14445,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("FIN-7073-UDG Cognos Extract")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(10000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())=\"" + param2 + "\"]/following::input[1]")));
@@ -14523,7 +14523,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if ((param1.equalsIgnoreCase("FIN-7056-Generate Customer Statements")
 					|| param1.equalsIgnoreCase("FIN-7077-Customer Statement"))
 					&& (param2.equalsIgnoreCase("Legal Entity") || param2.equalsIgnoreCase("Customer Name"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(10000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())=\"" + param2 + "\"]/following::input[1]")));
@@ -14613,7 +14613,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				if (param1.equalsIgnoreCase("General Journals Report") && (param2.equalsIgnoreCase("Ledger"))) {
 
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 					Thread.sleep(5000);
 
@@ -14639,7 +14639,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 				else {
 
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 					Thread.sleep(10000);
 
@@ -14844,7 +14844,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			if (param1.equalsIgnoreCase("FIN-7064-AP Invoice Summary")
 					|| param1.equalsIgnoreCase("P2P-3000-AP Hold Detailed Report")
 					|| param1.equalsIgnoreCase("FIN-7073-UDG Cognos Extract")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(15000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())=\"" + param2 + "\"]/following::input[1]")));
@@ -14891,7 +14891,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Report")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(5000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[normalize-space(text())=\"" + param2 + "\"]/following::input[1]")));
@@ -15211,7 +15211,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Basic Options") && param2.equalsIgnoreCase("Ledger")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 								+ param2 + "\"]/following::a[contains(@title,\"" + param2 + "\")]")));
@@ -15362,7 +15362,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -15432,7 +15432,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error("Failed during  dropdownValues" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -15511,7 +15511,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
 			WebElement waittext = driver.findElement(By.xpath("//label[normalize-space(text())=\"" + param1
@@ -15535,7 +15535,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//div[contains(@id,\"popup-container\")]//*[normalize-space(text())=\"" + param1
 							+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
@@ -15558,7 +15558,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -15580,7 +15580,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.info("Sucessfully Clicked dropdownValues" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(text(),\"Search\")]")));
 			WebElement search = driver.findElement(By.xpath("//a[contains(text(),\"Search\")]"));
 			Actions actions = new Actions(driver);
@@ -15627,7 +15627,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//*[normalize-space(text())=\"Search\"]/following::*[normalize-space(text())=\"Name\"]/following::input[1]")));
 			WebElement searchResult = driver.findElement(By.xpath(
@@ -15676,7 +15676,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			logger.error(e.getMessage());
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1
 					+ "\")]/following::label[normalize-space(text())=\"" + keysToSend + "\"]/following::input)[1]")));
 			Thread.sleep(1000);
@@ -15705,7 +15705,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(@id,\"" + param1 + "\")]")));
 			Thread.sleep(1000);
 //wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[contains(@id,\"drop\")]"), keysToSend));
@@ -16092,8 +16092,8 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
-		fetchConfigVO.getMedium_wait();
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		fetchConfigVO.getMEDIUM_WAIT();
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		WebElement element = waittill;
@@ -16123,7 +16123,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void mousehover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			Actions actions = new Actions(driver);
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary=\"" + param1 + "\"]//tr[1]/following::a)[2]")));
@@ -16562,7 +16562,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 			logger.info("Donwloaded path*** " + donwloadedAt);
 
-			File file = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+			File file = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
 
 			logger.info("File exists " + file.exists());
 

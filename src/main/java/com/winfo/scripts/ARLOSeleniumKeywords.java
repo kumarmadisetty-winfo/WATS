@@ -97,7 +97,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void clickNavigate(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[@title=\"" + param1 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//a[@title=\"" + param1 + "\"]")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -118,7 +118,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		if (param1.equalsIgnoreCase("Setup and Maintenance")) {
 			try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h1[normalize-space(text())=\"Navigator\"]/following::*[normalize-space(text())=\""
 								+ param1 + "\"]")));
@@ -144,7 +144,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		}try {
 			if(param2.equalsIgnoreCase("Annual Awards Merit,Bonus,St...")) {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//h1[normalize-space(text())=\"Navigator\"]/following::a[normalize-space(text())=\"Annual Awards (Merit,Bonus,St...\"]")));
 //		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())=\"Navigator\"]/following::*[normalize-space(text())=\""+param1+"\"]/following::a[normalize-space(text())=\""+param2+"\"]"), param2));
@@ -165,7 +165,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//h1[normalize-space(text())=\"Navigator\"]/following::a[normalize-space(text())=\"" + param2 + "\"]")));
 //		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())=\"Navigator\"]/following::*[normalize-space(text())=\""+param1+"\"]/following::a[normalize-space(text())=\""+param2+"\"]"), param2));
@@ -184,7 +184,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error("Failed During Menu Navigation " +  e.getMessage());
 			Thread.currentThread().interrupt();
 		}try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[text()=\"" + param2 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//a[text()=\"" + param2 + "\"]")));
 			highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -232,7 +232,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getAPPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -247,7 +247,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void clickLogoutDropdown(WebDriver driver, String param4, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//img[@title=\"" + param4 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//img[@title=\"" + param4 + "\"]")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -261,7 +261,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		try {
 
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[text()=\"" + param5 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//a[text()=\"" + param5 + "\"]")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -309,7 +309,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void uploadImage(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		try {
-			String sharepoint = fetchConfigVO.getSharepoint_resp();
+			String sharepoint = fetchConfigVO.getSHAREPOINT_RESP();
 			logger.info("Share point " + sharepoint);
 			String accessToken = getAccessToken();
 			List<String> imageUrlList = new ArrayList<>();
@@ -390,9 +390,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name,
 			CustomerProjectDto customerDetails) {
-		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + File.separator
+		String vidPath = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + File.separator
 				+ customerDetails.getTestSetName() + File.separator + name);
-		String folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + File.separator
+		String folder = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + File.separator
 				+ customerDetails.getTestSetName() + File.separator);
 		FileUtil.createDir(folder);
 		OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
@@ -426,7 +426,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + File.separator + customerDetails.getCustomerName()
+		File folder = new File(fetchConfigVO.getSCREENSHOT_PATH() + File.separator + customerDetails.getCustomerName()
 				+ File.separator + customerDetails.getTestSetName() + File.separator);
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -453,7 +453,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String number = copy.getText();
 			// String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 			// logger.info(num);
-			driver.get(fetchConfigVO.getDownlod_file_path() + "/" + number + ".log");
+			driver.get(fetchConfigVO.getDOWNLOD_FILE_PATH() + "/" + number + ".log");
 			Thread.sleep(2000);
 			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			driver.navigate().back();
@@ -469,7 +469,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public static File getLastModified(String directoryFilePath, FetchConfigVO fetchConfigVO) {
-		File directory = new File(fetchConfigVO.getDownlod_file_path());
+		File directory = new File(fetchConfigVO.getDOWNLOD_FILE_PATH());
 		File[] files = directory.listFiles(File::isFile);
 		long lastModifiedTime = Long.MIN_VALUE;
 		File chosenFile = null;
@@ -666,7 +666,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		if (param1.equalsIgnoreCase("Setup and Maintenance")) {
 			try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h1[normalize-space(text())=\"Navigator\"]/following::*[normalize-space(text())=\""
 								+ param1 + "\"]")));
@@ -690,7 +690,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//h1[normalize-space(text())=\"Navigator\"]/following::*[normalize-space(text())=\""
 							+ param1 + "\"]/following::a[normalize-space(text())=\"" + param2 + "\"]")));
@@ -710,7 +710,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//a[normalize-space(text())=\"" + param1 + "\"]"))));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -728,7 +728,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("//div[contains(@style,\"display: block\")]//div[text()=\"" + param1 + "\"]"))));
 			WebElement waittext = driver.findElement(
@@ -745,7 +745,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//div[normalize-space(text())=\"" + param1 + "\"]"))));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -763,7 +763,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//div[contains(@id,\"" + param1 + "\")])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//div[contains(@id,\"" + param1 + "\")])[1]"));
@@ -787,7 +787,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			String title1 = driver.getTitle();
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[@type=\"" + param6 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//button[@type=\"" + param6 + "\"]")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -815,7 +815,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			String title1 = driver.getTitle();
 			screenshot(driver, fetchMetadataVO, customerDetails);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[@name=\"" + param6 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//button[@name=\"" + param6 + "\"]")));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -842,7 +842,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(2000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//a[normalize-space(text())=\"" + param1 + "\"][1]"))));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -867,7 +867,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Approvals") && param2.equalsIgnoreCase("Actions")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::a[normalize-space(text())=\"" + param2 + "\"])[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())=\"" + param1
@@ -891,7 +891,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (param2.equalsIgnoreCase("Publish to Managers")) {
 				// updating [2] to [1] after 21A Execution
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::a[normalize-space(text())=\"" + param2 + "\"])[2]")));
 				WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -917,7 +917,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			// updating budget method to budget pool after 21A Execution and [2] to [1]
 			if (param1.equalsIgnoreCase("Budget Pool") && param2.equalsIgnoreCase("Actions")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::a[normalize-space(text())=\"" + param2 + "\"])[2]")));
 				WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -938,7 +938,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Workforce Compensation") && param2.equalsIgnoreCase("Search")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h1[contains(text(),\"" + param1 + "\")]/following::a[1]")));
 				WebElement waittext = driver
@@ -974,7 +974,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//h1[normalize-space(text())=\"" + param1 + "\"]/following::a[@title=\"" + param2 + "\"])[1]")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -998,7 +998,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\"" + param1
 					+ "\"]/following::a[normalize-space(text())=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//h1[normalize-space(text())=\"" + param1
@@ -1021,7 +1021,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//a[@title=\"" + param1 + "\"]"));
 			Actions actions = new Actions(driver);
@@ -1040,7 +1040,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//h1[contains(text(),\"" + param1 + "\")]/following::a[1]")));
 			WebElement waittext = driver
@@ -1066,7 +1066,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//li[normalize-space(text())=\"" + keysToSend + "\"]")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -1087,7 +1087,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//div[contains(@class,\"PopupMenuContent\")]//td[text()=\"" + keysToSend + "\"]")));
 			WebElement waittext = driver.findElement(
@@ -1108,7 +1108,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//td[normalize-space(text())=\"" + keysToSend + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//td[normalize-space(text())=\"" + keysToSend + "\"]"));
@@ -1134,7 +1134,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void clickExpandorcollapse(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//h2[normalize-space(text())=\"" + param1 + "\"]/following::*[@title=\"" + param2 + "\"])[1]")));
 			Thread.sleep(8000);
@@ -1155,7 +1155,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\"" + param2
 							+ "\"]/preceding::*[@title=\"Expand\" and @href and not(@style=\"display:none\")][1]")));
@@ -1177,7 +1177,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[@title=\"" + param2 + "\"])[1]")));
 			Thread.sleep(4000);
@@ -1201,7 +1201,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//*[normalize-space(text())=\"" + param1 + "\"]/preceding::*[@title=\"" + param2 + "\"])[1]")));
 
@@ -1234,7 +1234,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Manager")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[contains(text(),\"" + param1 + "\")]/following::*[text()=\"" + keysToSend + "\"][2]")));
@@ -1257,7 +1257,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Worker Name") || param1.equalsIgnoreCase("Manager")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
@@ -1289,7 +1289,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Worker")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::div[contains(@class,\"PopupMenuPopup\")]//span[contains(text(),\""
@@ -1319,7 +1319,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Document Eligibility")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[contains(text(),\"" + param1 + "\")]/following::a[text()=\"" + keysToSend + "\"]")));
@@ -1345,7 +1345,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("performance documents")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 	
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[contains(text(),\"" + param1 + "\")]/following::*[text()=\"" + keysToSend + "\"]")));
@@ -1367,7 +1367,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 	
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[contains(text(),\"" + param1 + "\")]/following::*[text()=\"" + keysToSend + "\"]")));
@@ -1388,7 +1388,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -1410,7 +1410,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//*[normalize-space(text())=\"" + param1 + "\"]/following::*[@title=\"" + keysToSend + "\"][1]")));
 			WebElement waittext = driver.findElement(By.xpath(
@@ -1439,7 +1439,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ keysToSend + "\"]/following::img[contains(@id,\"" + param2 + "\")][1]")));
@@ -1466,7 +1466,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ keysToSend + "\"]/following::img[@title=\"" + param2 + "\"])[1]")));
@@ -1491,7 +1491,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[@value=\"" + keysToSend
 							+ "\"]/following::img[normalize-space(@title)=\"" + param2 + "\"][1]")));
@@ -1524,7 +1524,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param2.equalsIgnoreCase("Back")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//h1[normalize-space(text())=\"" + param1 + "\"]/preceding::a[1]")));
 				WebElement waittext = driver
@@ -1548,7 +1548,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Back")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(3000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title=\"Done\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//a[@title=\"Done\"]"));
@@ -1609,7 +1609,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By
 					.xpath("(//h1[normalize-space(text())=\"" + param1 + "\"]/following::div[@role=\"button\"])[1]")));
 
@@ -1639,7 +1639,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\"" + param1
 					+ "\"]/following::img[@title=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath(
@@ -1661,7 +1661,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//*[normalize-space(text())=\"" + param1 + "\"]/following::img[@title=\"" + param2 + "\"][1]")));
 			WebElement waittext = driver.findElement(By.xpath(
@@ -1683,7 +1683,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//*[normalize-space(text())=\"" + param1 + "\"]/following::div[@role=\"button\"])[1]")));
 			WebElement waittext = driver.findElement(
@@ -1710,7 +1710,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::img[contains(@id,\"" + param2 + "\")]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -1732,7 +1732,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//*[normalize-space(text())=\"" + param1 + "\"]/following::img[@title=\"" + param2 + "\"][1]")));
 			WebElement waittext = driver.findElement(By.xpath(
@@ -1755,7 +1755,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//img[@title=\"" + param1 + "\"]"));
 			Thread.sleep(3000);
@@ -1777,7 +1777,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(
 					ExpectedConditions.presenceOfElementLocated(By.xpath("//img[contains(@id,\"" + param1 + "\")]")));
 			WebElement waittext = driver.findElement(By.xpath("//img[contains(@id,\"" + param1 + "\")]"));
@@ -1798,7 +1798,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//a[@title=\"" + param1 + "\"]"));
 			Actions actions = new Actions(driver);
@@ -1818,7 +1818,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::img[1]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -1841,7 +1841,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//*[contains(@aria-label,\"" + param1 + "\")]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[contains(@aria-label,\"" + param1 + "\")]"));
@@ -1869,7 +1869,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"ne\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"ne\"]"), "ne"));
@@ -1889,7 +1889,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Warning") && param2.equalsIgnoreCase("Yes")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(2000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//div[@class='AFPopupSelector']//*[contains(text(),\"Warning\")]/following::*[normalize-space(text())=\"Yes\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//div[@class='AFPopupSelector']//*[contains(text(),\"Warning\")]/following::*[normalize-space(text())=\"Yes\"]")));
@@ -1907,7 +1907,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	//			service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Done")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(2000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"o\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"o\"]"), "o"));
@@ -1926,7 +1926,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(40000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"m\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"m\"]"), "m"));
@@ -1948,7 +1948,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(20000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"m\"]"))));
@@ -1970,7 +1970,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Edit Employment: Review") && param2.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//h1[text()=\"Edit Employment: Review\"]/following::*[@title=\"Submit\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -1992,7 +1992,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Next")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"x\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"x\"]"), "x"));
 
@@ -2013,7 +2013,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Next")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]")));
 				wait.until(
@@ -2038,7 +2038,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Yes")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"Y\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -2063,7 +2063,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				return;
 			} else if (param1.equalsIgnoreCase("Yes")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"Y\"]"))));
 				Thread.sleep(4000);
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()=\"Y\"]")));
@@ -2081,7 +2081,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//button[@_afrpdo=\"ok\" and @accesskey=\"K\"]")));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -2102,7 +2102,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Save and Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"S\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"S\"]"), "S"));
 
@@ -2121,7 +2121,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Continue")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"u\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"u\"]"), "u"));
 
@@ -2141,7 +2141,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Continue")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[text()=\"Contin\"]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//button[text()=\"Contin\"]"),
 						"Contin"));
@@ -2159,7 +2159,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//button[text()=\"Cl\"]"))));
 
 				WebElement waittext = driver.findElement(By.xpath(("//button[text()=\"Cl\"]")));
@@ -2177,7 +2177,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param1.equalsIgnoreCase("Cancel")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"C\"]"))));
 
 				WebElement waittext = driver.findElement(By.xpath(("//span[text()=\"C\"]")));
@@ -2195,7 +2195,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				service.saveXpathParams(scriptID, lineNumber, xpath);
 				return;
 			} else if (param2.equalsIgnoreCase("Cancel")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"C\"]"))));
 
@@ -2216,7 +2216,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				return;
 			} else if (param1.equalsIgnoreCase("Save")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//span[text()=\"ave\"]"))));
 				wait.until(
 						ExpectedConditions.textToBePresentInElementLocated(By.xpath("//span[text()=\"ave\"]"), "ave"));
@@ -2243,7 +2243,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Subject Areas") && param2.equalsIgnoreCase("Name")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 								+ param2 + "\" and not(@_afrpdo)])[1]")));
@@ -2271,7 +2271,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Edit Plan Cycle")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"K\"][2]"))));
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -2299,7 +2299,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param2.equalsIgnoreCase("OK")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[text()=\"K\"]"))));
@@ -2329,7 +2329,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param2.equalsIgnoreCase("Submit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::span[normalize-space(text())=\"" + param2 + "\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())=\"" + param1
@@ -2355,7 +2355,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param2.equalsIgnoreCase("Save and Close")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::span[normalize-space(text())=\"S\"]"))));
 				WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())=\"" + param1
@@ -2381,7 +2381,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goals") && param2.equals("Actions")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(@id,\"actBtn\")]")));
 				WebElement waittext = driver.findElement(By.xpath("//div[contains(@id,\"actBtn\")]"));
@@ -2405,7 +2405,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//span[normalize-space(text())=\"" + param1 + "\"]"))));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -2431,7 +2431,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//td[normalize-space(text())=\"" + param1 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//td[normalize-space(text())=\"" + param1 + "\"]")));
@@ -2453,7 +2453,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By
 					.xpath(("//button[normalize-space(text())=\"" + param1 + "\"and not(@style=\"display:none\")]"))));
 			WebElement waittext = driver.findElement(
@@ -2477,7 +2477,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Warning")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"Warning\"]/following::*[contains(text(),\"Do you want to continue?\") and not(text()=\"Your changes aren\"t saved. If you leave this page, then your changes will be lost. Do you want to continue?\")]/following::*[text()=\"Yes\"]")));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -2501,7 +2501,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\" and not(@_afrpdo)])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -2523,7 +2523,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -2546,7 +2546,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -2569,7 +2569,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1
 					+ "\")]/following::*[normalize-space(text())=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//h1[contains(text(),\"" + param1
@@ -2592,7 +2592,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
 					+ "\")]/following::*[normalize-space(text())=\"" + param2 + "\"])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[contains(text(),\"" + param1
@@ -2622,7 +2622,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void clickTableLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary=\"" + param1 + "\"]//a)[1]")));
 
@@ -2646,7 +2646,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::table[@summary=\"Main Task List\"]//a)[2]")));
 
@@ -2677,7 +2677,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void tableRowSelect(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary=\"" + param1 + "\"]//td)[1]")));
 
@@ -2707,7 +2707,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void actionApprove(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			Thread.sleep(2000);
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//a[normalize-space(text())=\"" + param1 + "\"][1]"))));
@@ -2737,7 +2737,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Performance Goals")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//*[text()=\"Performance Goals\"]/following::a[1]"))));
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\"Performance Goals\"]/following::a[1]"));
@@ -2761,7 +2761,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goals") && param2.equalsIgnoreCase("Performance Goals")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath(("//*[text()=\"Performance Goals\"]/following::a[1]"))));
 				WebElement waittext = driver.findElement(By.xpath("//*[text()=\"Performance Goals\"]/following::a[1]"));
@@ -2785,7 +2785,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Viewing plan")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//span[normalize-space(text())=\"" + param1 + "\"]/following::a[1]")));
 
@@ -2814,7 +2814,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param2 != null) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(
 						ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\"" + param1
 								+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
@@ -2848,7 +2848,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Select Template")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"" + param1 + "\"]/following::a[@title=\"" + param2 + "\"][1]")));
 				WebElement waittext = driver.findElement(By.xpath(
@@ -2871,7 +2871,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 //		JavascriptExecutor js = (JavascriptExecutor) driver;
 
 			wait.until(ExpectedConditions
@@ -2899,7 +2899,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			// Thread.sleep(2000);
 //		JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -2927,7 +2927,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//a[contains(@id,\"" + param1 + "\")])[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,\"" + param1 + "\")])[1]"));
@@ -2945,7 +2945,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//div[@title=\"" + param1 + "\"]"));
 			Actions actions = new Actions(driver);
@@ -2965,7 +2965,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title=\"" + param1 + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//a[@title=\"" + param1 + "\"]"));
 			Actions actions = new Actions(driver);
@@ -2985,7 +2985,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(
 					ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(@title,\"" + param1 + "\")]")));
 			WebElement waittext = driver.findElement(By.xpath("//a[contains(@title,\"" + param1 + "\")]"));
@@ -3006,7 +3006,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(
 					ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@title,\"" + param1 + "\")]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[contains(@title,\"" + param1 + "\")]"));
@@ -3028,7 +3028,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		// Need to check for what purpose
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//div[contains(text(),\"" + param1 + "\")])[2]")));
 			WebElement waittext = driver.findElement(By.xpath("(//div[contains(text(),\"" + param1 + "\")])[2]"));
@@ -3049,7 +3049,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//a[@role=\"" + param1 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//a[@role=\"" + param1 + "\"]")));
 			Actions actions = new Actions(driver);
@@ -3069,7 +3069,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::a[normalize-space(text())=\"" + param2 + "\"]"))));
 			WebElement waittext = driver.findElement(By.xpath(("//*[normalize-space(text())=\"" + param1
@@ -3099,7 +3099,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		try {
 			Thread.sleep(3000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					("(//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 							+ param2 + "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"])[1]"))));
@@ -3129,7 +3129,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"])[1]"))));
 			WebElement waittext = driver.findElement(By.xpath(("(//*[normalize-space(text())=\"" + param1
@@ -3157,7 +3157,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			if ((param1.equalsIgnoreCase("Create Performance Documents"))
 					|| (param1.equalsIgnoreCase("Employee Final Feedback"))
 					|| (param1.equalsIgnoreCase("Performance Documents"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
@@ -3185,7 +3185,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		
 				try {
 					if (param1.equalsIgnoreCase("Goals")) {
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("(//*[normalize-space(text())=\"Goals\"]/following::*[normalize-space(text())=\""+ keysToSend + "\"]/preceding::input[@type='checkbox'])[1]"))));
 						WebElement waittext = driver.findElement(By.xpath(("(//*[normalize-space(text())=\"Goals\"]/following::*[normalize-space(text())=\""+ keysToSend + "\"]/preceding::input[@type='checkbox'])[1]")));
@@ -3209,7 +3209,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 				try {
 			if (param1.equalsIgnoreCase("Participant Feedback")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + keysToSend
@@ -3237,7 +3237,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (keysToSend.equalsIgnoreCase("Include terminated work relationships")
 					|| keysToSend.equalsIgnoreCase("Managers cannot update due dates")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]"))));
@@ -3267,7 +3267,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goals") && (keysToSend.equalsIgnoreCase("Private"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				Thread.sleep(4000);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]"))));
@@ -3297,7 +3297,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (param1.equalsIgnoreCase("Goal Weights") || param1.equalsIgnoreCase("Refresh Options")
 					|| param1.equalsIgnoreCase("Disability Info")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]"))));
@@ -3326,7 +3326,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					("//label[normalize-space(text())=\"" + param1 + "\"]/following::span[normalize-space(text())=\""
 							+ keysToSend + "\"]/preceding::label[1]"))));
@@ -3355,7 +3355,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::span[text()=\"" + keysToSend + "\"]/preceding::label[1]"))));
 			// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[normalize-space(text())=\""+param1+"\"]/following::span[text()=\""+keysToSend+"\"]"),
@@ -3381,7 +3381,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]/preceding::label[1]")));
 			wait.until(
@@ -3410,7 +3410,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//label[normalize-space(text())=\""
 					+ param1 + "\"]/following::label[normalize-space(text())=\"" + keysToSend + "\"]"))));
 			wait.until(
@@ -3438,7 +3438,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]"))));
 			wait.until(
@@ -3466,7 +3466,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//label[normalize-space(text())=\"" + keysToSend + "\"]"))));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -3496,7 +3496,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath(("//*[@placeholder=\"" + param1 + "\"]/following::a[1]"))));
 
@@ -3527,7 +3527,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 		try {
 			if (param1.equalsIgnoreCase("Goals") && param2.equalsIgnoreCase("Edit")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						("//*[normalize-space(text())=\"" + param1 + "\"]/following::span[normalize-space(text())=\""
 								+ keysToSend + "\"]/following::img[contains(@title,\"" + param2 + "\")][1]"))));
@@ -3559,7 +3559,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("//*[normalize-space(text())=\"" + param1 + "\"]/following::a[normalize-space(text())=\""
 							+ keysToSend + "\"]/following::img[contains(@title,\"" + param2 + "\")][1]"))));
@@ -3591,7 +3591,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::a[normalize-space(text())=\"" + keysToSend + "\"]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -3615,7 +3615,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {// *[text()=\"Worker Name\"]/following::*[text()=\"Kaushik (Kaushik)
 				// Sekaran\"]/following::img[1]
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//*[normalize-space(text())=\"" + keysToSend + "\"]/following::td[normalize-space(text())=\""
 							+ param1 + "\"]/following::table[1]//div)[1]")));
@@ -3638,7 +3638,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ keysToSend + "\"]/following::img[contains(@title,\"" + param2 + "\")])[1]"))));
@@ -3670,7 +3670,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if(param1.equalsIgnoreCase("Employee Comments"))
 			{
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\"Employee Comments\"]/following::p[1]")));
 			Thread.sleep(1000);
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -3692,7 +3692,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 			 }
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::p)[1]")));
 			
 			WebElement waittill = driver.findElement(By.xpath("(//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + param2 + "\"]/following::p)[1]"));
@@ -3714,7 +3714,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\"" + param1 + "\"]/following::p[1]")));
 			Thread.sleep(1000);
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -3735,7 +3735,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 			 }
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::textarea)[1]")));
 			
@@ -3763,7 +3763,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//body[@dir=\"ltr\"]")));
 			
 			WebElement waittill = driver.findElement(By.xpath("//body[@dir=\"ltr\"]"));
@@ -3784,7 +3784,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//body[contains(@class,\"contents_ltr\")][1]")));
 			
@@ -3806,7 +3806,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::textarea)[1]")));
 			
@@ -3839,7 +3839,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Search")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath(("//div[@role=\"" + param1 + "\" and not(@style)]//label[normalize-space(text())=\""
 								+ param2 + "\"]/following::input[1]"))));
@@ -3868,7 +3868,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Search") && (param2.equalsIgnoreCase("Match With"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
@@ -3895,7 +3895,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\""
 						+ param1
@@ -3921,7 +3921,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Participant Feedback") && (param2.equalsIgnoreCase("Participant"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"" + param1 + "\"]/following::td[normalize-space(text())=\""
@@ -3947,7 +3947,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Transfer")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
@@ -3974,7 +3974,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2
@@ -4001,7 +4001,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Duplicate Plan Cycle")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),\"" + param1
 						+ "\")]/following::label[text()=\"" + param2 + "\"]/following::input[1]")));
@@ -4026,7 +4026,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Send Email Notification")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//h1[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
@@ -4053,7 +4053,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Location") && (param2.equalsIgnoreCase("Location"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath("(//h1[contains(text(),\"" + param1 + "\")]/following::label[normalize-space(text())=\""
 								+ param2 + "\"]/following::input[not(@type=\"hidden\")])[1]")));
@@ -4089,7 +4089,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1
 					+ "\")]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 
@@ -4117,7 +4117,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//*[contains(@placeholder,\"" + param1 + "\")]")));
 			WebElement waittill = driver.findElement(By.xpath("//*[contains(@placeholder,\"" + param1 + "\")]"));
@@ -4134,7 +4134,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//label[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 							+ param2 + "\"]/following::input)[1]")));
@@ -4163,7 +4163,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 
@@ -4191,7 +4191,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::input)[1]")));
 			WebElement waittill = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -4225,7 +4225,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		try {
 			if (param2.equalsIgnoreCase("Plan") || param2.equalsIgnoreCase("Option")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//div[@class=\"AFPopupMenuPopup\"]//li[text()=\"" + keysToSend + "\"]")));
 				WebElement waittext = driver
@@ -4244,7 +4244,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//div[contains(@id,\"popup-container\")]//*[normalize-space(text())=\"" + keysToSend
 							+ "\"])[1]")));
@@ -4270,7 +4270,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//h1[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ param2 + "\"]/following::span[normalize-space(text())=\"" + keysToSend + "\"]")));
@@ -4297,7 +4297,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param2.equalsIgnoreCase("Performance Document Types")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2
 						+ "\"]/following::[@type=\"checkbox\"]/parent::label[normalize-space(text())=\"" + keysToSend
@@ -4327,7 +4327,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Send Email Notification")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//div[@class=\"AFPopupMenuPopup\"]//li[text()=\"" + keysToSend + "\"]")));
 				WebElement waittext = driver
@@ -4347,7 +4347,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//div[normalize-space(text())=\"" + keysToSend + "\"]")));
 				WebElement waittext = driver
@@ -4367,7 +4367,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//div[normalize-space(text())=\"" + keysToSend + "\"]")));
 				WebElement waittext = driver
@@ -4387,7 +4387,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Participant Feedback") && (param2.equalsIgnoreCase("Review Period"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions
 						.presenceOfElementLocated(By.xpath("//div[normalize-space(text())=\"" + keysToSend + "\"]")));
 				WebElement waittext = driver
@@ -4407,7 +4407,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Change Access for All Managers")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2
 						+ "\"]/following::*[@type=\"checkbox\"]/following::*[normalize-space(text())=\"" + keysToSend
@@ -4432,7 +4432,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//h1[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ param2 + "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]")));
@@ -4452,7 +4452,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By
 					.xpath("//label[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ param2 + "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"]")));
@@ -4472,7 +4472,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h3[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2
 					+ "\"][1]/following::div[contains(@style,\"position\")]//li[normalize-space(text())=\"" + keysToSend
@@ -4493,7 +4493,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h3[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2
 					+ "\"][1]/following::div[contains(@style,\"position\")]//li[normalize-space(text())=\"" + keysToSend
@@ -4515,7 +4515,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ param2 + "\"]/following::*[@type=\"checkbox\"]/following::*[normalize-space(text())=\""
@@ -4538,7 +4538,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ param2 + "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"][1]")));
@@ -4559,7 +4559,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(text(),\"Search\")]")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[contains(text(),\"Search\")]"),
 					"Search"));
@@ -4604,7 +4604,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//*[normalize-space(text())=\"Search\"]/following::*[normalize-space(text())=\"Name\"]/following::input[1]")));
 			WebElement searchResult = driver.findElement(By.xpath(
@@ -4644,7 +4644,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[contains(text(),\"" + param1 + "\")]/following::*[normalize-space(text())=\"" + param2
 							+ "\"]/following::*[normalize-space(text())=\"" + keysToSend + "\"][1]")));
@@ -4664,7 +4664,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1
 					+ "\")]/following::label[normalize-space(text())=\"" + keysToSend + "\"]/following::input)[1]")));
 
@@ -4698,7 +4698,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		try {
 			if (param1.equalsIgnoreCase("Element Details")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\"" + param1
 						+ "\"]/following::*[text()=\"" + value1 + "\"]/following::input[@placeholder=\"m/d/yy\"][1]"));
 				Thread.sleep(1000);
@@ -4723,7 +4723,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			WebElement waittill = driver.findElement(By.xpath(
 					"//*[text()=\"" + param1 + "\"]/following::*[text()=\"" + value1 + "\"]/following::input[1]"));
 			Thread.sleep(1000);
@@ -4747,7 +4747,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			WebElement waittill = driver.findElement(By.xpath("(//*[text()=\"" + param1 + "\"]/following::*[text()=\""
 					+ value1 + "\"]/following::input[contains(@id,\"NewBdgtPctLst\")])[" + param2 + "]"));
 			Thread.sleep(1000);
@@ -4775,7 +4775,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			WebElement waittill = driver
 					.findElement(By.xpath("//h1[text()=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 							+ param2 + "\"]/preceding-sibling::input[not(@type=\"hidden\")]"));
@@ -4911,7 +4911,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table[@summary=\"" + param1
 					+ "\"]/following::li[normalize-space(text())=\"" + keysToSend + "\"]")));
 			wait.until(
@@ -4933,7 +4933,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::li[normalize-space(text())=\"" + keysToSend + "\"]")));
 			wait.until(
@@ -4961,7 +4961,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		try {
 			if (param2.equalsIgnoreCase("Type")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//*[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 								+ param2 + "\"]/preceding::input[2]")));
@@ -4985,7 +4985,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::label[normalize-space(text())=\"" + param2 + "\"]/preceding::a[1]")));
 			WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -5007,7 +5007,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//table[@summary=\"" + param1 + "\"]//input/following-sibling::a[1]")));
 			WebElement waittext = driver
@@ -5035,7 +5035,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws Exception {
 		try {
 			if (!param3.isEmpty()) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//h1[normalize-space(text())=\"" + param1 + "\"]/following::label[normalize-space(text())=\""
 								+ param2 + "\"]/following::a[@title=\"" + param3 + "\"]")));
@@ -5064,7 +5064,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance") && param2.equalsIgnoreCase("Performance Documents")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By
 						.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
@@ -5091,7 +5091,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents") || (param1.equalsIgnoreCase("Performance Goals")  && (param2.equalsIgnoreCase("Review Period")))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\"Performance Goals\"]/following::label[normalize-space(text())=\"Review Period\"]/preceding-sibling::input[not(@type='hidden')]/following::a[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//h1[normalize-space(text())=\"Performance Goals\"]/following::label[normalize-space(text())=\"Review Period\"]/preceding-sibling::input[not(@type='hidden')]/following::a[1]"));
 				Actions actions = new Actions(driver);
@@ -5114,7 +5114,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (param1.equalsIgnoreCase("Send Email Notification")
 					&& (param2.equalsIgnoreCase("Hire Date Start Range - Days"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\""
 						+ param1
@@ -5141,7 +5141,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Other Plans")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::td[normalize-space(text())=\"Review Period *\"]/following::a[3])")));
@@ -5169,7 +5169,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (param1.equalsIgnoreCase("Send Email Notification")
 					&& (param2.equalsIgnoreCase("Hire Date End Range - Days"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\""
 						+ param1
@@ -5195,7 +5195,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Goal Name") && (param2.equalsIgnoreCase("Status"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
@@ -5221,7 +5221,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (param2.equalsIgnoreCase("Plan") || param2.equalsIgnoreCase("Option")) {
 
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
 				wait.until(
@@ -5254,7 +5254,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Create Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\""
 						+ param1
 						+ "\"]/following::*[normalize-space(text())=\"Review Period *\"][1]/following::a[contains(@id,\"HCMPERFORMANCE_FUSE_PERFORMANCE\") and not(@style)][1]")));
@@ -5286,7 +5286,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Performance Documents") && (param2.equalsIgnoreCase("Review Period"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\""
 						+ param1
 						+ "\"]/following::*[normalize-space(text())=\"Review Period *\"][1]/following::a[contains(@id,\"HCMPERFORMANCE_FUSE_PERFORMANCE\") and not(@style)][1]")));
@@ -5311,7 +5311,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Participant Feedback") && (param2.equalsIgnoreCase("Review Period"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[normalize-space(text())=\""
 						+ param1
 						+ "\"]/following::*[normalize-space(text())=\"Review Period *\"][1]/following::a[contains(@id,\"HCMPERFORMANCE_FUSE_PERFORMANCE\") and not(@style)][1]")));
@@ -5336,7 +5336,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Checklist") && (param2.equalsIgnoreCase("Status"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1 +"\")]/following::label[text()=\"" + param2 +"\"]/following::a)[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//h1[contains(text(),\"" + param1 +"\")]/following::label[text()=\"" + param2 + "\"]/following::a)[1]"));
 				Actions actions = new Actions(driver);
@@ -5359,7 +5359,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Worker List") && (param2.equalsIgnoreCase("Currency"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),\"" + param1 +"\")]/following::a[contains(@id,'CurrTypeList')]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),\"" + param1 +"\")]/following::a[contains(@id,'CurrTypeList')]"));
 				Actions actions = new Actions(driver);
@@ -5383,7 +5383,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (param1.equalsIgnoreCase("When and Why")
 					&& (param2.equalsIgnoreCase("Why are you changing the location?"))) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
 				WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -5436,7 +5436,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
@@ -5460,7 +5460,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[normalize-space(text())=\""
@@ -5486,7 +5486,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//label[normalize-space(text())=\""
 					+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
 			WebElement waittext = driver.findElement(By.xpath("//label[normalize-space(text())=\"" + param1
@@ -5508,7 +5508,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//div[contains(@id,\"popup-container\")]//*[normalize-space(text())=\"" + param1
 							+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
@@ -5553,7 +5553,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (param1.equalsIgnoreCase("Basic Information") || param1.equalsIgnoreCase("Communication")
 					|| param1.equalsIgnoreCase("Eligibility")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(
 						ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\"" + param1
 								+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::input[1]")));
@@ -5580,7 +5580,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			if (param1.equalsIgnoreCase("Selected Eligibility Profiles")
 					|| param1.equalsIgnoreCase("Overall Ratings")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 								+ param2 + "\"]/following::input[ not(@type=\"hidden\")])[1]")));
@@ -5606,7 +5606,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		}
 		try {
 			if (param1.equalsIgnoreCase("Details")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[normalize-space(text())=\""
 						+ param1 + "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a[1]")));
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + param1
@@ -5629,7 +5629,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[normalize-space(text())=\"" + param1 + "\"]/following::*[normalize-space(text())=\""
 							+ param2 + "\"]/following::input[@placeholder=\"Select a value\"]")));
@@ -5650,7 +5650,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"" + param1
 					+ "\"]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
 			WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"" + param1
@@ -5691,7 +5691,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),\"" + param1
 					+ "\")]/following::*[normalize-space(text())=\"" + param2 + "\"]/following::a)[1]")));
 			wait.until(
@@ -5719,7 +5719,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Thread.currentThread().interrupt();
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//label[contains(text(),\"" + param1 + "\")]/following::a)[1]")));
 			// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[contains(text(),\""+param1+"\")]/following::*[normalize-space(text())=\""+param2+"\"]"),
@@ -6105,8 +6105,8 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
-		fetchConfigVO.getMedium_wait();
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		fetchConfigVO.getMEDIUM_WAIT();
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		WebElement element = waittill;
@@ -6131,7 +6131,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void mousehover(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
 			Actions actions = new Actions(driver);
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//table[@summary=\"" + param1 + "\"]//tr[1]/following::a)[2]")));
@@ -6665,7 +6665,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	public void delatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
-		File folder = new File(fetchConfigVO.getScreenshot_path() + customerDetails.getCustomerName() + "/"
+		File folder = new File(fetchConfigVO.getSCREENSHOT_PATH() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/");
 		if (folder.exists()) {
 			File[] listOfFiles = folder.listFiles();
