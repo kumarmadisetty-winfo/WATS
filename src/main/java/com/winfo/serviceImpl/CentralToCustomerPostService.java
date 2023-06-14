@@ -145,7 +145,8 @@ public class CentralToCustomerPostService {
 			}
 
 			bean.add(dao.centralRepoData(master, masterdata.getScriptNumber(), masterdata.getProductVersion()));
-		}
+			logger.info("Successfully Migrated script");
+			}
 		else
 		{
 			response.setStatus(400);
@@ -158,7 +159,7 @@ public class CentralToCustomerPostService {
 
 
 	}
-		logger.info("Successfully Migrated script");
+		
 		return bean;
 	}
 }
