@@ -31,7 +31,6 @@ import com.winfo.dao.CopyTestRunDao;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
-import com.winfo.model.ExecutionAudit;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -479,10 +478,10 @@ public class CopyTestRunService {
 			return newtestrun;
 		} catch (NullPointerException ne) {
 			logger.error("GetTestrun object should not be null" + ne.getMessage());
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "GetTestrun object should not be null");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "GetTestrun object should not be null");
 		} catch (Exception e) {
 			logger.error("Internal Server Error" + e.getMessage());
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error");
 		}
 	}
 
