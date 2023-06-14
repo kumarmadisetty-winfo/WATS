@@ -13,7 +13,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.vo.DomGenericResponseBean;
@@ -286,7 +286,7 @@ public class WatsPluginDao {
 			return query.getSingleResult().toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Directory path is not present", e);
+			throw new WatsEBSException(500, "Directory path is not present", e);
 		}
 	}
 }

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.dao.VmInstanceDAO;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ExecutionAudit;
 import com.winfo.model.LookUp;
 import com.winfo.vo.CustomerProjectDto;
@@ -202,7 +202,7 @@ public class LimitScriptExecutionService {
 			logger.info("data added successfully");
 		} catch (Exception e) {
 			logger.error("testrun data not added " + e);
-			throw new WatsEBSCustomException(500, "Exception occured while inserting test run pdf records", e);
+			throw new WatsEBSException(500, "Exception occured while inserting test run pdf records", e);
 		}
 	}
 	
@@ -232,7 +232,7 @@ public class LimitScriptExecutionService {
 				return true;
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while checking update status of Script Run", e);
+			throw new WatsEBSException(500, "Exception occured while checking update status of Script Run", e);
 		}
 		return false;
 	}
