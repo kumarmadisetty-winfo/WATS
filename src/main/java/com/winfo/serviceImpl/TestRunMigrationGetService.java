@@ -395,31 +395,19 @@ public class TestRunMigrationGetService {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
-			int scriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
-					scriptMaster.getScriptNumber(),customerId);
+			int oldscriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
+					scriptMaster.getScriptNumber());
 			
+			String newCustomScriptNumber="";
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
 					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
 				if (id.equals(scriptMaster.getScriptId())) {
-					String newCustomScriptNumber="";
-					if(scriptMasterCustomerId==1) {
-						newCustomScriptNumber=scriptMaster.getScriptNumber()+"C.";
-						String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber,scriptMaster.getProductVersion());
-						if("".equals(maxScriptNumber)) {
-							newCustomScriptNumber=newCustomScriptNumber+"1";
-						}
-						else {
-							newCustomScriptNumber=newCustomScriptNumber+(Integer.parseInt(maxScriptNumber.substring(newCustomScriptNumber.length()))+1);								
-						}
-						scriptMaster.setScriptNumber(newCustomScriptNumber);
-					}
 					if (scriptMaster.getDependency() == null) {
 						int originalId = scriptMaster.getScriptId();
 						insertedScriptaId = dao.insertScriptMaster(scriptMaster);
 						for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
 							int oldMetaDataId = scriptMetaData.getScriptMetaDataId();
 							scriptMetaData.setScriptMaster(scriptMaster);
-							if(!"".equals(newCustomScriptNumber)) scriptMetaData.setScriptNumber(newCustomScriptNumber);
 							int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
 							mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
 						}
@@ -444,9 +432,38 @@ public class TestRunMigrationGetService {
 
 				}
 			} else if (scriptMasterPrsent > 0) {
-				int originalId = scriptMaster.getScriptId();
-				mapOfNewToOld.put(scriptMasterPrsent, originalId);
-				mapOfOldToNew.put(originalId, scriptMasterPrsent);
+				if(oldscriptMasterCustomerId!=customerId) {
+					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
+						scriptMaster.getScriptNumber()+".C.";
+					String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
+							,scriptMaster.getProductVersion());
+					if("".equals(maxScriptNumber)) {
+						newCustomScriptNumber=newCustomScriptNumber+"1";
+					}
+					else {
+						newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
+								+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);				
+					}
+					scriptMaster.setScriptNumber(newCustomScriptNumber);
+					scriptMaster.setStandardCustom("Custom");
+					int originalId = scriptMaster.getScriptId();
+					scriptMaster.setScriptId(null);
+					int newId = dao.insertScriptMaster(scriptMaster);
+					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
+						Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
+						scriptMetaData.setScriptMaster(scriptMaster);
+						if(!"".equals(newCustomScriptNumber)) scriptMetaData.setScriptNumber(newCustomScriptNumber);
+						int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
+						mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
+					}
+					mapOfNewToOld.put(newId, originalId);
+					mapOfOldToNew.put(originalId, newId);
+				}
+				else {
+					int originalId = scriptMaster.getScriptId();
+					mapOfNewToOld.put(scriptMasterPrsent, originalId);
+					mapOfOldToNew.put(originalId, scriptMasterPrsent);					
+				}
 			}
 		}
 		return insertedScriptaId;
@@ -460,29 +477,45 @@ public class TestRunMigrationGetService {
 
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
-			int scriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
-					scriptMaster.getScriptNumber(),customerId);
+			int oldscriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
+					scriptMaster.getScriptNumber());
 			
+			String newCustomScriptNumber="";
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
 					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
-				String newCustomScriptNumber="";
 				
 				if (scriptMaster.getDependency() != null) {
 					int insertedScriptaId = 0;
 					dependentScript(scriptMaster.getScriptId(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld,
 							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId);
 				} else {
-					if(scriptMasterCustomerId==1) {
-						newCustomScriptNumber=scriptMaster.getScriptNumber()+"C.";
-						String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber,scriptMaster.getProductVersion());
-						if("".equals(maxScriptNumber)) {
-							newCustomScriptNumber=newCustomScriptNumber+"1";
-						}
-						else {
-							newCustomScriptNumber=newCustomScriptNumber+(Integer.parseInt(maxScriptNumber.substring(newCustomScriptNumber.length()))+1);								
-						}
-						scriptMaster.setScriptNumber(newCustomScriptNumber);
+					int originalId = scriptMaster.getScriptId();
+					scriptMaster.setScriptId(null);
+					int id = dao.insertScriptMaster(scriptMaster);
+					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
+						Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
+						scriptMetaData.setScriptMaster(scriptMaster);
+						int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
+						mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
 					}
+					mapOfNewToOld.put(id, originalId);
+					mapOfOldToNew.put(originalId, id);
+				}
+			} else {
+				if(oldscriptMasterCustomerId!=customerId) {
+					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
+						scriptMaster.getScriptNumber()+".C.";
+					String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
+							,scriptMaster.getProductVersion());
+					if("".equals(maxScriptNumber)) {
+						newCustomScriptNumber=newCustomScriptNumber+"1";
+					}
+					else {
+						newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
+								+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);				
+					}
+					scriptMaster.setScriptNumber(newCustomScriptNumber);
+					scriptMaster.setStandardCustom("Custom");
 					int originalId = scriptMaster.getScriptId();
 					scriptMaster.setScriptId(null);
 					int id = dao.insertScriptMaster(scriptMaster);
@@ -496,12 +529,13 @@ public class TestRunMigrationGetService {
 					mapOfNewToOld.put(id, originalId);
 					mapOfOldToNew.put(originalId, id);
 				}
-			} else {
-				int originalId = scriptMaster.getScriptId();
-				int id = scriptMasterPrsent;
-				if (id > 0) {
-					mapOfNewToOld.put(id, originalId);
-					mapOfOldToNew.put(originalId, id);
+				else {
+					int originalId = scriptMaster.getScriptId();
+					int id = scriptMasterPrsent;
+					if (id > 0) {
+						mapOfNewToOld.put(id, originalId);
+						mapOfOldToNew.put(originalId, id);
+					}					
 				}
 
 			}

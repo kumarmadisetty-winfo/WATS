@@ -76,26 +76,25 @@ public class TestRunMigrationGetDao {
 		}
 		return data;
 	}
-	public int checkScriptPresentWithAnotherCustomer(String productVersion, String scriptNumber, int customerId) {
+	public int checkScriptPresentWithAnotherCustomer(String productVersion, String scriptNumber) {
 		Session session = entityManager.unwrap(Session.class);
 
-		BigDecimal checkifPresent = (BigDecimal) session
-				.createNativeQuery("select count(*) from WIN_TA_SCRIPT_MASTER where script_number='" + scriptNumber
-						+ "' and product_version='" + productVersion + "'"
-						+ "' and customer_id=" + customerId + "")
+		BigDecimal oldCustomerId = (BigDecimal) session
+				.createNativeQuery("select customer_id from WIN_TA_SCRIPT_MASTER where script_number='" + scriptNumber
+						+ "' and product_version='" + productVersion + "'")
 				.getSingleResult();
-		int data = Integer.parseInt(checkifPresent.toString());
-		return data;
+//		 oldCustomer_id = Integer.parseInt(oldCustomer_id.toString());
+		return Integer.parseInt(oldCustomerId.toString());
 	}
 	public String getMaxScriptNumber(String newCustomScriptNumber,String productVersion) {
 		Session session = entityManager.unwrap(Session.class);
 		
-		String checkifPresent = (String) session
+		String maxSciptNumber = (String) session
 				.createNativeQuery("select max(script_number) from WIN_TA_SCRIPT_MASTER where script_number like '" + newCustomScriptNumber
 						+ "%' and product_version='" + productVersion + "'")
 				.getSingleResult();
-		String data = checkifPresent;
-		return data;
+//		String data = checkifPresent;
+		return maxSciptNumber;
 	}
 
 }
