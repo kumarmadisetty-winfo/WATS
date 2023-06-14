@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
@@ -187,7 +188,7 @@ public class TestRunMigrationGetService {
 				master.setSubProcessArea(masterdata.getSubProcessArea());
 				master.setStandardCustom(masterdata.getStandardCustom());
 				master.setTestScriptStatus(masterdata.getTestScriptStatus());
-				master.setCustomerId(masterdata.getCustomerId());//------------------------------------------------------------
+				master.setCustomerId(masterdata.getCustomerId());
 				master.setDependency(masterdata.getDependency());
 				master.setEnd2endScenario(masterdata.getEnd2endScenario());
 				master.setExpectedResult(masterdata.getExpectedResult());
@@ -233,17 +234,23 @@ public class TestRunMigrationGetService {
 				}
 				listOfScriptMaster.add(master);
 			}
-			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew, customerId);
+			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew, customerId,testRunMigrateDto);
 
-			List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config")
+			List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config where customer_id="+customerId)
 					.getResultList();
-
-			int configurationId = Integer.parseInt(listOfConfig.get(0).toString());
+			int configurationId=Integer.parseInt(listOfConfig.get(0).toString());;
+//			try {
+//				configurationId = Integer.parseInt(listOfConfig.get(0).toString());				
+//			}catch(Exception e) {
+//				listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config")
+//						.getResultList();
+//				configurationId = Integer.parseInt(listOfConfig.get(0).toString());
+//			}
 
 //==========================================
 			BigDecimal checkProject = (BigDecimal) session
 					.createNativeQuery("select count(*) from win_ta_projects where project_name ='"
-							+ testRunMigrateDto.getProjectName() + "'")
+							+ testRunMigrateDto.getProjectName() + "' and customer_id="+customerId)
 					.getSingleResult();
 
 			int checkProjectId = Integer.parseInt(checkProject.toString());
@@ -256,6 +263,33 @@ public class TestRunMigrationGetService {
 				BigDecimal nextValueProject = (BigDecimal) session
 						.createNativeQuery("SELECT WIN_TA_PROJECT_SEQ.nextval FROM DUAL").getSingleResult();
 				Integer newNextValueProject = Integer.parseInt(nextValueProject.toString());
+				
+				BigDecimal checkProjectInInstance = (BigDecimal) session
+						.createNativeQuery("select count(*) from win_ta_projects where project_name ='"
+								+ testRunMigrateDto.getProjectName() + "'")
+						.getSingleResult();
+				int checkProjectIdInInstance = Integer.parseInt(checkProjectInInstance.toString());
+				
+				if (checkProjectIdInInstance > 0) {					
+					String maxProjectName = (String) session
+							.createNativeQuery("select max(PROJECT_NAME) from win_ta_projects where project_name like '"
+									+ testRunMigrateDto.getProjectName() + "%'")
+							.getSingleResult();
+					maxProjectName=maxProjectName.trim();
+					String newProjectName=maxProjectName+"-1";
+//					if(maxProjectName.lastIndexOf("-")==-1) {
+//						newProjectName=maxProjectName+"-1";
+//					}
+//					else {
+//						try {
+//							newProjectName=(maxProjectName.substring(0,maxProjectName.lastIndexOf("-")+1)
+//									+(Integer.parseInt(maxProjectName.substring(maxProjectName.indexOf("-")+1))+1));
+//						}catch(NumberFormatException e) {
+//							newProjectName=maxProjectName+"-1";
+//						}
+//					}
+					testRunMigrateDto.setProjectName(newProjectName);
+				}
 
 				session.createNativeQuery(
 						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,START_DATE,CUSTOMER_ID,PRODUCT_VERSION, WATS_PACKAGE) VALUES("
@@ -287,11 +321,16 @@ public class TestRunMigrationGetService {
 				testrundata.setTestRunName(testRunMigrateDto.getTestSetName());
 			}
 			testrundata.setConfigurationId(configurationId);
-
-			BigDecimal project = (BigDecimal) session
-					.createNativeQuery("select project_id from win_ta_projects where project_name ='"
-							+ testRunMigrateDto.getProjectName() + "'")
+			
+			String query = "select project_id from win_ta_projects where project_name ='"+testRunMigrateDto.getProjectName()+"' and customer_id="+customerId;
+			BigDecimal project = null;
+			try {
+			project = (BigDecimal) session
+					.createNativeQuery(query)
 					.getSingleResult();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 			int projectId = Integer.parseInt(project.toString());
 
 			testrundata.setProjectId(projectId);
@@ -391,7 +430,7 @@ public class TestRunMigrationGetService {
 
 	public int dependentScript(Integer id, List<ScriptMaster> listOfScriptMaster, int insertedScriptaId,
 			Map<Integer, Integer> mapOfNewToOld, Map<Integer, Integer> mapOfOldToNew,
-			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew,int customerId) {
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew,int customerId, TestRunMigrationDto testRunMigrateDto) {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
@@ -416,7 +455,7 @@ public class TestRunMigrationGetService {
 						return insertedScriptaId;
 					} else {
 						insertedScriptaId = dependentScript(scriptMaster.getDependency(), listOfScriptMaster,
-								insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId);
+								insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto);
 						scriptMaster.setDependency(insertedScriptaId);
 						int originalId = scriptMaster.getScriptId();
 						insertedScriptaId = dao.insertScriptMaster(scriptMaster);
@@ -444,6 +483,21 @@ public class TestRunMigrationGetService {
 						newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
 								+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);				
 					}
+					String setNewCustomScriptNumber=newCustomScriptNumber;
+					List<TestSetLineDto> updatedLineData =
+							testRunMigrateDto.getTestSetLinesAndParaData().stream()
+							.map((testSetLine) -> {
+								if(scriptMaster.getScriptNumber().equals(testSetLine.getScriptnumber())) {
+									testSetLine.setScriptnumber(setNewCustomScriptNumber);
+									List<WatsTestSetParamVO> updatedParamData =testSetLine.getScriptParam().stream().map((testSetLineParam) -> {
+										testSetLineParam.setScriptNumber(setNewCustomScriptNumber);
+										return testSetLineParam;
+									}).collect(Collectors.toList());
+									testSetLine.setScriptParam(updatedParamData);
+								}
+								return testSetLine;
+							}).collect(Collectors.toList());
+							testRunMigrateDto.setTestSetLinesAndParaData(updatedLineData);	
 					scriptMaster.setScriptNumber(newCustomScriptNumber);
 					scriptMaster.setStandardCustom("Custom");
 					int originalId = scriptMaster.getScriptId();
@@ -470,11 +524,10 @@ public class TestRunMigrationGetService {
 	}
 
 	public Map<Integer, Integer> independentScript(List<ScriptMaster> listOfScriptMaster,
-			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew, int customerId) {
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew, int customerId, TestRunMigrationDto testRunMigrateDto) {
 		Map<Integer, Integer> mapOfNewToOld = new HashMap<>();
 		Map<Integer, Integer> mapOfOldToNew = new HashMap<>();
-		for (ScriptMaster scriptMaster : listOfScriptMaster) {
-
+		for (ScriptMaster scriptMaster : listOfScriptMaster) {			
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
 			int oldscriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
@@ -487,7 +540,7 @@ public class TestRunMigrationGetService {
 				if (scriptMaster.getDependency() != null) {
 					int insertedScriptaId = 0;
 					dependentScript(scriptMaster.getScriptId(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld,
-							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId);
+							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto);
 				} else {
 					int originalId = scriptMaster.getScriptId();
 					scriptMaster.setScriptId(null);
@@ -514,6 +567,21 @@ public class TestRunMigrationGetService {
 						newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
 								+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);				
 					}
+					String setNewCustomScriptNumber=newCustomScriptNumber;
+					List<TestSetLineDto> updatedLineData =
+					testRunMigrateDto.getTestSetLinesAndParaData().stream()
+					.map((testSetLine) -> {
+						if(scriptMaster.getScriptNumber().equals(testSetLine.getScriptnumber())) {
+							testSetLine.setScriptnumber(setNewCustomScriptNumber);
+							List<WatsTestSetParamVO> updatedParamData =testSetLine.getScriptParam().stream().map((testSetLineParam) -> {
+								testSetLineParam.setScriptNumber(setNewCustomScriptNumber);
+								return testSetLineParam;
+							}).collect(Collectors.toList());
+							testSetLine.setScriptParam(updatedParamData);
+						}
+						return testSetLine;
+					}).collect(Collectors.toList());
+					testRunMigrateDto.setTestSetLinesAndParaData(updatedLineData);	
 					scriptMaster.setScriptNumber(newCustomScriptNumber);
 					scriptMaster.setStandardCustom("Custom");
 					int originalId = scriptMaster.getScriptId();
