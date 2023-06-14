@@ -19087,9 +19087,9 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					Thread.sleep(10000);
 					WebDriverWait waitForLineNumberInput = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					waitForLineNumber.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-							"(//span[text()='"+contractLineNumber+"'])[1]")));
+							"//div[contains(@data-afr-popupid,'dropdownPopup')]//span[text()='"+contractLineNumber+"']")));
 					WebElement waittillforLineNumberInput = driver.findElement(By.xpath(
-							"(//span[text()='"+contractLineNumber+"'])[1]"));
+							"//div[contains(@data-afr-popupid,'dropdownPopup')]//span[text()='"+contractLineNumber+"']"));
 					Actions actionForLineNumberInput = new Actions(driver);
 					actionForLineNumberInput.moveToElement(waittillforLineNumberInput).build().perform();
 					actionForLineNumberInput.click();
