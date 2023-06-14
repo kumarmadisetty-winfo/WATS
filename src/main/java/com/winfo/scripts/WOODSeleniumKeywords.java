@@ -19068,21 +19068,32 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					JavascriptExecutor jse1 = (JavascriptExecutor) driver;
 					jse.executeScript("arguments[0].value=\"" + contractNumber + "\";", waittillforNumber);
 
-					// Enter Contract Line Number
+					// Click Contract Line Number Dropdown Button
 					Thread.sleep(10000);
 					WebDriverWait waitForLineNumber = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					waitForLineNumber.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::input[not (@type='hidden')])[1]")));
+							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::a[not (@type='hidden')])[1]")));
 					WebElement waittillforLineNumber = driver.findElement(By.xpath(
-							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::input[not (@type='hidden')])[1]"));
+							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::a[not (@type='hidden')])[1]"));
 					Actions actionForLineNumber = new Actions(driver);
 					actionForLineNumber.moveToElement(waittillforLineNumber).build().perform();
-					waittillforLineNumber.clear();
-					JavascriptExecutor jse2 = (JavascriptExecutor) driver;
-					jse.executeScript("arguments[0].value=\"" + contractLineNumber + "\";", waittillforLineNumber);
-					waittillforLineNumber.sendKeys(Keys.TAB);
+					waittillforLineNumber.click();
+//					JavascriptExecutor jse2 = (JavascriptExecutor) driver;
+//					jse.executeScript("arguments[0].value=\"" + contractLineNumber + "\";", waittillforLineNumber);
+//					waittillforLineNumber.sendKeys(Keys.TAB);
+					
+					
+					// Click Contract Line Number Dropdown Button
+					Thread.sleep(10000);
+					WebDriverWait waitForLineNumberInput = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					waitForLineNumber.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+							"(//span[text()='"+contractLineNumber+"'])[1]")));
+					WebElement waittillforLineNumberInput = driver.findElement(By.xpath(
+							"(//span[text()='"+contractLineNumber+"'])[1]"));
+					Actions actionForLineNumberInput = new Actions(driver);
+					actionForLineNumberInput.moveToElement(waittillforLineNumberInput).build().perform();
+					actionForLineNumberInput.click();
 
-//					
 
 					// Click Search Button
 					Thread.sleep(10000);
@@ -19138,10 +19149,10 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					waittillforSaveAndClose.click();
 
 					// Print the Contract Number and ITD Invoiced Amount for each row
-					System.out.println("Contract Number: " + contractNumber);
-					System.out.println("Contract Line Number: " + contractLineNumber);
-					System.out.println("ITD Invoiced Amount: " + invoicedAmount);
-					System.out.println("-----------------------");
+					logger.info("Contract Number: " + contractNumber);
+					logger.info("Contract Line Number: " + contractLineNumber);
+					logger.info("ITD Invoiced Amount: " + invoicedAmount);
+					logger.info("-----------------------");
 				}
 
 			}
