@@ -478,7 +478,7 @@ public class CopyTestRunService {
 			logger.info("New test run " + newtestrun);
 			return newtestrun;
 		} catch (NullPointerException ne) {
-			logger.error("GetTestrun object should not be null");
+			logger.error("GetTestrun object should not be null" + ne.getMessage());
 			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "GetTestrun object should not be null");
 		} catch (Exception e) {
 			logger.error("Internal Server Error" + e.getMessage());
