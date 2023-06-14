@@ -19072,14 +19072,14 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					Thread.sleep(10000);
 					WebDriverWait waitForLineNumber = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					waitForLineNumber.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::input[not (@type='hidden')])[1]")));
+							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::a[not (@type='hidden')])[1]")));
 					WebElement waittillforLineNumber = driver.findElement(By.xpath(
-							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::input[not (@type='hidden')])[1]"));
+							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::a[not (@type='hidden')])[1]"));
 					Actions actionForLineNumber = new Actions(driver);
 					actionForLineNumber.moveToElement(waittillforLineNumber).build().perform();
-//					waittillforLineNumber.click();
-					JavascriptExecutor jse2 = (JavascriptExecutor) driver;
-					jse.executeScript("arguments[0].value=\"" + contractLineNumber + "\";", waittillforLineNumber);
+					waittillforLineNumber.click();
+//					JavascriptExecutor jse2 = (JavascriptExecutor) driver;
+//					jse.executeScript("arguments[0].value=\"" + contractLineNumber + "\";", waittillforLineNumber);
 //					waittillforLineNumber.sendKeys(Keys.TAB);
 					
 					
@@ -19087,12 +19087,15 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					Thread.sleep(10000);
 					WebDriverWait waitForLineNumberInput = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					waitForLineNumber.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::a[not (@type='hidden')])[1]")));
+							"//*[contains(@data-afr-popupid,'dropdownPopup')]//span[text()='"+contractLineNumber+"']")));
 					WebElement waittillforLineNumberInput = driver.findElement(By.xpath(
-							"(//*[text()='Search']/following::*[text()='Contract Line Number']/following::a[not (@type='hidden')])[1]"));
+							"//*[contains(@data-afr-popupid,'dropdownPopup')]//span[text()='"+contractLineNumber+"']"));
 					Actions actionForLineNumberInput = new Actions(driver);
 					actionForLineNumberInput.moveToElement(waittillforLineNumberInput).build().perform();
-					actionForLineNumberInput.click();
+//					actionForLineNumberInput.click();
+					JavascriptExecutor jse2 = (JavascriptExecutor) driver;
+					jse.executeScript("arguments[0].click();", waittillforLineNumberInput);
+//					waittillforLineNumber.sendKeys(Keys.TAB);
 
 
 					// Click Search Button
