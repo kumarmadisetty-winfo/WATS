@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class FetchConfigVO {
 	
+	
+
 	private String OIC_APPLICATION_URL;
 	
 	private String SF_APPLICATION_URL;
@@ -21,7 +23,7 @@ public class FetchConfigVO {
 	
 	private String BROWSER;
 	
-	private Duration WAIT_TIME;
+	private Integer WAIT_TIME;
 
 	private String APPLICATION_URL;
 	
@@ -177,4 +179,11 @@ public class FetchConfigVO {
     
     private String JIRA_ISSUE_UPDATE_TRANSITIONS;
    
+    public Duration getWait_time() {
+	    return Duration.ofSeconds(WAIT_TIME);
+	}
+	public void setWait_time(Duration wait_time) {
+	    this.WAIT_TIME = (int) wait_time.getSeconds();
+	}
+
 }
