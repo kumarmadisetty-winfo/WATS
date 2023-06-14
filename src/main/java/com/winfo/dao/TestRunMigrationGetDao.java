@@ -76,14 +76,13 @@ public class TestRunMigrationGetDao {
 		}
 		return data;
 	}
-	public int checkScriptPresentWithAnotherCustomer(String productVersion, String scriptNumber) {
+	public int getOldScriptCustomerId(String productVersion, String scriptNumber) {
 		Session session = entityManager.unwrap(Session.class);
 
 		BigDecimal oldCustomerId = (BigDecimal) session
 				.createNativeQuery("select customer_id from WIN_TA_SCRIPT_MASTER where script_number='" + scriptNumber
 						+ "' and product_version='" + productVersion + "'")
 				.getSingleResult();
-//		 oldCustomer_id = Integer.parseInt(oldCustomer_id.toString());
 		return Integer.parseInt(oldCustomerId.toString());
 	}
 	public String getMaxScriptNumber(String newCustomScriptNumber,String productVersion) {
@@ -93,7 +92,6 @@ public class TestRunMigrationGetDao {
 				.createNativeQuery("select max(script_number) from WIN_TA_SCRIPT_MASTER where script_number like '" + newCustomScriptNumber
 						+ "%' and product_version='" + productVersion + "'")
 				.getSingleResult();
-//		String data = checkifPresent;
 		return maxSciptNumber;
 	}
 

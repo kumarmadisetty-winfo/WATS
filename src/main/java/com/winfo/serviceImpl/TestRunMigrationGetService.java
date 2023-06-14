@@ -64,9 +64,7 @@ public class TestRunMigrationGetService {
 		int count=0;
 		DomGenericResponseBean domGenericResponseBean = null;
 		String testrunName=null;
-		String description=null;
-//		int customerId=dataBaseEntryDao.getCustomerId(customerName);
-		
+		String description=null;		
 		for (TestRunMigrationDto testRunMigrateDto : listOfTestRunDto) {
 			Session session = entityManager.unwrap(Session.class);
 
@@ -246,8 +244,7 @@ public class TestRunMigrationGetService {
 //						.getResultList();
 //				configurationId = Integer.parseInt(listOfConfig.get(0).toString());
 //			}
-
-//==========================================
+			
 			BigDecimal checkProject = (BigDecimal) session
 					.createNativeQuery("select count(*) from win_ta_projects where project_name ='"
 							+ testRunMigrateDto.getProjectName() + "' and customer_id="+customerId)
@@ -434,7 +431,8 @@ public class TestRunMigrationGetService {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
-			int oldscriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
+			//Get customer id of existing script
+			int oldScriptCustomerId = dao.getOldScriptCustomerId(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
 			
 			String newCustomScriptNumber="";
@@ -471,7 +469,8 @@ public class TestRunMigrationGetService {
 
 				}
 			} else if (scriptMasterPrsent > 0) {
-				if(oldscriptMasterCustomerId!=customerId) {
+				//check existing script is mapped with target customer or not 
+				if(oldScriptCustomerId!=customerId) {
 					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
 						scriptMaster.getScriptNumber()+".C.";
 					String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
@@ -484,6 +483,7 @@ public class TestRunMigrationGetService {
 								+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);				
 					}
 					String setNewCustomScriptNumber=newCustomScriptNumber;
+					//updating new script number in test_set_line and test_set_script_param
 					List<TestSetLineDto> updatedLineData =
 							testRunMigrateDto.getTestSetLinesAndParaData().stream()
 							.map((testSetLine) -> {
@@ -530,7 +530,8 @@ public class TestRunMigrationGetService {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {			
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
-			int oldscriptMasterCustomerId = dao.checkScriptPresentWithAnotherCustomer(scriptMaster.getProductVersion(),
+			//Get customer id of existing script
+			int oldScriptCustomerId = dao.getOldScriptCustomerId(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
 			
 			String newCustomScriptNumber="";
@@ -555,7 +556,8 @@ public class TestRunMigrationGetService {
 					mapOfOldToNew.put(originalId, id);
 				}
 			} else {
-				if(oldscriptMasterCustomerId!=customerId) {
+				//check existing script is mapped with target customer or not 
+				if(oldScriptCustomerId!=customerId) {
 					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
 						scriptMaster.getScriptNumber()+".C.";
 					String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
@@ -568,6 +570,7 @@ public class TestRunMigrationGetService {
 								+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);				
 					}
 					String setNewCustomScriptNumber=newCustomScriptNumber;
+					//updating new script number in test_set_line and test_set_script_param
 					List<TestSetLineDto> updatedLineData =
 					testRunMigrateDto.getTestSetLinesAndParaData().stream()
 					.map((testSetLine) -> {
