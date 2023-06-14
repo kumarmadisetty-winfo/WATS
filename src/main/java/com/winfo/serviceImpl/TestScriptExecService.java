@@ -28,7 +28,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -45,6 +44,7 @@ import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
+import com.winfo.constants.TestScriptExecServiceEnum;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSException;
@@ -74,35 +74,6 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 	public static final Logger logger = Logger.getLogger(TestScriptExecService.class);;
 
-	public static final String BACK_SLASH = "\\\\";
-	public static final String topic = "test-script-run";
-	private static final String PY_EXTN = ".py";
-	private static final String PNG_EXTENSION = ".png";
-	private static final String JPG_EXTENSION = ".jpg";
-	public static final String FORWARD_SLASH = "/";
-	private static final String[] CONST = { "Status", "Total", "Percentage" };
-	private static final String PASSED = "Passed";
-	private static final String FAILED = "Failed";
-	private static final String ARIAL = "Arial";
-	private static final String PASS = "Pass";
-	private static final String FAIL = "Fail";
-	private static final String IN_COMPLETE = "In Complete";
-	private static final String PDF_EXTENSION = ".pdf";
-	private static final String EXECUTION_REPORT = "Execution Report";
-	private static final String TEST_RUN_NAME = "Test Run Name";
-	private static final String EXECUTED_BY = "Executed By";
-	private static final String START_TIME = "Start Time";
-	private static final String END_TIME = "End Time";
-	private static final String EXECUTION_TIME = "Execution Time";
-	private static final String EXECUTION_SUMMARY = "Execution Summary";
-	private static final String SCRIPT_NUMBER = "Script Number";
-	private static final String STEP_DESC = "Step Description : ";
-	private static final String TEST_PARAM = "Test Parameter : ";
-	private static final String TEST_VALUE = "Test Value : ";
-	private static final String SCENARIO_NAME = "Test Case Name";
-	private static final String STEP_NO = "Step No : ";
-	private static final String SCREENSHOT = "Screenshot";
-
 	@Value("${configvO.watslogo}")
 	private String watslogo;
 
@@ -119,12 +90,6 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	@Value("${oci.namespace}")
 	private String ociNamespace;
 
-	@Autowired
-	ErrorMessagesHandler errorMessagesHandler;
-	@Value("${configvO.watsvediologo}")
-	private String watsvediologo;
-	@Value("${configvO.whiteimage}")
-	private String whiteimage;
 
 	@Value("${url.update.script.step.status}")
 	private String scriptParamStatusUpdateUrl;
@@ -148,8 +113,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	@Autowired
 	DriverConfiguration deriverConfiguration;
 
-	@Autowired
-	TestCaseDataService dataService;
+
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 	@Autowired
@@ -164,9 +128,6 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 	@Autowired
 	PyJabActionRepo actionRepo;
-
-	@Autowired
-	Environment environment;
 	
 	@Autowired
 	SmartBearService smartBearService;
@@ -203,8 +164,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				System.out.println(
 						"Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTestSetLineId());
 
-				String screenShotFolderPath = SCREENSHOT + BACK_SLASH + customerDetails.getCustomerName() + BACK_SLASH
-						+ customerDetails.getTestSetName() + BACK_SLASH;
+				String screenShotFolderPath = TestScriptExecServiceEnum.SCREENSHOT.getValue() + TestScriptExecServiceEnum.BACK_SLASH.getValue() + customerDetails.getCustomerName() + TestScriptExecServiceEnum.BACK_SLASH.getValue()
+						+ customerDetails.getTestSetName() + TestScriptExecServiceEnum.BACK_SLASH.getValue();
 
 				for (ScriptDetailsDto fetchMetadataVO : fetchMetadataListVO) {
 
@@ -245,10 +206,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				ctx.setVariable("dto", dto);
 				final String scriptContent = this.templateEngine.process(templateName, ctx);
 
-				String scriptPathForPyJabScript = customerDetails.getCustomerName() + FORWARD_SLASH
-						+ customerDetails.getTestSetName() + FORWARD_SLASH
-						+ fetchMetadataListVO.get(0).getTestSetLineId() + FORWARD_SLASH
-						+ fetchMetadataListVO.get(0).getTestSetLineId() + PY_EXTN;
+				String scriptPathForPyJabScript = customerDetails.getCustomerName() + TestScriptExecServiceEnum.FORWARD_SLASH.getValue()
+						+ customerDetails.getTestSetName() + TestScriptExecServiceEnum.FORWARD_SLASH.getValue()
+						+ fetchMetadataListVO.get(0).getTestSetLineId() + TestScriptExecServiceEnum.FORWARD_SLASH.getValue()
+						+ fetchMetadataListVO.get(0).getTestSetLineId() + TestScriptExecServiceEnum.PY_EXTN.getValue();
 				uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC, null);
 
@@ -552,7 +513,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					+ customerDetails.getTestSetName() +"/Detailed_Report.pdf";
 			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
 					+ customerDetails.getTestSetName() + "/" + testLinesDetails.get(0).getSeqNum() + "_"
-					+ testLinesDetails.get(0).getScriptNumber() + PDF_EXTENSION;
+					+ testLinesDetails.get(0).getScriptNumber() + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
@@ -575,18 +536,18 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			int failedScriptRunCount = 0;
 			if (scriptStatus != null && scriptStatus.equalsIgnoreCase(UPDATE_STATUS.PASS.getLabel())) {
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber()
-						+ PDF_EXTENSION;
+						+ TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
 				fetchConfigVO.setStatus1("Pass");
 				limitScriptExecutionService.updateFaileScriptscount(args.getTestSetLineId(), args.getTestSetId());
 				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 			} 
 			else {
 				fetchConfigVO.setErrormessage("Execution Failed");
-				fetchConfigVO.setStatus1(FAIL);
+				fetchConfigVO.setStatus1(TestScriptExecServiceEnum.FAIL.getValue());
 				failedScriptRunCount = limitScriptExecutionService.getFailScriptRunCount(args.getTestSetLineId(),
 						args.getTestSetId());
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
-						+ failedScriptRunCount + PDF_EXTENSION;
+						+ failedScriptRunCount + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
 				 scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
 							+ customerDetails.getTestSetName() + "/" + pdfName;
 				post.setP_test_set_line_path(scripturl);
@@ -599,12 +560,12 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if (updateStatus) {
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
 						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false);
-				if (fetchConfigVO.getStatus1().equals(FAIL)) {
+				if (fetchConfigVO.getStatus1().equals(TestScriptExecServiceEnum.FAIL.getValue())) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
 							args.getTestSetId());
 					pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber()
-							+ "_RUN" + failedScriptRunCount + PDF_EXTENSION;
+							+ "_RUN" + failedScriptRunCount + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
 				}
 			}
 			createPdf(testLinesDetails, fetchConfigVO, pdfName, customerDetails);
@@ -682,14 +643,14 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				String seqNum = entry.getKey();
 				String value = entry.getValue();
 				String screenShotName = null;
-				if (files.contains(value + "_" + PASSED + PNG_EXTENSION)) {
-					screenShotName = value + "_" + PASSED + PNG_EXTENSION;
-				} else if (files.contains(value + "_" + PASSED + JPG_EXTENSION)) {
-					screenShotName = value + "_" + PASSED + JPG_EXTENSION;
-				} else if (files.contains(value + "_" + FAILED + PNG_EXTENSION)) {
-					screenShotName = value + "_" + FAILED + PNG_EXTENSION;
-				} else if (files.contains(value + "_" + FAILED + JPG_EXTENSION)) {
-					screenShotName = value + "_" + FAILED + JPG_EXTENSION;
+				if (files.contains(value + "_" + TestScriptExecServiceEnum.PASSED.getValue() + TestScriptExecServiceEnum.PNG_EXTENSION.getValue())) {
+					screenShotName = value + "_" + TestScriptExecServiceEnum.PASSED.getValue() + TestScriptExecServiceEnum.PNG_EXTENSION.getValue();
+				} else if (files.contains(value + "_" + TestScriptExecServiceEnum.PASSED.getValue() + TestScriptExecServiceEnum.JPG_EXTENSION.getValue())) {
+					screenShotName = value + "_" + TestScriptExecServiceEnum.PASSED.getValue() + TestScriptExecServiceEnum.JPG_EXTENSION.getValue();
+				} else if (files.contains(value + "_" + TestScriptExecServiceEnum.FAILED.getValue() + TestScriptExecServiceEnum.PNG_EXTENSION.getValue())) {
+					screenShotName = value + "_" + TestScriptExecServiceEnum.FAILED.getValue() + TestScriptExecServiceEnum.PNG_EXTENSION.getValue();
+				} else if (files.contains(value + "_" + TestScriptExecServiceEnum.FAILED.getValue() + TestScriptExecServiceEnum.JPG_EXTENSION.getValue())) {
+					screenShotName = value + "_" + TestScriptExecServiceEnum.FAILED.getValue() + TestScriptExecServiceEnum.JPG_EXTENSION.getValue();
 				}
 				if (screenShotName == null) {
 					downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
@@ -864,8 +825,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		System.out
 				.println("Create script methods for  ---------   " + fetchMetadataListVO.get(0).getTestSetLineId());
 
-		String screenShotFolderPath = SCREENSHOT + BACK_SLASH + customerDetails.getCustomerName()
-				+ BACK_SLASH + customerDetails.getTestSetName() + BACK_SLASH;
+		String screenShotFolderPath = TestScriptExecServiceEnum.SCREENSHOT.getValue() + TestScriptExecServiceEnum.BACK_SLASH.getValue() + customerDetails.getCustomerName()
+				+ TestScriptExecServiceEnum.BACK_SLASH.getValue() + customerDetails.getTestSetName() + TestScriptExecServiceEnum.BACK_SLASH.getValue();
 		logger.info(" ScreenShot Folder Path " + screenShotFolderPath);
 		for (ScriptDetailsDto fetchMetadataVO : fetchMetadataListVO) {
 
@@ -893,10 +854,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		ctx.setVariable("dto", dto);
 		final String scriptContent = this.templateEngine.process("excel-automation-template.txt", ctx);
 		System.out.println(scriptContent);
-		String scriptPathForPyJabScript = customerDetails.getCustomerName() + FORWARD_SLASH
-				+ customerDetails.getTestSetName() + FORWARD_SLASH
-				+ fetchMetadataListVO.get(0).getTestSetLineId() + FORWARD_SLASH
-				+ fetchMetadataListVO.get(0).getTestSetLineId() + PY_EXTN;
+		String scriptPathForPyJabScript = customerDetails.getCustomerName() + TestScriptExecServiceEnum.FORWARD_SLASH.getValue()
+				+ customerDetails.getTestSetName() + TestScriptExecServiceEnum.FORWARD_SLASH.getValue()
+				+ fetchMetadataListVO.get(0).getTestSetLineId() + TestScriptExecServiceEnum.FORWARD_SLASH.getValue()
+				+ fetchMetadataListVO.get(0).getTestSetLineId() + TestScriptExecServiceEnum.PY_EXTN.getValue();
 		uploadObjectToObjectStoreWithInputContent(scriptContent, scriptPathForPyJabScript);
 		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SGC, null);
 
