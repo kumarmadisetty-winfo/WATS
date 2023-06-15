@@ -110,7 +110,7 @@ import com.oracle.bmc.objectstorage.responses.DeleteObjectResponse;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
@@ -366,10 +366,10 @@ public abstract class AbstractSeleniumKeywords {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage..", e);
 		}
 	}
 
@@ -380,7 +380,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
+			throw new WatsEBSException(500, "Exception occured while connecting to oci/config path", e);
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -426,15 +426,15 @@ public abstract class AbstractSeleniumKeywords {
 						}
 					} catch (IOException e1) {
 						e1.printStackTrace();
-						throw new WatsEBSCustomException(500,
+						throw new WatsEBSException(500,
 								"Exception occured while read or write screenshot from Object Storage", e1);
 					}
 				}
 			}
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
+			throw new WatsEBSException(500,
 					"Exception occured while downloading screenshots from object path location.", e);
 		}
 
@@ -1590,7 +1590,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Not able to read object store config");
+			throw new WatsEBSException(500, "Not able to read object store config");
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -1667,10 +1667,10 @@ public abstract class AbstractSeleniumKeywords {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
 	}
 
@@ -1713,7 +1713,7 @@ public abstract class AbstractSeleniumKeywords {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
 					logger.error(se);
-					throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 							"Not able to create the directory");
 				}
 			} else {
@@ -1731,7 +1731,7 @@ public abstract class AbstractSeleniumKeywords {
 			Files.delete(Paths.get(source.getPath()));
 		} catch (IOException ex) {
 			logger.error(ex);
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Failed to create the custom screenshot");
 		}
 	}
@@ -1773,10 +1773,10 @@ public abstract class AbstractSeleniumKeywords {
 				}
 
 			}
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
 
 	}
@@ -2164,7 +2164,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
+			throw new WatsEBSException(500, "Exception occured while connecting to oci/config path", e);
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -2182,10 +2182,10 @@ public abstract class AbstractSeleniumKeywords {
 				return objNames;
 			} catch (Exception e1) {
 
-				throw new WatsEBSCustomException(500, "Not able to connect with object store");
+				throw new WatsEBSException(500, "Not able to connect with object store");
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while getting files from object path location.",
+			throw new WatsEBSException(500, "Exception occured while getting files from object path location.",
 					e);
 		}
 
@@ -2220,10 +2220,10 @@ public abstract class AbstractSeleniumKeywords {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while creating folder in Object Storage..", e);
+			throw new WatsEBSException(500, "Exception occured while creating folder in Object Storage..", e);
 		}
 	}
 

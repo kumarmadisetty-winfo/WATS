@@ -35,7 +35,7 @@ import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.ErrorMessagesHandler;
@@ -176,9 +176,9 @@ public class RunAutomation {
 			executeTestrunVo.setStatusDescr("SUCCESS");
 		} catch (Exception e) {
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
-			if (e instanceof WatsEBSCustomException)
+			if (e instanceof WatsEBSException)
 				throw e;
-			throw new WatsEBSCustomException(500, "Exception Occured while creating script for Test Run", e);
+			throw new WatsEBSException(500, "Exception Occured while creating script for Test Run", e);
 		}
 		return executeTestrunVo;
 	}
@@ -575,7 +575,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
 										customerDetails);
 								logger.error("Failed during " + instanceName + " login because input value is null");
-								throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), 
 										"Failed during " + instanceName + " login because input value is null");
 							}
 						case "Login into SFApplication":
@@ -1462,7 +1462,7 @@ public class RunAutomation {
 							} catch (Exception e) {
 								seleniumFactory.getInstanceObj(instanceName).createScreenShot(
 										fetchMetadataVO, fetchConfigVO, "Unmatched", customerDetails,false);
-								throw new WatsEBSCustomException(500,"Failed at campare Value");
+								throw new WatsEBSException(500,"Failed at campare Value");
 							}
 							
 						case "apiAccessToken":
