@@ -25,6 +25,7 @@ import com.winfo.controller.MigrationReceiver;
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.dao.TestRunMigrationGetDao;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
 import com.winfo.model.ScriptMaster;
@@ -239,7 +240,7 @@ public class TestRunMigrationGetService {
 				}
 				listOfScriptMaster.add(master);
 			}
-			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew, customerId,testRunMigrateDto);
+			mapOfScriptIdsOldToNew = getOldToNewScriptIds(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew, customerId,testRunMigrateDto);
 			int configurationId;
 			try {
 				List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config where customer_id="+customerId)
@@ -431,11 +432,6 @@ public class TestRunMigrationGetService {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
-			//Get customer id of existing script
-			ScriptMaster oldScriptCustomerId = scriptMasterRepository.findByScriptNumberAndProductVersion(scriptMaster.getScriptNumber(),
-					scriptMaster.getProductVersion());
-			
-			String newCustomScriptNumber="";
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
 					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
 				if (id.equals(scriptMaster.getScriptId())) {
@@ -469,72 +465,20 @@ public class TestRunMigrationGetService {
 
 				}
 			} else if (scriptMasterPrsent > 0) {
-				//check existing script is mapped with target customer or not 
-				if(oldScriptCustomerId.getCustomerId()!=customerId) {
-					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
-						scriptMaster.getScriptNumber()+".C.";
-					String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
-							,scriptMaster.getProductVersion());
-					if("".equals(maxScriptNumber) || maxScriptNumber==null) {
-						newCustomScriptNumber=newCustomScriptNumber+"1";
-					}
-					else {
-						newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
-								+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);				
-					}
-					String setNewCustomScriptNumber=newCustomScriptNumber;
-					//updating new script number in test_set_line and test_set_script_param
-					List<TestSetLineDto> updatedLineData =
-							testRunMigrateDto.getTestSetLinesAndParaData().stream()
-							.map((testSetLine) -> {
-								if(scriptMaster.getScriptNumber().equals(testSetLine.getScriptnumber())) {
-									testSetLine.setScriptnumber(setNewCustomScriptNumber);
-									List<WatsTestSetParamVO> updatedParamData =testSetLine.getScriptParam().stream().map((testSetLineParam) -> {
-										testSetLineParam.setScriptNumber(setNewCustomScriptNumber);
-										return testSetLineParam;
-									}).collect(Collectors.toList());
-									testSetLine.setScriptParam(updatedParamData);
-								}
-								return testSetLine;
-							}).collect(Collectors.toList());
-							testRunMigrateDto.setTestSetLinesAndParaData(updatedLineData);	
-					scriptMaster.setScriptNumber(newCustomScriptNumber);
-					scriptMaster.setStandardCustom("Custom");
-					int originalId = scriptMaster.getScriptId();
-					scriptMaster.setScriptId(null);
-					int newId = dao.insertScriptMaster(scriptMaster);
-					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
-						Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
-						scriptMetaData.setScriptMaster(scriptMaster);
-						if(!"".equals(newCustomScriptNumber)) scriptMetaData.setScriptNumber(newCustomScriptNumber);
-						int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
-						mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
-					}
-					mapOfNewToOld.put(newId, originalId);
-					mapOfOldToNew.put(originalId, newId);
-				}
-				else {
-					int originalId = scriptMaster.getScriptId();
-					mapOfNewToOld.put(scriptMasterPrsent, originalId);
-					mapOfOldToNew.put(originalId, scriptMasterPrsent);					
-				}
+				createScriptIfExistWithDiffCustomer(listOfScriptMaster,mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto,scriptMaster,scriptMasterPrsent);
 			}
 		}
 		return insertedScriptaId;
 	}
 
-	public Map<Integer, Integer> independentScript(List<ScriptMaster> listOfScriptMaster,
+	public Map<Integer, Integer> getOldToNewScriptIds(List<ScriptMaster> listOfScriptMaster,
 			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew, int customerId, TestRunMigrationDto testRunMigrateDto) {
 		Map<Integer, Integer> mapOfNewToOld = new HashMap<>();
 		Map<Integer, Integer> mapOfOldToNew = new HashMap<>();
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {			
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
-			//Get customer id of existing script
-			ScriptMaster oldScriptCustomerId = scriptMasterRepository.findByScriptNumberAndProductVersion(scriptMaster.getScriptNumber(),
-					scriptMaster.getProductVersion());
 			
-			String newCustomScriptNumber="";
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
 					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
 				
@@ -556,62 +500,77 @@ public class TestRunMigrationGetService {
 					mapOfOldToNew.put(originalId, id);
 				}
 			} else {
-				//check existing script is mapped with target customer or not 
-				if(oldScriptCustomerId.getCustomerId()!=customerId) {
-					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
-						scriptMaster.getScriptNumber()+".C.";
-					String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
-							,scriptMaster.getProductVersion());
-					if("".equals(maxScriptNumber)) {
-						newCustomScriptNumber=newCustomScriptNumber+"1";
-					}
-					else {
-						newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
-								+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);				
-					}
-					String setNewCustomScriptNumber=newCustomScriptNumber;
-					//updating new script number in test_set_line and test_set_script_param
-					List<TestSetLineDto> updatedLineData =
-					testRunMigrateDto.getTestSetLinesAndParaData().stream()
-					.map((testSetLine) -> {
-						if(scriptMaster.getScriptNumber().equals(testSetLine.getScriptnumber())) {
-							testSetLine.setScriptnumber(setNewCustomScriptNumber);
-							List<WatsTestSetParamVO> updatedParamData =testSetLine.getScriptParam().stream().map((testSetLineParam) -> {
-								testSetLineParam.setScriptNumber(setNewCustomScriptNumber);
-								return testSetLineParam;
-							}).collect(Collectors.toList());
-							testSetLine.setScriptParam(updatedParamData);
-						}
-						return testSetLine;
-					}).collect(Collectors.toList());
-					testRunMigrateDto.setTestSetLinesAndParaData(updatedLineData);	
-					scriptMaster.setScriptNumber(newCustomScriptNumber);
-					scriptMaster.setStandardCustom("Custom");
-					int originalId = scriptMaster.getScriptId();
-					scriptMaster.setScriptId(null);
-					int id = dao.insertScriptMaster(scriptMaster);
-					for (ScriptMetaData scriptMetaData : scriptMaster.getScriptMetaDatalist()) {
-						Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
-						scriptMetaData.setScriptMaster(scriptMaster);
-						if(!"".equals(newCustomScriptNumber)) scriptMetaData.setScriptNumber(newCustomScriptNumber);
-						int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
-						mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
-					}
-					mapOfNewToOld.put(id, originalId);
-					mapOfOldToNew.put(originalId, id);
-				}
-				else {
-					int originalId = scriptMaster.getScriptId();
-					int id = scriptMasterPrsent;
-					if (id > 0) {
-						mapOfNewToOld.put(id, originalId);
-						mapOfOldToNew.put(originalId, id);
-					}					
-				}
-
+				createScriptIfExistWithDiffCustomer(listOfScriptMaster,mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto,scriptMaster,scriptMasterPrsent);
 			}
 		}
 		return mapOfOldToNew;
 	}
 
+	public Map<Integer, Integer> createScriptIfExistWithDiffCustomer(List<ScriptMaster> listOfScriptMaster,
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew, int customerId, TestRunMigrationDto testRunMigrateDto,
+			ScriptMaster scriptMaster,int scriptMasterPrsent) {
+		Map<Integer, Integer> mapOfNewToOld = new HashMap<>();
+		Map<Integer, Integer> mapOfOldToNew = new HashMap<>();
+		String newCustomScriptNumber="";
+		//Get customer id of existing script
+		ScriptMaster oldScriptCustomerId = scriptMasterRepository.findByScriptNumberAndProductVersion(scriptMaster.getScriptNumber(),
+				scriptMaster.getProductVersion());
+		//check existing script is mapped with target customer or not 
+		if(oldScriptCustomerId.getCustomerId()!=customerId) {
+			newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
+				scriptMaster.getScriptNumber()+".C.";
+			String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
+					,scriptMaster.getProductVersion());
+			if("".equals(maxScriptNumber)) {
+				newCustomScriptNumber=newCustomScriptNumber+"1";
+			}
+			else {
+				try {
+					newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
+							+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);
+					}catch(Exception e) {
+						logger.error("Exception Occured while creating new script for Test Run");
+						throw new WatsEBSException(500, "Exception Occured while creating new script for Test Run", e);
+					}				
+			}
+			String setNewCustomScriptNumber=newCustomScriptNumber;
+			//updating new script number in test_set_line and test_set_script_param
+			List<TestSetLineDto> updatedLineData =
+			testRunMigrateDto.getTestSetLinesAndParaData().stream()
+			.map((testSetLine) -> {
+				if(scriptMaster.getScriptNumber().equals(testSetLine.getScriptnumber())) {
+					testSetLine.setScriptnumber(setNewCustomScriptNumber);
+					List<WatsTestSetParamVO> updatedParamData =testSetLine.getScriptParam().stream().map((testSetLineParam) -> {
+						testSetLineParam.setScriptNumber(setNewCustomScriptNumber);
+						return testSetLineParam;
+					}).collect(Collectors.toList());
+					testSetLine.setScriptParam(updatedParamData);
+				}
+				return testSetLine;
+			}).collect(Collectors.toList());
+			testRunMigrateDto.setTestSetLinesAndParaData(updatedLineData);	
+			scriptMaster.setScriptNumber(newCustomScriptNumber);
+			scriptMaster.setStandardCustom("Custom");
+			int originalId = scriptMaster.getScriptId();
+			scriptMaster.setScriptId(null);
+			int id = dao.insertScriptMaster(scriptMaster);
+			List<ScriptMetaData> updatedScriptMetaData=
+				scriptMaster.getScriptMetaDatalist().stream().map((scriptMetaData) -> {
+				Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
+				if(!"".equals(setNewCustomScriptNumber)) scriptMetaData.setScriptNumber(setNewCustomScriptNumber);
+				int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
+				mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
+				return scriptMetaData;
+			}).collect(Collectors.toList());
+			scriptMaster.setScriptMetaDatalist(updatedScriptMetaData);
+			mapOfNewToOld.put(id, originalId);
+			mapOfOldToNew.put(originalId, id);
+		}
+		else {
+			int originalId = scriptMaster.getScriptId();
+				mapOfNewToOld.put(scriptMasterPrsent, originalId);
+				mapOfOldToNew.put(originalId, scriptMasterPrsent);				
+		}
+		return mapOfOldToNew;
+	}
 }
