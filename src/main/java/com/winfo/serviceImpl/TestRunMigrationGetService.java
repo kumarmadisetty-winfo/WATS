@@ -233,10 +233,19 @@ public class TestRunMigrationGetService {
 				listOfScriptMaster.add(master);
 			}
 			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew, customerId,testRunMigrateDto);
-
-			List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config where customer_id="+customerId)
-					.getResultList();
-			int configurationId=Integer.parseInt(listOfConfig.get(0).toString());;
+			int configurationId;
+			try {
+				List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config where customer_id="+customerId)
+						.getResultList();
+				configurationId=Integer.parseInt(listOfConfig.get(0).toString());;				
+			}catch (Exception e) {
+				domGenericResponseBean = new DomGenericResponseBean();
+				domGenericResponseBean.setStatusMessage("Configuration Not Found");
+				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
+				listOfResponseBean.add(domGenericResponseBean);
+				logger.error("Configuration not found");
+				return listOfResponseBean;
+			}
 //			try {
 //				configurationId = Integer.parseInt(listOfConfig.get(0).toString());				
 //			}catch(Exception e) {
@@ -274,17 +283,6 @@ public class TestRunMigrationGetService {
 							.getSingleResult();
 					maxProjectName=maxProjectName.trim();
 					String newProjectName=maxProjectName+"-1";
-//					if(maxProjectName.lastIndexOf("-")==-1) {
-//						newProjectName=maxProjectName+"-1";
-//					}
-//					else {
-//						try {
-//							newProjectName=(maxProjectName.substring(0,maxProjectName.lastIndexOf("-")+1)
-//									+(Integer.parseInt(maxProjectName.substring(maxProjectName.indexOf("-")+1))+1));
-//						}catch(NumberFormatException e) {
-//							newProjectName=maxProjectName+"-1";
-//						}
-//					}
 					testRunMigrateDto.setProjectName(newProjectName);
 				}
 
@@ -325,8 +323,13 @@ public class TestRunMigrationGetService {
 			project = (BigDecimal) session
 					.createNativeQuery(query)
 					.getSingleResult();
-			}catch(Exception e) {
-				e.printStackTrace();
+			}catch (Exception e) {
+				domGenericResponseBean = new DomGenericResponseBean();
+				domGenericResponseBean.setStatusMessage("Project Not Found");
+				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
+				listOfResponseBean.add(domGenericResponseBean);
+				logger.error("Project not found");
+				return listOfResponseBean;
 			}
 			int projectId = Integer.parseInt(project.toString());
 
