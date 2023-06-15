@@ -1,6 +1,7 @@
 package com.winfo.config;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 import javax.annotation.Nonnull;
 
@@ -47,7 +48,7 @@ public class ThymeleafConfig {
 		}
 		templateResolver.setSuffix(".txt");
 		templateResolver.setTemplateMode(TemplateMode.TEXT);
-		templateResolver.setCharacterEncoding("UTF8");
+		templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 		templateResolver.setCheckExistence(true);
 		templateResolver.setCacheable(false);
 		return templateResolver;
