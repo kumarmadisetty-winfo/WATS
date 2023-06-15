@@ -35,7 +35,7 @@ public class CustomerToCentralGetService {
 	@Autowired
 	private LookUpCodeRepository lookUpCodeJpaRepository;
 
-	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUri, String customerName) {
+	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUrl, String customerName) {
     
 		String response;
 		if (customerUrl.equals("")) {

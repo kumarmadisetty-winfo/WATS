@@ -1701,12 +1701,13 @@ public class DataBaseEntryDao {
 	}
 	
 	public int getCustomerId(String customerName) {
-		String customerId = "select customer_id from WATS_PROD.win_ta_customers where customer_name="+customerName;
+		String sql = "select customer_id from WATS_PROD.win_ta_customers where customer_name='"+customerName+"'";
 		try {
 			Session session = em.unwrap(Session.class);
-			return (int) session.createSQLQuery(customerId).getSingleResult();	
+			BigDecimal customerId = (BigDecimal) session.createSQLQuery(sql).getSingleResult();	
+			return Integer.parseInt(customerId.toString());
 			} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching customer ID.", e);
+			throw new WatsEBSException(500, "Exception occured while fetching customer ID", e);
 		}
 	}
 }
