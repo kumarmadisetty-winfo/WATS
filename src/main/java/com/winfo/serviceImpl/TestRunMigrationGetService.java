@@ -32,6 +32,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -55,6 +56,9 @@ public class TestRunMigrationGetService {
 	
 	@Autowired
 	DataBaseEntryDao dataBaseEntryDao;
+	
+	@Autowired
+	ScriptMasterRepository scriptMasterRepository;
 
 	@Transactional
 	@SuppressWarnings("unchecked")
@@ -246,13 +250,6 @@ public class TestRunMigrationGetService {
 				logger.error("Configuration not found");
 				return listOfResponseBean;
 			}
-//			try {
-//				configurationId = Integer.parseInt(listOfConfig.get(0).toString());				
-//			}catch(Exception e) {
-//				listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config")
-//						.getResultList();
-//				configurationId = Integer.parseInt(listOfConfig.get(0).toString());
-//			}
 			
 			BigDecimal checkProject = (BigDecimal) session
 					.createNativeQuery("select count(*) from win_ta_projects where project_name ='"
@@ -476,7 +473,7 @@ public class TestRunMigrationGetService {
 				if(oldScriptCustomerId!=customerId) {
 					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
 						scriptMaster.getScriptNumber()+".C.";
-					String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
+					String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
 							,scriptMaster.getProductVersion());
 					if("".equals(maxScriptNumber)) {
 						newCustomScriptNumber=newCustomScriptNumber+"1";
@@ -563,7 +560,7 @@ public class TestRunMigrationGetService {
 				if(oldScriptCustomerId!=customerId) {
 					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
 						scriptMaster.getScriptNumber()+".C.";
-					String maxScriptNumber=dao.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
+					String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
 							,scriptMaster.getProductVersion());
 					if("".equals(maxScriptNumber)) {
 						newCustomScriptNumber=newCustomScriptNumber+"1";

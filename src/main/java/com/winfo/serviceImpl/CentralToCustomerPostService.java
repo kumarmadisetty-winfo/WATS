@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.winfo.dao.CentralToCustomerPostDao;
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.model.Customer;
 import com.winfo.model.LookUp;
 import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
+import com.winfo.repository.CustomerRepository;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -31,13 +33,15 @@ public class CentralToCustomerPostService {
 	CentralToCustomerPostDao dao;
 	@Autowired
 	DataBaseEntryDao dataBaseEntryDao;
+	@Autowired
+	CustomerRepository customerRepository;
 
 	@Transactional
 	public List<DomGenericResponseBean> saveScriptMasterDtls(WatsMasterDataVOList mastervolist, String customerName) {
 
 		List<DomGenericResponseBean> bean = new ArrayList<>();
-		int customerId=dataBaseEntryDao.getCustomerId(customerName);
-		
+		Customer customer=customerRepository.findByCustomerName(customerName);
+		int customerId=customer.getCustomerId();	
 		for (ScriptMasterDto masterdata : mastervolist.getData()) {
 			List<String> result = dao.getExistScriptDetailsByScriptNumberAndProductVersion(masterdata.getScriptNumber(), masterdata.getProductVersion());
 			DomGenericResponseBean response = new DomGenericResponseBean();
