@@ -475,7 +475,7 @@ public class TestRunMigrationGetService {
 						scriptMaster.getScriptNumber()+".C.";
 					String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
 							,scriptMaster.getProductVersion());
-					if("".equals(maxScriptNumber)) {
+					if("".equals(maxScriptNumber) || maxScriptNumber==null) {
 						newCustomScriptNumber=newCustomScriptNumber+"1";
 					}
 					else {
