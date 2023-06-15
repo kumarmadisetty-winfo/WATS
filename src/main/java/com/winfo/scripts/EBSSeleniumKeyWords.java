@@ -340,7 +340,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getAPPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO,  fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO,  fetchConfigVO, customerDetails);
@@ -11344,7 +11344,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
-		fetchConfigVO.getMedium_wait();
+		fetchConfigVO.getMEDIUM_WAIT();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));

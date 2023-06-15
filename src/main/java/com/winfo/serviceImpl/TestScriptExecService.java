@@ -196,7 +196,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				} else if (targetApplication.contains(Constants.SAP_CONCUR)) {
 					dto.setEbsApplicationUrl(fetchConfigVO.getSAP_CONCUR_URL());
 				} else {
-					dto.setEbsApplicationUrl(fetchConfigVO.getApplication_url());
+					dto.setEbsApplicationUrl(fetchConfigVO.getAPPLICATION_URL());
 				}
 				dto.setScriptFileName(
 						fetchMetadataListVO.get(0).getTargetApplicationName().replaceAll("\\s+", "_").toLowerCase()
@@ -266,7 +266,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			sourceFilePath = sourceFolder + fileName;
 			destinationFilePath = destinationFolder + fileName;
 
-			seleniumFactory.getInstanceObj(fetchConfigVO.getInstance_name()).uploadObjectToObjectStore(sourceFilePath,
+			seleniumFactory.getInstanceObj(fetchConfigVO.getINSTANCE_NAME()).uploadObjectToObjectStore(sourceFilePath,
 					destinationFilePath);
 		}
 
@@ -505,13 +505,13 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 
 			String scriptId = testLinesDetails.get(0).getScriptId();
-			String passurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName()+"/"+ customerDetails.getProjectName()  + "/"
+			String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()+"/"+ customerDetails.getProjectName()  + "/"
 					+ customerDetails.getTestSetName() + "/Passed_Report.pdf";
-			String failurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() +"/"
+			String failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() +"/"
 					+ customerDetails.getTestSetName() + "/Failed_Report.pdf" ;
-			String detailurl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName()+ "/"+ customerDetails.getProjectName()  + "/"
+			String detailurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()+ "/"+ customerDetails.getProjectName()  + "/"
 					+ customerDetails.getTestSetName() +"/Detailed_Report.pdf";
-			String scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+			String scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
 					+ customerDetails.getTestSetName() + "/" + testLinesDetails.get(0).getSeqNum() + "_"
 					+ testLinesDetails.get(0).getScriptNumber() + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
@@ -548,7 +548,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						args.getTestSetId());
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
 						+ failedScriptRunCount + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
-				 scripturl = fetchConfigVO.getImg_url() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+				 scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
 							+ customerDetails.getTestSetName() + "/" + pdfName;
 				post.setP_test_set_line_path(scripturl);
 				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
@@ -587,11 +587,11 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry.getScriptDetailsListVO(args.getTestSetId(),
 						null, true, false);
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getInstance_name())
+				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
 						.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 			}
 			if (Constants.smartBear.YES.toString().equalsIgnoreCase(fetchConfigVO.getSMARTBEAR_ENABLED())
-					&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getInstance_name())) {
+					&& Constants.smartBear.WOOD.toString().equalsIgnoreCase(fetchConfigVO.getINSTANCE_NAME())) {
 				String sourceFilePath = (fetchConfigVO.getWINDOWS_PDF_LOCATION().replace("/", File.separator)
 						+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName()
 						+ File.separator) + pdfName;
@@ -847,9 +847,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		dto.setOciConfigPath(ociConfigPath);
 		dto.setOciConfigName(ociConfigName);
 		dto.setBuckerName(ociBucketName);
-		dto.setDownloadPath(fetchConfigVO.getDownlod_file_path().replace("\\", "\\\\"));
-		dto.setExcelDownloadFilePath(fetchConfigVO.getExcelDownloadFilePath().replace("\\", "\\\\"));
-
+		dto.setDownloadPath(fetchConfigVO.getDOWNLOD_FILE_PATH().replace("\\", "\\\\"));
+		dto.setExcelDownloadFilePath(fetchConfigVO.getEXCEL_DOWNLOAD_FILE_PATH().replace("\\", "\\\\"));
+		
 		final Context ctx = new Context();
 		ctx.setVariable("dto", dto);
 		final String scriptContent = this.templateEngine.process("excel-automation-template.txt", ctx);
