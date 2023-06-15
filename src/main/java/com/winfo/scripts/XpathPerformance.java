@@ -148,7 +148,7 @@ public class XpathPerformance {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
 			try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath((paramsr))));
 				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				WebElement waittext = driver.findElement(By.xpath((paramsr)));
@@ -209,7 +209,7 @@ public class XpathPerformance {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
 			try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(paramsr)));
 				WebElement waittill = driver.findElement(By.xpath(paramsr));
 				Actions actions = new Actions(driver);
@@ -354,7 +354,7 @@ public class XpathPerformance {
 			String param1r = xpathlocation.replace("param1", param1);
 			String paramsr = param1r.replace("param2", param2);
 			try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath((paramsr))));
 				WebElement waittext = driver.findElement(By.xpath((paramsr)));
 				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
@@ -654,7 +654,7 @@ public class XpathPerformance {
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//li[normalize-space(text())='" + keysToSend + "']")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -670,7 +670,7 @@ public class XpathPerformance {
 			logger.error("Failed During clickButtonDropdownText " + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//div[contains(@class,'PopupMenuContent')]//td[normalize-space(text())='" + keysToSend + "']")));
 			WebElement waittext = driver.findElement(By.xpath(
@@ -686,7 +686,7 @@ public class XpathPerformance {
 			logger.error("Failed During clickButtonDropdownText " + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("//td[normalize-space(text())='" + keysToSend + "']")));
 			WebElement waittext = driver.findElement(By.xpath("//td[normalize-space(text())='" + keysToSend + "']"));
@@ -871,7 +871,7 @@ public class XpathPerformance {
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
 					By.xpath("//div[@class='AFDetectExpansion']/following::*[text()='" + keysToSend + "']"),
 					keysToSend));
@@ -886,7 +886,7 @@ public class XpathPerformance {
 			logger.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//table[@summary='" + param1 + "']/following::li[text()='" + keysToSend + "']")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -903,7 +903,7 @@ public class XpathPerformance {
 			logger.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[text()='" + param1 + "']/following::li[text()='" + keysToSend + "']")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -919,7 +919,7 @@ public class XpathPerformance {
 			logger.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//*[text()='" + param1 + "']/following::td[text()='" + keysToSend + "']")));
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(
@@ -937,7 +937,7 @@ public class XpathPerformance {
 			logger.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//div[contains(@id,'dropdownPopup::content')]/following::a[contains(text(),'Search')][1]")));
 //		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[contains(text(),'Search')]"), "Search"));
@@ -979,7 +979,7 @@ public class XpathPerformance {
 			logger.error("Failed during  tableDropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			try {
 				WebElement searchResult = driver
 						.findElement(By.xpath("//*[text()='Search']/following::*[text()='Name']/following::input[1]"));
@@ -1059,7 +1059,7 @@ public class XpathPerformance {
 		try {
 
 			if (param2.equalsIgnoreCase("Postal Code") || param2.equalsIgnoreCase("Legal Entity")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"//div[contains(@id,'dropdownPopup::popup-container')]//a[contains(text(),'Search')][1]")));
 				Thread.sleep(4000);
@@ -1110,7 +1110,7 @@ public class XpathPerformance {
 
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"(//div[contains(@id,'popup-container')]//*[normalize-space(text())='" + keysToSend + "'])[1]")));
 			Thread.sleep(4000);
@@ -1131,7 +1131,7 @@ public class XpathPerformance {
 			logger.error("Failed during dropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("(//div[contains(@id,'dropdownPopup::dropDownContent')]//*[normalize-space(text())='"
 							+ keysToSend + "'])[1]")));
@@ -1155,7 +1155,7 @@ public class XpathPerformance {
 			logger.error("Failed during dropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//div[contains(@id,'dropdownPopup::dropDownContent')]/following::a[contains(text(),'Search')][1]")));
 //		wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[contains(text(),'Search')]"), "Search"));
@@ -1210,7 +1210,7 @@ public class XpathPerformance {
 			logger.error("Failed during dropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 					"//div[contains(@id,'PopupId::content')]/following::*[normalize-space(text())='Search']/following::*[text()='Name']/following::input[@type='text'][1]")));
 			WebElement searchResult = driver.findElement(By.xpath(
@@ -1232,7 +1232,7 @@ public class XpathPerformance {
 			logger.error("Failed during dropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//h1[contains(text(),'" + param1
 					+ "')]/following::label[text()='" + keysToSend + "']/following::input)[1]")));
 			Thread.sleep(1000);
@@ -1254,7 +1254,7 @@ public class XpathPerformance {
 			logger.error("Failed during dropdownTexts" + scripNumber);
 		}
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath("//div[@class='AFDetectExpansion']/following::a[contains(text(),'Search')][1]")));
 //			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//a[contains(text(),'Search')]"), "Search"));
@@ -1340,7 +1340,7 @@ public class XpathPerformance {
 			try {
 				for(int i=0;i<mainparams.length;i++) {
 							String mainparam = mainparams[i];
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparam)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparam)));
 							WebElement waittext = driver.findElement(By.xpath(mainparam));
@@ -1578,7 +1578,7 @@ public class XpathPerformance {
 							if(clickNavigator==true && totalXpaths==2 && mainparams.length==2 && i==0) {
 								navigator(driver, param3, fetchMetadataVO, fetchConfigVO, customerDetails);
 							}
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparam)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparam)));
 							WebElement waittext = driver.findElement(By.xpath(mainparam));
@@ -1638,7 +1638,7 @@ public class XpathPerformance {
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			Thread.sleep(4000);
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='" + param1 + "']")));
 			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@title='" + param1 + "']")));
 			WebElement waittext = driver.findElement(By.xpath("//a[@title='" + param1 + "']"));
@@ -1711,7 +1711,7 @@ public class XpathPerformance {
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			int count = 0;
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			Actions actions = new Actions(driver);
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.xpath("(//table[@summary='" + param1 + "']//tr[1]/following::a)[2]")));
@@ -1794,7 +1794,7 @@ public class XpathPerformance {
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		fetchConfigVO.getMEDIUM_WAIT();
-		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
 		WebElement element = waittill;
@@ -1991,7 +1991,7 @@ public class XpathPerformance {
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1).replace("param2", param2);
 			try {
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(param1r)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(param1r)));
 							WebElement waittext = driver.findElement(By.xpath(param1r));
@@ -2005,7 +2005,7 @@ public class XpathPerformance {
 				return;
 			} catch (Exception e) {
 				try {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(param1r)));
 					wait.until(ExpectedConditions.elementToBeClickable(By.xpath(param1r)));
 					WebElement waittext = driver.findElement(By.xpath(param1r));
@@ -2051,7 +2051,7 @@ public class XpathPerformance {
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1).replace("param2", param2);
 			try {
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(param1r)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(param1r)));
 							WebElement waittext = driver.findElement(By.xpath(param1r));
@@ -2096,7 +2096,7 @@ public class XpathPerformance {
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", param1).replace("param2", param2);
 			try {
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(param1r)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(param1r)));
 							WebElement waittext = driver.findElement(By.xpath(param1r));
@@ -2149,7 +2149,7 @@ public class XpathPerformance {
 			try {
 				for(int i=0;i<mainparams.length;i++) {
 					String mainparam = mainparams[i];
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparam)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparam)));
 							WebElement waittext = driver.findElement(By.xpath(mainparam));
@@ -2200,7 +2200,7 @@ public class XpathPerformance {
 		if (xpathlocation != null) {
 			String param1r = xpathlocation.replace("param1", inputParam);
 			try {
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(param1r)));
 							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(param1r)));
 							WebElement waittext = driver.findElement(By.xpath(param1r));
@@ -2251,7 +2251,7 @@ public class XpathPerformance {
 			String[] mainparams = param1r.split(";");
 			try {
 				//click date icon
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				Actions actions = new Actions(driver);
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparams[0])));
 				wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparams[0])));
@@ -2310,7 +2310,7 @@ public class XpathPerformance {
 			String param1r = xpathlocation.replace("value1", value1);
 			String[] mainparams = param1r.split(";");
 			try {	
-							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+							WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 //							wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparams[0])));
 //							wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparams[0])));
 //							WebElement waittext=driver.findElement(By.xpath(mainparams[0]));
@@ -2363,7 +2363,7 @@ public class XpathPerformance {
 			String param1r = xpathlocation.replace("param1", param1).replace("param2", param2);
 			String[] mainparams = param1r.split(";");
 			try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparams[0])));
 				WebElement waittill = driver.findElement(By.xpath(mainparams[0]));
 				Actions actions = new Actions(driver);
@@ -2409,14 +2409,14 @@ public class XpathPerformance {
 			String param1r = xpathlocation.replace("xpath1", xpath1).replace("xpath2", xpath2);
 			String[] mainparams = param1r.split(";");
 				try {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparams[1])));
 					wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparams[1])));
 					fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 					return;
 				} catch (Exception e) {
 					try {
-						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparams[0])));
 						wait.until(ExpectedConditions.elementToBeClickable(By.xpath(mainparams[0])));
 						WebElement waittill = driver.findElement(By.xpath(mainparams[0]));
@@ -2586,7 +2586,7 @@ public class XpathPerformance {
 	public void loginPage(WebDriver driver, String param1, String keysToSend, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails,String xpath) {
 		try {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
 				WebElement waittill = driver.findElement(By.xpath(xpath));
 				Actions actions = new Actions(driver);
@@ -2618,7 +2618,7 @@ public class XpathPerformance {
 		try {
 			mainparams = xpathlocation.split(";");
 			for(int i=0;i<mainparams.length;i++) {
-					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(mainparams[0])));
 					WebElement waittext = driver.findElement(By.xpath(mainparams[0]));
 					Actions actions = new Actions(driver);
@@ -2658,7 +2658,7 @@ public class XpathPerformance {
 	public void clickSignInSignOut(WebDriver driver, String param1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWAIT_TIME());
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("//button[normalize-space(normalize-space(text())='" + param1 + "')]"))));
 			WebElement waittext = driver

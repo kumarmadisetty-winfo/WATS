@@ -11,8 +11,6 @@ import lombok.Data;
 @Data
 public class FetchConfigVO {
 	
-	
-
 	private String OIC_APPLICATION_URL;
 	
 	private String SF_APPLICATION_URL;
