@@ -60,13 +60,15 @@ public class TestRunMigrationGetService {
 	@Autowired
 	ScriptMasterRepository scriptMasterRepository;
 
+	@Autowired
+	DomGenericResponseBean domGenericResponseBean;
+
 	@Transactional
 	@SuppressWarnings("unchecked")
 	public List<DomGenericResponseBean> centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
 		
 		List<DomGenericResponseBean> listOfResponseBean = new ArrayList<>();
 		int count=0;
-		DomGenericResponseBean domGenericResponseBean = null;
 		String testrunName=null;
 		String description=null;		
 		for (TestRunMigrationDto testRunMigrateDto : listOfTestRunDto) {
@@ -80,7 +82,6 @@ public class TestRunMigrationGetService {
 			int checkTestRun = Integer.parseInt(checkTest.toString());
 
 			if (checkTestRun > 0 && !testRunMigrateDto.isTestRunExists()) {
-				domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatus(0);
 				domGenericResponseBean.setStatusMessage("Already Exists");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
@@ -95,7 +96,6 @@ public class TestRunMigrationGetService {
 						.getSingleResult();
 				customerId = Integer.parseInt(checkCustomer.toString());
 			} catch (Exception e) {
-				domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatusMessage("Customer Not Found");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
@@ -243,7 +243,6 @@ public class TestRunMigrationGetService {
 						.getResultList();
 				configurationId=Integer.parseInt(listOfConfig.get(0).toString());;				
 			}catch (Exception e) {
-				domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatusMessage("Configuration Not Found");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
@@ -321,7 +320,6 @@ public class TestRunMigrationGetService {
 					.createNativeQuery(query)
 					.getSingleResult();
 			}catch (Exception e) {
-				domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatusMessage("Project Not Found");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
@@ -415,7 +413,6 @@ public class TestRunMigrationGetService {
 		}
 		if(count>=1)
 		{
-			domGenericResponseBean = new DomGenericResponseBean();
 			domGenericResponseBean.setStatus(200);
 			domGenericResponseBean.setStatusMessage("SUCCESS");
 			domGenericResponseBean.setDescription(description);
@@ -432,8 +429,8 @@ public class TestRunMigrationGetService {
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
 			//Get customer id of existing script
-			int oldScriptCustomerId = dao.getOldScriptCustomerId(scriptMaster.getProductVersion(),
-					scriptMaster.getScriptNumber());
+			ScriptMaster oldScriptCustomerId = scriptMasterRepository.findByScriptNumberAndProductVersion(scriptMaster.getScriptNumber(),
+					scriptMaster.getProductVersion());
 			
 			String newCustomScriptNumber="";
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
@@ -470,7 +467,7 @@ public class TestRunMigrationGetService {
 				}
 			} else if (scriptMasterPrsent > 0) {
 				//check existing script is mapped with target customer or not 
-				if(oldScriptCustomerId!=customerId) {
+				if(oldScriptCustomerId.getCustomerId()!=customerId) {
 					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
 						scriptMaster.getScriptNumber()+".C.";
 					String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
@@ -531,8 +528,8 @@ public class TestRunMigrationGetService {
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
 			//Get customer id of existing script
-			int oldScriptCustomerId = dao.getOldScriptCustomerId(scriptMaster.getProductVersion(),
-					scriptMaster.getScriptNumber());
+			ScriptMaster oldScriptCustomerId = scriptMasterRepository.findByScriptNumberAndProductVersion(scriptMaster.getScriptNumber(),
+					scriptMaster.getProductVersion());
 			
 			String newCustomScriptNumber="";
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
@@ -557,7 +554,7 @@ public class TestRunMigrationGetService {
 				}
 			} else {
 				//check existing script is mapped with target customer or not 
-				if(oldScriptCustomerId!=customerId) {
+				if(oldScriptCustomerId.getCustomerId()!=customerId) {
 					newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
 						scriptMaster.getScriptNumber()+".C.";
 					String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)

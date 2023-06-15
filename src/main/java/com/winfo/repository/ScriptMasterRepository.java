@@ -11,5 +11,7 @@ public interface ScriptMasterRepository extends JpaRepository<ScriptMaster, Inte
 	
 	@Query("Select max(scriptNumber) from ScriptMaster where scriptNumber like ?1% and productVersion=?2")
 	public String getMaxScriptNumber(String newCustomScriptNumber,String productVersion);
+	
+	public ScriptMaster findByScriptNumberAndProductVersion(String newCustomScriptNumber,String productVersion);
 
 }
