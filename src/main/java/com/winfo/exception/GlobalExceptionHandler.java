@@ -9,8 +9,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(WatsEBSException.class)
-	public ResponseEntity<Object> handleDefaultException(WatsEBSException exception) {
+	@ExceptionHandler(WatsEBSCustomException.class)
+	public ResponseEntity<Object> handleDefaultException(WatsEBSCustomException exception) {
 		ErrorDetail errorDetails = new ErrorDetail(exception.getErrorCode(), exception.getErrorMessage());
 		exception.printStackTrace();
 		return new ResponseEntity<>(errorDetails, HttpStatus.OK);

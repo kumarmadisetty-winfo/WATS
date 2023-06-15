@@ -32,7 +32,7 @@ import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.DataBaseEntryDao;
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.CustomerProjectDto;
@@ -140,7 +140,7 @@ public class HealthCheck {
 		try {
 			dao.dbAccessibilityCheck();
 		} catch (Exception e) {
-			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getDbAccessibilityMessage());
+			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getDbAccessibilityMessage());
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
@@ -158,10 +158,10 @@ public class HealthCheck {
 			if (total > 0) {
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} else {
-				throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
+				throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
 			}
 		} catch (Exception e) {
-			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
+			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
 		}
 	}
 
@@ -179,7 +179,7 @@ public class HealthCheck {
 			File file = new File(ociConfigPath);
 			configFile = ConfigFileReader.parse(new FileInputStream(file), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, messageUtil.getObjectStore().getConfigFileIOException());
+			throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getConfigFileIOException());
 		}
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
@@ -205,24 +205,24 @@ public class HealthCheck {
 			if (testSetId != null) {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
 						&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
-					throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
+					throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
 				}
 			} else {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH))) {
-					throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
+					throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
 				}
 			}
 		} catch (Exception e1) {
-			if (e1 instanceof WatsEBSException) {
+			if (e1 instanceof WatsEBSCustomException) {
 				throw e1;
 			} else {
-				throw new WatsEBSException(500, messageUtil.getObjectStore().getAccessDeniedException());
+				throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getAccessDeniedException());
 			}
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
 
-	public String getSharePointAccess(FetchConfigVO fetchConfigVO) throws WatsEBSException {
+	public String getSharePointAccess(FetchConfigVO fetchConfigVO) throws WatsEBSCustomException {
 		String acessToken = null;
 		try {
 			RestTemplate restTemplate = new RestTemplate();
@@ -243,7 +243,7 @@ public class HealthCheck {
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSharePointAccess());
+			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSharePointAccess());
 		}
 		return acessToken;
 	}

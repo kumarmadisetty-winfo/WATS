@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 
@@ -364,7 +364,7 @@ public class TemplateDownloadService {
 			return workbook;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Not able to generate excel templete", e);
 		}
 	}

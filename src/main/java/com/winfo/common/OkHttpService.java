@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -40,28 +40,28 @@ public class OkHttpService {
 				} else if (response.code() == 404) {
 					throw new NotFoundException("Endpoint not found");
 				} else if (response.code() == 401) {
-					throw new WatsEBSException(401, "Authentication Error");
+					throw new WatsEBSCustomException(401, "Authentication Error");
 				} else if (response.code() == 500) {
 					throw new InternalServerErrorException("Internal server error");
 				} else if (response.code() == 400) {
-					throw new WatsEBSException(400, "Bad Request");
+					throw new WatsEBSCustomException(400, "Bad Request");
 				} else if (response.code() == 503) {
-					throw new WatsEBSException(503, "Service Unavailable");
+					throw new WatsEBSCustomException(503, "Service Unavailable");
 				}
 			}
 
 		} catch (NotFoundException ex) {
 			logger.error("{}", ex.getMessage());
-			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-		} catch (WatsEBSException ex) {
+			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+		} catch (WatsEBSCustomException ex) {
 			logger.error("{}", ex.getMessage());
-			throw new WatsEBSException(ex.getErrorCode(), ex.getMessage());
+			throw new WatsEBSCustomException(ex.getErrorCode(), ex.getMessage());
 		} catch (InternalServerErrorException ex) {
 			logger.error("{}", ex.getMessage());
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
 		} catch (Exception ex) {
 			logger.error("Error while calling API: {}", ex.getMessage());
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
 		}
 	}
 }

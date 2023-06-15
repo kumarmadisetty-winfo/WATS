@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.utils.Constants;
 import com.winfo.utils.FileUtil;
@@ -74,7 +74,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 				file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMasterVO));
 				logger.info("Successfully saved details in file...!!");
 			} catch (IOException e) {
-				throw new WatsEBSException(500, "Not able to save the file!", e);
+				throw new WatsEBSCustomException(500, "Not able to save the file!", e);
 			}
 			uploadObjectToObjectStore(localPath + FORWARD_SLASH + encodedName, objectStorePath, encodedName);
 			return new ResponseDto(200, Constants.SUCCESS, "Successfully saved the history!");
@@ -120,7 +120,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			return map;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSException(500, "Not able to get the history list!", e);
+			throw new WatsEBSCustomException(500, "Not able to get the history list!", e);
 		}
 	}
 
@@ -142,7 +142,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			return scriptMaterVO;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSException(500, "Not able to get the history!", e);
+			throw new WatsEBSCustomException(500, "Not able to get the history!", e);
 		}
 	}
 

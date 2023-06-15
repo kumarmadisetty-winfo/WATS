@@ -3,7 +3,7 @@ package com.winfo.exception;
 import org.springframework.stereotype.Component;
 
 @Component
-public class WatsEBSException extends RuntimeException {
+public class WatsEBSCustomException extends RuntimeException {
 	/**
 		 * 
 		 */
@@ -11,13 +11,13 @@ public class WatsEBSException extends RuntimeException {
 	private final int code;
 	private final String errorDetails;
 
-	public WatsEBSException(int code, String errorDetails) {
+	public WatsEBSCustomException(int code, String errorDetails) {
 		super(errorDetails);
 		this.code = code;
 		this.errorDetails = errorDetails;
 	}
 
-	public WatsEBSException(int code, String errorDetails, Throwable e) {
+	public WatsEBSCustomException(int code, String errorDetails, Throwable e) {
 		super(e);
 		this.code = code;
 		this.errorDetails = errorDetails;
@@ -32,7 +32,7 @@ public class WatsEBSException extends RuntimeException {
 		return errorDetails;
 	}
 	
-	public WatsEBSException() {
+	public WatsEBSCustomException() {
 		this.code = 400;
 		this.errorDetails = "Error";
 	}

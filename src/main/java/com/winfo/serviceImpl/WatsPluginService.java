@@ -35,7 +35,7 @@ import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.winfo.dao.WatsPluginDao;
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.vo.DomGenericResponseBean;
@@ -318,10 +318,10 @@ public class WatsPluginService {
 				}
 
 			}
-		} catch (WatsEBSException e) {
+		} catch (WatsEBSCustomException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while downloading file from Object Store", e);
+			throw new WatsEBSCustomException(500, "Exception occured while downloading file from Object Store", e);
 		}
 
 	}

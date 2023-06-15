@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.common.OkHttpService;
 import com.winfo.common.WebClientService;
 import com.winfo.constants.HttpMethodConstants;
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.ScriptDetailsDto;
 
@@ -84,7 +84,7 @@ public class SmartBearService {
 
 		} catch (Exception e) {
 			logger.error("Error occurred while executing SmartBear API: %s", e.getMessage());
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Not able to perform SmartBear Integration.");
 		}
 	}
@@ -105,7 +105,7 @@ public class SmartBearService {
 
 		} catch (Exception e) {
 			logger.error("Error occurred while re-attaching the report in SmartBear: %s", e.getMessage());
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Not able to perform SmartBear Re-Attachment.");
 		}
 	}
@@ -119,7 +119,7 @@ public class SmartBearService {
 		if (optionalProject.isPresent()) {
 			return optionalProject.get().get("id").toString();
 		} else {
-			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),
+			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(),
 					"Project with name " + projectName + " not found in SmartBear.");
 		}
 	}
@@ -145,7 +145,7 @@ public class SmartBearService {
 		if (optionalScript.isPresent()) {
 			return optionalScript.get().get("id").toString();
 		} else {
-			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),
+			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(),
 					"Script with number " + fetchMetadataListVO.get(0).getScriptNumber() + " not found in SmartBear.");
 		}
 	}
@@ -159,7 +159,7 @@ public class SmartBearService {
 		if (execution.containsKey("id")) {
 			return execution.get("id").toString();
 		} else {
-			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),
+			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(),
 					"Failed to execute test run for script ID: " + scriptId);
 		}
 	}
@@ -175,7 +175,7 @@ public class SmartBearService {
 		if (optionalItem.isPresent()) {
 			return optionalItem.get().get("id").toString();
 		} else {
-			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),
+			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(),
 					"No test result item found for execution ID " + executionId + " in SmartBear.");
 		}
 	}

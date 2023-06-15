@@ -47,7 +47,7 @@ import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
@@ -455,7 +455,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 			return response.toString();
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception Occured while uploading generated script to object store",
+			throw new WatsEBSCustomException(500, "Exception Occured while uploading generated script to object store",
 					e);
 		}
 	}
@@ -491,10 +491,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSException e) {
+		} catch (WatsEBSCustomException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
+			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
 	}
 
@@ -646,10 +646,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(), scriptStatus);
 			}
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(args.getTestSetId());
-			if (e instanceof WatsEBSException) {
+			if (e instanceof WatsEBSCustomException) {
 				throw e;
 			}
-			throw new WatsEBSException(500, "Exception occured while generating the pdf", e);
+			throw new WatsEBSCustomException(500, "Exception occured while generating the pdf", e);
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}

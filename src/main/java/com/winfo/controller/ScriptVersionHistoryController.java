@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.serviceImpl.ScriptVersionHistoryService;
 import com.winfo.vo.ResponseDto;
@@ -57,7 +57,7 @@ public class ScriptVersionHistoryController {
 		if (!(Objects.isNull(versionHistoryDto.getVersionNumber()) || versionHistoryDto.getVersionNumber().isEmpty())) {
 			return versionHistoryService.getVersionHistory(versionHistoryDto);
 		} else {
-			throw new WatsEBSException(500, "Version can not be null!", null);
+			throw new WatsEBSCustomException(500, "Version can not be null!", null);
 		}
 	}
 }

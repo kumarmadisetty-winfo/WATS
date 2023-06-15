@@ -24,7 +24,7 @@ import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.WatsPluginDao;
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 
 @Service
 public class CommonObjectStoreUtils { 
@@ -62,19 +62,19 @@ public class CommonObjectStoreUtils {
 							out.write(targetArray);
 							out.flush();
 							});
-		    } catch (WatsEBSException e) {
+		    } catch (WatsEBSCustomException e) {
 		    	log.error(e.getErrorMessage());
 				throw e;
 			} catch (BmcException e) {
 				log.error(fileName+ " is not exist in Object Store");
-				throw new WatsEBSException(e.getStatusCode(),
+				throw new WatsEBSCustomException(e.getStatusCode(),
 						MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 		    }catch (IOException e) {
 		    	log.error("Exception occured while returning file from service");
-				throw new WatsEBSException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
+				throw new WatsEBSCustomException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
 			} catch (Exception e) {
 				log.error("Exception occured while downloading "+fileName+" from Object Store");
-		    	throw new WatsEBSException(500,MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getDownloadFailed(),fileName), e);
+		    	throw new WatsEBSCustomException(500,MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getDownloadFailed(),fileName), e);
 		    }
 	}
 }

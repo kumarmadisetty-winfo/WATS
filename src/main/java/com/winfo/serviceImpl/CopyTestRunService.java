@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.CopyTestRunDao;
-import com.winfo.exception.WatsEBSException;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
 import com.winfo.model.ExecutionAudit;
@@ -449,7 +449,7 @@ public class CopyTestRunService {
 			scriptParamObj.setInputValue(formatter.format(new Date()));
 		} catch (Exception e) {
 			logger.info("Exception occurred while converting date Format");
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while converting the Date Format", e);
+			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while converting the Date Format", e);
 		}
 		}
 		else{
