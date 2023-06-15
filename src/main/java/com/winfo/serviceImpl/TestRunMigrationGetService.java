@@ -62,6 +62,9 @@ public class TestRunMigrationGetService {
 
 	@Autowired
 	DomGenericResponseBean domGenericResponseBean;
+	
+	String CONFFIG_ERROR="Configuration not found";
+	String PROJECT_ERROR="Project not found";
 
 	@Transactional
 	@SuppressWarnings("unchecked")
@@ -243,10 +246,10 @@ public class TestRunMigrationGetService {
 						.getResultList();
 				configurationId=Integer.parseInt(listOfConfig.get(0).toString());;				
 			}catch (Exception e) {
-				domGenericResponseBean.setStatusMessage("Configuration Not Found");
+				domGenericResponseBean.setStatusMessage(CONFFIG_ERROR);
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
-				logger.error("Configuration not found");
+				logger.error(CONFFIG_ERROR);
 				return listOfResponseBean;
 			}
 			
@@ -320,10 +323,10 @@ public class TestRunMigrationGetService {
 					.createNativeQuery(query)
 					.getSingleResult();
 			}catch (Exception e) {
-				domGenericResponseBean.setStatusMessage("Project Not Found");
+				domGenericResponseBean.setStatusMessage(PROJECT_ERROR);
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
-				logger.error("Project not found");
+				logger.error(PROJECT_ERROR);
 				return listOfResponseBean;
 			}
 			int projectId = Integer.parseInt(project.toString());
