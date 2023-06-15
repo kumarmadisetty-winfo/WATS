@@ -379,7 +379,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getAPPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -740,10 +740,10 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name,
 			CustomerProjectDto customerDetails) {
-		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+		String vidPath = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/" + name);
 		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
-		String Folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+		String Folder = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/");
 		File theDir = new File(Folder);
 		if (!theDir.exists()) {
@@ -795,7 +795,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName() + "\\"
+		File folder = new File(fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customerDetails.getCustomerName() + "\\"
 				+ customerDetails.getTestSetName() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -818,7 +818,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 	public void compress(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			CustomerProjectDto customerDetails) throws IOException {
-		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName() + "\\"
+		String Folder = (fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customerDetails.getCustomerName() + "\\"
 				+ customerDetails.getTestSetName() + "\\");
 		List<String> fileNameList = null;
 		String customer_Name = customerDetails.getCustomerName();
@@ -828,7 +828,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 		for (String image : fileNameList) {
 
 			FileInputStream inputStream = new FileInputStream(
-					fetchConfigVO.getScreenshot_path() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
+					fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
 			BufferedImage inputImage = ImageIO.read(inputStream);
 
 			JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
@@ -15506,7 +15506,7 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
-		fetchConfigVO.getMedium_wait();
+		fetchConfigVO.getMEDIUM_WAIT();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));

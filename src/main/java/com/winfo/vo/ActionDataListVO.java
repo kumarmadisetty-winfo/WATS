@@ -2,16 +2,10 @@ package com.winfo.vo;
 
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class ActionDataListVO {
 	
 	private List<ActionDataVO> items;
-
-	public List<ActionDataVO> getItems() {
-		return items;
-	}
-
-	public void setItems(List<ActionDataVO> items) {
-		this.items = items;
-	}
-
 }
