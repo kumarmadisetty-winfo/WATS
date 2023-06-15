@@ -13,6 +13,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.winfo.model.LookUpCode;
+import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ApiValidationDto;
 import com.winfo.vo.ApiValidationMigrationDto;
@@ -26,14 +28,15 @@ public class PostApiValidationMigrationService {
 	public static final Logger logger = Logger.getLogger(PostApiValidationMigrationService.class);
 	@Autowired
 	DataBaseEntry dataBaseEntry;
-
+	
+	@Autowired
+	private LookUpCodeRepository lookUpCodeJpaRepository;
 	public ResponseDto webClientService(ApiValidationDto listOfLookUpCodesData, String customerUrl) throws JsonMappingException, JsonProcessingException {
 		if (customerUrl.equals("")) {
 			logger.error("Invalid URL " +customerUrl);
 			return new ResponseDto(500,"Invalid URL","Invalid URL!!");
 		} else {
-			String uri = customerUrl + "/apiValidationMigrationReceiver";
-			WebClient webClient = WebClient.create(uri);
+			WebClient webClient = WebClient.create(customerUrl + "/apiValidationMigrationReceiver");
 			Mono<String> result = webClient.post().syncBody(listOfLookUpCodesData).retrieve().bodyToMono(String.class);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String finalResult = result.block();
@@ -56,8 +59,9 @@ public class PostApiValidationMigrationService {
 			ApiValidationDto apiDto =new ApiValidationDto();
 			apiDto.setLookupCodes(Arrays.asList(listOfLookUpCodesData));
 			apiDto.setFlag(apiValidationMigration.isFlag());
-			String customerUrl = dataBaseEntry.getCentralRepoUrl(apiValidationMigration.getTargetEnvironment());
-			return webClientService(apiDto, customerUrl);
+			LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(Constants.Look_Up_Name,apiValidationMigration.getTargetEnvironment());
+			logger.info("LookUpCode Data " + lookUpCode);
+			return webClientService(apiDto, lookUpCode.getTargetCode());
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Failed during api validation migration " + e.getMessage());
