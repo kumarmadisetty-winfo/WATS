@@ -60,7 +60,7 @@ public class CustomerToCentralGetService {
 		String customerUri = result4.isEmpty() ? "" : result4.get(0);
 		WatsMasterDataVOList watsMasterDataVO = new WatsMasterDataVOList();
 		watsMasterDataVO.setData(watsMasterVOList);
-		return webClientService(watsMasterDataVO, "http://localhost:38081/wats", customerName);
+		return webClientService(watsMasterDataVO, customerUri, customerName);
 	}
 
 }
