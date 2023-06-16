@@ -71,7 +71,7 @@ public class ScriptMaterVO {
 
 	@JsonProperty("Customer Id")
 	@JsonAlias("customerId")
-	private Integer customerId;
+	private String customerId;
 
 	@JsonProperty("Customization Reference")
 	@JsonAlias("customisationReference")
@@ -153,6 +153,9 @@ public class ScriptMaterVO {
 		            String updatedAction = dataBaseEntry.getMeaningByTargetCode(metaData.getAction(), "ACTION");
 		            metaData.setAction(updatedAction);
 		        });
+		}
+		if (customerId != null) {
+			customerId = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(customerId)).getCustomerName();
 		}
 
 	}
