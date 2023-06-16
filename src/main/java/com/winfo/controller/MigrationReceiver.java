@@ -1,21 +1,22 @@
 package com.winfo.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winfo.exception.WatsEBSException;
 import com.winfo.serviceImpl.CentralToCustomerPostService;
 import com.winfo.serviceImpl.GetApiValidationMigrationService;
 import com.winfo.serviceImpl.TestRunMigrationGetService;
+import com.winfo.utils.Constants;
 import com.winfo.vo.ApiValidationDto;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.ResponseDto;
@@ -44,11 +45,8 @@ public class MigrationReceiver {
 		if(!"".equals(customerName) && customerName!=null) {
 			return service.saveScriptMasterDtls(mastervolist,customerName);			
 		}else{
-			List<DomGenericResponseBean> listOfResponseBean = new ArrayList<>();
-			domGenericResponseBean.setStatusMessage("Customer Not Found");
-			listOfResponseBean.add(domGenericResponseBean);
-			logger.info("Customer Not Found");
-			return listOfResponseBean;
+			logger.error(Constants.CUSTOMER_ERROR);
+			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.CUSTOMER_ERROR);
 		}
 
 	}

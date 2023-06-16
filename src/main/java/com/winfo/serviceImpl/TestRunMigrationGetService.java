@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,12 +29,15 @@ import com.winfo.dao.TestRunMigrationGetDao;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
+import com.winfo.model.Project;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.utils.Constants;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -62,11 +66,11 @@ public class TestRunMigrationGetService {
 	ScriptMasterRepository scriptMasterRepository;
 
 	@Autowired
+	ProjectRepository projectRepository;
+
+	@Autowired
 	DomGenericResponseBean domGenericResponseBean;
 	
-	String CONFFIG_ERROR="Configuration not found";
-	String PROJECT_ERROR="Project not found";
-
 	@Transactional
 	@SuppressWarnings("unchecked")
 	public List<DomGenericResponseBean> centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
@@ -248,11 +252,8 @@ public class TestRunMigrationGetService {
 						.getResultList();
 				configurationId=Integer.parseInt(listOfConfig.get(0).toString());;				
 			}catch (Exception e) {
-				domGenericResponseBean.setStatusMessage(CONFFIG_ERROR);
-				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
-				listOfResponseBean.add(domGenericResponseBean);
-				logger.error(CONFFIG_ERROR);
-				return listOfResponseBean;
+				logger.error(Constants.CONFFIG_ERROR);
+				throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.CONFFIG_ERROR);
 			}
 			
 			BigDecimal checkProject = (BigDecimal) session
@@ -271,12 +272,7 @@ public class TestRunMigrationGetService {
 						.createNativeQuery("SELECT WIN_TA_PROJECT_SEQ.nextval FROM DUAL").getSingleResult();
 				Integer newNextValueProject = Integer.parseInt(nextValueProject.toString());
 				
-				BigDecimal checkProjectInInstance = (BigDecimal) session
-						.createNativeQuery("select count(*) from win_ta_projects where project_name ='"
-								+ testRunMigrateDto.getProjectName() + "'")
-						.getSingleResult();
-				int checkProjectIdInInstance = Integer.parseInt(checkProjectInInstance.toString());
-				
+				long checkProjectIdInInstance = projectRepository.countByProjectName(testRunMigrateDto.getProjectName());				
 				if (checkProjectIdInInstance > 0) {					
 					String maxProjectName = (String) session
 							.createNativeQuery("select max(PROJECT_NAME) from win_ta_projects where project_name like '"
@@ -324,14 +320,12 @@ public class TestRunMigrationGetService {
 			project = (BigDecimal) session
 					.createNativeQuery(query)
 					.getSingleResult();
-			}catch (Exception e) {
-				domGenericResponseBean.setStatusMessage(PROJECT_ERROR);
-				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
-				listOfResponseBean.add(domGenericResponseBean);
-				logger.error(PROJECT_ERROR);
-				return listOfResponseBean;
+			}catch (Exception e) {			
+				logger.error(Constants.PROJECT_ERROR);
+				throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.PROJECT_ERROR);
 			}
-			int projectId = Integer.parseInt(project.toString());
+			Project projectObject=projectRepository.findByProjectNameAndCustomerId(testRunMigrateDto.getProjectName(),customerId);
+			int projectId =  projectObject.getProjectId();
 
 			testrundata.setProjectId(projectId);
 
