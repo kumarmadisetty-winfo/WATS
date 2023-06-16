@@ -76,23 +76,4 @@ public class TestRunMigrationGetDao {
 		}
 		return data;
 	}
-	public int getOldScriptCustomerId(String productVersion, String scriptNumber) {
-		Session session = entityManager.unwrap(Session.class);
-
-		BigDecimal oldCustomerId = (BigDecimal) session
-				.createNativeQuery("select customer_id from WIN_TA_SCRIPT_MASTER where script_number='" + scriptNumber
-						+ "' and product_version='" + productVersion + "'")
-				.getSingleResult();
-		return Integer.parseInt(oldCustomerId.toString());
-	}
-	public String getMaxScriptNumber(String newCustomScriptNumber,String productVersion) {
-		Session session = entityManager.unwrap(Session.class);
-		
-		String maxSciptNumber = (String) session
-				.createNativeQuery("select max(script_number) from WIN_TA_SCRIPT_MASTER where script_number like '" + newCustomScriptNumber
-						+ "%' and product_version='" + productVersion + "'")
-				.getSingleResult();
-		return maxSciptNumber;
-	}
-
 }
