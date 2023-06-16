@@ -1,5 +1,6 @@
 package com.winfo.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,10 +35,21 @@ public class MigrationReceiver {
 
 	@Autowired
 	TestRunMigrationGetService testRunMigrateGetService;
+	
+	@Autowired
+	DomGenericResponseBean domGenericResponseBean;
 
 	@PostMapping("/centralToCustomerScriptMigrate/{customerName}")
 	public List<DomGenericResponseBean> scriptMetaDataListFromCentral(@RequestBody WatsMasterDataVOList mastervolist,@PathVariable String customerName) {
-		return service.saveScriptMasterDtls(mastervolist,customerName);
+		if(!"".equals(customerName) && customerName!=null) {
+			return service.saveScriptMasterDtls(mastervolist,customerName);			
+		}else{
+			List<DomGenericResponseBean> listOfResponseBean = new ArrayList<>();
+			domGenericResponseBean.setStatusMessage("Customer Not Found");
+			listOfResponseBean.add(domGenericResponseBean);
+			logger.info("Customer Not Found");
+			return listOfResponseBean;
+		}
 
 	}
 

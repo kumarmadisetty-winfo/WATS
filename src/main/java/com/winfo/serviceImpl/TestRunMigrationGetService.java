@@ -90,7 +90,8 @@ public class TestRunMigrationGetService {
 				domGenericResponseBean.setStatusMessage("Already Exists");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
-				logger.info("Test Run already exists " + testRunMigrateDto.getTestSetName() );			continue;
+				logger.info("Test Run already exists " + testRunMigrateDto.getTestSetName());
+				continue;
 			}
 			int customerId = 0;
 			try {
