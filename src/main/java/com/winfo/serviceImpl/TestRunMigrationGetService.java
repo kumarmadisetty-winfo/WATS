@@ -465,7 +465,8 @@ public class TestRunMigrationGetService {
 
 				}
 			} else if (scriptMasterPrsent > 0) {
-				createScriptIfExistWithDiffCustomer(listOfScriptMaster,mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto,scriptMaster,scriptMasterPrsent);
+				createScriptIfExistWithDiffCustomer(listOfScriptMaster,mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto,
+						scriptMaster,scriptMasterPrsent,mapOfOldToNew,mapOfNewToOld);
 			}
 		}
 		return insertedScriptaId;
@@ -500,17 +501,16 @@ public class TestRunMigrationGetService {
 					mapOfOldToNew.put(originalId, id);
 				}
 			} else {
-				createScriptIfExistWithDiffCustomer(listOfScriptMaster,mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto,scriptMaster,scriptMasterPrsent);
+				createScriptIfExistWithDiffCustomer(listOfScriptMaster,mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto,
+						scriptMaster,scriptMasterPrsent,mapOfOldToNew,mapOfNewToOld);
 			}
 		}
 		return mapOfOldToNew;
 	}
 
-	public Map<Integer, Integer> createScriptIfExistWithDiffCustomer(List<ScriptMaster> listOfScriptMaster,
+	public void createScriptIfExistWithDiffCustomer(List<ScriptMaster> listOfScriptMaster,
 			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew, int customerId, TestRunMigrationDto testRunMigrateDto,
-			ScriptMaster scriptMaster,int scriptMasterPrsent) {
-		Map<Integer, Integer> mapOfNewToOld = new HashMap<>();
-		Map<Integer, Integer> mapOfOldToNew = new HashMap<>();
+			ScriptMaster scriptMaster,int scriptMasterPrsent,Map<Integer, Integer> mapOfOldToNew,Map<Integer, Integer> mapOfNewToOld) {
 		String newCustomScriptNumber="";
 		//Get customer id of existing script
 		ScriptMaster oldScriptCustomerId = scriptMasterRepository.findByScriptNumberAndProductVersion(scriptMaster.getScriptNumber(),
@@ -519,9 +519,11 @@ public class TestRunMigrationGetService {
 		if(oldScriptCustomerId.getCustomerId()!=customerId) {
 			newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
 				scriptMaster.getScriptNumber()+".C.";
-			String maxScriptNumber=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
+			int maxScriptId=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
 					,scriptMaster.getProductVersion());
-			if("".equals(maxScriptNumber)) {
+			ScriptMaster maxScriptObject=scriptMasterRepository.findByScriptId(maxScriptId);
+			String maxScriptNumber=maxScriptObject.getScriptNumber();
+			if("".equals(maxScriptNumber) || maxScriptNumber==null) {
 				newCustomScriptNumber=newCustomScriptNumber+"1";
 			}
 			else {
@@ -571,6 +573,5 @@ public class TestRunMigrationGetService {
 				mapOfNewToOld.put(scriptMasterPrsent, originalId);
 				mapOfOldToNew.put(originalId, scriptMasterPrsent);				
 		}
-		return mapOfOldToNew;
 	}
 }
