@@ -80,6 +80,9 @@ public class TemplateDownloadService {
 	}
 
 	private List<String> getCodes(String codeType) {
+		if(codeType=="CUSTOMER_ID") {
+			return dataBaseEntry.getListOfCustomers();			
+		}
 		return dataBaseEntry.findLookUpCodesUsingLookUpName(codeType);
 	}
 
@@ -175,7 +178,7 @@ public class TemplateDownloadService {
 					: null;
 
 			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns("PRODUCT_VERSION", "PROCESS",
-					"MODULE", "ROLE", "STATUS", "PRIORITY", "STANDARD");
+					"MODULE", "ROLE", "STATUS", "PRIORITY", "STANDARD","CUSTOMER_ID");
 
 			List<String> listOfTargetApplication = getCodes("TARGET_APPLICATION");
 
@@ -192,7 +195,7 @@ public class TemplateDownloadService {
 					"ACTION", "UNIQUE/MANDATORY", "DATATYPES");
 
 			List<String> listOfDropdownKeys = Arrays.asList("PRODUCT VERSION", "PROCESS AREA", "MODULE", "ROLE",
-					"TEST SCRIPT STATUS", "PRIORITY", "TYPE OF SCRIPT");
+					"TEST SCRIPT STATUS", "PRIORITY", "TYPE OF SCRIPT","CUSTOMER ID");
 
 			Sheet valueSheet = createListSheet(workbook, mapOfTargetApplicationAndAction);
 
@@ -272,9 +275,13 @@ public class TemplateDownloadService {
 								|| "PRIORITY".equalsIgnoreCase(row[i - 1])) {
 							if ("PROCESS AREA".equalsIgnoreCase(row[i - 1])) {
 								result = dataBaseEntry.getMeaningByTargetCode(result.toString(), "PROCESS");
-							} else {
+							}else {
 								result = dataBaseEntry.getMeaningByTargetCode(result.toString(), row[i - 1]);
 							}
+						}
+						if("CUSTOMER ID".equalsIgnoreCase(row[i - 1])){
+							result = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(result.toString()));
+							System.out.println("result="+result);
 						}
 						value = (result != null) ? result.toString() : "";
 					}
