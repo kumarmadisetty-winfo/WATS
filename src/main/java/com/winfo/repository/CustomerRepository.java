@@ -15,6 +15,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	@Query("select customerName from Customer")
 	List<String> findListOfCustomers();
 	
+	@Query("select c.customerName from Customer c, UserRole r, User u where upper(u.userId)=upper(?1) and "
+			+ "upper(r.userId)=upper(u.userId) and (upper(r.userType)='SUPER_ADMIN' or c.customerId=u.customerId)")
+	List<String> findListOfCustomers(String userName);
+	
 //	@Query("SELECT customerName from Customer where customerId=?1")
 //	String getCus(int customerId);
 }

@@ -79,15 +79,17 @@ public class TemplateDownloadService {
 		});
 	}
 
-	private List<String> getCodes(String codeType) {
+	private List<String> getCodes(String userName, String codeType) {
 		if(codeType=="CUSTOMER_ID") {
-			return dataBaseEntry.getListOfCustomers();			
+			return dataBaseEntry.getListOfCustomers(userName);			
+//			return dataBaseEntry.getListOfCustomers();			
 		}
 		return dataBaseEntry.findLookUpCodesUsingLookUpName(codeType);
 	}
 
-	private List<List<String>> getScriptDetailsColumns(String... codeTypes) {
-		return Arrays.stream(codeTypes).map(this::getCodes).collect(Collectors.toList());
+	private List<List<String>> getScriptDetailsColumns(String userName, String... codeTypes) {
+//		return Arrays.stream(codeTypes).map(this::getCodes).collect(Collectors.toList());
+		return Arrays.stream(codeTypes).map(codeType->getCodes(userName,codeType)).collect(Collectors.toList());
 	}
 
 	private void setCellStyle(Cell cell, Font font, FillPatternType fillPatternType, IndexedColors fillColor,
@@ -171,16 +173,16 @@ public class TemplateDownloadService {
 		return listOfScriptColumnName;
 	}
 
-	public Workbook generateTemplate(Optional<Integer> scriptId) {
+	public Workbook generateTemplate(Optional<Integer> scriptId,String userName) {
 		try {
 			ScriptMaster scriptMasterData = scriptId.isPresent()
 					? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get())
 					: null;
 
-			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns("PRODUCT_VERSION", "PROCESS",
+			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns(userName, "PRODUCT_VERSION", "PROCESS",
 					"MODULE", "ROLE", "STATUS", "PRIORITY", "STANDARD","CUSTOMER_ID");
 
-			List<String> listOfTargetApplication = getCodes("TARGET_APPLICATION");
+			List<String> listOfTargetApplication = getCodes("","TARGET_APPLICATION");
 
 			Map<String, List<String>> mapOfTargetApplicationAndAction = listOfTargetApplication.stream()
 					.collect(Collectors.toMap(targetApplication -> targetApplication,

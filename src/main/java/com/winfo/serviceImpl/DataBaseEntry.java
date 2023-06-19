@@ -629,6 +629,9 @@ public class DataBaseEntry {
 	public String getCustomerNameFromCustomerId(int customerId) {
 		return customerRepository.findByCustomerId(customerId).getCustomerName();
 	}
+	public List<String> getListOfCustomers(String userName) {
+		return customerRepository.findListOfCustomers(userName);
+	}
 	public List<String> getListOfCustomers() {
 		return customerRepository.findListOfCustomers();
 	}
