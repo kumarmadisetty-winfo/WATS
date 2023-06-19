@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -658,10 +660,11 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				}
 			}
 		}
-		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", customerDetails);
-		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", customerDetails);
-		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
-
+		ExecutorService executor = Executors.newFixedThreadPool(2);
+		executor.execute(() -> createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", customerDetails));
+		executor.execute(() -> createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", customerDetails));
+		executor.execute(() -> createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", customerDetails));
+		executor.shutdown();
 	}
 
 	public void createDir(String path) {
@@ -792,7 +795,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setEndtime(endDate);
 				testRunPdfGeneration(testSetId, fetchConfigVO);
-				response = new ResponseDto(200, Constants.SUCCESS, null);
+				response = new ResponseDto(200, Constants.SUCCESS, "The process of generating the PDF has started, please check back after some time.");
 			} catch (Exception e) {
 				e.printStackTrace();
 				response = new ResponseDto(500, Constants.ERROR, e.getMessage());
@@ -805,7 +808,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 
-	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+//	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
