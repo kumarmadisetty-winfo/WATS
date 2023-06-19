@@ -1699,6 +1699,7 @@ public class DataBaseEntryDao {
 		logDetailsTable.setLogDescription(logDescription);
 		return logDetailsTable;
 	}
+
 }
 	
 	

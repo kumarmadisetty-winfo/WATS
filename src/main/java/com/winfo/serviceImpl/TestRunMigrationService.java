@@ -173,8 +173,10 @@ public class TestRunMigrationService {
 			lookUpDataMap.put(DATATYPES.toLowerCase(), dataBaseEntryDao.getLookUp(DATATYPES, lookUpCodeDataTypes));
 			testRunMigrateDto.setLookUpData(lookUpDataMap);
 			testRunMigrationDto.add(testRunMigrateDto);
-			logger.info("Succesfully added migration data");		}
+			logger.info("Succesfully added migration data");
+      }
 		return webClientService(testRunMigrationDto, lookUpCode.getTargetCode());
+
 
 	}
 

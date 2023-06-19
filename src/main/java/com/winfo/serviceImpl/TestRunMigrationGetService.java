@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
@@ -17,19 +18,28 @@ import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.controller.MigrationReceiver;
 import com.winfo.dao.CopyTestRunDao;
+import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.dao.TestRunMigrationGetDao;
+import com.winfo.exception.WatsEBSException;
+import com.winfo.model.ConfigTable;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
+import com.winfo.model.Project;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.ConfigurationRepository;
+import com.winfo.repository.ProjectRepository;
+import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.utils.Constants;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -50,17 +60,30 @@ public class TestRunMigrationGetService {
 
 	@Autowired
 	private EntityManager entityManager;
+	
+	@Autowired
+	DataBaseEntryDao dataBaseEntryDao;
+	
+	@Autowired
+	ScriptMasterRepository scriptMasterRepository;
 
+	@Autowired
+	ProjectRepository projectRepository;
+
+	@Autowired
+	DomGenericResponseBean domGenericResponseBean;
+
+	@Autowired
+	ConfigurationRepository configurationRepository;
+	
 	@Transactional
 	@SuppressWarnings("unchecked")
 	public List<DomGenericResponseBean> centralRepoData(List<TestRunMigrationDto> listOfTestRunDto) {
 		
 		List<DomGenericResponseBean> listOfResponseBean = new ArrayList<>();
 		int count=0;
-		DomGenericResponseBean domGenericResponseBean = null;
 		String testrunName=null;
-		String description=null;
-		
+		String description=null;		
 		for (TestRunMigrationDto testRunMigrateDto : listOfTestRunDto) {
 			Session session = entityManager.unwrap(Session.class);
 
@@ -72,12 +95,12 @@ public class TestRunMigrationGetService {
 			int checkTestRun = Integer.parseInt(checkTest.toString());
 
 			if (checkTestRun > 0 && !testRunMigrateDto.isTestRunExists()) {
-				domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatus(0);
 				domGenericResponseBean.setStatusMessage("Already Exists");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
-				logger.info("Test Run already exists " + testRunMigrateDto.getTestSetName() );			continue;
+				logger.info("Test Run already exists " + testRunMigrateDto.getTestSetName());
+				continue;
 			}
 			int customerId = 0;
 			try {
@@ -87,7 +110,6 @@ public class TestRunMigrationGetService {
 						.getSingleResult();
 				customerId = Integer.parseInt(checkCustomer.toString());
 			} catch (Exception e) {
-				domGenericResponseBean = new DomGenericResponseBean();
 				domGenericResponseBean.setStatusMessage("Customer Not Found");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
@@ -228,17 +250,19 @@ public class TestRunMigrationGetService {
 				}
 				listOfScriptMaster.add(master);
 			}
-			mapOfScriptIdsOldToNew = independentScript(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew);
-
-			List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config")
-					.getResultList();
-
-			int configurationId = Integer.parseInt(listOfConfig.get(0).toString());
-
-//==========================================
+			mapOfScriptIdsOldToNew = getOldToNewScriptIds(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew, customerId,testRunMigrateDto);
+			int configurationId;
+			try {
+				ConfigTable config=configurationRepository.findFirstByCustomerId(customerId);
+				configurationId=config.getConfigurationId();		
+			}catch (Exception e) {
+				logger.error(Constants.CONFFIG_ERROR);
+				throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.CONFFIG_ERROR);
+			}
+			
 			BigDecimal checkProject = (BigDecimal) session
 					.createNativeQuery("select count(*) from win_ta_projects where project_name ='"
-							+ testRunMigrateDto.getProjectName() + "'")
+							+ testRunMigrateDto.getProjectName() + "' and customer_id="+customerId)
 					.getSingleResult();
 
 			int checkProjectId = Integer.parseInt(checkProject.toString());
@@ -251,6 +275,13 @@ public class TestRunMigrationGetService {
 				BigDecimal nextValueProject = (BigDecimal) session
 						.createNativeQuery("SELECT WIN_TA_PROJECT_SEQ.nextval FROM DUAL").getSingleResult();
 				Integer newNextValueProject = Integer.parseInt(nextValueProject.toString());
+				
+				long checkProjectIdInInstance = projectRepository.countByProjectName(testRunMigrateDto.getProjectName());				
+				if (checkProjectIdInInstance > 0) {	
+					String maxProjectName=projectRepository.getMaxProjectName(testRunMigrateDto.getProjectName()).trim();
+					String newProjectName=maxProjectName+"-1";
+					testRunMigrateDto.setProjectName(newProjectName);
+				}
 
 				session.createNativeQuery(
 						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,START_DATE,CUSTOMER_ID,PRODUCT_VERSION, WATS_PACKAGE) VALUES("
@@ -282,12 +313,19 @@ public class TestRunMigrationGetService {
 				testrundata.setTestRunName(testRunMigrateDto.getTestSetName());
 			}
 			testrundata.setConfigurationId(configurationId);
-
-			BigDecimal project = (BigDecimal) session
-					.createNativeQuery("select project_id from win_ta_projects where project_name ='"
-							+ testRunMigrateDto.getProjectName() + "'")
+			
+			String query = "select project_id from win_ta_projects where project_name ='"+testRunMigrateDto.getProjectName()+"' and customer_id="+customerId;
+			BigDecimal project = null;
+			try {
+			project = (BigDecimal) session
+					.createNativeQuery(query)
 					.getSingleResult();
-			int projectId = Integer.parseInt(project.toString());
+			}catch (Exception e) {			
+				logger.error(Constants.PROJECT_ERROR);
+				throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.PROJECT_ERROR);
+			}
+			Project projectObject=projectRepository.findByProjectNameAndCustomerId(testRunMigrateDto.getProjectName(),customerId);
+			int projectId =  projectObject.getProjectId();
 
 			testrundata.setProjectId(projectId);
 
@@ -374,7 +412,6 @@ public class TestRunMigrationGetService {
 		}
 		if(count>=1)
 		{
-			domGenericResponseBean = new DomGenericResponseBean();
 			domGenericResponseBean.setStatus(200);
 			domGenericResponseBean.setStatusMessage("SUCCESS");
 			domGenericResponseBean.setDescription(description);
@@ -386,7 +423,7 @@ public class TestRunMigrationGetService {
 
 	public int dependentScript(Integer id, List<ScriptMaster> listOfScriptMaster, int insertedScriptaId,
 			Map<Integer, Integer> mapOfNewToOld, Map<Integer, Integer> mapOfOldToNew,
-			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew,int customerId, TestRunMigrationDto testRunMigrateDto) {
 		for (ScriptMaster scriptMaster : listOfScriptMaster) {
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
@@ -407,7 +444,7 @@ public class TestRunMigrationGetService {
 						return insertedScriptaId;
 					} else {
 						insertedScriptaId = dependentScript(scriptMaster.getDependency(), listOfScriptMaster,
-								insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
+								insertedScriptaId, mapOfNewToOld, mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto);
 						scriptMaster.setDependency(insertedScriptaId);
 						int originalId = scriptMaster.getScriptId();
 						insertedScriptaId = dao.insertScriptMaster(scriptMaster);
@@ -423,29 +460,28 @@ public class TestRunMigrationGetService {
 
 				}
 			} else if (scriptMasterPrsent > 0) {
-				int originalId = scriptMaster.getScriptId();
-				mapOfNewToOld.put(scriptMasterPrsent, originalId);
-				mapOfOldToNew.put(originalId, scriptMasterPrsent);
+				createScriptIfExistWithDiffCustomer(listOfScriptMaster,mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto,
+						scriptMaster,scriptMasterPrsent,mapOfOldToNew,mapOfNewToOld);
 			}
 		}
 		return insertedScriptaId;
 	}
 
-	public Map<Integer, Integer> independentScript(List<ScriptMaster> listOfScriptMaster,
-			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew) {
+	public Map<Integer, Integer> getOldToNewScriptIds(List<ScriptMaster> listOfScriptMaster,
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew, int customerId, TestRunMigrationDto testRunMigrateDto) {
 		Map<Integer, Integer> mapOfNewToOld = new HashMap<>();
 		Map<Integer, Integer> mapOfOldToNew = new HashMap<>();
-		for (ScriptMaster scriptMaster : listOfScriptMaster) {
-
+		for (ScriptMaster scriptMaster : listOfScriptMaster) {			
 			int scriptMasterPrsent = dao.checkScriptPresent(scriptMaster.getProductVersion(),
 					scriptMaster.getScriptNumber());
-
+			
 			if (scriptMasterPrsent == 0 && !mapOfNewToOld.containsKey(scriptMaster.getScriptId())
 					&& !mapOfOldToNew.containsKey(scriptMaster.getScriptId())) {
+				
 				if (scriptMaster.getDependency() != null) {
 					int insertedScriptaId = 0;
 					dependentScript(scriptMaster.getScriptId(), listOfScriptMaster, insertedScriptaId, mapOfNewToOld,
-							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew);
+							mapOfOldToNew, mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto);
 				} else {
 					int originalId = scriptMaster.getScriptId();
 					scriptMaster.setScriptId(null);
@@ -460,16 +496,77 @@ public class TestRunMigrationGetService {
 					mapOfOldToNew.put(originalId, id);
 				}
 			} else {
-				int originalId = scriptMaster.getScriptId();
-				int id = scriptMasterPrsent;
-				if (id > 0) {
-					mapOfNewToOld.put(id, originalId);
-					mapOfOldToNew.put(originalId, id);
-				}
-
+				createScriptIfExistWithDiffCustomer(listOfScriptMaster,mapOfMetaDataScriptIdsOldToNew,customerId,testRunMigrateDto,
+						scriptMaster,scriptMasterPrsent,mapOfOldToNew,mapOfNewToOld);
 			}
 		}
 		return mapOfOldToNew;
 	}
 
+	public void createScriptIfExistWithDiffCustomer(List<ScriptMaster> listOfScriptMaster,
+			Map<Integer, Integer> mapOfMetaDataScriptIdsOldToNew, int customerId, TestRunMigrationDto testRunMigrateDto,
+			ScriptMaster scriptMaster,int scriptMasterPrsent,Map<Integer, Integer> mapOfOldToNew,Map<Integer, Integer> mapOfNewToOld) {
+		String newCustomScriptNumber="";
+		//Get customer id of existing script
+		ScriptMaster oldScriptCustomerId = scriptMasterRepository.findByScriptNumberAndProductVersion(scriptMaster.getScriptNumber(),
+				scriptMaster.getProductVersion());
+		//check existing script is mapped with target customer or not 
+		if(oldScriptCustomerId.getCustomerId()!=customerId) {
+			newCustomScriptNumber=scriptMaster.getScriptNumber().contains(".C.")?scriptMaster.getScriptNumber():
+				scriptMaster.getScriptNumber()+".C.";
+			int maxScriptId=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
+					,scriptMaster.getProductVersion());
+			ScriptMaster maxScriptObject=scriptMasterRepository.findByScriptId(maxScriptId);
+			String maxScriptNumber=maxScriptObject.getScriptNumber();
+			if("".equals(maxScriptNumber) || maxScriptNumber==null) {
+				newCustomScriptNumber=newCustomScriptNumber+"1";
+			}
+			else {
+				try {
+					newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
+							+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);
+					}catch(Exception e) {
+						logger.error("Exception Occured while creating new script for Test Run");
+						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception Occured while creating new script for Test Run", e);
+					}				
+			}
+			String setNewCustomScriptNumber=newCustomScriptNumber;
+			//updating new script number in test_set_line and test_set_script_param
+			List<TestSetLineDto> updatedLineData =
+			testRunMigrateDto.getTestSetLinesAndParaData().stream()
+			.map((testSetLine) -> {
+				if(scriptMaster.getScriptNumber().equals(testSetLine.getScriptnumber())) {
+					testSetLine.setScriptnumber(setNewCustomScriptNumber);
+					List<WatsTestSetParamVO> updatedParamData =testSetLine.getScriptParam().stream().map((testSetLineParam) -> {
+						testSetLineParam.setScriptNumber(setNewCustomScriptNumber);
+						return testSetLineParam;
+					}).collect(Collectors.toList());
+					testSetLine.setScriptParam(updatedParamData);
+				}
+				return testSetLine;
+			}).collect(Collectors.toList());
+			testRunMigrateDto.setTestSetLinesAndParaData(updatedLineData);	
+			scriptMaster.setScriptNumber(newCustomScriptNumber);
+			scriptMaster.setStandardCustom(Constants.CUSTOM_SCRIPT);
+			int originalId = scriptMaster.getScriptId();
+			scriptMaster.setScriptId(null);
+			int id = dao.insertScriptMaster(scriptMaster);
+			List<ScriptMetaData> updatedScriptMetaData=
+				scriptMaster.getScriptMetaDatalist().stream().map((scriptMetaData) -> {
+				Integer oldMetaDataId = scriptMetaData.getScriptMetaDataId();
+				if(!"".equals(setNewCustomScriptNumber)) scriptMetaData.setScriptNumber(setNewCustomScriptNumber);
+				int insertedScriptMetaDataObject = dao.insertScriptMetaData(scriptMetaData);
+				mapOfMetaDataScriptIdsOldToNew.put(oldMetaDataId, insertedScriptMetaDataObject);
+				return scriptMetaData;
+			}).collect(Collectors.toList());
+			scriptMaster.setScriptMetaDatalist(updatedScriptMetaData);
+			mapOfNewToOld.put(id, originalId);
+			mapOfOldToNew.put(originalId, id);
+		}
+		else {
+			int originalId = scriptMaster.getScriptId();
+				mapOfNewToOld.put(scriptMasterPrsent, originalId);
+				mapOfOldToNew.put(originalId, scriptMasterPrsent);				
+		}
+	}
 }
