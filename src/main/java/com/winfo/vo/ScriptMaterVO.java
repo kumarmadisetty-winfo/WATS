@@ -39,7 +39,7 @@ public class ScriptMaterVO {
 
 	@JsonProperty("Dependency")
 	@JsonAlias("dependency")
-	private Integer dependency;
+	private String dependency;
 
 	@JsonProperty("Sub Process Area")
 	@JsonAlias("subProcessArea")
@@ -122,6 +122,9 @@ public class ScriptMaterVO {
 	private List<ScriptMetaDataVO> scriptMetaDatalist;
 
 	public void updateFieldIfNotNull(DataBaseEntry dataBaseEntry) {
+		if (dependency != null) {
+			dependency = dataBaseEntry.getScriptDetailsByScriptId(Integer.parseInt(dependency)).getScriptNumber();
+		}
 		if (attribute1 != null) {
 			attribute1 = dataBaseEntry.getScriptDetailsByScriptId(Integer.parseInt(attribute1)).getScriptNumber();
 		}

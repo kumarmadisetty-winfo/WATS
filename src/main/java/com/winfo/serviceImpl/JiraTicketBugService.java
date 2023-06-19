@@ -109,7 +109,7 @@ public class JiraTicketBugService {
 		try {
 			String args = testsetid.toString();
 			FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(args);
-			final String uri = fetchConfigVO.getUri_test_scripts() + args;
+			final String uri = fetchConfigVO.getURI_TEST_SCRIPTS() + args;
 			List<FetchMetadataVO> fetchMetadataListVO = testRunService.getFetchMetaData(args, uri);
 
 			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
@@ -117,7 +117,7 @@ public class JiraTicketBugService {
 
 			// File filenew=new
 			// File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
-			File filenew = new File(fetchConfigVO.getPdf_path() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+			File filenew = new File(fetchConfigVO.getPDF_PATH() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");
 
 			logger.info("jira pdf path= " + filenew);
