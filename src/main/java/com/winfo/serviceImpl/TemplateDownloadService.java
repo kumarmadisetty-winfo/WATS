@@ -82,13 +82,11 @@ public class TemplateDownloadService {
 	private List<String> getCodes(String userName, String codeType) {
 		if(codeType=="CUSTOMER_ID") {
 			return dataBaseEntry.getListOfCustomers(userName);			
-//			return dataBaseEntry.getListOfCustomers();			
 		}
 		return dataBaseEntry.findLookUpCodesUsingLookUpName(codeType);
 	}
 
 	private List<List<String>> getScriptDetailsColumns(String userName, String... codeTypes) {
-//		return Arrays.stream(codeTypes).map(this::getCodes).collect(Collectors.toList());
 		return Arrays.stream(codeTypes).map(codeType->getCodes(userName,codeType)).collect(Collectors.toList());
 	}
 

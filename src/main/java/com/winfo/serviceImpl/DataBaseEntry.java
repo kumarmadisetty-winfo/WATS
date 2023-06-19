@@ -632,7 +632,4 @@ public class DataBaseEntry {
 	public List<String> getListOfCustomers(String userName) {
 		return customerRepository.findListOfCustomers(userName);
 	}
-	public List<String> getListOfCustomers() {
-		return customerRepository.findListOfCustomers();
-	}
 }
