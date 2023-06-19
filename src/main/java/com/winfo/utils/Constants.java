@@ -124,4 +124,4 @@ public class Constants {
 	public static final String CONFFIG_ERROR="Configuration not found";
 	public static final String PROJECT_ERROR="Project not found";
 	public static final String CUSTOMER_ERROR="Customer not found";
-}
+	public static final String CUSTOM_SCRIPT="Custom";}

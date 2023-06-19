@@ -27,6 +27,7 @@ import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.dao.TestRunMigrationGetDao;
 import com.winfo.exception.WatsEBSException;
+import com.winfo.model.ConfigTable;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
 import com.winfo.model.Project;
@@ -35,6 +36,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.ConfigurationRepository;
 import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.utils.Constants;
@@ -70,6 +72,9 @@ public class TestRunMigrationGetService {
 
 	@Autowired
 	DomGenericResponseBean domGenericResponseBean;
+
+	@Autowired
+	ConfigurationRepository configurationRepository;
 	
 	@Transactional
 	@SuppressWarnings("unchecked")
@@ -248,9 +253,8 @@ public class TestRunMigrationGetService {
 			mapOfScriptIdsOldToNew = getOldToNewScriptIds(listOfScriptMaster, mapOfMetaDataScriptIdsOldToNew, customerId,testRunMigrateDto);
 			int configurationId;
 			try {
-				List<BigDecimal> listOfConfig = session.createNativeQuery("select configuration_id from win_ta_config where customer_id="+customerId)
-						.getResultList();
-				configurationId=Integer.parseInt(listOfConfig.get(0).toString());;				
+				ConfigTable config=configurationRepository.findFirstByCustomerId(customerId);
+				configurationId=config.getConfigurationId();		
 			}catch (Exception e) {
 				logger.error(Constants.CONFFIG_ERROR);
 				throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.CONFFIG_ERROR);
@@ -273,12 +277,8 @@ public class TestRunMigrationGetService {
 				Integer newNextValueProject = Integer.parseInt(nextValueProject.toString());
 				
 				long checkProjectIdInInstance = projectRepository.countByProjectName(testRunMigrateDto.getProjectName());				
-				if (checkProjectIdInInstance > 0) {					
-					String maxProjectName = (String) session
-							.createNativeQuery("select max(PROJECT_NAME) from win_ta_projects where project_name like '"
-									+ testRunMigrateDto.getProjectName() + "%'")
-							.getSingleResult();
-					maxProjectName=maxProjectName.trim();
+				if (checkProjectIdInInstance > 0) {	
+					String maxProjectName=projectRepository.getMaxProjectName(testRunMigrateDto.getProjectName()).trim();
 					String newProjectName=maxProjectName+"-1";
 					testRunMigrateDto.setProjectName(newProjectName);
 				}
@@ -527,7 +527,7 @@ public class TestRunMigrationGetService {
 							+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);
 					}catch(Exception e) {
 						logger.error("Exception Occured while creating new script for Test Run");
-						throw new WatsEBSException(500, "Exception Occured while creating new script for Test Run", e);
+						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception Occured while creating new script for Test Run", e);
 					}				
 			}
 			String setNewCustomScriptNumber=newCustomScriptNumber;
@@ -547,7 +547,7 @@ public class TestRunMigrationGetService {
 			}).collect(Collectors.toList());
 			testRunMigrateDto.setTestSetLinesAndParaData(updatedLineData);	
 			scriptMaster.setScriptNumber(newCustomScriptNumber);
-			scriptMaster.setStandardCustom("Custom");
+			scriptMaster.setStandardCustom(Constants.CUSTOM_SCRIPT);
 			int originalId = scriptMaster.getScriptId();
 			scriptMaster.setScriptId(null);
 			int id = dao.insertScriptMaster(scriptMaster);
