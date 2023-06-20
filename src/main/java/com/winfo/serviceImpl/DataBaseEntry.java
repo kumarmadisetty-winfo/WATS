@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Customer;
 import com.winfo.model.LookUpCode;
@@ -29,6 +30,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.CustomerRepository;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.repository.TestSetLinesRepository;
@@ -56,6 +58,9 @@ public class DataBaseEntry {
 
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
+	
+	@Autowired
+	CustomerRepository customerRepository;
 
 	@Autowired
 	ApplicationContext appContext;
@@ -619,5 +624,11 @@ public class DataBaseEntry {
 	
 	public TestSetLine getTestSetLineBySequenceNumber(String testSetId, String seqNumber) {
 		return testSetLinesRepository.findBySeqNum(Integer.parseInt(testSetId), Integer.parseInt(seqNumber));
+	}
+	public String getCustomerNameFromCustomerId(int customerId) {
+		return customerRepository.findByCustomerId(customerId).getCustomerName();
+	}
+	public List<String> getListOfCustomers(String userName) {
+		return customerRepository.findListOfCustomers(userName);
 	}
 }
