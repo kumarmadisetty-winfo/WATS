@@ -489,15 +489,11 @@ public class DataBaseEntry {
 		BigDecimal executed = (BigDecimal) subscriptionDtls.get(0)[1];
 		BigDecimal balance = (BigDecimal) subscriptionDtls.get(0)[2];
 
-		Integer sum = dao.findGraceAllowance(subsId);
-
-		Integer graceValue = (sum == null) ? 0 : sum;
-
-		if (sumQuantity.intValue() + graceValue.intValue() - sumExecuted.intValue() > 0) {
+		if (sumQuantity.intValue() - sumExecuted.intValue() > 0) {
 			dao.updateSubscriptionExecuteAndBalance(executed, balance, subsId);
 		}
 
-		if (Math.abs(balance.intValue() - 1) >= graceValue && (balance.intValue() - 1) <= 0) {
+		if (balance.intValue() == 0) {
 			dao.updateSubscriptionStatus(COMPLETED, subsId);
 		}
 
