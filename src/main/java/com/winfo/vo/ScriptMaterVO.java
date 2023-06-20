@@ -155,7 +155,7 @@ public class ScriptMaterVO {
 		        });
 		}
 		if (customerId != null) {
-			customerId = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(customerId)).getCustomerName();
+			customerId = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(customerId));
 		}
 
 	}

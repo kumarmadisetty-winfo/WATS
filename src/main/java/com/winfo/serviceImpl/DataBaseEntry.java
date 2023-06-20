@@ -624,7 +624,4 @@ public class DataBaseEntry {
 	public TestSetLine getTestSetLineBySequenceNumber(String testSetId, String seqNumber) {
 		return testSetLinesRepository.findBySeqNum(Integer.parseInt(testSetId), Integer.parseInt(seqNumber));
 	}
-	public Customer getCustomerNameFromCustomerId(int customerId) {
-		return customerRepository.findByCustomerId(customerId);
-	}
 }
