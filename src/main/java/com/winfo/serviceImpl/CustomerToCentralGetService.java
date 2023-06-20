@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.winfo.dao.CustomerToCentralGetDao;
+import com.winfo.model.LookUpCode;
+import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.utils.Constants;
 import com.winfo.vo.ScriptDtlsDto;
 import com.winfo.vo.WatsMasterDataVOList;
 import com.winfo.vo.ScriptMasterDto;
@@ -28,15 +31,19 @@ public class CustomerToCentralGetService {
 
 	@Autowired
 	CustomerToCentralGetDao dao;
+	
+	@Autowired
+	private LookUpCodeRepository lookUpCodeJpaRepository;
 
-	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUri) {
+	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUrl, String customerName) {
+    
 		String response;
-		if (customerUri.equals("")) {
+		if (customerUrl.equals("")) {
 			response = "[{\"status\":500,\"statusMessage\":\"Invalid URL\",\"description\":\"Invalid URL!!\"}]";
-			logger.error("Invalid URL " + customerUri);
+			logger.error("Invalid URL " + customerUrl);
 		} else {
-			String uri = customerUri + "/centralToCustomerScriptMigrate";
-			WebClient webClient = WebClient.create(uri);
+
+			WebClient webClient = WebClient.create(customerUrl + "/centralToCustomerScriptMigrate/"+customerName);
 			Mono<String> result = webClient.post().syncBody(watsMasterDataVO).retrieve().bodyToMono(String.class);
 			response = result.block();
 			if ("[]".equals(response)) {
@@ -51,15 +58,11 @@ public class CustomerToCentralGetService {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String scriptMetaData(ScriptDtlsDto scriptDtls) {
 		List<ScriptMasterDto> watsMasterVOList = dao.fecthMetaDataList(scriptDtls);
-		Session session = entityManager.unwrap(Session.class);
-		Query query4 = session.createQuery(
-				"select valueName from ApplicationProperties where keyName='" + scriptDtls.getCustomerName() + "'");
-		List<String> result4 = query4.list();
-//		String customerUri = result4.isEmpty() ? "http://localhost:38081/wats" : result4.get(0);
-		String customerUri = result4.isEmpty() ? "" : result4.get(0);
+		LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(Constants.Look_Up_Name,scriptDtls.getCustomerName());
+		logger.info("LookUpCode Data " + lookUpCode);
 		WatsMasterDataVOList watsMasterDataVO = new WatsMasterDataVOList();
 		watsMasterDataVO.setData(watsMasterVOList);
-		return webClientService(watsMasterDataVO, customerUri);
+		return webClientService(watsMasterDataVO, lookUpCode.getTargetCode(),scriptDtls.getCustomerName());
 	}
 
 }

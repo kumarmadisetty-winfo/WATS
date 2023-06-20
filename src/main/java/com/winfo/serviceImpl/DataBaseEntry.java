@@ -579,16 +579,15 @@ public class DataBaseEntry {
 	}
 	
 	@Transactional
-	public void getTestRunLinesDataByTestSetLineId(TestSetLine testSetLineObj) {
+	public void getTestRunLinesDataByTestSetLineId(TestSetLine testSetLineObj, String deletedBy) {
 	
 		TestSetLine newTestSetLineObj = dao.getTestSetLine(testSetLineObj.getTestRunScriptId().toString());
-		newTestSetLineObj.setLastUpdatedBy(testSetLineObj.getLastUpdatedBy());
-		appContext.getBean(this.getClass()).deleteScriptFromTestRun(newTestSetLineObj);
+		appContext.getBean(this.getClass()).deleteScriptFromTestRun(newTestSetLineObj,deletedBy);
 	}
 	
-	public void deleteScriptFromTestRun(TestSetLine testSetLineObj) {
+	public void deleteScriptFromTestRun(TestSetLine testSetLineObj, String deletedBy) {
 		dao.deleteTestSetScriptParamRecordsByTestSetLineId(testSetLineObj);
-		dao.deleteTestSetLinesRecordsByTestSetLineId(testSetLineObj);
+		dao.deleteTestSetLinesRecordsByTestSetLineId(testSetLineObj,deletedBy);
 	}
 	
 	public TestSetLine getTestSetLineRecordsByTestSetLineId(String testSetLineId) {

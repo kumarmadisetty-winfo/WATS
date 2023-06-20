@@ -141,16 +141,16 @@ public class VMDetailesService {
 	private void getWebDriver(FetchConfigVO fetchConfigVO) throws MalformedURLException, InterruptedException {
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
-		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
+		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBROWSER())) {
+			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getCHROME_DRIVER_PATH());
 			System.setProperty("java.awt.headless", "false");
 			// System.setProperty(DriverConstants.CHROME_DRIVER.value,
 			// "C:\\Users\\watsadmin\\Documents\\Selenium Grid\\chromedriver.exe");
 			Map<String, Object> prefs = new HashMap<String, Object>();
 			prefs.put("profile.default_content_settings.popups", 0);
-			prefs.put("download.default_directory", fetchConfigVO.getDownlod_file_path());
+			prefs.put("download.default_directory", fetchConfigVO.getDOWNLOD_FILE_PATH());
 			ChromeOptions options = new ChromeOptions();
-			
+	
 			if (os.contains("win")) {
 				logger.info("Script executing on windows location");
 				options.setBinary("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");// cap.setCapability("chrome.binary",

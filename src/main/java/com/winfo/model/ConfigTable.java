@@ -19,5 +19,7 @@ public class ConfigTable {
 	@Column(name = "JIRA_ISSUE_URL")
 	private String jiraIssueUrl;
 
+	@Column(name = "CUSTOMER_ID")
+	private Integer customerId;
 	
 }

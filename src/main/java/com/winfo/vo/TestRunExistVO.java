@@ -9,6 +9,4 @@ public class TestRunExistVO {
 	
 	private List<ExistTestRunDto> testRunNameList;
 
-	
-
 }

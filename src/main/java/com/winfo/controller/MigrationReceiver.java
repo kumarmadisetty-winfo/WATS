@@ -6,13 +6,17 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.winfo.exception.WatsEBSException;
 import com.winfo.serviceImpl.CentralToCustomerPostService;
 import com.winfo.serviceImpl.GetApiValidationMigrationService;
 import com.winfo.serviceImpl.TestRunMigrationGetService;
+import com.winfo.utils.Constants;
 import com.winfo.vo.ApiValidationDto;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.ResponseDto;
@@ -32,10 +36,18 @@ public class MigrationReceiver {
 
 	@Autowired
 	TestRunMigrationGetService testRunMigrateGetService;
+	
+	@Autowired
+	DomGenericResponseBean domGenericResponseBean;
 
-	@PostMapping("/centralToCustomerScriptMigrate")
-	public List<DomGenericResponseBean> scriptMetaDataListFromCentral(@RequestBody WatsMasterDataVOList mastervolist) {
-		return service.saveScriptMasterDtls(mastervolist);
+	@PostMapping("/centralToCustomerScriptMigrate/{customerName}")
+	public List<DomGenericResponseBean> scriptMetaDataListFromCentral(@RequestBody WatsMasterDataVOList mastervolist,@PathVariable String customerName) {
+		if(!"".equals(customerName) && customerName!=null) {
+			return service.saveScriptMasterDtls(mastervolist,customerName);			
+		}else{
+			logger.error(Constants.CUSTOMER_ERROR);
+			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.CUSTOMER_ERROR);
+		}
 
 	}
 

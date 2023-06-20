@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ResponseDto;
 
@@ -20,7 +20,7 @@ public class CentralRepoStatusCheckService {
 			String url = dataBaseEntry.getCentralRepoUrl(Constants.WATS_CENTRAL);
 			restTemplate.getForObject(url, String.class);
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Central repo is not accessible");
+			throw new WatsEBSException(500, "Central repo is not accessible");
 		}
 		return new ResponseDto(200, Constants.SUCCESS, "Central repo is up");
 	}
