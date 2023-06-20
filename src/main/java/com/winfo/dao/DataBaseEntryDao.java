@@ -1149,7 +1149,7 @@ public class DataBaseEntryDao {
 	public List<Object[]> getSumDetailsFromSubscription() {
 		List<Object[]> result = null;
 		String qry = "select sum(quantity),sum(executed),sum(balance) from wats_subscription\r\n"
-				+ "where uom = 'Script' and status='Active'  and to_date(sysdate ,'dd-mm-yyyy') >= start_date and to_date(sysdate ,'dd-mm-yyyy') <= end_date";
+				+ "where uom = 'Script' and status='Active'  and to_date(sysdate) >= start_date and to_date(sysdate) <= end_date";
 		try {
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(qry);
@@ -1159,11 +1159,11 @@ public class DataBaseEntryDao {
 		}
 		return result;
 	}
-
+  
 	public List<Object[]> getSubscriptionDetails() {
 		String qry = "select subscription_id, executed,balance from (SELECT subscription_id,executed,balance\r\n"
 				+ "         FROM wats_subscription\r\n"
-				+ "         WHERE status = 'Active' and uom = 'Script' and to_date(sysdate ,'dd-mm-yyyy') >= start_date and to_date(sysdate ,'dd-mm-yyyy') <= end_date\r\n"
+				+ "         WHERE status = 'Active' and uom = 'Script' and to_date(sysdate) >= start_date and to_date(sysdate) <= end_date\r\n"
 				+ "        ORDER BY subscription_id) where ROWNUM = 1";
 		List<Object[]> result = null;
 		try {
