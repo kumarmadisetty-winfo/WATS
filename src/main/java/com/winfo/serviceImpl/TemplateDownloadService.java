@@ -80,7 +80,7 @@ public class TemplateDownloadService {
 	}
 
 	private List<String> getCodes(String userName, String codeType) {
-		if(codeType=="CUSTOMER_ID") {
+		if("CUSTOMER_ID".equalsIgnoreCase(codeType) && codeType!=null) {
 			return dataBaseEntry.getListOfCustomers(userName);			
 		}
 		return dataBaseEntry.findLookUpCodesUsingLookUpName(codeType);
