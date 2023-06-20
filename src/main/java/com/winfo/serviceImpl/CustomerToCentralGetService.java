@@ -35,13 +35,15 @@ public class CustomerToCentralGetService {
 	@Autowired
 	private LookUpCodeRepository lookUpCodeJpaRepository;
 
-	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUrl) {
+	public String webClientService(WatsMasterDataVOList watsMasterDataVO, String customerUrl, String customerName) {
+    
 		String response;
 		if (customerUrl.equals("")) {
 			response = "[{\"status\":500,\"statusMessage\":\"Invalid URL\",\"description\":\"Invalid URL!!\"}]";
 			logger.error("Invalid URL " + customerUrl);
 		} else {
-			WebClient webClient = WebClient.create(customerUrl + "/apiValidationMigrationReceiver");
+
+			WebClient webClient = WebClient.create(customerUrl + "/centralToCustomerScriptMigrate/"+customerName);
 			Mono<String> result = webClient.post().syncBody(watsMasterDataVO).retrieve().bodyToMono(String.class);
 			response = result.block();
 			if ("[]".equals(response)) {
@@ -60,7 +62,7 @@ public class CustomerToCentralGetService {
 		logger.info("LookUpCode Data " + lookUpCode);
 		WatsMasterDataVOList watsMasterDataVO = new WatsMasterDataVOList();
 		watsMasterDataVO.setData(watsMasterVOList);
-		return webClientService(watsMasterDataVO, lookUpCode.getTargetCode());
+		return webClientService(watsMasterDataVO, lookUpCode.getTargetCode(),scriptDtls.getCustomerName());
 	}
 
 }
