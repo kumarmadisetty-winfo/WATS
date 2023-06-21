@@ -1478,7 +1478,12 @@ public class RunAutomation {
 						case "validation":
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).validation(fetchMetadataVO, api);
 							break;
+							
 
+						case "Enter Multiple Transactions":
+							seleniumFactory.getInstanceObj(instanceName).enterMultipleTransaction(driver, fetchConfigVO,
+									fetchMetadataVO, customerDetails);
+							break;
 						default:
 							logger.info("Action Name is not matched with " + "" + actionName);
 							break;

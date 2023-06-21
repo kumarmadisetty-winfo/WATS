@@ -340,4 +340,7 @@ public interface SeleniumKeyWordsInterface {
 	
 	public void createScreenShot(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, String message,
 			CustomerProjectDto customerDetails, boolean isPassed) throws Exception;
+	
+	public void enterMultipleTransaction(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) throws Exception;
 }
