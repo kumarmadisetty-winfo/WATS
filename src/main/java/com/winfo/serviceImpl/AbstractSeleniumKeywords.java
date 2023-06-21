@@ -648,7 +648,7 @@ public abstract class AbstractSeleniumKeywords {
 		return totalExecutedTime;
 	}
 
-	public void createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
+	public String createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			CustomerProjectDto customerDetails) {
 		try {
 			StringBuffer folderBuffer = new StringBuffer();
@@ -772,6 +772,7 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			logger.error("Failed to Create pdf " + e.getMessage());
 		}
+		return pdffileName;
 	}
 
 	public void generateScriptLvlPDF(Document document, Date startTime, Date endTime, Image watsLogo,
