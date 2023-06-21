@@ -10789,14 +10789,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]")));
 				WebElement waittill = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]/following::*[text()=\""+param2+"\"]/following::input[1]"));
-				boolean check = false;
-				if("Mandatory".equalsIgnoreCase(fetchMetadataVO.getFieldType())) {
-					check = isMandatory(waittill, driver);
-				}
-				if(check) {
-					System.out.println("WARNING");
-				}
-//				if()
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittill).build().perform();
 				//waittill.sendKeys(keysToSend);
@@ -18366,38 +18358,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		
 	}
 	
-	public boolean isMandatory(WebElement inputElement, WebDriver driver) {
-		// Find the label element associated with the input field or button
-		WebElement labelElement = null;
-		WebElement currentNode = inputElement;
-		while (currentNode != null) {
-            WebElement[] labels = currentNode.findElements(By.tagName("label")).toArray(new WebElement[0]);
-//            System.out.println("Current Node: " + currentNode);
-//            System.out.println("Labels: " + Arrays.toString(labels));
-            if (labels.length > 0) {
-                labelElement = labels[0];
-                break;
-            }
-            currentNode = currentNode.findElement(By.xpath(".."));
-        }
-//        System.out.println("Label Element: " + labelElement);
-
-		// Check if the field is required based on the presence of the label element and
-		// required indicator element
-		WebElement requiredIndicatorElement = (labelElement != null)
-				? labelElement.findElement(By.cssSelector("abbr.slds-required"))
-				: null;
-		boolean isRequired = (requiredIndicatorElement != null);
-
-		// Output the result
-		if (isRequired) {
-//			System.out.println("This field is required.");
-			return true;
-		} else {
-//			System.out.println("This field is not required.");
-			return false;
-		}
-	}
 	@Override
 	public void enterMultipleTransaction(WebDriver driver, FetchConfigVO fetchConfigVO,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) throws Exception {
