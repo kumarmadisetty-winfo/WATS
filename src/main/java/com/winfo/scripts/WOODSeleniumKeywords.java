@@ -64,7 +64,7 @@ import com.aspose.cells.Row;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
 import com.itextpdf.text.DocumentException;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.service.SeleniumKeyWordsInterface;
 import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 import com.winfo.serviceImpl.DataBaseEntry;
@@ -19095,7 +19095,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 			workbook.dispose();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 		}
 	}
 
