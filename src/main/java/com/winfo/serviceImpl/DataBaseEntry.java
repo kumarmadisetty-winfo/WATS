@@ -29,6 +29,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.CustomerRepository;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.repository.TestSetLinesRepository;
@@ -56,6 +57,9 @@ public class DataBaseEntry {
 
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
+	
+	@Autowired
+	CustomerRepository customerRepository;
 
 	@Autowired
 	ApplicationContext appContext;
@@ -484,15 +488,11 @@ public class DataBaseEntry {
 		BigDecimal executed = (BigDecimal) subscriptionDtls.get(0)[1];
 		BigDecimal balance = (BigDecimal) subscriptionDtls.get(0)[2];
 
-		Integer sum = dao.findGraceAllowance(subsId);
-
-		Integer graceValue = (sum == null) ? 0 : sum;
-
-		if (sumQuantity.intValue() + graceValue.intValue() - sumExecuted.intValue() > 0) {
+		if (sumQuantity.intValue() - sumExecuted.intValue() > 0) {
 			dao.updateSubscriptionExecuteAndBalance(executed, balance, subsId);
 		}
 
-		if (Math.abs(balance.intValue() - 1) >= graceValue && (balance.intValue() - 1) <= 0) {
+		if (balance.intValue() == 0) {
 			dao.updateSubscriptionStatus(COMPLETED, subsId);
 		}
 
@@ -619,5 +619,11 @@ public class DataBaseEntry {
 	
 	public TestSetLine getTestSetLineBySequenceNumber(String testSetId, String seqNumber) {
 		return testSetLinesRepository.findBySeqNum(Integer.parseInt(testSetId), Integer.parseInt(seqNumber));
+	}
+	public String getCustomerNameFromCustomerId(int customerId) {
+		return customerRepository.findByCustomerId(customerId).getCustomerName();
+	}
+	public List<String> getListOfCustomers(String userName) {
+		return customerRepository.findListOfCustomers(userName);
 	}
 }
