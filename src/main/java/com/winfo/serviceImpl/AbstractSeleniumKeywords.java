@@ -110,12 +110,13 @@ import com.oracle.bmc.objectstorage.responses.DeleteObjectResponse;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.utils.Constants.TEST_SET_LINE_ID_STATUS;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.FileUtil;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -128,7 +129,7 @@ import reactor.core.publisher.Mono;
 public abstract class AbstractSeleniumKeywords {
 
 	public static final Logger logger = Logger.getLogger(AbstractSeleniumKeywords.class);
-
+	
 	@Value("${oci.config.path}")
 	private String ociConfigPath;
 	@Value("${oci.config.name}")
@@ -306,7 +307,7 @@ public abstract class AbstractSeleniumKeywords {
 			return e.getMessage();
 		}
 	}
-
+	
 	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
 		try {
@@ -365,10 +366,10 @@ public abstract class AbstractSeleniumKeywords {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage..", e);
 		}
 	}
 
@@ -379,7 +380,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
+			throw new WatsEBSException(500, "Exception occured while connecting to oci/config path", e);
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -401,7 +402,7 @@ public abstract class AbstractSeleniumKeywords {
 				objNames = response.getListObjects().getObjects().stream().map(objSummary -> objSummary.getName())
 						.collect(Collectors.toList());
 				ListIterator<String> listIt = objNames.listIterator();
-				createDir(screenshotPath);
+				FileUtil.createDir(screenshotPath);
 				while (listIt.hasNext()) {
 					String objectName = listIt.next();
 					GetObjectResponse getResponse = client.getObject(GetObjectRequest.builder()
@@ -425,36 +426,22 @@ public abstract class AbstractSeleniumKeywords {
 						}
 					} catch (IOException e1) {
 						e1.printStackTrace();
-						throw new WatsEBSCustomException(500,
+						throw new WatsEBSException(500,
 								"Exception occured while read or write screenshot from Object Storage", e1);
 					}
 				}
 			}
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
+			throw new WatsEBSException(500,
 					"Exception occured while downloading screenshots from object path location.", e);
 		}
 
 	}
 
-	public void createDir(String path) {
-		File folder1 = new File(path);
-		if (!folder1.exists()) {
-			logger.info("creating directory: " + folder1.getName());
-			try {
-				folder1.mkdirs();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-			}
-		} else {
-			logger.info("Folder exist");
-		}
-	}
-
 	public void findPassAndFailCount(FetchConfigVO fetchConfigVO, String testSetId) {
-
+		
 		List<String> testLineStatusList = dataBaseEntry.getStatusByTestSetId(testSetId);
 		fetchConfigVO.setSeqNumAndStatus(dataBaseEntry.getStatusAndSeqNum(testSetId));
 		int passCount = 0;
@@ -683,7 +670,7 @@ public abstract class AbstractSeleniumKeywords {
 				fileNameList = getFileNameListNew(fetchMetadataListVO, fetchConfigVO, customerDetails);
 			}
 			String executedBy = fetchMetadataListVO.get(0).getExecutedBy();
-			createDir(folder);
+			FileUtil.createDir(folder);
 			Document document = new Document();
 			String report = EXECUTION_REPORT;
 			Font font23 = FontFactory.getFont(ARIAL, 23);
@@ -932,7 +919,7 @@ public abstract class AbstractSeleniumKeywords {
 							.append(customerDetails.getTestSetName()).append("_Passed");
 					String docName = docNameBuffer.toString();
 					StringBuffer fileBuffer = new StringBuffer();
-					fileBuffer.append(fetchConfigVO.getDownlod_file_path()).append(docName).append(".pdf");
+					fileBuffer.append(fetchConfigVO.getDOWNLOD_FILE_PATH()).append(docName).append(".pdf");
 					File file = new File(fileBuffer.toString());
 					if (file.exists()) {
 						PdfContentByte contentByte = writer.getDirectContent();
@@ -1416,10 +1403,10 @@ public abstract class AbstractSeleniumKeywords {
 				if (!currentSeqNumber.equalsIgnoreCase(nextSeqNumber) || fetchMetadataListVO.size() == increment) {
 					String docName = (metaDataVO.getSeqNum() + "_" + metaDataVO.getScenarioName() + "_"
 							+ metaDataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_Passed");
-					File file = new File(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+					File file = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + docName + ".pdf");
 					if (file.exists()) {
 						PdfContentByte contentByte = writer.getDirectContent();
-						PdfReader pdfReader = new PdfReader(fetchConfigVO.getDownlod_file_path() + docName + ".pdf");
+						PdfReader pdfReader = new PdfReader(fetchConfigVO.getDOWNLOD_FILE_PATH() + docName + ".pdf");
 						for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
 							PdfImportedPage pages = writer.getImportedPage(pdfReader, page);
 							document.newPage();
@@ -1603,9 +1590,8 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Not able to read object store config");
+			throw new WatsEBSException(500, "Not able to read object store config");
 		}
-
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 			List<String> objNames = null;
@@ -1681,10 +1667,10 @@ public abstract class AbstractSeleniumKeywords {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
 	}
 
@@ -1727,7 +1713,7 @@ public abstract class AbstractSeleniumKeywords {
 					imagePath.mkdirs();
 				} catch (SecurityException se) {
 					logger.error(se);
-					throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 							"Not able to create the directory");
 				}
 			} else {
@@ -1745,7 +1731,7 @@ public abstract class AbstractSeleniumKeywords {
 			Files.delete(Paths.get(source.getPath()));
 		} catch (IOException ex) {
 			logger.error(ex);
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Failed to create the custom screenshot");
 		}
 	}
@@ -1787,10 +1773,10 @@ public abstract class AbstractSeleniumKeywords {
 				}
 
 			}
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
 
 	}
@@ -2095,7 +2081,7 @@ public abstract class AbstractSeleniumKeywords {
 
 			String name = nameBuffer.toString();
 
-			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName());
+			FileUtil.createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getTestSetName());
 
 			try (PrintWriter out = new PrintWriter(fileName)) {
 				out.println(api.getResponse());
@@ -2129,7 +2115,7 @@ public abstract class AbstractSeleniumKeywords {
 		jse.executeScript("window.open()");
 		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
 		String fileName = null;
-		if (fetchConfigVO.getBrowser().equalsIgnoreCase("chrome")) {
+		if (fetchConfigVO.getBROWSER().equalsIgnoreCase("chrome")) {
 			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
 			/* Download Window Open */
 			Thread.sleep(3000);
@@ -2139,7 +2125,7 @@ public abstract class AbstractSeleniumKeywords {
 			driver.switchTo().window(tabs.get(0));
 			logger.info("File Name*** " + fileName);
 
-		} else if (fetchConfigVO.getBrowser().equalsIgnoreCase("firefox")) {
+		} else if (fetchConfigVO.getBROWSER().equalsIgnoreCase("firefox")) {
 			driver.switchTo().window(tabs.get(1)).get("about:downloads");
 			/* Download Window Open */
 			Thread.sleep(3000);
@@ -2151,18 +2137,18 @@ public abstract class AbstractSeleniumKeywords {
 		}
 
 		if (fileName != null) {
-			File oldFile = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+			File oldFile = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
 			StringBuffer newNameBuffer = new StringBuffer();
 			newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
 					.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
 					.append(customerDetails.getTestSetName()).append("_Passed");
 			String newName = newNameBuffer.toString();
 
-			if (new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").exists())
-				new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf").delete();
+			if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
+				new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
 
 			if (oldFile.exists()) {
-				if (oldFile.renameTo(new File(fetchConfigVO.getDownlod_file_path() + newName + ".pdf"))) {
+				if (oldFile.renameTo(new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"))) {
 					logger.info("File name changed succesful");
 				} else {
 					logger.info("Rename failed");
@@ -2178,7 +2164,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, "Exception occured while connecting to oci/config path", e);
+			throw new WatsEBSException(500, "Exception occured while connecting to oci/config path", e);
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -2196,10 +2182,10 @@ public abstract class AbstractSeleniumKeywords {
 				return objNames;
 			} catch (Exception e1) {
 
-				throw new WatsEBSCustomException(500, "Not able to connect with object store");
+				throw new WatsEBSException(500, "Not able to connect with object store");
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while getting files from object path location.",
+			throw new WatsEBSException(500, "Exception occured while getting files from object path location.",
 					e);
 		}
 
@@ -2234,10 +2220,10 @@ public abstract class AbstractSeleniumKeywords {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while creating folder in Object Storage..", e);
+			throw new WatsEBSException(500, "Exception occured while creating folder in Object Storage..", e);
 		}
 	}
 
@@ -2278,7 +2264,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			String accessToken = getSharepointAccessTokenPdf(fetchConfigVO);
 			List imageUrlList = new ArrayList();
-			File imageDir = new File(fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+			File imageDir = new File(fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getTestSetName() + "/");
 			logger.info("Image Directory : " + imageDir);
 			RestTemplate restTemplate = new RestTemplate();
@@ -2395,13 +2381,13 @@ public abstract class AbstractSeleniumKeywords {
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			map.add("grant_type", "client_credentials");
-			map.add("client_id", fetchConfigVO.getClient_id());
-			map.add("client_secret", fetchConfigVO.getClient_secret());
+			map.add("client_id", fetchConfigVO.getCLIENT_ID());
+			map.add("client_secret", fetchConfigVO.getCLIENT_SECRET());
 			map.add("scope", "https://graph.microsoft.com/.default");
 
 			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 			ResponseEntity<Object> response = restTemplate.exchange(
-					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
+					"https://login.microsoftonline.com/" + fetchConfigVO.getTENANT_ID() + "/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
 
 			@SuppressWarnings("unchecked")

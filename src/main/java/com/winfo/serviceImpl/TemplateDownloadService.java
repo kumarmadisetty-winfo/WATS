@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 
@@ -79,12 +79,15 @@ public class TemplateDownloadService {
 		});
 	}
 
-	private List<String> getCodes(String codeType) {
+	private List<String> getCodes(String userName, String codeType) {
+		if("CUSTOMER_ID".equalsIgnoreCase(codeType) && codeType!=null) {
+			return dataBaseEntry.getListOfCustomers(userName);			
+		}
 		return dataBaseEntry.findLookUpCodesUsingLookUpName(codeType);
 	}
 
-	private List<List<String>> getScriptDetailsColumns(String... codeTypes) {
-		return Arrays.stream(codeTypes).map(this::getCodes).collect(Collectors.toList());
+	private List<List<String>> getScriptDetailsColumns(String userName, String... codeTypes) {
+		return Arrays.stream(codeTypes).map(codeType->getCodes(userName,codeType)).collect(Collectors.toList());
 	}
 
 	private void setCellStyle(Cell cell, Font font, FillPatternType fillPatternType, IndexedColors fillColor,
@@ -168,16 +171,16 @@ public class TemplateDownloadService {
 		return listOfScriptColumnName;
 	}
 
-	public Workbook generateTemplate(Optional<Integer> scriptId) {
+	public Workbook generateTemplate(Optional<Integer> scriptId,String userName) {
 		try {
 			ScriptMaster scriptMasterData = scriptId.isPresent()
 					? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get())
 					: null;
 
-			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns("PRODUCT_VERSION", "PROCESS",
-					"MODULE", "ROLE", "STATUS", "PRIORITY", "STANDARD");
+			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns(userName, "PRODUCT_VERSION", "PROCESS",
+					"MODULE", "ROLE", "STATUS", "PRIORITY", "STANDARD","CUSTOMER_ID");
 
-			List<String> listOfTargetApplication = getCodes("TARGET_APPLICATION");
+			List<String> listOfTargetApplication = getCodes("","TARGET_APPLICATION");
 
 			Map<String, List<String>> mapOfTargetApplicationAndAction = listOfTargetApplication.stream()
 					.collect(Collectors.toMap(targetApplication -> targetApplication,
@@ -192,7 +195,7 @@ public class TemplateDownloadService {
 					"ACTION", "UNIQUE/MANDATORY", "DATATYPES");
 
 			List<String> listOfDropdownKeys = Arrays.asList("PRODUCT VERSION", "PROCESS AREA", "MODULE", "ROLE",
-					"TEST SCRIPT STATUS", "PRIORITY", "TYPE OF SCRIPT");
+					"TEST SCRIPT STATUS", "PRIORITY", "TYPE OF SCRIPT","CUSTOMER ID");
 
 			Sheet valueSheet = createListSheet(workbook, mapOfTargetApplicationAndAction);
 
@@ -272,9 +275,13 @@ public class TemplateDownloadService {
 								|| "PRIORITY".equalsIgnoreCase(row[i - 1])) {
 							if ("PROCESS AREA".equalsIgnoreCase(row[i - 1])) {
 								result = dataBaseEntry.getMeaningByTargetCode(result.toString(), "PROCESS");
-							} else {
+							}else {
 								result = dataBaseEntry.getMeaningByTargetCode(result.toString(), row[i - 1]);
 							}
+						}
+						if("CUSTOMER ID".equalsIgnoreCase(row[i - 1])){
+							result = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(result.toString()));
+							System.out.println("result="+result);
 						}
 						value = (result != null) ? result.toString() : "";
 					}
@@ -364,7 +371,7 @@ public class TemplateDownloadService {
 			return workbook;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Not able to generate excel templete", e);
 		}
 	}

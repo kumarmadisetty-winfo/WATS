@@ -110,6 +110,7 @@ import com.winfo.serviceImpl.LimitScriptExecutionService;
 import com.winfo.serviceImpl.ScriptXpathService;
 import com.winfo.utils.ArithmeticUtils;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.FileUtil;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -386,7 +387,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getAPPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -732,10 +733,10 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name, CustomerProjectDto customerDetails) {
-		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+		String vidPath = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/" + name);
 		// String vidPath="C:\\Testing\\ReportWinfo\\"+name;
-		String Folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+		String Folder = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/");
 		File theDir = new File(Folder);
 		if (!theDir.exists()) {
@@ -786,7 +787,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<String>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName()
+		File folder = new File(fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customerDetails.getCustomerName()
 				+ "\\" + customerDetails.getTestSetName() + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -808,7 +809,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	public void compress(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName, CustomerProjectDto customerDetails)
 			throws IOException {
-		String Folder = (fetchConfigVO.getScreenshot_path() + "\\" + customerDetails.getCustomerName()
+		String Folder = (fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customerDetails.getCustomerName()
 				+ "\\" + customerDetails.getTestSetName() + "\\");
 		List<String> fileNameList = null;
 		String customer_Name = customerDetails.getCustomerName();
@@ -818,7 +819,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		for (String image : fileNameList) {
 
 			FileInputStream inputStream = new FileInputStream(
-					fetchConfigVO.getScreenshot_path() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
+					fetchConfigVO.getSCREENSHOT_PATH() + "\\" + customer_Name + "\\" + test_Run_Name + "\\" + image);
 			BufferedImage inputImage = ImageIO.read(inputStream);
 
 			JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
@@ -15486,7 +15487,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
-		fetchConfigVO.getMedium_wait();
+		fetchConfigVO.getMEDIUM_WAIT();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
@@ -15898,7 +15899,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 			logger.info("Donwloaded path*** " + donwloadedAt);
 
-			File file = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+			File file = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
 
 			logger.info(file.exists());
 
@@ -18856,8 +18857,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 					+ fetchMetadataVO.getLineNumber() + "_" + fetchMetadataVO.getScenarioName() + "_"
 					+ fetchMetadataVO.getScriptNumber() + "_" + customerDetails.getTestSetName() + "_"
 					+ fetchMetadataVO.getLineNumber() + "_Passed").concat(".txt");
-			createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
-			
+			FileUtil.createDir(fetchConfigVO.getWINDOWS_PDF_LOCATION()+customerDetails.getTestSetName());
 			try (PrintWriter out = new PrintWriter(fileName)) {
 			    out.println(api.getResponse());
 			}
@@ -18887,7 +18887,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			throws IOException, DocumentException, com.lowagie.text.DocumentException {
 			try {
 				String Date = DateUtils.getSysdate();
-				String Folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + "/"
+				String Folder = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 						+ customerDetails.getTestSetName() + "/");
 				String FILE = (Folder + pdffileName);
 				logger.error("File " + FILE);

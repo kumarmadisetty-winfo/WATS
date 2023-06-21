@@ -46,8 +46,8 @@ public class DriverConfiguration {
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
 		os = operatingSystem == null ? os : operatingSystem;
-		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getChrome_driver_path());
+		if (BrowserConstants.CHROME.getValue().equalsIgnoreCase(fetchConfigVO.getBROWSER())) {
+			System.setProperty(DriverConstants.CHROME_DRIVER.getValue(), fetchConfigVO.getCHROME_DRIVER_PATH());
 			Map<String, Object> prefs = new HashMap<>();
 			ChromeOptions options = new ChromeOptions();
 			MutableCapabilities cap = new MutableCapabilities();
@@ -57,7 +57,7 @@ public class DriverConfiguration {
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
 			} else  {
-				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
+				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDOWNLOD_FILE_PATH());
 				logger.info("Script Running on Linux Location");
 				options.setBinary("/usr/bin/google-chrome");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
@@ -77,8 +77,8 @@ public class DriverConfiguration {
 
 			driver = new RemoteWebDriver(new URL(hubUrl), cap);
 			logger.info("driver init success");
-		}else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBrowser())) {
-			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(), fetchConfigVO.getFirefox_driver_path());
+		}else if (BrowserConstants.FIREFOX.getValue().equalsIgnoreCase(fetchConfigVO.getBROWSER())) {
+			System.setProperty(DriverConstants.FIREFOX_DRIVER.getValue(), fetchConfigVO.getFIREFOX_DRIVER_PATH());
 			FirefoxProfile profile = new FirefoxProfile();
 			System.setProperty(BrowserConstants.AWT_HEADLESS.getValue(), "false");
 			FirefoxOptions options = new FirefoxOptions();

@@ -2,15 +2,11 @@ package com.winfo.vo;
 
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class FetchMetadataListVO {
 	
 	private List<FetchMetadataVO> items;
-	
-	public List<FetchMetadataVO> getItems() {
-		return items;
-	}
 
-	public void setItems(List<FetchMetadataVO> items) {
-		this.items = items;
-	}
 }

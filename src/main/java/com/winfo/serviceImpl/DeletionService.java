@@ -35,7 +35,7 @@ import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.responses.DeleteObjectResponse;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.winfo.config.MessageUtil;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.Customer;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
@@ -92,7 +92,7 @@ public class DeletionService{
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getConfigFileIOException());
+			throw new WatsEBSException(500, messageUtil.getObjectStore().getConfigFileIOException());
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -108,7 +108,7 @@ public class DeletionService{
 				
 			}
 		} catch (Exception e) {
-			if (e instanceof WatsEBSCustomException) {
+			if (e instanceof WatsEBSException) {
 				throw e;
 			} else {
 				return new ResponseDto(500, Constants.ERROR, messageUtil.getDeletion().getError().getPdfAndScreenshotNotDeleted());
@@ -122,7 +122,7 @@ public class DeletionService{
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getConfigFileIOException());
+			throw new WatsEBSException(500, messageUtil.getObjectStore().getConfigFileIOException());
 		}
 		
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(deleteReportDtoObj.getTestSetId());
@@ -215,7 +215,7 @@ public class DeletionService{
 			}
 
 		} catch (Exception e1) {
-			throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getAccessDeniedException());
+			throw new WatsEBSException(500, messageUtil.getObjectStore().getAccessDeniedException());
 		}
 		return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getScreenshotDeleted());
 	}
@@ -262,7 +262,7 @@ public class DeletionService{
 				return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfNotPresent());
 			}
 		} catch (Exception e1) {
-			throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getAccessDeniedException());
+			throw new WatsEBSException(500, messageUtil.getObjectStore().getAccessDeniedException());
 		}
 		return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfDeleted());
 	}

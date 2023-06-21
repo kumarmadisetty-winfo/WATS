@@ -55,6 +55,7 @@ import com.itextpdf.text.DocumentException;
 import com.winfo.service.SeleniumKeyWordsInterface;
 import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 import com.winfo.serviceImpl.ScriptXpathService;
+import com.winfo.utils.FileUtil;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -231,7 +232,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getAPPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -308,7 +309,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void uploadImage(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		try {
-			String sharepoint = fetchConfigVO.getSharepoint_resp();
+			String sharepoint = fetchConfigVO.getSHAREPOINT_RESP();
 			logger.info("Share point " + sharepoint);
 			String accessToken = getAccessToken();
 			List<String> imageUrlList = new ArrayList<>();
@@ -389,11 +390,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void convertJPGtoMovie(String targetFile1, List<String> targetFileList,
 			List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String name,
 			CustomerProjectDto customerDetails) {
-		String vidPath = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + File.separator
+		String vidPath = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + File.separator
 				+ customerDetails.getTestSetName() + File.separator + name);
-		String folder = (fetchConfigVO.getPdf_path() + customerDetails.getCustomerName() + File.separator
+		String folder = (fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + File.separator
 				+ customerDetails.getTestSetName() + File.separator);
-		createDir(folder);
+		FileUtil.createDir(folder);
 		OpenCVFrameConverter.ToIplImage grabberConverter = new OpenCVFrameConverter.ToIplImage();
 		FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(vidPath, 1366, 614);
 		String str = null;
@@ -425,7 +426,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public List<String> getImages(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		List<String> fileNameList = new ArrayList<>();
-		File folder = new File(fetchConfigVO.getScreenshot_path() + File.separator + customerDetails.getCustomerName()
+		File folder = new File(fetchConfigVO.getSCREENSHOT_PATH() + File.separator + customerDetails.getCustomerName()
 				+ File.separator + customerDetails.getTestSetName() + File.separator);
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -452,7 +453,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			String number = copy.getText();
 			// String num = number.replaceAll("[^\\d.]+|\\.(?!\\d)", "");
 			// logger.info(num);
-			driver.get(fetchConfigVO.getDownlod_file_path() + "/" + number + ".log");
+			driver.get(fetchConfigVO.getDOWNLOD_FILE_PATH() + "/" + number + ".log");
 			Thread.sleep(2000);
 			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			driver.navigate().back();
@@ -468,7 +469,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	}
 
 	public static File getLastModified(String directoryFilePath, FetchConfigVO fetchConfigVO) {
-		File directory = new File(fetchConfigVO.getDownlod_file_path());
+		File directory = new File(fetchConfigVO.getDOWNLOD_FILE_PATH());
 		File[] files = directory.listFiles(File::isFile);
 		long lastModifiedTime = Long.MIN_VALUE;
 		File chosenFile = null;
@@ -6104,7 +6105,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
-		fetchConfigVO.getMedium_wait();
+		fetchConfigVO.getMEDIUM_WAIT();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
@@ -6664,7 +6665,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	public void delatedScreenshoots(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws IOException {
-		File folder = new File(fetchConfigVO.getScreenshot_path() + customerDetails.getCustomerName() + "/"
+		File folder = new File(fetchConfigVO.getSCREENSHOT_PATH() + customerDetails.getCustomerName() + "/"
 				+ customerDetails.getTestSetName() + "/");
 		if (folder.exists()) {
 			File[] listOfFiles = folder.listFiles();

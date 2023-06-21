@@ -18,7 +18,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 
 @Service
 public class SshService {
@@ -52,9 +52,9 @@ public class SshService {
 			session.connect();
 		} catch (JSchException jse) {
 			if (jse.getMessage().equals(EX_TYPE)) {
-				throw new WatsEBSCustomException(500, "Please verify ssh user credentials", jse);
+				throw new WatsEBSException(500, "Please verify ssh user credentials", jse);
 			} else {
-				throw new WatsEBSCustomException(500, "Exception occured while creating Sftp Connection", jse);
+				throw new WatsEBSException(500, "Exception occured while creating Sftp Connection", jse);
 			}
 		}
 		return session;
@@ -81,7 +81,7 @@ public class SshService {
 			closeSftp(session, sftpChannel);
 
 		} catch (SftpException | JSchException | IOException e) {
-			throw new WatsEBSCustomException(500, "Exception occured while writing file via ssh", e);
+			throw new WatsEBSException(500, "Exception occured while writing file via ssh", e);
 		}
 	}
 

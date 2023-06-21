@@ -2,16 +2,11 @@ package com.winfo.vo;
 
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class FetchConfigMetaVO {
 	
 	private List<FetchConfigVO> items;
-
-	public List<FetchConfigVO> getItemconfig() {
-		return items;
-	}
-
-	public void setItemconfig(List<FetchConfigVO> itemconfig) {
-		this.items = itemconfig;
-	}
 
 }
