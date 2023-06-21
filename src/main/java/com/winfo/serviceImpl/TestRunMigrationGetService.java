@@ -13,12 +13,14 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.winfo.controller.MigrationReceiver;
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.TestRunMigrationGetDao;
 import com.winfo.model.ExecuteStatus;
@@ -39,7 +41,7 @@ import com.winfo.vo.WatsTestSetParamVO;
 
 @Service
 public class TestRunMigrationGetService {
-
+	public static final Logger logger = Logger.getLogger(TestRunMigrationGetService.class);
 	@Autowired
 	TestRunMigrationGetDao dao;
 
@@ -75,7 +77,7 @@ public class TestRunMigrationGetService {
 				domGenericResponseBean.setStatusMessage("Already Exists");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
-				continue;
+				logger.info("Test Run already exists " + testRunMigrateDto.getTestSetName() );			continue;
 			}
 			int customerId = 0;
 			try {
@@ -89,6 +91,7 @@ public class TestRunMigrationGetService {
 				domGenericResponseBean.setStatusMessage("Customer Not Found");
 				domGenericResponseBean.setTestRunName(testRunMigrateDto.getTestSetName());
 				listOfResponseBean.add(domGenericResponseBean);
+				logger.info("Customer not found " + testRunMigrateDto.getCustomer());
 				return listOfResponseBean;
 			}
 
@@ -250,9 +253,9 @@ public class TestRunMigrationGetService {
 				Integer newNextValueProject = Integer.parseInt(nextValueProject.toString());
 
 				session.createNativeQuery(
-						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,CUSTOMER_ID,PRODUCT_VERSION, WATS_PACKAGE) VALUES("
+						"insert into win_ta_projects(PROJECT_ID,PROJECT_NUMBER,PROJECT_NAME,START_DATE,CUSTOMER_ID,PRODUCT_VERSION, WATS_PACKAGE) VALUES("
 								+ newNextValueProject + "," + newNextValueProjectNumber + ",'"
-								+ testRunMigrateDto.getProjectName() + "'," + customerId + ",'"
+								+ testRunMigrateDto.getProjectName() +"',SYSDATE," + customerId + ",'"
 								+ testRunMigrateDto.getScriptMasterData().get(0).getProductVersion() + "','"
 								+ testRunMigrateDto.getWatsPackage() + "')")
 						.executeUpdate();
@@ -376,6 +379,7 @@ public class TestRunMigrationGetService {
 			domGenericResponseBean.setStatusMessage("SUCCESS");
 			domGenericResponseBean.setDescription(description);
 			listOfResponseBean.add(domGenericResponseBean);
+			logger.info("Successfully migrated test run " + description );
 		}
 		return listOfResponseBean;
 	}

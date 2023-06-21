@@ -120,4 +120,5 @@ public class Constants {
 	public static final String VALIDATION_TYPE_REGULAR_EXPR="REGULAR_EXPR";
 	public static final String VALIDATION_DATATYPE_DATE="Date";
 	public static final String MM_dd_yy="MM/dd/yy";
+	public static final String Look_Up_Name="TARGET CLIENT";
 }

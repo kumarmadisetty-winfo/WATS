@@ -43,7 +43,6 @@ public class DriverConfiguration {
 	 */
 
 	public WebDriver getWebDriver(FetchConfigVO fetchConfigVO, String operatingSystem) throws MalformedURLException {
-		logger.info("Start of get web driver method");
 		WebDriver driver = null;
 		String os = System.getProperty("os.name").toLowerCase();
 		os = operatingSystem == null ? os : operatingSystem;
@@ -54,12 +53,12 @@ public class DriverConfiguration {
 			MutableCapabilities cap = new MutableCapabilities();
 			if (os.contains("win")) {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getExcelDownloadFilePath());
-				logger.info("Windows location");
+				logger.info("Script Running on  Windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
 			} else  {
 				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDownlod_file_path());
-				logger.info("linux location");
+				logger.info("Script Running on Linux Location");
 				options.setBinary("/usr/bin/google-chrome");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.LINUX);
 			}
@@ -86,7 +85,7 @@ public class DriverConfiguration {
 			if (os.contains("win")) {
 				options.setBinary("/Program Files/Mozilla Firefox/firefox.exe");
 			} else {
-				logger.info("linux location");
+				logger.info("Script Running on linux location");
 				options.setBinary("/usr/bin/firefox");
 			}
 			options.addArguments(BrowserConstants.NO_SENDBOX.getValue());

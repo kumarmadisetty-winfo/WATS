@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,16 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.winfo.controller.JobController;
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.utils.Constants;
 import com.winfo.vo.ExistTestRunDto;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -39,23 +44,24 @@ public class TestRunMigrationService {
 	private static final String ACTION = "ACTION";
 	private static final String UNIQUE_MANDATORY = "UNIQUE_MANDATORY";
 	private static final String DATATYPES = "DATATYPES";
-
+	public static final Logger logger = Logger.getLogger(TestRunMigrationService.class);
 	@Autowired
 	private DataBaseEntryDao dataBaseEntryDao;
-
-	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customerUri)
+	
+	@Autowired
+	private LookUpCodeRepository lookUpCodeJpaRepository;
+	
+	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customerUrl)
 			throws JsonMappingException, JsonProcessingException {
 
-		System.out.println("json data**" + listOfTestRunMigrate);
-
-		String uri = customerUri + "/testRunMigrationToCustomer";
-		WebClient webClient = WebClient.create(uri);
+		logger.info("TestRun Migrate json data " + listOfTestRunMigrate);
+		WebClient webClient = WebClient.create(customerUrl + "/testRunMigrationToCustomer");
 		Mono<String> result = webClient.post().syncBody(listOfTestRunMigrate).retrieve().bodyToMono(String.class);
 		String response = result.block();
 		if ("[]".equals(response)) {
 			response = "[{\"status\":404,\"statusMessage\":\"PV_ERROR\",\"description\":\"Wrong Product Version\"}]";
 		}
-		System.out.println(response);
+		logger.info("Test Run Migration Response " +response);
 		return response;
 	}
 
@@ -63,9 +69,8 @@ public class TestRunMigrationService {
 	public String testRunMigration(TestRunDetails testRunDetails) throws ParseException, JsonProcessingException {
 
 		List<TestRunMigrationDto> testRunMigrationDto = new ArrayList<>();
-
-		String customerURI = dataBaseEntryDao.getCentralRepoUrl(testRunDetails.getCustomerName());
-
+		LookUpCode lookUpCode = lookUpCodeJpaRepository.findByLookUpNameAndLookUpCode(Constants.Look_Up_Name,testRunDetails.getCustomerName());
+		logger.info("LookUpCode Data " + lookUpCode);
 		for (ExistTestRunDto id : testRunDetails.getListOfTestRun()) {
 			int testRunId = id.getTestSetId();
 
@@ -96,7 +101,7 @@ public class TestRunMigrationService {
 
 			for (int testSetLineID : testSetLineIDs) {
 				TestSetLine scriptsData = dataBaseEntryDao.getScriptDataByLineID(testSetLineID);
-				System.out.println("scriptsData " + scriptsData.getTestRunScriptId());
+				logger.debug("scriptsData " + scriptsData.getTestRunScriptId());
 				TestSetLineDto testSetLineDto = new TestSetLineDto(scriptsData);
 
 				List<WatsTestSetParamVO> ScriptParamMetaData = new ArrayList<>();
@@ -168,8 +173,8 @@ public class TestRunMigrationService {
 			lookUpDataMap.put(DATATYPES.toLowerCase(), dataBaseEntryDao.getLookUp(DATATYPES, lookUpCodeDataTypes));
 			testRunMigrateDto.setLookUpData(lookUpDataMap);
 			testRunMigrationDto.add(testRunMigrateDto);
-		}
-		return webClientService(testRunMigrationDto, customerURI);
+			logger.info("Succesfully added migration data");		}
+		return webClientService(testRunMigrationDto, lookUpCode.getTargetCode());
 
 	}
 

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ import com.winfo.vo.WatsMasterDataVOList;
 
 @Service
 public class CentralToCustomerPostService {
-
+	public static final Logger logger = Logger.getLogger(CentralToCustomerPostService.class);
 	@Autowired
 	CentralToCustomerPostDao dao;
 
@@ -144,7 +145,8 @@ public class CentralToCustomerPostService {
 			}
 
 			bean.add(dao.centralRepoData(master, masterdata.getScriptNumber(), masterdata.getProductVersion()));
-		}
+			logger.info("Successfully Migrated script");
+			}
 		else
 		{
 			response.setStatus(400);
@@ -152,10 +154,12 @@ public class CentralToCustomerPostService {
 			response.setDescription("Script Number Already exists");
 			response.setFailed_Script(masterdata.getScriptNumber());
 			bean.add(response);	
+			logger.error("Script Number Already exists " + masterdata.getScriptNumber());
 		}
 
 
 	}
+		
 		return bean;
 	}
 }

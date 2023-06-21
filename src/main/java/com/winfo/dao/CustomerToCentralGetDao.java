@@ -63,7 +63,7 @@ public class CustomerToCentralGetDao {
 			int customerId = 0;
 
 			Integer scriptId = scriptIds.get(i);
-			logger.info(scriptId);
+			logger.debug("Script Id " +scriptId);
 			Query<?> query3 = session
 					.createQuery("select product_version from ScriptMaster where script_id=" + scriptId);
 			List<String> result2 = (List<String>) query3.list();
@@ -490,7 +490,7 @@ public class CustomerToCentralGetDao {
 			for (ScriptMetaData scriptMetaData : scriptMetaDataList) {
 				ScriptMetaDataDto scriptMetaDataDto = new ScriptMetaDataDto(scriptMetaData);
 				scriptMetaDataListDto.add(scriptMetaDataDto);
-				if(scriptMetaData.getValidationName() != null && API_VALIDATION.equals(scriptMetaData.getValidationType())) {
+				if(scriptMetaData.getValidationName() != null && !scriptMetaData.getValidationName().equalsIgnoreCase("NA") && API_VALIDATION.equalsIgnoreCase(scriptMetaData.getValidationType())) {
 					LookUpCodeVO lookUpCodeObj = dataBaseEntryDao.getLookupCode(scriptMetaData.getValidationType(), scriptMetaData.getValidationName());
 					lookUpCodeMap.put(scriptMetaData.getValidationName(), lookUpCodeObj);
 					validationType = API_VALIDATION;
