@@ -49,8 +49,6 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
 			ScriptMaterVO scriptMasterVO = mapper.readValue(mapper.writeValueAsString(scriptMaster),
 					ScriptMaterVO.class);
-			Timestamp instant = Timestamp.from(Instant.now());
-
 			Integer newNumber = null;
 			String directoryPath = dataBaseEntry.getDirectoryPath();
 			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
@@ -62,39 +60,48 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 				listOfSortedFiles(listOfFiles);
 				String[] lastValue = listOfFiles.get(0).split("_");
 				newNumber = Integer.parseInt(lastValue[1].replace(JSON, "")) + 1;
+				String lastIndex[]= listOfFiles.get(0).split(FORWARD_SLASH);
+				String latestHistory=lastIndex[2].replace(".json", "");
+				String decode=URLDecoder.decode(
+						new String(latestHistory.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
+						"UTF-8");
+				versionHistoryDto.setVersionNumber(decode);
+				ScriptMaterVO History = getVersionHistory(versionHistoryDto);
+				System.out.println(History);
+				System.out.println(scriptMasterVO);
+				if(!scriptMasterVO.equals(History)){	
+					System.out.println("Inside");
+					saveHistoryData(newNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+				}
 			} else {
 				newNumber = 1;
+				saveHistoryData(newNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 			}
-			String lastIndex[]= listOfFiles.get(0).split(FORWARD_SLASH);
-			String latestHistory=lastIndex[2].replace(".json", "");
-			String decode=URLDecoder.decode(
-					new String(latestHistory.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
-					"UTF-8");
-			versionHistoryDto.setVersionNumber(decode);
-			ScriptMaterVO History = getVersionHistory(versionHistoryDto);
-			System.out.println(History);
-			System.out.println(scriptMasterVO);
-			if(!scriptMasterVO.equals(History)){	
-				System.out.println("Inside");
-				String fileName = instant + "_" + newNumber + JSON;
-				String encodedName = URLEncoder.encode(
-						new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8), "UTF-8");
-				// Write into the file
-				try (FileWriter file = new FileWriter(localPath + FORWARD_SLASH + encodedName)) {
-					file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMasterVO));
-					logger.info("Successfully saved details in file...!!");
-				} catch (IOException e) {
-					throw new WatsEBSException(500, "Not able to save the file!", e);
-				}
-				uploadObjectToObjectStore(localPath + FORWARD_SLASH + encodedName, objectStorePath, encodedName);
-			
-			}
-			
+			logger.info("Successfully Saved Version History");
 			return new ResponseDto(200, Constants.SUCCESS, "Successfully saved the history!");
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error("Failed to Save Version History " +e.getMessage());
 			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
+	}
+	
+	public void saveHistoryData(Integer newNumber, ObjectMapper mapper,String localPath, ScriptMaterVO scriptMasterVO, String objectStorePath ) throws UnsupportedEncodingException
+	{
+		Timestamp instant = Timestamp.from(Instant.now());
+		String fileName = instant + "_" + newNumber + JSON;
+		String encodedName = URLEncoder.encode(
+				new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8), "UTF-8");
+		// Write into the file
+		try (FileWriter file = new FileWriter(localPath + FORWARD_SLASH + encodedName)) {
+			file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMasterVO));
+			logger.info("Successfully saved details in file...!!");
+		} catch (IOException e) {
+			logger.info("Failed to save details in the file " +e.getMessage());
+			throw new WatsEBSException(500, "Not able to save the file!", e);
+		}
+		uploadObjectToObjectStore(localPath + FORWARD_SLASH + encodedName, objectStorePath, encodedName);
+	
 	}
 
 	private List<String> listOfSortedFiles(List<String> listOfFiles) {
