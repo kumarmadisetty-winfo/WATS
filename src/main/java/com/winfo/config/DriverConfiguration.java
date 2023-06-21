@@ -52,7 +52,7 @@ public class DriverConfiguration {
 			ChromeOptions options = new ChromeOptions();
 			MutableCapabilities cap = new MutableCapabilities();
 			if (os.contains("win")) {
-				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getDOWNLOD_FILE_PATH());
+				prefs.put(BrowserConstants.DOWNLOAD_DEFAULT_DIRECTORY.getValue(), fetchConfigVO.getEXCEL_DOWNLOAD_FILE_PATH());
 				logger.info("Script Running on  Windows location");
 				options.setBinary("/Program Files/Google/Chrome/Application/chrome.exe");
 				cap.setCapability(CapabilityType.PLATFORM_NAME, Platform.WINDOWS);
