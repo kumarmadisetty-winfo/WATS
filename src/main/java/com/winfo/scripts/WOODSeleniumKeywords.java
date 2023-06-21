@@ -19026,7 +19026,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		logger.info("File Name*** " + fileName);
 
 		try {
-			File file = new File(fetchConfigVO.getDownlod_file_path() + fileName);
+			File file = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
 
 			logger.info(file.exists());
 
