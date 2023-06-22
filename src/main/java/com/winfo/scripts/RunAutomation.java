@@ -37,6 +37,7 @@ import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.service.WoodInterface;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.ErrorMessagesHandler;
 import com.winfo.serviceImpl.GraphQLService;
@@ -100,6 +101,8 @@ public class RunAutomation {
 	GraphQLService graphQLService;
 	@Autowired
 	SmartBearService smartBearService;
+	@Autowired
+	WoodInterface woodInterface;
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -1478,7 +1481,12 @@ public class RunAutomation {
 						case "validation":
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).validation(fetchMetadataVO, api);
 							break;
+							
 
+						case "Enter Multiple Transactions":
+							woodInterface.enterMultipleTransaction(driver, fetchConfigVO,
+									fetchMetadataVO, customerDetails);
+							break;
 						default:
 							logger.info("Action Name is not matched with " + "" + actionName);
 							break;
