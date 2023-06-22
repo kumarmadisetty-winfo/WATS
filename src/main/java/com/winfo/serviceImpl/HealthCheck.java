@@ -23,6 +23,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
@@ -38,6 +39,7 @@ import com.winfo.utils.StringUtils;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.HealthCheckVO;
+import com.winfo.vo.HubResponse;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.SanityCheckVO;
 
@@ -150,11 +152,9 @@ public class HealthCheck {
 			RestTemplate restTemplate = new RestTemplate();
 			String url = watsHubUrl.concat("status");
 			String result = restTemplate.getForObject(url, String.class);
-			JSONParser parser = new JSONParser();
-			JSONObject obj = (JSONObject) parser.parse(result);
-			JSONObject obj1 = (JSONObject) obj.get("value");
-			JSONArray jsonarray = (JSONArray) obj1.get("nodes");
-			long total = (long) jsonarray.size();
+			ObjectMapper mapper = new ObjectMapper();
+			HubResponse hubResponse = mapper.readValue(result,HubResponse.class);
+			long total = hubResponse.getValue().getNodes().size();
 			if (total > 0) {
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} else {
