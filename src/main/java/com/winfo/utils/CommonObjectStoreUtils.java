@@ -2,12 +2,15 @@ package com.winfo.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -76,5 +79,28 @@ public class CommonObjectStoreUtils {
 				log.error("Exception occured while downloading "+fileName+" from Object Store");
 		    	throw new WatsEBSCustomException(500,MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getDownloadFailed(),fileName), e);
 		    }
+	}
+	
+	public PDDocument readFileFromCommonObjectStore(String folderName,String fileName) {
+		GetObjectResponse response = null;
+		try {
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			String destinationFilePath = folderName + FORWARD_SLASH + fileName;
+			/* Create a service client */
+			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+				/* Create a request and dependent object(s). */
+				GetObjectRequest getObjectRequest = GetObjectRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).objectName(destinationFilePath).build();
+				response = client.getObject(getObjectRequest);
+				PDDocument document = PDDocument.load(response.getInputStream());
+				return document;
+			}
+		} catch (WatsEBSCustomException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
+		}
 	}
 }
