@@ -6984,10 +6984,4 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	}
 
-	@Override
-	public void enterMultipleTransaction(WebDriver driver, FetchConfigVO fetchConfigVO,
-			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 }

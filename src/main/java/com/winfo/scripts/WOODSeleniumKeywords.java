@@ -66,6 +66,7 @@ import com.aspose.cells.Worksheet;
 import com.itextpdf.text.DocumentException;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.service.SeleniumKeyWordsInterface;
+import com.winfo.service.WoodInterface;
 import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
@@ -78,7 +79,7 @@ import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service("WOOD")
-public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
+public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface, WoodInterface {
 	@Autowired
 	private DataBaseEntry databaseentry;
 	@Autowired
