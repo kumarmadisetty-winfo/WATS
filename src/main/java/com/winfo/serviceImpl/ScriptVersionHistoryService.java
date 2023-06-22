@@ -43,7 +43,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 
 	public ResponseDto saveVersionHistory(VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
-
+			versionHistoryDto.setSaveHistory(true);
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
@@ -61,11 +61,11 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 				String[] lastValue = listOfFiles.get(0).split("_");
 				newNumber = Integer.parseInt(lastValue[1].replace(JSON, "")) + 1;
 				String lastIndex[]= listOfFiles.get(0).split(FORWARD_SLASH);
-				String latestHistory=lastIndex[2].replace(".json", "");
-				String decode=URLDecoder.decode(
-						new String(latestHistory.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
+				String latestHistoryName=lastIndex[2].replace(".json", "");
+				String decodeFileName=URLDecoder.decode(
+						new String(latestHistoryName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
 						"UTF-8");
-				versionHistoryDto.setVersionNumber(decode);
+				versionHistoryDto.setVersionNumber(decodeFileName);
 				ScriptMaterVO History = getVersionHistory(versionHistoryDto);
 				System.out.println(History);
 				System.out.println(scriptMasterVO);
@@ -158,7 +158,9 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			ObjectMapper mapper = new ObjectMapper();
 			ScriptMaterVO scriptMaterVO = mapper.readValue(new File(localPath + FORWARD_SLASH + fileName + JSON),
 					ScriptMaterVO.class);
-//			scriptMaterVO.updateFieldIfNotNull(dataBaseEntry);
+			if(!versionHistoryDto.isSaveHistory()){
+				scriptMaterVO.updateFieldIfNotNull(dataBaseEntry);
+			}
 			return scriptMaterVO;
 		} catch (Exception e) {
 			e.printStackTrace();

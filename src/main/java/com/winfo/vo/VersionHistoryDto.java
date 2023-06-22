@@ -11,5 +11,7 @@ public class VersionHistoryDto {
 
 	@NotNull
 	private Integer scriptId;
+	
+	private boolean isSaveHistory;
 
 }
