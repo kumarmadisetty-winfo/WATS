@@ -18744,5 +18744,4 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
-
 }

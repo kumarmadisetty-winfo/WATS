@@ -18871,5 +18871,4 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
-
 }
