@@ -46,7 +46,7 @@ import com.winfo.serviceImpl.LimitScriptExecutionService;
 import com.winfo.serviceImpl.ScriptXpathService;
 import com.winfo.serviceImpl.SmartBearService;
 import com.winfo.serviceImpl.TestCaseDataService;
-import com.winfo.serviceImpl.TestScriptExecServiceImpl;
+import com.winfo.serviceImpl.TestScriptExecService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -88,7 +88,7 @@ public class RunAutomation {
 	@Autowired
 	LimitScriptExecutionService limitScriptExecutionService;
 	@Autowired
-	TestScriptExecServiceImpl testScriptExecServiceImpl;
+	TestScriptExecService testScriptExecService;
 	@Autowired
 	XpathPerformance xpathPerformance;
 	@Autowired
@@ -146,7 +146,7 @@ public class RunAutomation {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		try {
 			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
-			FetchConfigVO fetchConfigVO = testScriptExecServiceImpl.fetchConfigVO(testSetId);
+			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testSetId, null, false,
 					true);
@@ -158,7 +158,7 @@ public class RunAutomation {
 			// Independent
 			for (Entry<Integer, List<ScriptDetailsDto>> metaData : metaDataMap.entrySet()) {
 				logger.info("Running Independent - " + metaData.getKey());
-				testScriptExecServiceImpl.executorMethodPyJab(testSetId, fetchConfigVO, metaData, true, customerDetails);
+				testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, true, customerDetails);
 			}
 
 			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getPARALLEL_DEPENDENT());
@@ -169,7 +169,7 @@ public class RunAutomation {
 					boolean run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
 							metaData.getValue().get(0).getDependencyScriptNumber());
 					logger.info("Dependant Script run status " + metaData.getValue().get(0).getScriptId() + " " + run);
-					testScriptExecServiceImpl.executorMethodPyJab(testSetId, fetchConfigVO, metaData, run, customerDetails);
+					testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, run, customerDetails);
 				});
 			}
 			executordependent.shutdown();
@@ -189,7 +189,7 @@ public class RunAutomation {
 	public ResponseDto cloudRun(String testSetId) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		try {
-			FetchConfigVO fetchConfigVO = testScriptExecServiceImpl.fetchConfigVO(testSetId);
+			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			logger.info(String.format("Customer Id : %s, Customer Name : %s, Project Name : %s  " , customerDetails.getCustomerId(), customerDetails.getCustomerName(), customerDetails.getProjectName()));
@@ -533,7 +533,7 @@ public class RunAutomation {
 							excelMetadataListVO.add(fetchMetadataVO);
 						}
 						startExcelAction = false;
-						testScriptExecServiceImpl.runExcelSteps(param, excelMetadataListVO, fetchConfigVO, true,
+						testScriptExecService.runExcelSteps(param, excelMetadataListVO, fetchConfigVO, true,
 								customerDetails,auditTrial);
 						logger.info("Size of Excel MetadataList " + excelMetadataListVO.size());
 						List<Integer> stepIdList = excelMetadataListVO.stream().map(e -> e.getTestScriptParamId())

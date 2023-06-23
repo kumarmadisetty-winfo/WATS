@@ -37,8 +37,7 @@ public class ScriptHealController {
 	@GetMapping(value = "/getNewInputParameter/{targetApplication}/{productVersion}/{module}")
 	@ApiOperation( value="Get new label from new release note of target application",notes = "Script Id - Using for getting old input parameter from database")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Succesfully found new Input Parameters")})
-	public ResponseEntity<List<ScriptHealVo>> getUpdatedInputParameters(@PathVariable String targetApplication,@PathVariable String productVersion
-			,@PathVariable String module) {
+	public ResponseEntity<List<ScriptHealVo>> readPdf(@PathVariable String targetApplication,@PathVariable String productVersion,@PathVariable String module) {
 		try {
 			return scriptHealService.getNewInputParameters(targetApplication,productVersion,module);
         } catch (IOException e) {
