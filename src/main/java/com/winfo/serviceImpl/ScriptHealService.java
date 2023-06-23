@@ -2,16 +2,22 @@ package com.winfo.serviceImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import com.winfo.model.ScriptMaster;
 import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.utils.CommonObjectStoreUtils;
+import com.winfo.vo.ScriptHealVo;
 
 @Service
 public class ScriptHealService {
@@ -21,31 +27,36 @@ public class ScriptHealService {
 	@Autowired
 	CommonObjectStoreUtils commonObjectStoreUtils;
 	
-	public Map<Integer, Map<String,String>> getNewInputParameters(int scriptId) throws IOException {
+	public List<ScriptHealVo> getNewInputParameters(String targetApplication, String productVersion, String module) throws IOException {
 
-		ScriptMaster scriptMaster = scriptMasterRepository.findByScriptId(scriptId);
+		List<ScriptMaster> scriptMasters = scriptMasterRepository.findByProductVersionAndModule(productVersion,module);
 		PDDocument document = commonObjectStoreUtils.readFileFromCommonObjectStore("Script Heal/"+
-				scriptMaster.getTargetApplication(),scriptMaster.getProductVersion()+" release notes.pdf");
+				targetApplication,productVersion+" release notes.pdf");
 		PDFTextStripper textStripper = new PDFTextStripper();
 		String text = textStripper.getText(document);
 		
-		Map<Integer, Map<String,String>> result=new HashMap<Integer, Map<String, String>>();
-		scriptMaster.getScriptMetaDatalist().parallelStream().forEach((metadata)->{
-			Map<String,String> oldNewInputParameters=new HashMap<String, String>();
-			String[] inputParameters=metadata.getInputParameter().split(">");
-			for(int i=0;i<inputParameters.length;i++) {
-				if(text.indexOf(inputParameters[i])!=-1){
-					String val=text.substring(text.indexOf(inputParameters[i])+inputParameters[i].length()+1);
-					val=val.substring(0,val.indexOf("\n")).trim();
-					oldNewInputParameters.put(inputParameters[i],val);						
+		List<ScriptHealVo> listOfOldNewInputParameters=new ArrayList<ScriptHealVo>();
+		scriptMasters.parallelStream().forEach((scriptMaster)->{
+			scriptMaster.getScriptMetaDatalist().parallelStream().forEach((metadata)->{
+				if(!"".equals(metadata.getInputParameter()) && metadata.getInputParameter()!=null) {
+					String[] inputParameters=metadata.getInputParameter().split(">");
+					Arrays.stream(inputParameters).forEach((inputParameter)->{
+						if(text.indexOf(inputParameter)!=-1){
+							String val=text.substring(text.indexOf(inputParameter)+inputParameter.length()+1);
+							val=val.substring(0,val.indexOf("\n")).trim();						
+							ScriptHealVo OldNewInputParameter=new ScriptHealVo();
+							OldNewInputParameter.setScriptNumber(metadata.getScriptNumber());
+							OldNewInputParameter.setLineNumber(metadata.getLineNumber());
+							OldNewInputParameter.setOldInputParameter(inputParameter);
+							OldNewInputParameter.setNewInputParameter(val);
+							listOfOldNewInputParameters.add(OldNewInputParameter);
+						}
+					});
 				}
-			}
-			if(oldNewInputParameters.size()>0) {
-				result.put(metadata.getLineNumber(),oldNewInputParameters);					
-			}
+			});	
 		});
         document.close();
-        return result;
+        return listOfOldNewInputParameters;
 		
 	}
 }
