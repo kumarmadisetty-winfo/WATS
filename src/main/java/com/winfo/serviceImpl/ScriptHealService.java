@@ -32,7 +32,7 @@ public class ScriptHealService {
 	
 	public ResponseEntity<List<ScriptHealVo>> getNewInputParameters(String targetApplication, String productVersion, String module) throws IOException {
 
-		List<ScriptMaster> scriptMasters = scriptMasterRepository.findByProductVersionAndModule(productVersion,module);
+		List<ScriptMaster> scriptMasters = scriptMasterRepository.findByTargetApplicationAndProductVersionAndModule(targetApplication,productVersion,module);
 		PDDocument document = commonObjectStoreUtils.readFileFromCommonObjectStore("Script Heal/"+
 				targetApplication,productVersion+" release notes.pdf");
 		PDFTextStripper textStripper = new PDFTextStripper();
