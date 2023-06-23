@@ -100,7 +100,7 @@ public class CommonObjectStoreUtils {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
+			throw new WatsEBSException(500, "Exception occured while reading pdf in Object Storage", e);
 		}
 	}
 }
