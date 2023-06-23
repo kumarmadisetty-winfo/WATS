@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.winfo.model.ScriptMaster;
 import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.service.ScriptHealService;
 import com.winfo.utils.CommonObjectStoreUtils;
 import com.winfo.vo.ScriptHealVo;
 
 @Service
-public class ScriptHealService {
+public class ScriptHealServiceImpl implements ScriptHealService{
 
 	@Autowired
 	ScriptMasterRepository scriptMasterRepository;

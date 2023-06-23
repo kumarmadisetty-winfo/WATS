@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.exception.WatsEBSException;
 import com.winfo.repository.ScriptMasterRepository;
-import com.winfo.serviceImpl.ScriptHealService;
+import com.winfo.serviceImpl.ScriptHealServiceImpl;
 import com.winfo.vo.ScriptHealVo;
 
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +30,7 @@ public class ScriptHealController {
 	@Autowired
 	ScriptMasterRepository scriptMasterRepository;
 	@Autowired
-	ScriptHealService scriptHealService;
+	ScriptHealServiceImpl scriptHealServiceImpl;
 	
 	
 	@ResponseBody
@@ -39,7 +39,7 @@ public class ScriptHealController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Succesfully found new Input Parameters")})
 	public ResponseEntity<List<ScriptHealVo>> getUpdatedInputParameters(@PathVariable String targetApplication,@PathVariable String productVersion,@PathVariable String module) {
 		try {
-			return scriptHealService.getNewInputParameters(targetApplication,productVersion,module);
+			return scriptHealServiceImpl.getNewInputParameters(targetApplication,productVersion,module);
         } catch (IOException e) {
         	logger.error("Exception occured while fetching the new Input Parameter");
         	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while fetching the new Input Parameter"); 
