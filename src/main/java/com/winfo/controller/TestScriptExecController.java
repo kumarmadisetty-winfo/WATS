@@ -1,9 +1,18 @@
 package com.winfo.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collector;
 
 import javax.validation.Valid;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
@@ -14,7 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.winfo.serviceImpl.TestScriptExecService;
+import com.winfo.model.ScriptMaster;
+import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.serviceImpl.TestScriptExecServiceImpl;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.ResponseDto;
@@ -25,11 +36,14 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+
 @Controller
 public class TestScriptExecController {
 
 	@Autowired
-	TestScriptExecService testScriptExecService;
+	TestScriptExecServiceImpl testScriptExecServiceImpl;
+	@Autowired
+	ScriptMasterRepository scriptMasterRepository;
 
 //	@ResponseBody
 //	@RequestMapping(value = "/executeTestScript")
@@ -37,7 +51,7 @@ public class TestScriptExecController {
 //			BindingResult bindingResult) throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 //		ResponseDto status = null;
 //		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
-////			status = testScriptExecService.run(testScriptDto.getTestScriptNo());
+////			status = testScriptExecServiceImpl.run(testScriptDto.getTestScriptNo());
 //		}
 //
 //		return status;
@@ -50,7 +64,7 @@ public class TestScriptExecController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Updated StartScript Status Succesfully")})
 	public void updateStartScriptStatus(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult)
 			throws ClassNotFoundException, SQLException {
-		testScriptExecService.updateStartStatus(args);
+		testScriptExecServiceImpl.updateStartStatus(args);
 	}
 
 	@ResponseBody
@@ -60,7 +74,7 @@ public class TestScriptExecController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Updated EndScript Status Succesfully")})
 	public void updateEndScriptStatus(@Valid @RequestBody MessageQueueDto msgQueueDto, BindingResult bindingResult)
 			throws Exception {
-		testScriptExecService.generateTestScriptLineIdReports(msgQueueDto);
+		testScriptExecServiceImpl.generateTestScriptLineIdReports(msgQueueDto);
 	}
 
 	@ResponseBody
@@ -70,14 +84,14 @@ public class TestScriptExecController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Generated TestRunPdfs Succesfully")})
 	public ResponseDto updateEndScriptStatus2(@Valid @RequestBody MessageQueueDto args, BindingResult bindingResult)
 			throws Exception {
-		return testScriptExecService.generateTestScriptLineIdReports(args);
+		return testScriptExecServiceImpl.generateTestScriptLineIdReports(args);
 	}
 
 	@KafkaListener(topics = "#{'${kafka.topic.name.wats.not.reachable}'.split(',')}", groupId = "wats-group")
 	public void updateStatusForTestRunWhenWatsIsNotReachable(MessageQueueDto event) throws Exception {
-		testScriptExecService.generateTestScriptLineIdReports(event);
+		testScriptExecServiceImpl.generateTestScriptLineIdReports(event);
 		event.setStage(AUDIT_TRAIL_STAGES.SU);
-		testScriptExecService.updateAuditLogs(event);
+		testScriptExecServiceImpl.updateAuditLogs(event);
 	}
 
 	@ResponseBody
@@ -87,7 +101,7 @@ public class TestScriptExecController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Updated ScriptParam Status")})
 	public void updateScriptParamStatus(@Valid @RequestBody UpdateScriptParamStatus args)
 			throws ClassNotFoundException, SQLException {
-		testScriptExecService.updateScriptParamStatus(args);
+		testScriptExecServiceImpl.updateScriptParamStatus(args);
 	}
 
 	@ResponseBody
@@ -97,7 +111,7 @@ public class TestScriptExecController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Updated ScriptStep Status")})
 	public void updateScriptStepStatus(@Valid @RequestBody UpdateScriptStepStatus args)
 			throws ClassNotFoundException, SQLException {
-		testScriptExecService.updateScriptStepStatus(args);
+		testScriptExecServiceImpl.updateScriptStepStatus(args);
 	}
 
 	@ResponseBody
@@ -105,7 +119,7 @@ public class TestScriptExecController {
 	@ApiOperation( value="Get Copied Value",notes = "We should pass copyPath to get copied value present in the testrun input value")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Copied Succesfully")})
 	public String getTestSetMode(@PathVariable Long testSetId) {
-		return testScriptExecService.getTestSetMode(testSetId);
+		return testScriptExecServiceImpl.getTestSetMode(testSetId);
 	}
 
 	@ResponseBody
@@ -113,7 +127,7 @@ public class TestScriptExecController {
 	@ApiOperation( value="Get Copied Value",notes = "We should pass copyPath to get copied value in the test run input value")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Copied Succesfully")})
 	public String getTestSetMode(@PathVariable String copyPath) {
-		return testScriptExecService.getCopiedValue(copyPath);
+		return testScriptExecServiceImpl.getCopiedValue(copyPath);
 	}
 
 	@ResponseBody
@@ -121,7 +135,7 @@ public class TestScriptExecController {
 	@ApiOperation( value="Generate Test Run PDF",notes = "To generate TestRun pdf(Passed, Failed and Detailed), we should pass testSetId")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Generated TestRunPdfs Succesfully")})
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {
-		return testScriptExecService.generateTestRunPdf(testSetId);
+		return testScriptExecServiceImpl.generateTestRunPdf(testSetId);
 	}
 	
 	@ResponseBody
@@ -129,7 +143,7 @@ public class TestScriptExecController {
 	@ApiOperation( value="ExcelRun Status Updation",notes = "To update ExcelRun Status Updation, we should pass testsetlineid")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Excel updated Succesfully")})
 	public ResponseDto excelStatus(@PathVariable("testsetlineid") Integer testsetlineid) {
-		return testScriptExecService.excelStatusCheck(testsetlineid);
+		return testScriptExecServiceImpl.excelStatusCheck(testsetlineid);
 	}
 
 }

@@ -71,7 +71,7 @@ public class HealthCheck {
 	CentralRepoStatusCheckService centralRepoStatusCheckService;
 
 	@Autowired
-	TestScriptExecService testScriptExecService;
+	TestScriptExecServiceImpl testScriptExecServiceImpl;
 	
 	@Autowired
 	MessageUtil messageUtil;
@@ -166,7 +166,7 @@ public class HealthCheck {
 	}
 
 	public void storageAccessChecks(String testSetId) throws Exception {
-		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
+		FetchConfigVO fetchConfigVO = testScriptExecServiceImpl.fetchConfigVO(testSetId);
 		objectStoreAccessChecks(Optional.of(testSetId));
 		if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 			getSharePointAccess(fetchConfigVO);

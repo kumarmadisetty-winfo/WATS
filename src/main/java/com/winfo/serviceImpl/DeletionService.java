@@ -71,7 +71,7 @@ public class DeletionService{
 	HealthCheck healthCheck;
 
 	@Autowired
-	TestScriptExecService testScriptExecService;
+	TestScriptExecServiceImpl testScriptExecServiceImpl;
 	
 	@Autowired
 	ScriptDeletionService scriptDeletionService;
@@ -96,7 +96,7 @@ public class DeletionService{
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
+			FetchConfigVO fetchConfigVO = testScriptExecServiceImpl.fetchConfigVO(testSetId);
 			TestSet testSet = dataBaseEntry.getTestRunDetails(testSetId);
 			deleteScreenShot(null, customerDetails, provider, testScriptDto.isTestRunDelete(), testSet);
 			deletePdf(null, customerDetails, provider, testScriptDto.isTestRunDelete(), testSet);
@@ -129,7 +129,7 @@ public class DeletionService{
 	
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 		
-		FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(deleteReportDtoObj.getTestSetId());
+		FetchConfigVO fetchConfigVO = testScriptExecServiceImpl.fetchConfigVO(deleteReportDtoObj.getTestSetId());
 		
 		ExecutorService executor = Executors.newFixedThreadPool(10);
 		

@@ -81,7 +81,6 @@ import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
 import com.winfo.serviceImpl.LimitScriptExecutionService;
 import com.winfo.serviceImpl.ScriptXpathService;
-import com.winfo.serviceImpl.TestScriptExecService;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -93,7 +92,7 @@ import com.winfo.vo.ScriptDetailsDto;
 @RefreshScope
 public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
 
-	public final Logger logger = LogManager.getLogger(TestScriptExecService.class);
+	public final Logger logger = LogManager.getLogger(EBSSeleniumKeyWords.class);
 
 	@Autowired
 	private DataBaseEntry databaseentry;

@@ -52,6 +52,7 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.service.TestScriptExecService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -70,9 +71,9 @@ import com.winfo.vo.UpdateScriptParamStatus;
 import com.winfo.vo.UpdateScriptStepStatus;
 
 @Service
-public class TestScriptExecService extends AbstractSeleniumKeywords {
+public class TestScriptExecServiceImpl extends AbstractSeleniumKeywords implements TestScriptExecService {
 
-	public static final Logger logger = Logger.getLogger(TestScriptExecService.class);;
+	public static final Logger logger = Logger.getLogger(TestScriptExecServiceImpl.class);;
 
 	@Value("${configvO.watslogo}")
 	private String watslogo;
