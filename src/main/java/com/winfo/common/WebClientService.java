@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.vo.ApiValidationVO;
 
 import reactor.core.publisher.Mono;
@@ -57,13 +57,13 @@ public class WebClientService {
 						.onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
 								clientResponse -> Mono.error(new NotFoundException("Endpoint not found")))
 						.onStatus(httpStatus -> HttpStatus.UNAUTHORIZED.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSCustomException(401, "Authentication Error")))
+								clientResponse -> Mono.error(new WatsEBSException(401, "Authentication Error")))
 						.onStatus(httpStatus -> HttpStatus.INTERNAL_SERVER_ERROR.equals(httpStatus),
 								clientResponse -> Mono.error(new InternalServerErrorException("Internal server error")))
 						.onStatus(httpStatus -> HttpStatus.BAD_REQUEST.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSCustomException(400,"Bad Request")))
+								clientResponse -> Mono.error(new WatsEBSException(400,"Bad Request")))
 						.onStatus(httpStatus -> HttpStatus.SERVICE_UNAVAILABLE.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSCustomException(503,"Service Unavailable")))
+								clientResponse -> Mono.error(new WatsEBSException(503,"Service Unavailable")))
 						.bodyToMono(String.class);
 			} else {
 				bodyToMono = client.method(httpMethod).uri(apiValidationData.getUrl())
@@ -72,13 +72,13 @@ public class WebClientService {
 						.onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
 								clientResponse -> Mono.error(new NotFoundException("Endpoint not found")))
 						.onStatus(httpStatus -> HttpStatus.UNAUTHORIZED.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSCustomException(401, "Authentication Error")))
+								clientResponse -> Mono.error(new WatsEBSException(401, "Authentication Error")))
 						.onStatus(httpStatus -> HttpStatus.INTERNAL_SERVER_ERROR.equals(httpStatus),
 								clientResponse -> Mono.error(new InternalServerErrorException("Internal server error")))
 						.onStatus(httpStatus -> HttpStatus.BAD_REQUEST.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSCustomException(400,"Bad Request")))
+								clientResponse -> Mono.error(new WatsEBSException(400,"Bad Request")))
 						.onStatus(httpStatus -> HttpStatus.SERVICE_UNAVAILABLE.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSCustomException(503,"Service Unavailable")))
+								clientResponse -> Mono.error(new WatsEBSException(503,"Service Unavailable")))
 						.bodyToMono(String.class);
 			}
 
@@ -87,16 +87,16 @@ public class WebClientService {
 			apiValidationData.setResponse(result);
 		} catch (NotFoundException ex) {
 			logger.error("{}", ex.getMessage());
-			throw new WatsEBSCustomException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
-		} catch (WatsEBSCustomException ex) {
+			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+		} catch (WatsEBSException ex) {
 			logger.error("{}", ex.getMessage());
-			throw new WatsEBSCustomException(ex.getErrorCode(), ex.getMessage());
+			throw new WatsEBSException(ex.getErrorCode(), ex.getMessage());
 		} catch (InternalServerErrorException ex) {
 			logger.error("{}", ex.getMessage());
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
 		} catch (Exception ex) {
 			logger.error("Error while calling API: {}", ex.getMessage());
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
 		}
 	}
 

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.serviceImpl.PluginTestrunService;
 import com.winfo.serviceImpl.WatsPluginService;
 import com.winfo.vo.DomGenericResponseBean;
@@ -87,7 +87,7 @@ public class WatsPlugInRest {
 			}
 			return service.getWatsScriptAssistantFile(plugInVO);
 		} else {
-			throw new WatsEBSCustomException(500, "Customer can not be null or empty");
+			throw new WatsEBSException(500, "Customer can not be null or empty");
 		}
 
 	}

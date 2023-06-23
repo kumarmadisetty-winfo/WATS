@@ -33,7 +33,7 @@ import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
 import com.winfo.serviceImpl.ScriptXpathService;
 import com.winfo.vo.CustomerProjectDto;
@@ -1793,7 +1793,7 @@ public class XpathPerformance {
 
 	private void scrollMethod(WebDriver driver, FetchConfigVO fetchConfigVO, WebElement waittill,
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
-		fetchConfigVO.getMedium_wait();
+		fetchConfigVO.getMEDIUM_WAIT();
 		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 		// WebElement elements =
 		// wait.until(ExpectedConditions.elementToBeClickable(waittill));
@@ -1975,10 +1975,10 @@ public class XpathPerformance {
 				response = client.putObject(putObjectRequest);
 			}
 			return response.toString();
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage..", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage..", e);
 		}
 	}
 	
@@ -2548,7 +2548,7 @@ public class XpathPerformance {
 	}
 	public void navigateUrl(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
-			driver.navigate().to(fetchConfigVO.getApplication_url());
+			driver.navigate().to(fetchConfigVO.getAPPLICATION_URL());
 			driver.manage().window().maximize();
 			deleteAllCookies(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);

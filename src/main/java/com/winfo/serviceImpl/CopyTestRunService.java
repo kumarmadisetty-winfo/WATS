@@ -28,10 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.CopyTestRunDao;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ExecuteStatusPK;
-import com.winfo.model.ExecutionAudit;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -449,7 +448,7 @@ public class CopyTestRunService {
 			scriptParamObj.setInputValue(formatter.format(new Date()));
 		} catch (Exception e) {
 			logger.info("Exception occurred while converting date Format");
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while converting the Date Format", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while converting the Date Format", e);
 		}
 		}
 		else{
@@ -460,22 +459,30 @@ public class CopyTestRunService {
 
 	@Transactional
 	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
-		TestSet getTestrun = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
-		logger.info("Test run Data " + getTestrun);
-		for (TestSetLine getScriptdata : getTestrun.getTestRunScriptDatalist()) {
-			String status = getScriptdata.getStatus();
-			if (status.equalsIgnoreCase("fail")) {
-				for (TestSetScriptParam getScriptlinedata : getScriptdata.getTestRunScriptParam()) {
-					TestSetScriptParam setScriptlinedata = new TestSetScriptParam();
-					addInputvalues(getScriptlinedata, setScriptlinedata, copyTestrunvo, getScriptdata);
-					getScriptlinedata.setInputValue(setScriptlinedata.getInputValue());
+		try {
+			TestSet getTestrun = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+			logger.info("Test Run Name : " + getTestrun.getTestRunName());
+			for (TestSetLine getScriptdata : getTestrun.getTestRunScriptDatalist()) {
+				String status = getScriptdata.getStatus();
+				if (status.equalsIgnoreCase("fail")) {
+					for (TestSetScriptParam getScriptlinedata : getScriptdata.getTestRunScriptParam()) {
+						TestSetScriptParam setScriptlinedata = new TestSetScriptParam();
+						addInputvalues(getScriptlinedata, setScriptlinedata, copyTestrunvo, getScriptdata);
+						getScriptlinedata.setInputValue(setScriptlinedata.getInputValue());
+					}
 				}
 			}
+			logger.info("before update");
+			int newtestrun = copyTestrunDao.updateTestSetRecord(getTestrun);
+			logger.info("New test run " + newtestrun);
+			return newtestrun;
+		} catch (NullPointerException ne) {
+			logger.error("GetTestrun object should not be null" + ne.getMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "GetTestrun object should not be null");
+		} catch (Exception e) {
+			logger.error("Internal Server Error" + e.getMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error");
 		}
-		logger.info("before update");
-		int newtestrun = copyTestrunDao.updateTestSetRecord(getTestrun);
-		logger.info("New test run " + newtestrun);
-		return newtestrun;
 	}
 
 	@Transactional

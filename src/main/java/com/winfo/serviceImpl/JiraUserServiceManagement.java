@@ -26,7 +26,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.winfo.constants.HttpMethodConstants;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.JiraUserManagement;
@@ -160,7 +160,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to get the user info " + e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to get the user info!");
+			throw new WatsEBSException(500, "Not able to get the user info!");
 		}
 	}
 
@@ -179,7 +179,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to get all the organization details " + e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to get all the organization details!");
+			throw new WatsEBSException(500, "Not able to get all the organization details!");
 		}
 	}
 
@@ -203,7 +203,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to create the organization " +e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to create the organization!");
+			throw new WatsEBSException(500, "Not able to create the organization!");
 		}
 	}
 
@@ -225,7 +225,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to add the organization to the project " +e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to add the organization to the project!");
+			throw new WatsEBSException(500, "Not able to add the organization to the project!");
 		}
 	}
 
@@ -244,7 +244,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to get all the organization present in the project " +e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to get all the organization present in the project!");
+			throw new WatsEBSException(500, "Not able to get all the organization present in the project!");
 		}
 	}
 
@@ -268,7 +268,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to create new user "+e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to create new user!");
+			throw new WatsEBSException(500, "Not able to create new user!");
 		}
 	}
 
@@ -290,7 +290,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to add the user to the organization!" +e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to add the user to the organization!");
+			throw new WatsEBSException(500, "Not able to add the user to the organization!");
 		}
 	}
 
@@ -312,7 +312,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to remove the user from the organization " +e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to remove the user from the organization!");
+			throw new WatsEBSException(500, "Not able to remove the user from the organization!");
 		}
 	}
 
@@ -334,7 +334,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to remove the user from the project "+e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to remove the user from the project!");
+			throw new WatsEBSException(500, "Not able to remove the user from the project!");
 		}
 	}
 
@@ -355,7 +355,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to remove the organization from the project " +e.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to remove the organization from the project!");
+			throw new WatsEBSException(500, "Not able to remove the organization from the project!");
 		}
 	}
 
@@ -405,7 +405,7 @@ public class JiraUserServiceManagement {
 			apiValidationData.setResponse(result);
 		} catch (Exception ex) {
 			logger.error("Failed to hit the jira url " + ex.getMessage());
-			throw new WatsEBSCustomException(500, "Not able to hit the jira url!");
+			throw new WatsEBSException(500, "Not able to hit the jira url!");
 		}
 	}
 

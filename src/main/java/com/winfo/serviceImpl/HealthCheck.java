@@ -23,6 +23,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
@@ -32,12 +33,13 @@ import com.oracle.bmc.objectstorage.requests.ListObjectsRequest;
 import com.oracle.bmc.objectstorage.responses.ListObjectsResponse;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.DataBaseEntryDao;
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.HealthCheckVO;
+import com.winfo.vo.HubResponse;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.SanityCheckVO;
 
@@ -140,7 +142,7 @@ public class HealthCheck {
 		try {
 			dao.dbAccessibilityCheck();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getDbAccessibilityMessage());
+			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getDbAccessibilityMessage());
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
@@ -150,18 +152,16 @@ public class HealthCheck {
 			RestTemplate restTemplate = new RestTemplate();
 			String url = watsHubUrl.concat("status");
 			String result = restTemplate.getForObject(url, String.class);
-			JSONParser parser = new JSONParser();
-			JSONObject obj = (JSONObject) parser.parse(result);
-			JSONObject obj1 = (JSONObject) obj.get("value");
-			JSONArray jsonarray = (JSONArray) obj1.get("nodes");
-			long total = (long) jsonarray.size();
+			ObjectMapper mapper = new ObjectMapper();
+			HubResponse hubResponse = mapper.readValue(result,HubResponse.class);
+			long total = hubResponse.getValue().getNodes().size();
 			if (total > 0) {
 				return new ResponseDto(200, Constants.SUCCESS, null);
 			} else {
-				throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
+				throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
+			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
 		}
 	}
 
@@ -179,7 +179,7 @@ public class HealthCheck {
 			File file = new File(ociConfigPath);
 			configFile = ConfigFileReader.parse(new FileInputStream(file), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getConfigFileIOException());
+			throw new WatsEBSException(500, messageUtil.getObjectStore().getConfigFileIOException());
 		}
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
@@ -205,24 +205,24 @@ public class HealthCheck {
 			if (testSetId != null) {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
 						&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
-					throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
+					throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
 				}
 			} else {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH))) {
-					throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
+					throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
 				}
 			}
 		} catch (Exception e1) {
-			if (e1 instanceof WatsEBSCustomException) {
+			if (e1 instanceof WatsEBSException) {
 				throw e1;
 			} else {
-				throw new WatsEBSCustomException(500, messageUtil.getObjectStore().getAccessDeniedException());
+				throw new WatsEBSException(500, messageUtil.getObjectStore().getAccessDeniedException());
 			}
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
 
-	public String getSharePointAccess(FetchConfigVO fetchConfigVO) throws WatsEBSCustomException {
+	public String getSharePointAccess(FetchConfigVO fetchConfigVO) throws WatsEBSException {
 		String acessToken = null;
 		try {
 			RestTemplate restTemplate = new RestTemplate();
@@ -230,20 +230,20 @@ public class HealthCheck {
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			map.add("grant_type", "client_credentials");
-			map.add("client_id", fetchConfigVO.getClient_id());
-			map.add("client_secret", fetchConfigVO.getClient_secret());
+			map.add("client_id", fetchConfigVO.getCLIENT_ID());
+			map.add("client_secret", fetchConfigVO.getCLIENT_SECRET());
 			map.add("scope", "https://graph.microsoft.com/.default");
 
 			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
 			ResponseEntity<Object> response = restTemplate.exchange(
-					"https://login.microsoftonline.com/" + fetchConfigVO.getTenant_id() + "/oauth2/v2.0/token",
+					"https://login.microsoftonline.com/" + fetchConfigVO.getTENANT_ID() + "/oauth2/v2.0/token",
 					HttpMethod.POST, entity, Object.class);
 			@SuppressWarnings("unchecked")
 			Map<String, Object> linkedMap = response.getBody() != null ? (Map<String, Object>) response.getBody()
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, messageUtil.getHealthCheck().getError().getSharePointAccess());
+			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSharePointAccess());
 		}
 		return acessToken;
 	}

@@ -37,7 +37,6 @@ public class CopyTestrunController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Created new test run and returned testSetId")})
 	public CopyTestrunjson copyTestrun(@Valid @RequestBody(required = false) CopytestrunVo copyTestrunvo,
 			BindingResult bindingResult) throws InterruptedException, JsonProcessingException {
-		logger.info("Test Run Name : " + copyTestrunvo.getNewtestrunname());
 		int newtestrun = 0;
 		if (copyTestrunvo.getRequestType().equalsIgnoreCase("copyTestRun")) {
 			newtestrun = service.copyTestrun(copyTestrunvo);

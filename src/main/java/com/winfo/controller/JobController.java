@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.scripts.RunAutomation;
 import com.winfo.serviceImpl.HealthCheck;
 import com.winfo.vo.ResponseDto;
@@ -52,13 +52,13 @@ public class JobController {
 				runAutomation.run(testScriptDto.getTestScriptNo());
 			} else {
 				return new ResponseEntity(
-						new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Sanity check fail"),
+						new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Sanity check fail"),
 						HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			return ResponseEntity.ok(responseDto);
 		} else {
 			return new ResponseEntity(
-					new WatsEBSCustomException(HttpStatus.BAD_REQUEST.value(), "Enter valid test set id"),
+					new WatsEBSException(HttpStatus.BAD_REQUEST.value(), "Enter valid test set id"),
 					HttpStatus.BAD_REQUEST);
 		}
 

@@ -40,7 +40,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.winfo.exception.WatsEBSCustomException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ApplicationProperties;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.AuditStageLookup;
@@ -488,7 +488,7 @@ public class DataBaseEntryDao {
 			query.select(root.get("pdfGenerationEnabled")).where(condition);
 			return em.createQuery(query).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
+			throw new WatsEBSException(500,
 					"Exception occured while getting status of PDF Generation for the Test Run", e);
 		}
 
@@ -543,7 +543,7 @@ public class DataBaseEntryDao {
 			query.setParameter("testSetId", testSetId);
 			return query.getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching configuration details", e);
+			throw new WatsEBSException(500, "Exception occured while fetching configuration details", e);
 		}
 	}
 
@@ -667,7 +667,7 @@ public class DataBaseEntryDao {
 			Query query = em.createQuery(cq.select(from.get(STATUS)));
 			result = query.getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching the status for test run pdfs", e);
+			throw new WatsEBSException(500, "Exception occured while fetching the status for test run pdfs", e);
 		}
 
 		return result;
@@ -682,7 +682,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQry);
 			result = query.getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(604, "Unable to read status from win_ta_test_set_lines");
+			throw new WatsEBSException(604, "Unable to read status from win_ta_test_set_lines");
 		}
 		return result;
 	}
@@ -707,7 +707,7 @@ public class DataBaseEntryDao {
 				failCount = Integer.parseInt(bigDecimal.toString());
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(600, "Unable to read the fail count");
+			throw new WatsEBSException(600, "Unable to read the fail count");
 		}
 		try {
 			NativeQuery<BigDecimal> query1 = session.createSQLQuery(sqlPassQuery);
@@ -721,7 +721,7 @@ public class DataBaseEntryDao {
 			fetchConfigVO.setFailcount(failCount);
 			fetchConfigVO.setPasscount(passCount);
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(600, "Unable to read the pass count");
+			throw new WatsEBSException(600, "Unable to read the pass count");
 		}
 
 	}
@@ -749,7 +749,7 @@ public class DataBaseEntryDao {
 			customerDetails
 					.setTestSetName(NULL_STRING.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run.",
+			throw new WatsEBSException(500, "Exception occured while fetching all steps details for test run.",
 					e);
 		}
 		return customerDetails;
@@ -876,15 +876,15 @@ public class DataBaseEntryDao {
 			}
 		} catch (QueryException e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Error executing the query: " + e.getMessage(), e);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Error accessing array element: " + e.getMessage(), e);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
 					"Exception occured while fetching all steps details for test run", e);
 		}
 		return listOfTestRunExecutionVo;
@@ -1004,7 +1004,7 @@ public class DataBaseEntryDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Exception occured while fetching all steps details for test run", e);
+			throw new WatsEBSException(500, "Exception occured while fetching all steps details for test run", e);
 		}
 		return listOfTestRunExecutionVo;
 	}
@@ -1018,7 +1018,7 @@ public class DataBaseEntryDao {
 					+ message.replace("'", "''") + "' where testRunScriptParamId=" + "'" + testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
+			throw new WatsEBSException(500,
 					"Exception occured while updating the status for testScriptId " + testScriptParamId, e);
 		}
 	}
@@ -1149,7 +1149,7 @@ public class DataBaseEntryDao {
 	public List<Object[]> getSumDetailsFromSubscription() {
 		List<Object[]> result = null;
 		String qry = "select sum(quantity),sum(executed),sum(balance) from wats_subscription\r\n"
-				+ "where uom = 'Script' and status='Active'  and to_date(sysdate ,'dd-mm-yyyy') >= start_date and to_date(sysdate ,'dd-mm-yyyy') <= end_date";
+				+ "where uom = 'Script' and status='Active'  and to_date(sysdate) >= start_date and to_date(sysdate) <= end_date";
 		try {
 			Session session = em.unwrap(Session.class);
 			Query query = session.createSQLQuery(qry);
@@ -1159,11 +1159,11 @@ public class DataBaseEntryDao {
 		}
 		return result;
 	}
-
+  
 	public List<Object[]> getSubscriptionDetails() {
 		String qry = "select subscription_id, executed,balance from (SELECT subscription_id,executed,balance\r\n"
 				+ "         FROM wats_subscription\r\n"
-				+ "         WHERE status = 'Active' and uom = 'Script' and to_date(sysdate ,'dd-mm-yyyy') >= start_date and to_date(sysdate ,'dd-mm-yyyy') <= end_date\r\n"
+				+ "         WHERE status = 'Active' and uom = 'Script' and to_date(sysdate) >= start_date and to_date(sysdate) <= end_date\r\n"
 				+ "        ORDER BY subscription_id) where ROWNUM = 1";
 		List<Object[]> result = null;
 		try {
@@ -1237,7 +1237,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
+			throw new WatsEBSException(500,
 					"Exception occured while updating status, end date and path for script level pdf", e);
 		}
 	}
@@ -1252,7 +1252,7 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while updating the Paths for test run pdfs", e);
+			throw new WatsEBSException(500, "Exception occured while updating the Paths for test run pdfs", e);
 		}
 	}
 
@@ -1271,7 +1271,7 @@ public class DataBaseEntryDao {
 			instQuery.executeUpdate();
 
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
+			throw new WatsEBSException(500,
 					"Exception occured while inserting records for start date, end date and status", e);
 		}
 	}
@@ -1283,7 +1283,7 @@ public class DataBaseEntryDao {
 			String execQry = "SELECT SEQ_NUM, STATUS FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID=" + testSetId;
 			listObj = session.createSQLQuery(execQry).getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(605, "Unable to read records from WIN_TA_TEST_SET_LINES");
+			throw new WatsEBSException(605, "Unable to read records from WIN_TA_TEST_SET_LINES");
 		}
 		return listObj;
 	}
@@ -1304,7 +1304,7 @@ public class DataBaseEntryDao {
 			emailParam.setFailCount(failCount.intValue());
 
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500,
+			throw new WatsEBSException(500,
 					"Exception occured while fetching total pass and fail count for test run script.", e);
 		}
 
@@ -1326,7 +1326,7 @@ public class DataBaseEntryDao {
 			emailParam.setReceiver(user);
 			emailParam.setCcPerson(manager);
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching email for user.", e);
+			throw new WatsEBSException(500, "Exception occured while fetching email for user.", e);
 		}
 	}
 
@@ -1342,7 +1342,7 @@ public class DataBaseEntryDao {
 				count = getCountOfInProgressScript(testSetId);
 			}
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching the running process count.", e);
+			throw new WatsEBSException(500, "Exception occured while fetching the running process count.", e);
 		}
 		return count;
 	}
@@ -1357,7 +1357,7 @@ public class DataBaseEntryDao {
 			BigDecimal inProgressCount = (BigDecimal) session.createSQLQuery(selectQry).getSingleResult();
 			count = inProgressCount.intValue();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while fetching the running process count.", e);
+			throw new WatsEBSException(500, "Exception occured while fetching the running process count.", e);
 		}
 		return count;
 	}
@@ -1377,7 +1377,7 @@ public class DataBaseEntryDao {
 					+ testSetId + " )";
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while updating the response count", e);
+			throw new WatsEBSException(500, "Exception occured while updating the response count", e);
 		}
 		return id + 1;
 
@@ -1390,7 +1390,7 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while Updating status flag for test run script.",
+			throw new WatsEBSException(500, "Exception occured while Updating status flag for test run script.",
 					e);
 		}
 	}
@@ -1407,7 +1407,7 @@ public class DataBaseEntryDao {
 					+ "TEST_RUN_ID = " + testSetId + ")";
 			requestCount = session.createSQLQuery(execQry).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, EXCEPTION_MSG, e);
+			throw new WatsEBSException(500, EXCEPTION_MSG, e);
 		}
 		return requestCount;
 	}
@@ -1455,7 +1455,7 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.", e);
+			throw new WatsEBSException(500, "Exception occured while Updating status for scripts.", e);
 		}
 	}
 
@@ -1475,7 +1475,7 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).setParameter("P_TEST_SET_ID", testSetId).executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while Updating status for status flag.", e);
+			throw new WatsEBSException(500, "Exception occured while Updating status for status flag.", e);
 		}
 	}
 
@@ -1491,7 +1491,7 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			count = session.createSQLQuery(updateQry).setParameter("script_id", scriptId).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while Checking if actions contains excel or not.",
+			throw new WatsEBSException(500, "Exception occured while Checking if actions contains excel or not.",
 					e);
 		}
 		return Integer.parseInt(count.toString()) > 0;
@@ -1505,7 +1505,7 @@ public class DataBaseEntryDao {
 			String execQry = "select lookup_id from win_ta_lookups where lookup_name = 'API_VALIDATION'";
 			requestCount = session.createSQLQuery(execQry).getSingleResult();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, EXCEPTION_MSG, e);
+			throw new WatsEBSException(500, EXCEPTION_MSG, e);
 		}
 		return Integer.parseInt(requestCount.toString());
 	}
@@ -1518,7 +1518,7 @@ public class DataBaseEntryDao {
 					"from LookUpCode lu where lu.lookUpId in :lookupId and lu.lookUpCodeId in (:listOfLookUpId)")
 					.setParameter("lookupId", apiValidationId).setParameter("listOfLookUpId", list).getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, EXCEPTION_MSG, e);
+			throw new WatsEBSException(500, EXCEPTION_MSG, e);
 		}
 		return listOfLookUpCodesData;
 	}
@@ -1531,7 +1531,7 @@ public class DataBaseEntryDao {
 					+ " and lookup_code in ('" + lookUpCode + "')";
 			listOfLookUpCode = session.createSQLQuery(query).getResultList();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, EXCEPTION_MSG, e);
+			throw new WatsEBSException(500, EXCEPTION_MSG, e);
 		}
 		return listOfLookUpCode;
 	}
@@ -1576,7 +1576,7 @@ public class DataBaseEntryDao {
 			  
 		} catch (Exception e) {
 			logger.error("Not able to fetch LookUpCode data from database");
-			throw new WatsEBSCustomException(500, "Exception occured while fetching LookUpCode data",e);
+			throw new WatsEBSException(500, "Exception occured while fetching LookUpCode data",e);
 		}
 		 return query.setParameter("apiValidationId", apiValidationId).setParameter("lookUpCode", lookUpCode).getResultList();
 		}
@@ -1606,7 +1606,7 @@ public class DataBaseEntryDao {
 			return query.getSingleResult().toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Directory path is not present", e);
+			throw new WatsEBSException(500, "Directory path is not present", e);
 		}
 	}
 	
@@ -1617,13 +1617,13 @@ public class DataBaseEntryDao {
 			return query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSCustomException(500, "Not able to fetch the module", e);
+			throw new WatsEBSException(500, "Not able to fetch the module", e);
 		}
 	}
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void deleteTestSetLinesRecordsByTestSetLineId(TestSetLine testSetLine) {
+	public void deleteTestSetLinesRecordsByTestSetLineId(TestSetLine testSetLine, String deletedBy) {
 		try {
-			LogDetailsTable logDetailsTable = createLogDetailsTable(testSetLine);
+			LogDetailsTable logDetailsTable = createLogDetailsTable(testSetLine,deletedBy);
 	        logDetailsRepository.save(logDetailsTable);
 			int data = em.createQuery("delete from TestSetLine where testRunScriptId = :testSetLineId")
 					.setParameter("testSetLineId", testSetLine.getTestRunScriptId()).executeUpdate();
@@ -1680,25 +1680,26 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while Updating status for scripts.", e);
+			throw new WatsEBSException(500, "Exception occured while Updating status for scripts.", e);
 		}
 	}
 	
-	private LogDetailsTable createLogDetailsTable(TestSetLine testSetLine) {
+	private LogDetailsTable createLogDetailsTable(TestSetLine testSetLine, String deletedBy) {
 		LogDetailsTable logDetailsTable = new LogDetailsTable();
 		logDetailsTable.setLogLevel("Info");
 		logDetailsTable.setLogTable("WIN_TA_TEST_SET_LINES");
 		logDetailsTable.setLogAction("Delete");
 		logDetailsTable.setLogTime(new Date());
-		logDetailsTable.setExecutedBy(testSetLine.getLastUpdatedBy());
+		logDetailsTable.setExecutedBy(deletedBy);
 		String logDescription = String.format(
 				"Test Set Id: %d, Script Number: %s, Test Set Line Id: %d, Last Updated By: %s, Sequence Number: %d is Deleted",
 				testSetLine.getTestRun().getTestRunId(), testSetLine.getScriptNumber(),
-				testSetLine.getTestRunScriptId(), testSetLine.getLastUpdatedBy(), testSetLine.getSeqNum());
+				testSetLine.getTestRunScriptId(), deletedBy, testSetLine.getSeqNum());
 		logger.info(logDescription);
 		logDetailsTable.setLogDescription(logDescription);
 		return logDetailsTable;
 	}
+
 }
 	
 	
