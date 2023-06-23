@@ -4,7 +4,9 @@ import java.sql.SQLException;
 
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.winfo.exception.WatsEBSException;
 import com.winfo.serviceImpl.TestScriptExecService;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.vo.MessageQueueDto;
@@ -31,6 +34,8 @@ public class TestScriptExecController {
 	@Autowired
 	TestScriptExecService testScriptExecService;
 
+	public static final Logger logger = Logger.getLogger(TestScriptExecController.class);
+	
 //	@ResponseBody
 //	@RequestMapping(value = "/executeTestScript")
 //	public ResponseDto executeTestScript(@Valid @RequestBody(required = false) TestScriptDto testScriptDto,
@@ -121,7 +126,13 @@ public class TestScriptExecController {
 	@ApiOperation( value="Generate Test Run PDF",notes = "To generate TestRun pdf(Passed, Failed and Detailed), we should pass testSetId")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Generated TestRunPdfs Succesfully")})
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {
-		return testScriptExecService.generateTestRunPdf(testSetId);
+		try {
+			return testScriptExecService.generateTestRunPdf(testSetId);			
+		}
+		catch(Exception e) {
+			logger.error("Exception occured while generating PDFs");
+        	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while generating PDFs"); 
+		}
 	}
 	
 	@ResponseBody

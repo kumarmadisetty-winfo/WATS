@@ -18,6 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -30,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -122,6 +127,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	CodeLinesRepository codeLineRepo;
 	@Autowired
 	DynamicRequisitionNumber dynamicnumber;
+	@Autowired
+	GenerateTestRunPDFService generateTestRunPDFService;
 
 	@Autowired
 	private KafkaTemplate<String, MessageQueueDto> kafkaTemp;
@@ -580,7 +587,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					if (runFinalPdf) {
 						dataBaseEntry.updatePdfGenerationEnableStatus(args.getTestSetId(),
 								BOOLEAN_STATUS.FALSE.getLabel());
-						testRunPdfGeneration(args.getTestSetId(), fetchConfigVO);
+						generateTestRunPDFService.testRunPdfGeneration(args.getTestSetId(), fetchConfigVO);
 					}
 				}
 			}
@@ -615,68 +622,6 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
 
-	private void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO) throws Exception {
-		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
-		List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true,
-				false);
-		dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
-		String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
-				+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
-		createDir(screenShotFolderPath);
-		File folder = new File(screenShotFolderPath);
-		Map<String, String> screenShotsMap = new HashMap<>();
-		for (ScriptDetailsDto scriptDetailsData : fetchMetadataListVOFinal) {
-			String seqNum = scriptDetailsData.getSeqNum();
-			if (!screenShotsMap.containsKey(seqNum)) {
-				String screenShot = scriptDetailsData.getSeqNum() + "_" + scriptDetailsData.getLineNumber() + "_"
-						+ scriptDetailsData.getScenarioName() + "_" + scriptDetailsData.getScriptNumber() + "_"
-						+ customerDetails.getTestSetName() + "_" + scriptDetailsData.getLineNumber();
-				screenShotsMap.put(seqNum, screenShot);
-			}
-		}
-		List<String> files = new ArrayList<>();
-		for (File fileName : Arrays.asList(folder.listFiles())) {
-			files.add(fileName.getName());
-		}
-		if (folder.exists()) {
-			for (Map.Entry<String, String> entry : screenShotsMap.entrySet()) {
-				String seqNum = entry.getKey();
-				String value = entry.getValue();
-				String screenShotName = null;
-				if (files.contains(value + "_" + TestScriptExecServiceEnum.PASSED.getValue() + TestScriptExecServiceEnum.PNG_EXTENSION.getValue())) {
-					screenShotName = value + "_" + TestScriptExecServiceEnum.PASSED.getValue() + TestScriptExecServiceEnum.PNG_EXTENSION.getValue();
-				} else if (files.contains(value + "_" + TestScriptExecServiceEnum.PASSED.getValue() + TestScriptExecServiceEnum.JPG_EXTENSION.getValue())) {
-					screenShotName = value + "_" + TestScriptExecServiceEnum.PASSED.getValue() + TestScriptExecServiceEnum.JPG_EXTENSION.getValue();
-				} else if (files.contains(value + "_" + TestScriptExecServiceEnum.FAILED.getValue() + TestScriptExecServiceEnum.PNG_EXTENSION.getValue())) {
-					screenShotName = value + "_" + TestScriptExecServiceEnum.FAILED.getValue() + TestScriptExecServiceEnum.PNG_EXTENSION.getValue();
-				} else if (files.contains(value + "_" + TestScriptExecServiceEnum.FAILED.getValue() + TestScriptExecServiceEnum.JPG_EXTENSION.getValue())) {
-					screenShotName = value + "_" + TestScriptExecServiceEnum.FAILED.getValue() + TestScriptExecServiceEnum.JPG_EXTENSION.getValue();
-				}
-				if (screenShotName == null) {
-					downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
-							customerDetails.getTestSetName(), seqNum);
-				}
-			}
-		}
-		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", customerDetails);
-		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", customerDetails);
-		createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
-
-	}
-
-	public void createDir(String path) {
-		File folder1 = new File(path);
-		if (!folder1.exists()) {
-			logger.info("creating directory: " + folder1.getName());
-			try {
-				folder1.mkdirs();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-			}
-		} else {
-			logger.info("Folder exist");
-		}
-	}
 
 	public Map<String, String> findExecutionTimeForTestRun(String testSetId, String pdffileName) {
 
@@ -779,7 +724,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		Gson g = new Gson();
 		return g.fromJson(jsno.toString(), FetchConfigVO.class);
 	}
-
+	
 	public ResponseDto generateTestRunPdf(String testSetId) {
 		dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.GENERATING);
 		ResponseDto response;
@@ -791,16 +736,16 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				Date endDate = dataBaseEntry.findMaxExecutionEndDate(Long.valueOf(testSetId));
 				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setEndtime(endDate);
-				testRunPdfGeneration(testSetId, fetchConfigVO);
-				response = new ResponseDto(200, Constants.SUCCESS, null);
+				generateTestRunPDFService.testRunPdfGeneration(testSetId, fetchConfigVO);
+				response = new ResponseDto(200, Constants.SUCCESS, "The process of generating the PDF has started, please check back after some time.");
 			} catch (Exception e) {
-				e.printStackTrace();
+				dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
 				response = new ResponseDto(500, Constants.ERROR, e.getMessage());
 			}
 		} else {
+			dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
 			response = new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
 		}
-		dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
 		return response;
 	}
 
