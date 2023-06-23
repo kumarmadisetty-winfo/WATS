@@ -97,10 +97,10 @@ public class CommonObjectStoreUtils {
 				PDDocument document = PDDocument.load(response.getInputStream());
 				return document;
 			}
-		} catch (WatsEBSCustomException e) {
+		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSCustomException(500, "Exception occured while uploading pdf in Object Storage", e);
+			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
 		}
 	}
 }

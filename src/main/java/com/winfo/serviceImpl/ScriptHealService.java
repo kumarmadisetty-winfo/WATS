@@ -7,10 +7,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -27,7 +30,7 @@ public class ScriptHealService {
 	@Autowired
 	CommonObjectStoreUtils commonObjectStoreUtils;
 	
-	public List<ScriptHealVo> getNewInputParameters(String targetApplication, String productVersion, String module) throws IOException {
+	public ResponseEntity<List<ScriptHealVo>> getNewInputParameters(String targetApplication, String productVersion, String module) throws IOException {
 
 		List<ScriptMaster> scriptMasters = scriptMasterRepository.findByProductVersionAndModule(productVersion,module);
 		PDDocument document = commonObjectStoreUtils.readFileFromCommonObjectStore("Script Heal/"+
@@ -56,7 +59,7 @@ public class ScriptHealService {
 			});	
 		});
         document.close();
-        return listOfOldNewInputParameters;
+        return new ResponseEntity<List<ScriptHealVo>>(listOfOldNewInputParameters,HttpStatus.OK) ;
 		
 	}
 }
