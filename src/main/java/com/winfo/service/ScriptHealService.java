@@ -11,5 +11,5 @@ import com.winfo.vo.ScriptHealVo;
 @Service
 public interface ScriptHealService {
 
-	public ResponseEntity<List<ScriptHealVo>> getNewInputParameters(String targetApplication, String productVersion, String module) throws IOException;
+	public List<ScriptHealVo> getNewInputParameters(String targetApplication, String productVersion, String module) throws IOException;
 }

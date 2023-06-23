@@ -97,9 +97,14 @@ public class CommonObjectStoreUtils {
 				PDDocument document = PDDocument.load(response.getInputStream());
 				return document;
 			}
-		} catch (WatsEBSException e) {
-			throw e;
-		} catch (Exception e) {
+		} catch (BmcException e) {
+			log.error(fileName+ " is not exist in Object Store");
+			throw new WatsEBSException(e.getStatusCode(),
+					MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
+	    }catch (IOException e) {
+	    	log.error("Exception occured while fetching file from service");
+			throw new WatsEBSException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
+		}  catch (Exception e) {
 			throw new WatsEBSException(500, "Exception occured while reading pdf in Object Storage", e);
 		}
 	}

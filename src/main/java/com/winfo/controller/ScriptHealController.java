@@ -39,7 +39,8 @@ public class ScriptHealController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Succesfully found new Input Parameters")})
 	public ResponseEntity<List<ScriptHealVo>> getUpdatedInputParameters(@PathVariable String targetApplication,@PathVariable String productVersion,@PathVariable String module) {
 		try {
-			return scriptHealServiceImpl.getNewInputParameters(targetApplication,productVersion,module);
+			List<ScriptHealVo> listOfOldNewInputParameters=scriptHealServiceImpl.getNewInputParameters(targetApplication,productVersion,module);
+			return new ResponseEntity<List<ScriptHealVo>>(listOfOldNewInputParameters,HttpStatus.OK);
         } catch (IOException e) {
         	logger.error("Exception occured while fetching the new Input Parameter");
         	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while fetching the new Input Parameter"); 
