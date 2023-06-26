@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -60,6 +61,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -648,7 +650,8 @@ public abstract class AbstractSeleniumKeywords {
 		return totalExecutedTime;
 	}
 
-	public String createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
+	@Async
+	public  CompletableFuture<String> createPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO, String pdffileName,
 			CustomerProjectDto customerDetails) {
 		try {
 			StringBuffer folderBuffer = new StringBuffer();
@@ -772,7 +775,7 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			logger.error("Failed to Create pdf " + e.getMessage());
 		}
-		return pdffileName;
+		return  CompletableFuture.completedFuture(pdffileName);
 	}
 
 	public void generateScriptLvlPDF(Document document, Date startTime, Date endTime, Image watsLogo,
