@@ -74,15 +74,15 @@ public class GenerateTestRunPDFService extends AbstractSeleniumKeywords {
 				}
 			}
 			
-			CompletableFuture<String> completableFuture1 = CompletableFuture.supplyAsync(()->createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", customerDetails));	
-			CompletableFuture<String> completableFuture2 = CompletableFuture.supplyAsync(()->createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", customerDetails));
-			CompletableFuture<String> completableFuture3 = CompletableFuture.supplyAsync(()->createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", customerDetails));
+			CompletableFuture<String> completableFuture1 = createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Passed_Report.pdf", customerDetails);	
+			CompletableFuture<String> completableFuture2 = createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Failed_Report.pdf", customerDetails);
+			CompletableFuture<String> completableFuture3 = createPdf(fetchMetadataListVOFinal, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
 			List<CompletableFuture<String>> completableFutures = Arrays.asList(completableFuture1, completableFuture2, completableFuture3);
 			CompletableFuture<Void> resultantCf = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()]));
 			CompletableFuture<List<String>> allFutureResults = resultantCf.thenApply(t ->{
 				dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
 				return completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
-			});   		
+			});  		
 			logger.info("Successfully generated PDFs - " + allFutureResults.get());    
 		}
 		catch(Exception e) {
