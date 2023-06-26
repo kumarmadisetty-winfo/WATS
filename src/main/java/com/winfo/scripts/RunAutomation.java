@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -331,13 +333,21 @@ public class RunAutomation {
 				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry.getScriptDetailsListVO(testSetId,
 						null, true, false);
 
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
-						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", customerDetails);
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
+				dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.GENERATING);
+				CompletableFuture<String> completableFuture1 = seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
+						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", customerDetails);	
+				CompletableFuture<String> completableFuture2 = seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
 						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Failed_Report.pdf", customerDetails);
-				seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).createPdf(
+				CompletableFuture<String> completableFuture3 = seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).createPdf(
 						fetchMetadataListVOforEvidence, fetchConfigVO, "Detailed_Report.pdf", customerDetails);
-
+				List<CompletableFuture<String>> completableFutures = Arrays.asList(completableFuture1, completableFuture2, completableFuture3);
+				CompletableFuture<Void> resultantCf = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()]));
+				CompletableFuture<List<String>> allFutureResults = resultantCf.thenApply(t ->{
+					dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
+					return completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+				});
+				logger.info("Successfully created PDFs - " + allFutureResults.get());
+				
 				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(), fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
 				
 				increment = 0;
