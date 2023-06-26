@@ -43,7 +43,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 
 	public ResponseDto saveVersionHistory(VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
-//			versionHistoryDto.setSaveHistory(true);
+			versionHistoryDto.setSaveHistory(true);
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
@@ -158,9 +158,9 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			ObjectMapper mapper = new ObjectMapper();
 			ScriptMaterVO scriptMaterVO = mapper.readValue(new File(localPath + FORWARD_SLASH + fileName + JSON),
 					ScriptMaterVO.class);
-//			if(!versionHistoryDto.isSaveHistory()){
-//				scriptMaterVO.updateFieldIfNotNull(dataBaseEntry);
-//			}
+			if(!versionHistoryDto.isSaveHistory()){
+				scriptMaterVO.updateFieldIfNotNull(dataBaseEntry);
+			}
 			return scriptMaterVO;
 		} catch (Exception e) {
 			e.printStackTrace();
