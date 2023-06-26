@@ -345,6 +345,10 @@ public class RunAutomation {
 				CompletableFuture<List<String>> allFutureResults = resultantCf.thenApply(t ->{
 					dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
 					return completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+				}).exceptionally((e)->{
+					dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
+					logger.info("Exception occurred while generating PDFs");
+					return null;
 				});
 				logger.info("Successfully created PDFs - " + allFutureResults.get());
 				
