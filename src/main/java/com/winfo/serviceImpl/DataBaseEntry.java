@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.exception.WatsEBSCustomException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Customer;
 import com.winfo.model.LookUpCode;
