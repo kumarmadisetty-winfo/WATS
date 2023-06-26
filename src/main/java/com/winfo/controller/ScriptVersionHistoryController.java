@@ -1,6 +1,6 @@
 package com.winfo.controller;
 
-import java.lang.reflect.InvocationTargetException;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -37,7 +37,7 @@ public class ScriptVersionHistoryController {
 	@PostMapping(value = "/saveVersionHistory")
 	@ApiOperation( value="Save Version History ",notes = " <B>scriptId and Version Number</B> is to pass to save the version history for particular scriptId and version Number")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Saved version history successfully")})
-	public ResponseDto saveVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception{
+	public ResponseDto saveVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
 		return versionHistoryService.saveVersionHistory(versionHistoryDto);
 	}
 
