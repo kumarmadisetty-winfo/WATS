@@ -67,10 +67,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 						"UTF-8");
 				versionHistoryDto.setVersionNumber(decodeFileName);
 				ScriptMaterVO History = getVersionHistory(versionHistoryDto);
-				System.out.println(History);
-				System.out.println(scriptMasterVO);
-				if(!scriptMasterVO.equals(History)){	
-					System.out.println("Inside");
+				if(!scriptMasterVO.equals(History)){
 					saveHistoryData(newNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 				}
 			} else {
