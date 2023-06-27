@@ -20,6 +20,7 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,14 +83,14 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Failed to Save Version History " +e.getMessage());
-			return new ResponseDto(500, Constants.ERROR, e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
 	}
 	
-	public void saveHistoryData(Integer newNumber, ObjectMapper mapper,String localPath, ScriptMaterVO scriptMasterVO, String objectStorePath ) throws UnsupportedEncodingException
+	public void saveHistoryData(Integer scriptHistoryNumber, ObjectMapper mapper,String localPath, ScriptMaterVO scriptMasterVO, String objectStorePath ) throws UnsupportedEncodingException
 	{
 		Timestamp instant = Timestamp.from(Instant.now());
-		String fileName = instant + "_" + newNumber + JSON;
+		String fileName = instant + "_" + scriptHistoryNumber + JSON;
 		String encodedName = URLEncoder.encode(
 				new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8), "UTF-8");
 		// Write into the file
