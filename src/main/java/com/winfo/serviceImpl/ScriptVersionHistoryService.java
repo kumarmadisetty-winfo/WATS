@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -18,7 +19,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,30 +49,33 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
 			ScriptMaterVO scriptMasterVO = mapper.readValue(mapper.writeValueAsString(scriptMaster),
 					ScriptMaterVO.class);
-			Integer newNumber = null;
+			Integer scriptHistoryNumber = null;
 			String directoryPath = dataBaseEntry.getDirectoryPath();
 			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
 					+ versionHistoryDto.getScriptId();
 			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId();
 			FileUtil.createDir(localPath);
 			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath + FORWARD_SLASH);
-			if (!listOfFiles.isEmpty()) {
+			if (listOfFiles.size()>0) {
 				listOfSortedFiles(listOfFiles);
-				String[] lastValue = listOfFiles.get(0).split("_");
-				newNumber = Integer.parseInt(lastValue[1].replace(JSON, "")) + 1;
-				String lastIndex[]= listOfFiles.get(0).split(FORWARD_SLASH);
-				String latestHistoryName=lastIndex[2].replace(".json", "");
+				scriptHistoryNumber = Integer.parseInt(Arrays.stream(listOfFiles.stream()
+						.findFirst()
+						.get().split("_"))
+						.skip(1).findFirst().get().replace(JSON, ""))+1;
+				String latestHistoryName=listOfFiles.stream()
+						.findFirst()
+						.get().split(FORWARD_SLASH)[2].replace(".json", "");
 				String decodeFileName=URLDecoder.decode(
 						new String(latestHistoryName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
 						"UTF-8");
 				versionHistoryDto.setVersionNumber(decodeFileName);
 				ScriptMaterVO History = getVersionHistory(versionHistoryDto);
 				if(!scriptMasterVO.equals(History)){
-					saveHistoryData(newNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+					saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 				}
 			} else {
-				newNumber = 1;
-				saveHistoryData(newNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+				scriptHistoryNumber = 1;
+				saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 			}
 			logger.info("Successfully Saved Version History");
 			return new ResponseDto(200, Constants.SUCCESS, "Successfully saved the history!");
