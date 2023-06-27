@@ -89,8 +89,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	
 	public void saveHistoryData(Integer scriptHistoryNumber, ObjectMapper mapper,String localPath, ScriptMaterVO scriptMasterVO, String objectStorePath ) throws UnsupportedEncodingException
 	{
-		Timestamp instant = Timestamp.from(Instant.now());
-		String fileName = instant + "_" + scriptHistoryNumber + JSON;
+		String fileName = Timestamp.from(Instant.now()) + "_" + scriptHistoryNumber + JSON;
 		String encodedName = URLEncoder.encode(
 				new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8), "UTF-8");
 		// Write into the file
