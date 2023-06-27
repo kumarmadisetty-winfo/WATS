@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,45 +44,64 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 
 	public ResponseDto saveVersionHistory(VersionHistoryDto versionHistoryDto) throws Exception {
 		try {
-
+			versionHistoryDto.setSaveHistory(true);
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
 			ScriptMaterVO scriptMasterVO = mapper.readValue(mapper.writeValueAsString(scriptMaster),
 					ScriptMaterVO.class);
-			Timestamp instant = Timestamp.from(Instant.now());
-
-			Integer newNumber = null;
+			Integer scriptHistoryNumber = null;
 			String directoryPath = dataBaseEntry.getDirectoryPath();
 			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
 					+ versionHistoryDto.getScriptId();
 			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId();
 			FileUtil.createDir(localPath);
 			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath + FORWARD_SLASH);
-			if (!listOfFiles.isEmpty()) {
+			if (listOfFiles.size()>0) {
 				listOfSortedFiles(listOfFiles);
-				String[] lastValue = listOfFiles.get(0).split("_");
-				newNumber = Integer.parseInt(lastValue[1].replace(JSON, "")) + 1;
+				scriptHistoryNumber = Integer.parseInt(Arrays.stream(listOfFiles.stream()
+						.findFirst()
+						.get().split("_"))
+						.skip(1).findFirst().get().replace(JSON, ""))+1;
+				String latestHistoryName=listOfFiles.stream()
+						.findFirst()
+						.get().split(FORWARD_SLASH)[2].replace(".json", "");
+				String decodeFileName=URLDecoder.decode(
+						new String(latestHistoryName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
+						"UTF-8");
+				versionHistoryDto.setVersionNumber(decodeFileName);
+				ScriptMaterVO History = getVersionHistory(versionHistoryDto);
+				if(!scriptMasterVO.equals(History)){
+					saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+				}
 			} else {
-				newNumber = 1;
+				scriptHistoryNumber = 1;
+				saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 			}
-			String fileName = instant + "_" + newNumber + JSON;
-
-			String encodedName = URLEncoder.encode(
-					new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8), "UTF-8");
-			// Write into the file
-			try (FileWriter file = new FileWriter(localPath + FORWARD_SLASH + encodedName)) {
-				file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMasterVO));
-				logger.info("Successfully saved details in file...!!");
-			} catch (IOException e) {
-				throw new WatsEBSException(500, "Not able to save the file!", e);
-			}
-			uploadObjectToObjectStore(localPath + FORWARD_SLASH + encodedName, objectStorePath, encodedName);
+			logger.info("Successfully Saved Version History");
 			return new ResponseDto(200, Constants.SUCCESS, "Successfully saved the history!");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseDto(500, Constants.ERROR, e.getMessage());
+			logger.error("Failed to Save Version History " +e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
+	}
+	
+	public void saveHistoryData(Integer scriptHistoryNumber, ObjectMapper mapper,String localPath, ScriptMaterVO scriptMasterVO, String objectStorePath ) throws UnsupportedEncodingException
+	{
+		String fileName = Timestamp.from(Instant.now()) + "_" + scriptHistoryNumber + JSON;
+		String encodedName = URLEncoder.encode(
+				new String(fileName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8), "UTF-8");
+		// Write into the file
+		try (FileWriter file = new FileWriter(localPath + FORWARD_SLASH + encodedName)) {
+			file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMasterVO));
+			logger.info("Successfully saved details in file...!!");
+		} catch (IOException e) {
+			logger.info("Failed to save details in the file " +e.getMessage());
+			throw new WatsEBSException(500, "Not able to save the file!", e);
+		}
+		uploadObjectToObjectStore(localPath + FORWARD_SLASH + encodedName, objectStorePath, encodedName);
+	
 	}
 
 	private List<String> listOfSortedFiles(List<String> listOfFiles) {
@@ -137,7 +158,9 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			ObjectMapper mapper = new ObjectMapper();
 			ScriptMaterVO scriptMaterVO = mapper.readValue(new File(localPath + FORWARD_SLASH + fileName + JSON),
 					ScriptMaterVO.class);
-			scriptMaterVO.updateFieldIfNotNull(dataBaseEntry);
+			if(!versionHistoryDto.isSaveHistory()){
+				scriptMaterVO.updateFieldIfNotNull(dataBaseEntry);
+			}
 			return scriptMaterVO;
 		} catch (Exception e) {
 			e.printStackTrace();
