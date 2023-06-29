@@ -19167,7 +19167,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	private static double getCellValueAsDouble(Cell cell) {
 		if (cell != null) {
-			String value = cell.getStringValue().replace("EUR", "").replace(",", "");
+			String value = cell.getStringValue().replace("EUR", "").replace("USD", "").replace(",", "");
 			return Double.parseDouble(value);
 		}
 		return 0.0;
