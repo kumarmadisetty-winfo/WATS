@@ -19062,7 +19062,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				Row row = cells1.getRow(i);
 				String type = getCellValueAsString(row.getCellOrNull(typeIndex));
 				String contractLineNumber = getCellValueAsString(row.getCellOrNull(number));
-				if(type.equalsIgnoreCase("PB - T&M")) {
+				if(type.equalsIgnoreCase("Free-form, project")) {
 					listOfTAndM.add(contractLineNumber);
 					mapOfType.put(type, listOfTAndM);
 				}else if(type.equalsIgnoreCase("PB - Lump Sum")) {
