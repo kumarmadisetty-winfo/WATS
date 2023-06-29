@@ -492,7 +492,6 @@ public class DataBaseEntry {
 			dao.updateSubscriptionExecuteAndBalance(executed, balance, subsId);
 		}
 		BigDecimal updatedBalance=dao.getSubscriptionBalance();
-		System.out.println(updatedBalance);
 		if (updatedBalance.intValue() == 0) {
 			dao.updateSubscriptionStatus(COMPLETED, subsId);
 		}
