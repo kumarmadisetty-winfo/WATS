@@ -97,7 +97,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMasterVO));
 			logger.info("Successfully saved details in file...!!");
 		} catch (IOException e) {
-			logger.info("Failed to save details in the file " +e.getMessage());
+			logger.error("Failed to save details in the file " +e.getMessage());
 			throw new WatsEBSException(500, "Not able to save the file!", e);
 		}
 		uploadObjectToObjectStore(localPath + FORWARD_SLASH + encodedName, objectStorePath, encodedName);
