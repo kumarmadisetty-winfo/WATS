@@ -55,6 +55,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,7 @@ import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service("WOOD")
+@RefreshScope
 public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface, WoodInterface {
 	@Autowired
 	private DataBaseEntry databaseentry;
@@ -19022,74 +19024,130 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		Thread.sleep(3000);
 		fileName = (String) jse.executeScript(
 				"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
+		String secondFileName = (String) jse.executeScript(
+				"return document.querySelector('downloads-manager').shadowRoot.querySelectorAll('#downloadsList downloads-item')[1].shadowRoot.querySelector('div#content #file-link').text");
 		driver.close();
 		driver.switchTo().window(tabs.get(0));
 		logger.info("File Name*** " + fileName);
 
 		try {
 			File file = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
-
+			File file1 = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + secondFileName);
+			
 			logger.info(file.exists());
 
 			Workbook workbook = new Workbook(file.getPath());
+			Workbook workbook1 = new Workbook(file1.getPath());
 			Worksheet sheet = workbook.getWorksheets().get(0); // Assuming the data is in the first sheet
-
+			Worksheet sheet1 = workbook1.getWorksheets().get(0);
+			
 			// Column indices
+			int typeIndex = 2;
+			int number = 1;
 			int contractNumberColumnIndex = 1;
+			int contractLineNumberColumnIndex = 2;
 			int lastDateIndex = 3;
 			int itdRecognizedRevenueIndex = 5;
 			int invoicedAmountColumnIndex = 6;
 
 			Map<String, Double> mapOfITD = new HashMap<>();
 			Map<String, Double> mapOfRevenue = new HashMap<>();
-			Map<String, String> resultMap = new HashMap<>();
+			Map<String, List<String>> mapOfType = new HashMap<>();
+			
+			List<String> listOfTAndM = new ArrayList<>();
+			List<String> listOfLAndS = new ArrayList<>();
+			
+			Cells cells1 = sheet1.getCells();
+			for(int i = 1; i <= sheet1.getCells().getMaxDataRow(); i++) {
+				Row row = cells1.getRow(i);
+				String type = getCellValueAsString(row.getCellOrNull(typeIndex));
+				String contractLineNumber = getCellValueAsString(row.getCellOrNull(number));
+				if(type.equalsIgnoreCase("PB - T&M")) {
+					listOfTAndM.add(contractLineNumber);
+					mapOfType.put(type, listOfTAndM);
+				}else if(type.equalsIgnoreCase("PB - Lump Sum")) {
+					listOfLAndS.add(contractLineNumber);
+					mapOfType.put(type, listOfLAndS);
+				}
+			}
+			System.out.println("Map of type: " + mapOfType);
 
 			Cells cells = sheet.getCells();
 			for (int i = 2; i <= cells.getMaxDataRow(); i++) {
 				Row row = cells.getRow(i);
 
-				String contractNumber = getCellValueAsString(row.getCellOrNull(contractNumberColumnIndex));
+				String contractLineNumber = getCellValueAsString(row.getCellOrNull(contractLineNumberColumnIndex));
 				double itdRecognizedRevenue = getCellValueAsDouble(row.getCellOrNull(itdRecognizedRevenueIndex));
 				double invoicedAmount = getCellValueAsDouble(row.getCellOrNull(invoicedAmountColumnIndex));
 
 				if (itdRecognizedRevenue != invoicedAmount) {
-					mapOfITD.merge(contractNumber, itdRecognizedRevenue, Double::sum);
-					mapOfRevenue.merge(contractNumber, invoicedAmount, Double::sum);
-
-					if (resultMap.containsKey(contractNumber)) {
-						double itdValue = mapOfITD.get(contractNumber);
-						double revenueValue = mapOfRevenue.get(contractNumber);
-						if (itdValue < revenueValue) {
-							resultMap.put(contractNumber, "ITD Recognized Revenue");
-						} else if (itdValue > revenueValue) {
-							resultMap.put(contractNumber, "ITD Invoiced Amount");
-						}
-					} else {
-						resultMap.put(contractNumber, "");
-					}
+					mapOfITD.merge(contractLineNumber, invoicedAmount, Double::sum);
+					mapOfRevenue.merge(contractLineNumber, itdRecognizedRevenue, Double::sum);
 				}
 			}
-			resultMap.entrySet().removeIf(entry -> entry.getValue().isEmpty());
 			logger.info("ITD Map: " + mapOfITD);
 			logger.info("Revenue Map: " + mapOfRevenue);
-			logger.info("Result Map: " + resultMap);
+			
+	        Map<String, String> resultMap = new HashMap<>();
+
+	        // Iterate over the keys in the typeMap
+	        for (String type : mapOfType.keySet()) {
+	        	String[] keys = new String [mapOfType.get(type).size()];
+//	            String[] keys = mapOfType.get(type);
+	        	mapOfType.get(type).toArray(keys);
+//	            double minValue = Double.MAX_VALUE;
+	            String mapType = "";
+
+	            // Find the minimum value from the provided maps for the current type
+	            double itdValue = 0.0;
+	            double revenueValue = 0.0;
+	            for (String key : keys) {
+	                itdValue = itdValue+mapOfITD.getOrDefault(key, 0.0);
+	                revenueValue = revenueValue+mapOfRevenue.getOrDefault(key, 0.0);
+
+	                if (itdValue < revenueValue) {
+//	                    minValue = itdValue;
+	                    mapType = "ITD Invoiced Amount";
+	                }
+
+	                if (revenueValue < itdValue) {
+//	                    minValue = revenueValue;
+	                    mapType = "ITD Recognized Revenue";
+	                }
+	            }
+	            
+	            for (int i = 0; i < keys.length; i++) {
+	            	resultMap.put(keys[i], mapType);
+	            }
+	            // Store the minimum value and map type in the resultMap
+//	            resultMap1.put(keys, );
+	        }
+
+	        // Print the resulting map
+	        System.out.println("Resulting Map:"+resultMap);
+	        for (String key : resultMap.keySet()) {
+	            System.out.println(key + "=" + resultMap.get(key));
+	        }
+	        System.out.println("-------------------------------------------------------------");
+			
 
 			for (int i = 2; i <= cells.getMaxDataRow(); i++) {
 				Row row = cells.getRow(i);
 
 				String contractNumber = getCellValueAsString(row.getCellOrNull(contractNumberColumnIndex));
+				String contractLineNumber = getCellValueAsString(row.getCellOrNull(contractLineNumberColumnIndex));
 				String lastDate = getCellValueAsString(row.getCellOrNull(lastDateIndex));
 				double itdRecognizedRevenue = getCellValueAsDouble(row.getCellOrNull(itdRecognizedRevenueIndex));
 				double invoicedAmount = getCellValueAsDouble(row.getCellOrNull(invoicedAmountColumnIndex));
 
-				if (resultMap.containsKey(contractNumber) && itdRecognizedRevenue != invoicedAmount && lastDate.isEmpty()) {
-					String valueType = resultMap.get(contractNumber);
+				if (resultMap.containsKey(contractLineNumber) && itdRecognizedRevenue != invoicedAmount && lastDate.isEmpty()) {
+					String valueType = resultMap.get(contractLineNumber);
 					if (valueType.equals("ITD Recognized Revenue") && itdRecognizedRevenue > 0) {
 						insertTransaction(driver, fetchConfigVO, contractNumber,
-								getCellValueAsString(row.getCellOrNull(2)), itdRecognizedRevenue);
+								contractLineNumber, itdRecognizedRevenue);
 					} else if (valueType.equals("ITD Invoiced Amount") && invoicedAmount > 0) {
 						insertTransaction(driver, fetchConfigVO, contractNumber,
-								getCellValueAsString(row.getCellOrNull(2)), invoicedAmount);
+								contractLineNumber, invoicedAmount);
 					}
 				}
 			}
