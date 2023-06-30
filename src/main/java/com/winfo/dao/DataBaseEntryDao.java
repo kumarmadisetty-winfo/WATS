@@ -1175,20 +1175,6 @@ public class DataBaseEntryDao {
 		}
 		return result;
 	}
-	
-	public BigDecimal getSubscriptionBalance() {
-		String qry="SELECT balance FROM wats_subscription WHERE status = 'Active' and uom = 'Script' and to_date(sysdate) >= start_date and to_date(sysdate) <= end_date ORDER BY subscription_id";
-		BigDecimal result =null;
-		try {
-			Session session = em.unwrap(Session.class);
-			Query query = session.createSQLQuery(qry);
-			result=   (BigDecimal) query.getResultList().get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Failed to get Subscription Balance count ");
-		}
-		return result;
-	}
 
 	public Integer findGraceAllowance(BigDecimal subscriptionId) {
 		BigDecimal sum = null;
