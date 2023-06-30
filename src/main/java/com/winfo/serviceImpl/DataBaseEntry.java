@@ -499,7 +499,7 @@ public class DataBaseEntry {
 			dao.updateSubscriptionExecuteAndBalance(executed, balance, subsId);
 		}
 		List<Long> updatedBalance=subscriptionRepository.findBalanceByStatusAndUomAndStartDateEndDateOrderBySubscriptionId();
-		if(updatedBalance.get(0)== 0) {
+		if(updatedBalance.stream().findFirst().get()== 0) {
 			dao.updateSubscriptionStatus(COMPLETED, subsId);
 		}
 
