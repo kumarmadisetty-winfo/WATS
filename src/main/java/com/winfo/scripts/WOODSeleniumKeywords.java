@@ -19070,7 +19070,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					mapOfType.put(type, listOfLAndS);
 				}
 			}
-			System.out.println("Map of type: " + mapOfType);
+			logger.info("Map of type: " + mapOfType);
 
 			Cells cells = sheet.getCells();
 			for (int i = 2; i <= cells.getMaxDataRow(); i++) {
@@ -19093,9 +19093,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	        // Iterate over the keys in the typeMap
 	        for (String type : mapOfType.keySet()) {
 	        	String[] keys = new String [mapOfType.get(type).size()];
-//	            String[] keys = mapOfType.get(type);
 	        	mapOfType.get(type).toArray(keys);
-//	            double minValue = Double.MAX_VALUE;
 	            String mapType = "";
 
 	            // Find the minimum value from the provided maps for the current type
@@ -19106,30 +19104,18 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	                revenueValue = revenueValue+mapOfRevenue.getOrDefault(key, 0.0);
 
 	                if (itdValue < revenueValue) {
-//	                    minValue = itdValue;
 	                    mapType = "ITD Invoiced Amount";
 	                }
 
 	                if (revenueValue < itdValue) {
-//	                    minValue = revenueValue;
 	                    mapType = "ITD Recognized Revenue";
 	                }
 	            }
-	            
+	            // Store the minimum value and map type in the resultMap
 	            for (int i = 0; i < keys.length; i++) {
 	            	resultMap.put(keys[i], mapType);
 	            }
-	            // Store the minimum value and map type in the resultMap
-//	            resultMap1.put(keys, );
 	        }
-
-	        // Print the resulting map
-	        System.out.println("Resulting Map:"+resultMap);
-	        for (String key : resultMap.keySet()) {
-	            System.out.println(key + "=" + resultMap.get(key));
-	        }
-	        System.out.println("-------------------------------------------------------------");
-			
 
 			for (int i = 2; i <= cells.getMaxDataRow(); i++) {
 				Row row = cells.getRow(i);
