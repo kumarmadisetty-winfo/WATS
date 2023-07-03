@@ -333,7 +333,7 @@ public class TestRunMigrationGetService {
 			testrundata.setTestRunDesc(testRunMigrateDto.getTestSetDesc());
 			testrundata.setTestRunComments(testRunMigrateDto.getTestSetComments());
 			testrundata.setEnabled(testRunMigrateDto.getEnabled());
-
+			testrundata.setCreatedBy(testRunMigrateDto.getCreatedBy());
 			testrundata.setPassPath(testRunMigrateDto.getPassPath());
 			testrundata.setFailPath(testRunMigrateDto.getFailPath());
 			testrundata.setExceptionPath(testRunMigrateDto.getExeceptionPath());

@@ -9,5 +9,6 @@ public class TestRunDetails {
 
 	private List<ExistTestRunDto> listOfTestRun;
 	private String customerName;
+	private String createdBy;
 
 }
