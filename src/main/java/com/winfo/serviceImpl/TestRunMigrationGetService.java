@@ -334,6 +334,7 @@ public class TestRunMigrationGetService {
 			testrundata.setTestRunComments(testRunMigrateDto.getTestSetComments());
 			testrundata.setEnabled(testRunMigrateDto.getEnabled());
 			testrundata.setCreatedBy(testRunMigrateDto.getCreatedBy());
+			testrundata.setCreationDate(new Date());
 			testrundata.setPassPath(testRunMigrateDto.getPassPath());
 			testrundata.setFailPath(testRunMigrateDto.getFailPath());
 			testrundata.setExceptionPath(testRunMigrateDto.getExeceptionPath());
