@@ -90,7 +90,7 @@ public class TestRunMigrationService {
 			testRunMigrateDto.setConfigurationName(configurationName);
 			testRunMigrateDto.setTestRunExists(id.isForceMigrate());
 			testRunMigrateDto.setWatsPackage(projectNameAndWatsPackage.get(0)[1].toString());
-
+			testRunMigrateDto.setCreatedBy(testRunDetails.getCreatedBy());
 			List<Integer> testSetLineIDs = dataBaseEntryDao.getListOfLineIdByTestSetId(testRunId);
 
 			List<TestSetLineDto> testSetLinesAndParaData = new ArrayList<>();
