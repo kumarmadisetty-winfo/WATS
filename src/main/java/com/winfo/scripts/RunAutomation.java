@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -37,6 +39,7 @@ import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.service.WoodInterface;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.ErrorMessagesHandler;
 import com.winfo.serviceImpl.GraphQLService;
@@ -100,6 +103,9 @@ public class RunAutomation {
 	GraphQLService graphQLService;
 	@Autowired
 	SmartBearService smartBearService;
+	
+	@Autowired
+	WoodInterface woodInterface;
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -1478,6 +1484,10 @@ public class RunAutomation {
 						case "validation":
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).validation(fetchMetadataVO, api);
 							break;
+							
+						case "Enter Multiple Transactions":
+							woodInterface.enterMultipleTransaction(driver, fetchConfigVO,
+									fetchMetadataVO, customerDetails);
 
 						default:
 							logger.info("Action Name is not matched with " + "" + actionName);
@@ -1489,6 +1499,20 @@ public class RunAutomation {
 						try {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 									testScriptParamId, "Pass");
+							Optional<String> testSetlineWarningMsgOptional = Optional.ofNullable(fetchMetadataVO)
+									.map(ScriptDetailsDto::getLineErrorMsg)
+									.filter(testSetlineWarningMsg -> !testSetlineWarningMsg.isEmpty());
+
+							testSetlineWarningMsgOptional
+									.filter(testSetlineWarningMsg -> testSetlineWarningMsg.startsWith("Warning"))
+									.ifPresent(testSetlineWarningMsg -> {
+										try {
+											dataBaseEntry.updateTestSetLinesWarningMessage(
+													fetchMetadataVO.getTestScriptParamId(), testSetlineWarningMsg);
+										} catch (ClassNotFoundException | SQLException e) {
+											logger.error("Not able to update warning message: {}" + e.getMessage());
+										}
+									});
 							fetchMetadataVO.setStatus("Pass");
 						} catch (Exception e) {
 							logger.error(e.getMessage());
