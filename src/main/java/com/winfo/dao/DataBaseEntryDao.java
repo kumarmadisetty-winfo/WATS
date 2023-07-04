@@ -788,6 +788,7 @@ public class DataBaseEntryDao {
 				+ "          ,ex_st.EXECUTED_BY    EXECUTED_BY\r\n" + "          ,ma.TARGET_APPLICATION\r\n"
 				+ " ,wttsl.dependency_tr\r\n" 
 				+ "          , wttsl.ISSUE_KEY\r\n"
+				+ " ,mam.UNIQUE_MANDATORY\r\n"
 				+", wtp.ORACLE_RELEASE_YEAR\r\n"
 				+ "      from\r\n" + "      execute_status ex_st,\r\n"
 				+ "      win_ta_test_set        wtts,\r\n" + "    win_ta_script_master ma,\r\n"
@@ -799,6 +800,8 @@ public class DataBaseEntryDao {
 				+ "      -- AND wtts.test_set_id = :p_test_set_id\r\n"
 				+ "       AND wttsl.test_set_id = wtts.test_set_id\r\n"
 				+ "       AND wttsl.script_id = wtsmdata.script_id\r\n"
+				+ " 	  AND mam.script_id = wtsmdata.script_id\r\n"
+			    + " 	  AND mam.line_number = wtsmdata.line_number\r\n"
 				+ "       AND wtsmdata.test_set_line_id =wttsl.test_set_line_id\r\n"
 				+ "       AND wtts.project_id = wtp.project_id\r\n" + "       AND wtp.customer_id = wtc.customer_id\r\n"
 				+ "       AND wtts.test_set_id=" + testRunId + "\r\n" + whereClause + "       order by\r\n"
@@ -872,6 +875,10 @@ public class DataBaseEntryDao {
 				
 				scriptDetailsDto.setOracleReleaseYear(
 						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
+				
+				scriptDetailsDto.setUniqueMandatory(
+						NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
+				
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
 			}
 		} catch (QueryException e) {
@@ -1698,6 +1705,18 @@ public class DataBaseEntryDao {
 		logger.info(logDescription);
 		logDetailsTable.setLogDescription(logDescription);
 		return logDetailsTable;
+	}
+	
+	public void updateTestSetLinesWarningMessage(String testScriptParamId, String errorMessage) {
+
+		String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM SET LINE_ERROR_MESSAGE= :error_message where TEST_SCRIPT_PARAM_ID='"
+				+ testScriptParamId + "'";
+		Session session = em.unwrap(Session.class);
+		Query query = session.createSQLQuery(sql);
+		query.setParameter("error_message", errorMessage);
+
+		query.executeUpdate();
+
 	}
 
 }
