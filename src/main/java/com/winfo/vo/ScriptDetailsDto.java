@@ -38,4 +38,5 @@ public class ScriptDetailsDto {
 	private String executedBy;
 	private String targetApplicationName;
 	private String oracleReleaseYear;
+	private String uniqueMandatory;
 }
