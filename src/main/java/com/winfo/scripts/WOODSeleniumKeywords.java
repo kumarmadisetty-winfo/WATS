@@ -55,6 +55,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +80,8 @@ import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service("WOOD")
-public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface,WoodInterface {
+@RefreshScope
+public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface, WoodInterface {
 
 	@Autowired
 	private DataBaseEntry databaseentry;
@@ -19032,14 +19034,12 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			File file = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
 			File file1 = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + secondFileName);
-
 			logger.info(file.exists());
 
 			Workbook workbook = new Workbook(file.getPath());
 			Workbook workbook1 = new Workbook(file1.getPath());
 			Worksheet sheet = workbook.getWorksheets().get(0); // Assuming the data is in the first sheet
 			Worksheet sheet1 = workbook1.getWorksheets().get(0);
-
 			// Column indices
 			int typeIndex = 2;
 			int number = 1;
@@ -19052,10 +19052,10 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			Map<String, Double> mapOfITD = new HashMap<>();
 			Map<String, Double> mapOfRevenue = new HashMap<>();
 			Map<String, List<String>> mapOfType = new HashMap<>();
-
+			
 			List<String> listOfTAndM = new ArrayList<>();
 			List<String> listOfLAndS = new ArrayList<>();
-
+			
 			Cells cells1 = sheet1.getCells();
 			for(int i = 1; i <= sheet1.getCells().getMaxDataRow(); i++) {
 				Row row = cells1.getRow(i);
