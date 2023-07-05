@@ -3,6 +3,8 @@ package com.winfo.serviceImpl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -32,6 +34,7 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.repository.CustomerRepository;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.repository.SubscriptionRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
@@ -60,9 +63,13 @@ public class DataBaseEntry {
 	
 	@Autowired
 	CustomerRepository customerRepository;
-
+	
+	@Autowired
+	SubscriptionRepository subscriptionRepository;
+	
 	@Autowired
 	ApplicationContext appContext;
+	
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
 	@Autowired
@@ -491,8 +498,8 @@ public class DataBaseEntry {
 		if (sumQuantity.intValue() - sumExecuted.intValue() > 0) {
 			dao.updateSubscriptionExecuteAndBalance(executed, balance, subsId);
 		}
-
-		if (balance.intValue() == 0) {
+		List<Long> updatedBalance=subscriptionRepository.findBalanceByStatusAndUomAndStartDateEndDateOrderBySubscriptionId();
+		if(updatedBalance.stream().findFirst().get()== 0) {
 			dao.updateSubscriptionStatus(COMPLETED, subsId);
 		}
 
@@ -625,5 +632,9 @@ public class DataBaseEntry {
 	}
 	public List<String> getListOfCustomers(String userName) {
 		return customerRepository.findListOfCustomers(userName);
+	}
+	public void updateTestSetLinesWarningMessage(String test_script_param_id, String error_message)
+			throws ClassNotFoundException, SQLException {
+		dao.updateTestSetLinesWarningMessage(test_script_param_id, error_message);
 	}
 }

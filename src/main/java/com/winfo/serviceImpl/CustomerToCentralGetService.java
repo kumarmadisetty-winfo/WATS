@@ -42,7 +42,6 @@ public class CustomerToCentralGetService {
 			response = "[{\"status\":500,\"statusMessage\":\"Invalid URL\",\"description\":\"Invalid URL!!\"}]";
 			logger.error("Invalid URL " + customerUrl);
 		} else {
-
 			WebClient webClient = WebClient.create(customerUrl + "/centralToCustomerScriptMigrate/"+customerName);
 			Mono<String> result = webClient.post().syncBody(watsMasterDataVO).retrieve().bodyToMono(String.class);
 			response = result.block();

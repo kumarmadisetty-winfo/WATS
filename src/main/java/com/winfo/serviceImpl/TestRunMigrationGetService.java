@@ -333,7 +333,8 @@ public class TestRunMigrationGetService {
 			testrundata.setTestRunDesc(testRunMigrateDto.getTestSetDesc());
 			testrundata.setTestRunComments(testRunMigrateDto.getTestSetComments());
 			testrundata.setEnabled(testRunMigrateDto.getEnabled());
-
+			testrundata.setCreatedBy(testRunMigrateDto.getCreatedBy());
+			testrundata.setCreationDate(new Date());
 			testrundata.setPassPath(testRunMigrateDto.getPassPath());
 			testrundata.setFailPath(testRunMigrateDto.getFailPath());
 			testrundata.setExceptionPath(testRunMigrateDto.getExeceptionPath());
@@ -516,19 +517,13 @@ public class TestRunMigrationGetService {
 				scriptMaster.getScriptNumber()+".C.";
 			int maxScriptId=scriptMasterRepository.getMaxScriptNumber(newCustomScriptNumber.substring(0,newCustomScriptNumber.indexOf(".C.")+3)
 					,scriptMaster.getProductVersion());
-			ScriptMaster maxScriptObject=scriptMasterRepository.findByScriptId(maxScriptId);
-			String maxScriptNumber=maxScriptObject.getScriptNumber();
-			if("".equals(maxScriptNumber) || maxScriptNumber==null) {
-				newCustomScriptNumber=newCustomScriptNumber+"1";
+			if(maxScriptId!=0) {
+				ScriptMaster maxScriptObject=scriptMasterRepository.findByScriptId(maxScriptId);			
+				newCustomScriptNumber=maxScriptObject.getScriptNumber().substring(0,maxScriptObject.getScriptNumber().indexOf(".C.")+3) 
+							+(Integer.parseInt(maxScriptObject.getScriptNumber().substring(maxScriptObject.getScriptNumber().indexOf(".C.")+3))+1);			
 			}
-			else {
-				try {
-					newCustomScriptNumber=maxScriptNumber.substring(0,maxScriptNumber.indexOf(".C.")+3) 
-							+ (Integer.parseInt(maxScriptNumber.substring(maxScriptNumber.indexOf(".C.")+3))+1);
-					}catch(Exception e) {
-						logger.error("Exception Occured while creating new script for Test Run");
-						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception Occured while creating new script for Test Run", e);
-					}				
+			else{
+				newCustomScriptNumber=newCustomScriptNumber+"1";
 			}
 			String setNewCustomScriptNumber=newCustomScriptNumber;
 			//updating new script number in test_set_line and test_set_script_param

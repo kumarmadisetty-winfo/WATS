@@ -82,6 +82,7 @@ import com.winfo.vo.ScriptDetailsDto;
 @Service("WOOD")
 @RefreshScope
 public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface, WoodInterface {
+
 	@Autowired
 	private DataBaseEntry databaseentry;
 	@Autowired
@@ -3191,7 +3192,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		
+
 		try {
 			if (param1.equalsIgnoreCase("Search") && param2.equalsIgnoreCase("Search")) {
 				WebDriverWait waitForSearch1 = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -19033,14 +19034,12 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		try {
 			File file = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
 			File file1 = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + secondFileName);
-			
 			logger.info(file.exists());
 
 			Workbook workbook = new Workbook(file.getPath());
 			Workbook workbook1 = new Workbook(file1.getPath());
 			Worksheet sheet = workbook.getWorksheets().get(0); // Assuming the data is in the first sheet
 			Worksheet sheet1 = workbook1.getWorksheets().get(0);
-			
 			// Column indices
 			int typeIndex = 2;
 			int number = 1;
@@ -19087,7 +19086,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 			logger.info("ITD Map: " + mapOfITD);
 			logger.info("Revenue Map: " + mapOfRevenue);
-			
+
 	        Map<String, String> resultMap = new HashMap<>();
 
 	        // Iterate over the keys in the typeMap
@@ -19253,6 +19252,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		logger.info("Contract Line Number: " + contractLineNumber);
 		logger.info("ITD Invoiced Amount: " + itdRecognizedRevenue);
 		logger.info("-----------------------");
+
 
 	}
 }
