@@ -633,4 +633,8 @@ public class DataBaseEntry {
 	public List<String> getListOfCustomers(String userName) {
 		return customerRepository.findListOfCustomers(userName);
 	}
+	public void updateTestSetLinesWarningMessage(String test_script_param_id, String error_message)
+			throws ClassNotFoundException, SQLException {
+		dao.updateTestSetLinesWarningMessage(test_script_param_id, error_message);
+	}
 }

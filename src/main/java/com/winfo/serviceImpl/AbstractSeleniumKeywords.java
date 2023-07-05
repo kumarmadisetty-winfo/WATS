@@ -893,6 +893,10 @@ public abstract class AbstractSeleniumKeywords {
 				if (failMsg != null) {
 					document.add(new Paragraph(failMsg, fnt12));
 				}
+				//Add warning message if field is not required : SalesForce
+				if (metaDataVO != null && metaDataVO.getLineErrorMsg() != null && metaDataVO.getLineErrorMsg().startsWith("Warning")) {
+				    document.add(new Paragraph(metaDataVO.getLineErrorMsg(), fnt12));
+				}
 				if (stepDescription != null) {
 					document.add(new Paragraph(STEP_DESC + stepDescription, fnt12));
 				}
