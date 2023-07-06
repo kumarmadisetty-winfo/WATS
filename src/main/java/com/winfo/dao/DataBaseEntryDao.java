@@ -792,6 +792,7 @@ public class DataBaseEntryDao {
 				+", wtp.ORACLE_RELEASE_YEAR\r\n"
 				+ "      from\r\n" + "      execute_status ex_st,\r\n"
 				+ "      win_ta_test_set        wtts,\r\n" + "    win_ta_script_master ma,\r\n"
+				+ "    win_ta_script_metadata mam,\r\n"
 				+ "           win_ta_test_set_lines  wttsl,\r\n"
 				+ "           win_ta_test_set_script_param wtsmdata,\r\n" + "           win_ta_projects        wtp,\r\n"
 				+ "           win_ta_customers       wtc\r\n" + "     WHERE 1=1\r\n"
