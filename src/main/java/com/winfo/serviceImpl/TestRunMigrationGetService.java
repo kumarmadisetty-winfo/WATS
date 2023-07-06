@@ -204,7 +204,7 @@ public class TestRunMigrationGetService {
 				master.setSubProcessArea(masterdata.getSubProcessArea());
 				master.setStandardCustom(masterdata.getStandardCustom());
 				master.setTestScriptStatus(masterdata.getTestScriptStatus());
-				master.setCustomerId(masterdata.getCustomerId());
+				master.setCustomerId(customerId);
 				master.setDependency(masterdata.getDependency());
 				master.setEnd2endScenario(masterdata.getEnd2endScenario());
 				master.setExpectedResult(masterdata.getExpectedResult());
