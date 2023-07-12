@@ -63,6 +63,7 @@ import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
 import com.winfo.utils.Constants.UPDATE_STATUS;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.FileUtil;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.FetchMetadataVO;
@@ -605,6 +606,12 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				smartBearService.smartBearRegenerateAttachment(testLinesDetails, sourceFilePath,
 						fetchConfigVO.getSMARTBEAR_PROJECT_NAME(), fetchConfigVO.getSMARTBEAR_CUSTOM_COLUMN_NAME());
 			}
+			FileUtil.deleteScreenshotsForSpecificSeqFromDir(
+					fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+							+ File.separator + customerDetails.getTestSetName() + File.separator, testSetLine.getSeqNum());
+			FileUtil.deletePdfsForSpecificSeqFromDir(
+					fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+					+ File.separator + customerDetails.getTestSetName() + File.separator, testSetLine.getSeqNum());
 		} catch (Exception e) {
 			if (args.getAutditTrial() != null) {
 				dataBaseEntry.insertScriptExecAuditRecord(args.getAutditTrial(), AUDIT_TRAIL_STAGES.EISU,
