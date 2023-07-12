@@ -54,6 +54,7 @@ import com.winfo.serviceImpl.TestScriptExecService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
+import com.winfo.utils.FileUtil;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.FetchConfigVO;
@@ -347,6 +348,12 @@ public class RunAutomation {
 				List<CompletableFuture<String>> completableFutures = Arrays.asList(completableFuture1, completableFuture2, completableFuture3);
 				CompletableFuture<Void> resultantCf = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()]));
 				CompletableFuture<List<String>> allFutureResults = resultantCf.thenApply(t ->{
+					FileUtil.deleteDir(
+							fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+									+ File.separator + customerDetails.getTestSetName() + File.separator);
+					FileUtil.deleteDir(
+							fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+									+ File.separator + customerDetails.getTestSetName() + File.separator);
 					dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
 					return completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 				}).exceptionally((e)->{
