@@ -2,6 +2,7 @@ package com.winfo.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -26,8 +27,9 @@ public class FileUtil {
 	
 	public static void deleteDir(String folderPath) {
 		try {
-			FileUtils.deleteDirectory(new File(folderPath));
-			logger.info("Successfully deleted the directory");
+			File file = new File(folderPath);
+			FileUtils.deleteDirectory(file);
+			logger.info("Successfully deleted the directory : "+file.getName());
 		} catch (IOException e) {
 			logger.error("Not able to delete the directory");
 		}
@@ -37,20 +39,17 @@ public class FileUtil {
 		try {
 			File folder = new File(folderPath);
 			File[] files = folder.listFiles();
-
 			if (files != null) {
-				for (File file : files) {
-					if (file.isFile() && file.getName().startsWith(seqNum + "_")
-							&& file.getName().toLowerCase().endsWith(".png")) {
-						if (file.delete()) {
-							logger.info("Deleted file: " + file.getName());
-						} else {
-							logger.warn("Failed to delete file: " + file.getName());
-						}
-					}
-				}
+				Arrays.stream(files).parallel().filter(file -> file.isFile() && file.getName().startsWith(seqNum + "_")
+						&& file.getName().toLowerCase().endsWith(".png")).forEach(file -> {
+							if (file.delete()) {
+								logger.info("Deleted file: " + file.getName());
+							} else {
+								logger.warn("Failed to delete file: " + file.getName());
+							}
+						});
 			}
-			logger.info("Successfully deleted the directory");
+			logger.info("Successfully deleted the screenshots");
 		} catch (NullPointerException e) {
 			logger.error("Path is not correct");
 		} catch (SecurityException e) {
@@ -67,18 +66,16 @@ public class FileUtil {
 			File[] files = folder.listFiles();
 
 			if (files != null) {
-				for (File file : files) {
-					if (file.isFile() && file.getName().startsWith(seqNum + "_")
-							&& file.getName().toLowerCase().endsWith(".pdf")) {
-						if (file.delete()) {
-							logger.info("Deleted file: " + file.getName());
-						} else {
-							logger.warn("Failed to delete file: " + file.getName());
-						}
-					}
-				}
+				Arrays.stream(files).parallel().filter(file -> file.isFile() && file.getName().startsWith(seqNum + "_")
+						&& file.getName().toLowerCase().endsWith(".pdf")).forEach(file -> {
+							if (file.delete()) {
+								logger.info("Deleted file: " + file.getName());
+							} else {
+								logger.warn("Failed to delete file: " + file.getName());
+							}
+						});
 			}
-			logger.info("Successfully deleted the directory");
+			logger.info("Successfully deleted the pdfs");
 		} catch (NullPointerException e) {
 			logger.error("Path is not correct");
 		} catch (SecurityException e) {
@@ -86,7 +83,6 @@ public class FileUtil {
 		} catch (Exception e) {
 			logger.error("Not able to delete the pdfs");
 		}
-
 	}
 
 }
