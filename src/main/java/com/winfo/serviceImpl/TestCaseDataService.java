@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,9 @@ public class TestCaseDataService {
 
 	@Value("${configvO.config_url1}")
 	private String config_url;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	// public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
@@ -166,8 +170,6 @@ public class TestCaseDataService {
 
 		System.out.println(uri);
 
-		RestTemplate restTemplate = new RestTemplate();
-
 		System.out.println(restTemplate);
 
 		String result = restTemplate.getForObject(uri, String.class);
@@ -195,8 +197,6 @@ public class TestCaseDataService {
 // 	                          final String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/" + parameter;
 		try {
 			System.out.println(uri);
-
-			RestTemplate restTemplate = new RestTemplate();
 
 			System.out.println(restTemplate);
 

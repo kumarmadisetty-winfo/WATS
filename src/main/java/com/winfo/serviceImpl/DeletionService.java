@@ -79,6 +79,9 @@ public class DeletionService{
 	@Autowired
 	MessageUtil messageUtil;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
 //	@Autowired
 //	AbstractSeleniumKeywords abstractSeleniumKeywords;
 
@@ -270,7 +273,6 @@ public class DeletionService{
 	public void deletePdfFromSharePoint(FetchConfigVO fetchConfigVO, String accessToken,
 			CustomerProjectDto customerDetails, TestSetLine testSetLine, boolean isTestRunDelete, TestSet testSet) {
 		try {
-			RestTemplate restTemplate = new RestTemplate();
 
 			// Outer header
 			HttpHeaders deleteSessionHeader = new HttpHeaders();

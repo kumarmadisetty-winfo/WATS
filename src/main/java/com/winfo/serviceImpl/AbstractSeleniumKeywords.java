@@ -186,6 +186,9 @@ public abstract class AbstractSeleniumKeywords {
 
 	@Autowired
 	DynamicRequisitionNumber dynamicnumber;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	private String createFolderName(String SCREENSHOT, String FORWARD_SLASH, String customerName, String testSetName) {
 		StringBuffer folderNameBuffer = new StringBuffer();
@@ -2271,7 +2274,6 @@ public abstract class AbstractSeleniumKeywords {
 			File imageDir = new File(fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 					+ customerDetails.getTestSetName() + "/");
 			logger.info("Image Directory : " + imageDir);
-			RestTemplate restTemplate = new RestTemplate();
 
 			// Outer header
 			HttpHeaders uploadSessionHeader = new HttpHeaders();
@@ -2380,7 +2382,6 @@ public abstract class AbstractSeleniumKeywords {
 	public String getSharepointAccessTokenPdf(FetchConfigVO fetchConfigVO) {
 		String acessToken = null;
 		try {
-			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
