@@ -7,6 +7,9 @@ import java.util.Arrays;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.FetchConfigVO;
+
 public class FileUtil {
 	public static final Logger logger = Logger.getLogger(FileUtil.class);
 	
@@ -83,6 +86,15 @@ public class FileUtil {
 		} catch (Exception e) {
 			logger.error("Not able to delete the pdfs");
 		}
+	}
+	
+	public static void deleteScreenshotAndPdfDirectoryFromTemp(FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		deleteDir(
+				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+						+ File.separator + customerDetails.getTestSetName() + File.separator);
+		deleteDir(
+				fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+						+ File.separator + customerDetails.getTestSetName() + File.separator);
 	}
 
 }
