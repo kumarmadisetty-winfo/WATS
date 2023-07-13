@@ -1,5 +1,6 @@
 package com.winfo.vo;
 
+import java.util.Comparator;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
@@ -153,10 +154,31 @@ public class ScriptMaterVO {
 		            String updatedAction = dataBaseEntry.getMeaningByTargetCode(metaData.getAction(), "ACTION");
 		            metaData.setAction(updatedAction);
 		        });
+		    scriptMetaDatalist.sort(Comparator.comparing(ScriptMetaDataVO::getLineNumber));
 		}
 		if (customerId != null) {
 			customerId = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(customerId));
 		}
-
+	}
+	
+	public void updateFieldIfNotNullForRequestBody(DataBaseEntry dataBaseEntry) {
+		if (dependency != null) {
+			dependency = dataBaseEntry.getScriptDetailsByScriptId(Integer.parseInt(dependency)).getScriptNumber();
+		}
+		if (attribute1 != null) {
+			attribute1 = dataBaseEntry.getScriptDetailsByScriptId(Integer.parseInt(attribute1)).getScriptNumber();
+		}
+		if (standardCustom != null) {
+			standardCustom = dataBaseEntry.getMeaningByTargetCode(standardCustom, "STANDARD");
+		}
+		if (testScriptStatus != null) {
+			testScriptStatus = dataBaseEntry.getMeaningByTargetCode(testScriptStatus, "STATUS");
+		}
+		if (priority != null) {
+			priority = dataBaseEntry.getMeaningByTargetCode(priority, "PRIORITY");
+		}
+		if (customerId != null) {
+			customerId = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(customerId));
+		}
 	}
 }
