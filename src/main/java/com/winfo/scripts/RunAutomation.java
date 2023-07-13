@@ -348,12 +348,7 @@ public class RunAutomation {
 				List<CompletableFuture<String>> completableFutures = Arrays.asList(completableFuture1, completableFuture2, completableFuture3);
 				CompletableFuture<Void> resultantCf = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()]));
 				CompletableFuture<List<String>> allFutureResults = resultantCf.thenApply(t ->{
-					FileUtil.deleteDir(
-							fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-									+ File.separator + customerDetails.getTestSetName() + File.separator);
-					FileUtil.deleteDir(
-							fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
-									+ File.separator + customerDetails.getTestSetName() + File.separator);
+					deleteDirectory(fetchConfigVO, customerDetails);
 					dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
 					return completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 				}).exceptionally((e)->{
@@ -1720,6 +1715,15 @@ public class RunAutomation {
 				.downloadScreenshotsFromObjectStore(screenShotFolder, customerDetails.getCustomerName(),
 						customerDetails.getTestSetName(), seqNumber);
 		logger.info("Successfully downloaded ScreenShots");
+	}
+	
+	private void deleteDirectory(FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		FileUtil.deleteDir(
+				fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+						+ File.separator + customerDetails.getTestSetName() + File.separator);
+		FileUtil.deleteDir(
+				fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
+						+ File.separator + customerDetails.getTestSetName() + File.separator);
 	}
 	
 
