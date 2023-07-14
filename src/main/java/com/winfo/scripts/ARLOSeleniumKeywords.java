@@ -6983,4 +6983,11 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 		// EMPTY METHOD
 
 	}
+
+	@Override
+	public void loginDLApplication(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }
