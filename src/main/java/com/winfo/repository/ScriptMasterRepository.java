@@ -13,8 +13,8 @@ public interface ScriptMasterRepository extends JpaRepository<ScriptMaster, Inte
 
 	List<ScriptMaster> findByTargetApplicationAndProductVersionAndModule(String targetApplication,String productVersion, String module);
 	
-	@Query("Select max(scriptId) from ScriptMaster where scriptNumber like ?1% and productVersion=?2")
-	public int getMaxScriptNumber(String newCustomScriptNumber,String productVersion);
+	@Query("Select nvl(max(scriptId),0) from ScriptMaster where scriptNumber like ?1% and productVersion=?2")
+	public Integer getMaxScriptNumber(String newCustomScriptNumber,String productVersion);
 	
 	public ScriptMaster findByScriptId(Integer scriptId);
 	

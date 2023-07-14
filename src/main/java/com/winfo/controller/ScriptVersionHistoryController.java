@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,11 +34,11 @@ public class ScriptVersionHistoryController {
 	private ScriptVersionHistoryService versionHistoryService;
 
 	@ResponseBody
-	@PostMapping(value = "/saveVersionHistory")
+	@PostMapping(value = "/saveVersionHistory/{scriptId}")
 	@ApiOperation( value="Save Version History ",notes = " <B>scriptId and Version Number</B> is to pass to save the version history for particular scriptId and version Number")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Saved version history successfully")})
-	public ResponseDto saveVersionHistory(@Valid @RequestBody VersionHistoryDto versionHistoryDto) throws Exception {
-		return versionHistoryService.saveVersionHistory(versionHistoryDto);
+	public ResponseDto saveVersionHistory(@PathVariable Integer scriptId ,@Valid @RequestBody ScriptMaterVO scriptMaterVO) throws Exception {
+		return versionHistoryService.saveVersionHistory(scriptId,scriptMaterVO);
 	}
 
 	@ResponseBody

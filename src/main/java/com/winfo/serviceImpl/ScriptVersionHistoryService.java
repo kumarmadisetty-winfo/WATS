@@ -42,19 +42,18 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
 
-	public ResponseDto saveVersionHistory(VersionHistoryDto versionHistoryDto) throws Exception {
+	public ResponseDto saveVersionHistory(Integer scriptId,ScriptMaterVO updatedScriptMaterVO) throws Exception {
 		try {
-			versionHistoryDto.setSaveHistory(true);
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(versionHistoryDto.getScriptId());
+			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(scriptId);
 			ScriptMaterVO scriptMasterVO = mapper.readValue(mapper.writeValueAsString(scriptMaster),
 					ScriptMaterVO.class);
 			Integer scriptHistoryNumber = null;
 			String directoryPath = dataBaseEntry.getDirectoryPath();
 			String localPath = directoryPath + FORWARD_SLASH + TEMP + FORWARD_SLASH + HISTORY + FORWARD_SLASH
-					+ versionHistoryDto.getScriptId();
-			String objectStorePath = HISTORY + FORWARD_SLASH + versionHistoryDto.getScriptId();
+					+ scriptId;
+			String objectStorePath = HISTORY + FORWARD_SLASH + scriptId;
 			FileUtil.createDir(localPath);
 			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath + FORWARD_SLASH);
 			if (listOfFiles.size()>0) {
@@ -63,16 +62,14 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 						.findFirst()
 						.get().split("_"))
 						.skip(1).findFirst().get().replace(JSON, ""))+1;
-				String latestHistoryName=listOfFiles.stream()
-						.findFirst()
-						.get().split(FORWARD_SLASH)[2].replace(".json", "");
-				String decodeFileName=URLDecoder.decode(
-						new String(latestHistoryName.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8),
-						"UTF-8");
-				versionHistoryDto.setVersionNumber(decodeFileName);
-				ScriptMaterVO History = getVersionHistory(versionHistoryDto);
-				if(!scriptMasterVO.equals(History)){
+				updatedScriptMaterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
+				scriptMasterVO.updateFieldIfNotNull(dataBaseEntry);
+				if(!scriptMasterVO.equals(updatedScriptMaterVO)){
 					saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+				}
+				else {
+					logger.info("No change present for creating a new history");
+					return new ResponseDto(HttpStatus.CONFLICT.value(), Constants.WARNING, "No change present for creating a new history");
 				}
 			} else {
 				scriptHistoryNumber = 1;
@@ -97,7 +94,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			file.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(scriptMasterVO));
 			logger.info("Successfully saved details in file...!!");
 		} catch (IOException e) {
-			logger.info("Failed to save details in the file " +e.getMessage());
+			logger.error("Failed to save details in the file " +e.getMessage());
 			throw new WatsEBSException(500, "Not able to save the file!", e);
 		}
 		uploadObjectToObjectStore(localPath + FORWARD_SLASH + encodedName, objectStorePath, encodedName);

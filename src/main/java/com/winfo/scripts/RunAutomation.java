@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -52,6 +54,7 @@ import com.winfo.serviceImpl.TestScriptExecService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
+import com.winfo.utils.FileUtil;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.FetchConfigVO;
@@ -103,6 +106,8 @@ public class RunAutomation {
 	GraphQLService graphQLService;
 	@Autowired
 	SmartBearService smartBearService;
+
+
 	@Autowired
 	WoodInterface woodInterface;
 
@@ -343,6 +348,7 @@ public class RunAutomation {
 				List<CompletableFuture<String>> completableFutures = Arrays.asList(completableFuture1, completableFuture2, completableFuture3);
 				CompletableFuture<Void> resultantCf = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()]));
 				CompletableFuture<List<String>> allFutureResults = resultantCf.thenApply(t ->{
+					FileUtil.deleteScreenshotAndPdfDirectoryFromTemp(fetchConfigVO, customerDetails);
 					dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
 					return completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 				}).exceptionally((e)->{
@@ -1511,6 +1517,20 @@ public class RunAutomation {
 						try {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 									testScriptParamId, "Pass");
+							Optional<String> testSetlineWarningMsgOptional = Optional.ofNullable(fetchMetadataVO)
+									.map(ScriptDetailsDto::getLineErrorMsg)
+									.filter(testSetlineWarningMsg -> !testSetlineWarningMsg.isEmpty());
+
+							testSetlineWarningMsgOptional
+									.filter(testSetlineWarningMsg -> testSetlineWarningMsg.startsWith("Warning"))
+									.ifPresent(testSetlineWarningMsg -> {
+										try {
+											dataBaseEntry.updateTestSetLinesWarningMessage(
+													fetchMetadataVO.getTestScriptParamId(), testSetlineWarningMsg);
+										} catch (ClassNotFoundException | SQLException e) {
+											logger.error("Not able to update warning message: {}" + e.getMessage());
+										}
+									});
 							fetchMetadataVO.setStatus("Pass");
 						} catch (Exception e) {
 							logger.error(e.getMessage());
