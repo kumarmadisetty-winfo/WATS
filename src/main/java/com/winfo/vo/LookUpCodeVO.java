@@ -37,6 +37,7 @@ public class LookUpCodeVO {
 		this.lookUpId = lookUpCode.getLookUpId();
 		this.lookUpName = lookUpCode.getLookUpName();
 		this.lookUpCode = lookUpCode.getLookUpCode();
+		this.targetCode=lookUpCode.getTargetCode();
 		this.meaning = lookUpCode.getMeaning();
 		this.description = lookUpCode.getDescription();
 		this.effectiveFrom = lookUpCode.getEffectiveFrom();
