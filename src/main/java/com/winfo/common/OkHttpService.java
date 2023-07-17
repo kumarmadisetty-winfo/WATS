@@ -7,6 +7,7 @@ import javax.ws.rs.NotFoundException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,9 @@ import okhttp3.Response;
 @Component
 public class OkHttpService {
 	private final Logger logger = LogManager.getLogger(OkHttpService.class);
+	
+	@Autowired
+	private OkHttpClient okHttpClient;
 
 	public void attachPdf(String url, String filePath, String authHeader) {
 		logger.info("Received details as input in attachPdf method");
@@ -33,8 +37,7 @@ public class OkHttpService {
 			Request request = new Request.Builder().url(url).method("POST", body).addHeader("Authorization", authHeader)
 					.addHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"")
 					.addHeader("X-Atlassian-Token", "no-check").build();
-			OkHttpClient client = new OkHttpClient.Builder().build();
-			try (Response response = client.newCall(request).execute()) {
+			try (Response response = okHttpClient.newCall(request).execute()) {
 				if (response.isSuccessful()) {
 					logger.info("Pdf attached succefully!");
 				} else if (response.code() == 404) {

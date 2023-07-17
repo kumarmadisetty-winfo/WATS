@@ -5,6 +5,7 @@ import javax.ws.rs.NotFoundException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,10 @@ import reactor.core.publisher.Mono;
 @Component
 public class WebClientService {
 	private final Logger logger = LogManager.getLogger(WebClientService.class);
-
+	
+	@Autowired
+	private WebClient webClient;
+	
 	public void executeWebClientApi(ApiValidationVO apiValidationData, String userName, String password) {
 		logger.info(
 				"Received details as input in executeSmartBearApi: URL - {}, HTTP Type - {}, Request Header - {}, Request Body - {}, Response - {}",
@@ -32,8 +36,6 @@ public class WebClientService {
 				apiValidationData.getRequestBody(), apiValidationData.getResponse());
 
 		try {
-			WebClient client = WebClient.create();
-
 			// Setting headers
 			HttpHeaders headers = new HttpHeaders();
 			MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<>();
@@ -51,7 +53,7 @@ public class WebClientService {
 			// Checking if body required or not for API.
 			if (apiValidationData.getRequestBody() != null
 					&& !StringUtils.isEmpty(apiValidationData.getRequestBody())) {
-				bodyToMono = client.method(httpMethod).uri(apiValidationData.getUrl())
+				bodyToMono = webClient.method(httpMethod).uri(apiValidationData.getUrl())
 						.headers(httpHeaders -> httpHeaders.addAll(headers)).contentType(MediaType.APPLICATION_JSON)
 						.body(BodyInserters.fromObject(apiValidationData.getRequestBody())).retrieve()
 						.onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
@@ -66,7 +68,7 @@ public class WebClientService {
 								clientResponse -> Mono.error(new WatsEBSException(503,"Service Unavailable")))
 						.bodyToMono(String.class);
 			} else {
-				bodyToMono = client.method(httpMethod).uri(apiValidationData.getUrl())
+				bodyToMono = webClient.method(httpMethod).uri(apiValidationData.getUrl())
 						.headers(httpHeaders -> httpHeaders.addAll(headers)).accept(MediaType.APPLICATION_JSON)
 						.retrieve()
 						.onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
