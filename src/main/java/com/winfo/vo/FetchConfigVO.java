@@ -176,6 +176,8 @@ public class FetchConfigVO {
     private String JIRA_ISSUE_UPDATE_STATUS_URL;
     
     private String JIRA_ISSUE_UPDATE_TRANSITIONS;
+    
+    private String DL_APPLICATION_URL;
    
     public Duration getWait_time() {
 	    return Duration.ofSeconds(WAIT_TIME);
