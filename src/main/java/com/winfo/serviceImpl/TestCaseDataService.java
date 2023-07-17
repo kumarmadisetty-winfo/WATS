@@ -167,24 +167,26 @@ public class TestCaseDataService {
 	}
 
 	public List<FetchMetadataVO> getFetchMetaData(String parameter, String uri) {
+		try {
+			logger.info(uri);
 
-		logger.info(uri);
+			String result = restTemplate.getForObject(uri, String.class);
 
-		logger.info(restTemplate);
+			logger.info(result);
 
-		String result = restTemplate.getForObject(uri, String.class);
+			// convert Java Objects into their JSON and viz
 
-		logger.info(result);
+			Gson g = new Gson();
 
-		// convert Java Objects into their JSON and viz
+			FetchMetadataListVO MetaList = g.fromJson(result, FetchMetadataListVO.class);
 
-		Gson g = new Gson();
+			// prepareTestcasedata(MetaList.getItems());
 
-		FetchMetadataListVO MetaList = g.fromJson(result, FetchMetadataListVO.class);
-
-		// prepareTestcasedata(MetaList.getItems());
-
-		return MetaList.getItems();
+			return MetaList.getItems();
+		} catch (Exception e) {
+			logger.error("Error occured while fetching the meta data");
+			return null;
+		}
 
 	}
 
@@ -198,15 +200,11 @@ public class TestCaseDataService {
 		try {
 			logger.info(uri);
 
-			logger.info(restTemplate);
-
 			String result = restTemplate.getForObject(uri, String.class);
 
 			logger.info(result);
 
 			JSONObject obj = (JSONObject) jsonParser.parse(result);
-
-			logger.info(restTemplate);
 
 			JSONArray employeeList = (JSONArray) obj.get("items");
 			logger.info(employeeList);
@@ -230,11 +228,10 @@ public class TestCaseDataService {
 
 		// Get employee first name
 		String firstName = (String) employee.get("key_name");
-		logger.info(firstName);
 
 		// Get employee last name
 		String lastName = (String) employee.get("value_name");
-		logger.info(lastName);
+		logger.info("First Name : "+firstName+" Last Name : "+lastName);
 		map.put(firstName, lastName);
 	}
 }
