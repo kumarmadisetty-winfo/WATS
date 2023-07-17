@@ -41,6 +41,7 @@ import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.service.SFInterface;
 import com.winfo.service.WoodInterface;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.ErrorMessagesHandler;
@@ -110,6 +111,9 @@ public class RunAutomation {
 
 	@Autowired
 	WoodInterface woodInterface;
+	
+	@Autowired
+	SFInterface sfInterface;
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -615,9 +619,8 @@ public class RunAutomation {
 								break;
 							}
 						case "Login into DLApplication":
-                            seleniumFactory.getInstanceObj(instanceName).loginDLApplication(driver, param1, param2,
-                            		fetchMetadataVO, fetchConfigVO, customerDetails);
-
+							
+                            sfInterface.loginDLApplication(driver, param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
                             break;
 							
 						case "Login into SSOApplication":
@@ -1508,7 +1511,7 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).validation(fetchMetadataVO, api);
 							break;
 							
-
+		
 						case "Enter Multiple Transactions":
 							woodInterface.enterMultipleTransaction(driver, fetchConfigVO,
 									fetchMetadataVO, customerDetails);

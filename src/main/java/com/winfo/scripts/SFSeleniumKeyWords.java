@@ -67,6 +67,7 @@ import com.aspose.cells.Row;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
 import com.itextpdf.text.DocumentException;
+import com.winfo.service.SFInterface;
 import com.winfo.service.SeleniumKeyWordsInterface;
 import com.winfo.serviceImpl.AbstractSeleniumKeywords;
 import com.winfo.serviceImpl.DataBaseEntry;
@@ -82,7 +83,7 @@ import com.winfo.vo.ScriptDetailsDto;
 
 @Service("SF")
 @RefreshScope
-public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface {
+public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface,SFInterface {
 //New-changes - added annotation for DatabaseEntry
 	@Autowired
 	private DataBaseEntry databaseentry;
@@ -423,7 +424,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed to logout " + scripNumber);
+			logger.info("Suucessfully Navigated to the URL " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("failed to do navigate URl " + scripNumber);
@@ -439,7 +440,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed to logout " + scripNumber);
+			logger.info("Suucessfully Navigated to the SF URL " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("failed to do navigate URl " + scripNumber);
@@ -455,7 +456,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			refreshPage(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
 			switchToActiveElement(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed to logout " + scripNumber);
+			logger.info("Suucessfully Navigated to the DL URL " + scripNumber);
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("failed to do navigate URl " + scripNumber);
@@ -3317,6 +3318,32 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		
+		try {
+            if (param1.equalsIgnoreCase("Agreements")&&(param2.equalsIgnoreCase("New"))) {
+                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+                wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//span[text()='"+param1+"']/following::*[text()='"+param2+"']")));
+                WebElement waittext = driver.findElement(
+                        By.xpath("//span[text()='"+param1+"']/following::*[text()='"+param2+"']"));
+                Actions actions = new Actions(driver);
+                actions.moveToElement(waittext).build().perform();
+                waittext.click();
+                screenshot(driver, fetchMetadataVO, customerDetails);
+                Thread.sleep(6000);
+                String scripNumber = fetchMetadataVO.getScriptNumber();
+                logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
+                String xpath = "//span[text()='param1']/following::*[text()='param2']";
+                String scriptID = fetchMetadataVO.getScriptId();
+                String lineNumber = fetchMetadataVO.getLineNumber();
+                service.saveXpathParams(scriptID, lineNumber, xpath);
+                return;
+            }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScriptNumber();
+            logger.error("Failed during Republish clickButton" + scripNumber);
+            screenshotFail(driver, fetchMetadataVO, customerDetails);
+        }
 		try {
 			if  (param1.equalsIgnoreCase("Next")||(param1.equalsIgnoreCase("Save & Run"))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
