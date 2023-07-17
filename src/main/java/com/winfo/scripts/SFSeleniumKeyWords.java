@@ -3327,7 +3327,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				//actions.moveToElement(waittext).build().perform();
 				//scrollMethod(driver, fetchConfigVO, waittext, fetchMetadataVO, customerDetails);
-				takeScreenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				//waittext.click();
 				
 				//actions.moveToElement(waittext).build().perform();
@@ -3358,7 +3358,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				//actions.moveToElement(waittext).build().perform();
 				//scrollMethod(driver, fetchConfigVO, waittext, fetchMetadataVO, customerDetails);
-				takeScreenshot(driver, fetchMetadataVO, customerDetails);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 				//waittext.click();
 				
 				//actions.moveToElement(waittext).build().perform();
