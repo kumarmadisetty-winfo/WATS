@@ -72,7 +72,7 @@ public class TestCaseDataService {
 
 		}
 
-		System.out.println(testCaseMap);
+		logger.info(testCaseMap);
 
 		return testCaseMap;
 
@@ -168,13 +168,13 @@ public class TestCaseDataService {
 
 	public List<FetchMetadataVO> getFetchMetaData(String parameter, String uri) {
 
-		System.out.println(uri);
+		logger.info(uri);
 
-		System.out.println(restTemplate);
+		logger.info(restTemplate);
 
 		String result = restTemplate.getForObject(uri, String.class);
 
-		System.out.println(result);
+		logger.info(result);
 
 		// convert Java Objects into their JSON and viz
 
@@ -196,27 +196,27 @@ public class TestCaseDataService {
 
 // 	                          final String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/" + parameter;
 		try {
-			System.out.println(uri);
+			logger.info(uri);
 
-			System.out.println(restTemplate);
+			logger.info(restTemplate);
 
 			String result = restTemplate.getForObject(uri, String.class);
 
-			System.out.println(result);
+			logger.info(result);
 
 			JSONObject obj = (JSONObject) jsonParser.parse(result);
 
-			System.out.println(restTemplate);
+			logger.info(restTemplate);
 
 			JSONArray employeeList = (JSONArray) obj.get("items");
-			System.out.println(employeeList);
+			logger.info(employeeList);
 			Map<String, String> map = new TreeMap<>();
 			// Iterate over employee array
 			employeeList.forEach(emp -> parseEmployeeObject((JSONObject) emp, map));
 			JSONObject jsno = new JSONObject(map);
 			Gson g = new Gson();
 			FetchConfigVO vo = g.fromJson(jsno.toString(), FetchConfigVO.class);
-			System.out.println(jsno.toString());
+			logger.info(jsno.toString());
 			return vo;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -230,11 +230,11 @@ public class TestCaseDataService {
 
 		// Get employee first name
 		String firstName = (String) employee.get("key_name");
-		System.out.println(firstName);
+		logger.info(firstName);
 
 		// Get employee last name
 		String lastName = (String) employee.get("value_name");
-		System.out.println(lastName);
+		logger.info(lastName);
 		map.put(firstName, lastName);
 	}
 }
