@@ -615,15 +615,10 @@ public class RunAutomation {
 								break;
 							}
 						case "Login into DLApplication":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
                             seleniumFactory.getInstanceObj(instanceName).loginDLApplication(driver, param1, param2,
                             		fetchMetadataVO, fetchConfigVO, customerDetails);
 
                             break;
-							}
-							else {
-								break;
-							}
 							
 						case "Login into SSOApplication":
 							userName = fetchMetadataVO.getInputValue();
