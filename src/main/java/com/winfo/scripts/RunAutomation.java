@@ -1111,6 +1111,7 @@ public class RunAutomation {
 										&& !message.startsWith("All higher-level managers can see comments")
 										&& !message.startsWith("Shift")
 										&& !message.startsWith("Copy tasks and selected attributes to the new project")
+										&& !message.startsWith("You encountered some errors")
 										&& !message.startsWith("Course Title")) {
 
 									fetchConfigVO.setErrormessage(message);
