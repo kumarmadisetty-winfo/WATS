@@ -69,6 +69,9 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	@Autowired
 	ScriptXpathService service;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	public void loginApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
@@ -336,7 +339,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 						"https://graph.microsoft.com/Sites.ReadWrite.All https://graph.microsoft.com/Files.ReadWrite");
 				HttpEntity<byte[]> requestEntity = new HttpEntity<>(data, headers);
 
-				RestTemplate restTemplate = new RestTemplate();
 				ResponseEntity<byte[]> response = restTemplate.exchange(
 						"https://graph.microsoft.com/v1.0/me/drive/root:/Screenshot/"
 								+ customerDetails.getCustomerName() + "/" + imageFileName + ":/content",
@@ -352,8 +354,6 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public String getAccessToken() {
 		String acessToken = null;
 		try {
-			RestTemplate restTemplate = new RestTemplate();
-
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 

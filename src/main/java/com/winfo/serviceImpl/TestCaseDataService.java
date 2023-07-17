@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,9 @@ public class TestCaseDataService {
 
 	@Value("${configvO.config_url1}")
 	private String config_url;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	// public LinkedHashMap<String, List<FetchMetadataVO>> dependentScriptMap;
 
@@ -68,7 +72,7 @@ public class TestCaseDataService {
 
 		}
 
-		System.out.println(testCaseMap);
+		logger.info(testCaseMap);
 
 		return testCaseMap;
 
@@ -163,26 +167,26 @@ public class TestCaseDataService {
 	}
 
 	public List<FetchMetadataVO> getFetchMetaData(String parameter, String uri) {
+		try {
+			logger.info(uri);
 
-		System.out.println(uri);
+			String result = restTemplate.getForObject(uri, String.class);
 
-		RestTemplate restTemplate = new RestTemplate();
+			logger.info(result);
 
-		System.out.println(restTemplate);
+			// convert Java Objects into their JSON and viz
 
-		String result = restTemplate.getForObject(uri, String.class);
+			Gson g = new Gson();
 
-		System.out.println(result);
+			FetchMetadataListVO MetaList = g.fromJson(result, FetchMetadataListVO.class);
 
-		// convert Java Objects into their JSON and viz
+			// prepareTestcasedata(MetaList.getItems());
 
-		Gson g = new Gson();
-
-		FetchMetadataListVO MetaList = g.fromJson(result, FetchMetadataListVO.class);
-
-		// prepareTestcasedata(MetaList.getItems());
-
-		return MetaList.getItems();
+			return MetaList.getItems();
+		} catch (Exception e) {
+			logger.error("Error occured while fetching the meta data");
+			return null;
+		}
 
 	}
 
@@ -194,29 +198,23 @@ public class TestCaseDataService {
 
 // 	                          final String uri = "https://watshubd01.winfosolutions.com:4443/wats/wats_workspace_prod/taconfig/data/" + parameter;
 		try {
-			System.out.println(uri);
-
-			RestTemplate restTemplate = new RestTemplate();
-
-			System.out.println(restTemplate);
+			logger.info(uri);
 
 			String result = restTemplate.getForObject(uri, String.class);
 
-			System.out.println(result);
+			logger.info(result);
 
 			JSONObject obj = (JSONObject) jsonParser.parse(result);
 
-			System.out.println(restTemplate);
-
 			JSONArray employeeList = (JSONArray) obj.get("items");
-			System.out.println(employeeList);
+			logger.info(employeeList);
 			Map<String, String> map = new TreeMap<>();
 			// Iterate over employee array
 			employeeList.forEach(emp -> parseEmployeeObject((JSONObject) emp, map));
 			JSONObject jsno = new JSONObject(map);
 			Gson g = new Gson();
 			FetchConfigVO vo = g.fromJson(jsno.toString(), FetchConfigVO.class);
-			System.out.println(jsno.toString());
+			logger.info(jsno.toString());
 			return vo;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -230,11 +228,10 @@ public class TestCaseDataService {
 
 		// Get employee first name
 		String firstName = (String) employee.get("key_name");
-		System.out.println(firstName);
 
 		// Get employee last name
 		String lastName = (String) employee.get("value_name");
-		System.out.println(lastName);
+		logger.info("First Name : "+firstName+" Last Name : "+lastName);
 		map.put(firstName, lastName);
 	}
 }

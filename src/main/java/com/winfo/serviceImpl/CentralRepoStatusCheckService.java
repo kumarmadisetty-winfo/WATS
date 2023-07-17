@@ -13,10 +13,12 @@ public class CentralRepoStatusCheckService {
 	
 	@Autowired
 	DataBaseEntry dataBaseEntry;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	public ResponseDto centralRepoStatus() {
 		try {
-			RestTemplate restTemplate = new RestTemplate();
 			String url = dataBaseEntry.getCentralRepoUrl(Constants.WATS_CENTRAL);
 			restTemplate.getForObject(url, String.class);
 		} catch (Exception e) {
