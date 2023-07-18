@@ -162,23 +162,15 @@ public class ScriptMaterVO {
 	}
 	
 	public void updateFieldIfNotNullForRequestBody(DataBaseEntry dataBaseEntry) {
-//		if (standardCustom != null) {
-//			standardCustom = dataBaseEntry.getLookUpCodeByMeaning(standardCustom, "STANDARD");
-//		}
 		if (scriptMetaDatalist != null) {
 		    scriptMetaDatalist.stream()
 		        .filter(metaData -> metaData.getAction() != null)
 		        .forEach(metaData -> {
-		            String updatedAction = dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION");
-		            metaData.setAction(updatedAction);
-		            String updatedValidationType = dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS");
-		            metaData.setValidationType(updatedValidationType);
-		            String updatedValidationName = dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION");
-		            metaData.setValidationType(updatedValidationName);
-		            String updatedValidationDataType = dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES");
-		            metaData.setDatatypes(updatedValidationDataType);
-		            String updatedValidationUniqueMandetory = dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY");
-		            metaData.setUniqueMandatory(updatedValidationUniqueMandetory);
+		            metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
+		            metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS"));
+		            metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
+		            metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES"));
+		            metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
 		        });
 		}
 		if (role != null) {
