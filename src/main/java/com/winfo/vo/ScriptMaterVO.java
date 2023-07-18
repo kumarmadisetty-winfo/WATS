@@ -196,16 +196,16 @@ public class ScriptMaterVO {
 		scriptMetaDatalist.stream()
         .filter(metaData -> metaData.getAction() != null)
         .forEach(metaData -> {
-            if("NA".equals(metaData.getValidationType())) {
+            if("NA".equalsIgnoreCase(metaData.getValidationType())) {
             	metaData.setValidationType(null);            	
             }
-            if("NA".equals(metaData.getValidationName())) {
+            if("NA".equalsIgnoreCase(metaData.getValidationName())) {
             	metaData.setValidationName(null);            	
             }
-            if("NA".equals(metaData.getDatatypes())) {
+            if("NA".equalsIgnoreCase(metaData.getDatatypes())) {
             	metaData.setDatatypes(null);            	
             }
-            if("NA".equals(metaData.getUniqueMandatory())) {
+            if("NA".equalsIgnoreCase(metaData.getUniqueMandatory())) {
             	metaData.setUniqueMandatory(null);            	
             }
         });
