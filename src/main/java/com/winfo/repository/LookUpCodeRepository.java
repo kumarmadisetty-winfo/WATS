@@ -24,6 +24,9 @@ public interface LookUpCodeRepository extends JpaRepository<LookUpCode, Integer>
 
 	@Query("SELECT lc.meaning from LookUpCode lc where lower(lc.lookUpCode) = lower(:lookUpCode) and lower(lc.lookUpName) = lower(:lookUpName)")
 	String getMeaningByTargetCode(@Param("lookUpCode") String lookUpCode, @Param("lookUpName") String lookUpName);
+	
+	@Query("SELECT lc.lookUpCode from LookUpCode lc where lower(lc.meaning) = lower(:meaning) and lower(lc.lookUpName) = lower(:lookUpName)")
+	String getLookUpCodeByMeaning(@Param("meaning") String meaning, @Param("lookUpName") String lookUpName);
 
 	LookUpCode findByLookUpNameAndLookUpCode(String lookUpName, String customerName);
 
