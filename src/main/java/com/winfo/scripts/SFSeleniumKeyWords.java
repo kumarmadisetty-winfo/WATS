@@ -8126,11 +8126,12 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Agreements ID")) {
 				checkDescending(driver, fetchConfigVO, fetchMetadataVO);
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				Thread.sleep(10000);
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"(//span[starts-with(text(),'Con-')])[1]")));
+						"//h1[text()='Agreements']/following::*[starts-with(text(),'Con-')][1]")));
 				WebElement waittext = driver.findElement(By
-						.xpath("(//span[starts-with(text(),'Con-')])[1]"));
+						.xpath("//h1[text()='Agreements']/following::*[starts-with(text(),'Con-')][1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				
@@ -8140,7 +8141,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(6000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked  clickButton" + scripNumber);
-				String xpath = "(//span[starts-with(text(),'Con-')])[1]";
+				String xpath = "//h1[text()='Agreements']/following::*[starts-with(text(),'Con-')][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -21466,7 +21467,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			// Find label elements within the page that have the required indicator
 			driver.findElement(By.xpath(
-					"(//*[name()='svg' and @data-key='arrowdown'])[1]/following::span[text()='Sorted Descending']"));
+					"(//*[name()='svg' and @data-key='arrowdown'])[1]/following::span[text()='Sorted Descending'][1]"));
 			logger.info("The field is in Descending order.");
 			return;
 		} catch (NoSuchElementException e) {
@@ -21476,8 +21477,8 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 			wait.until(ExpectedConditions
-					.presenceOfElementLocated(By.xpath("(//*[text()='Agreements ID'])[1]")));
-			WebElement waittext = driver.findElement(By.xpath("(//*[text()='Agreements ID'])[1]"));
+					.presenceOfElementLocated(By.xpath("//h1[text()='Agreements']/following::*[text()='Agreements ID']")));
+			WebElement waittext = driver.findElement(By.xpath("//h1[text()='Agreements']/following::*[text()='Agreements ID']"));
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			logger.info("The field is in Descending order.");
 			return;
