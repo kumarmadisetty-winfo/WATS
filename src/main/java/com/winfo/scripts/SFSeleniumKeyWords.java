@@ -8128,19 +8128,15 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				checkDescending(driver, fetchConfigVO, fetchMetadataVO);
 				Thread.sleep(10000);
 				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
-						"//h1[text()='Agreements']/following::*[starts-with(text(),'Con-')][1]")));
-				WebElement waittext = driver.findElement(By
-						.xpath("//h1[text()='Agreements']/following::*[starts-with(text(),'Con-')][1]"));
-				Actions actions = new Actions(driver);
-				actions.moveToElement(waittext).build().perform();
-				
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()='Agreements']/following::*[starts-with(text(),'Con-')][1]")));
+				WebElement waittext = driver.findElement(By.xpath("//h1[text()='Agreements']/following::*[starts-with(text(),'Con-')][1]"));
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				//waittext.click();
+				Thread.sleep(2000);
+				// waittext.click();
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(6000);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked  clickButton" + scripNumber);
+				logger.info("Successfully Clicked clickButton" + scripNumber);
 				String xpath = "//h1[text()='Agreements']/following::*[starts-with(text(),'Con-')][1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
@@ -8153,6 +8149,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			System.out.println(e);
 		}
+		
 		try {
 			if (param1.equalsIgnoreCase("Resource Request")&&(param2.equalsIgnoreCase("Resources"))||(param1.equalsIgnoreCase("Resource Request")&&(param2.equalsIgnoreCase("Details")))) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
