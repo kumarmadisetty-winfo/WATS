@@ -7664,6 +7664,35 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
+			if (param1.equalsIgnoreCase("View All")) {
+//				checkDescending(driver, fetchConfigVO, fetchMetadataVO);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+						"//span[@class='view-all-label']")));
+				WebElement waittext = driver.findElement(By
+						.xpath("//span[@class='view-all-label']"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				//waittext.click();
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(6000);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.info("Sucessfully Clicked  clickButton" + scripNumber);
+				String xpath = "//span[@class='view-all-label']";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during clickButton" + scripNumber);
+			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			System.out.println(e);
+		}
+		try {
 			if (param2.equalsIgnoreCase("Edit Create Pre-Sales Project")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
@@ -8084,6 +8113,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Agreements ID")) {
+				checkDescending(driver, fetchConfigVO, fetchMetadataVO);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
 						"(//span[starts-with(text(),'Con-')])[1]")));
@@ -21383,6 +21413,31 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				fetchMetadataVO.setLineErrorMsg(
 						"Warning : The field is marked mandatory in the test step but not required in the application.");
 			}
+		}
+	}
+	
+	private void checkDescending(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO) {
+
+		try {
+			// Find label elements within the page that have the required indicator
+			driver.findElement(By.xpath(
+					"(//*[name()='svg' and @data-key='arrowdown'])[1]/following::span[text()='Sorted Descending']"));
+			logger.info("The field is in Descending order.");
+			return;
+		} catch (NoSuchElementException e) {
+			logger.info("The field is in Ascending order.");
+		}
+
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+			wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath("(//*[text()='Agreements ID'])[1]")));
+			WebElement waittext = driver.findElement(By.xpath("(//*[text()='Agreements ID'])[1]"));
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+			logger.info("The field is in Descending order.");
+			return;
+		} catch (NoSuchElementException e) {
+			logger.info("Not able to make the field is in Descending order.");
 		}
 	}
 
