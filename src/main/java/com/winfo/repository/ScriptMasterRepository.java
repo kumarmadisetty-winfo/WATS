@@ -17,5 +17,7 @@ public interface ScriptMasterRepository extends JpaRepository<ScriptMaster, Inte
 	public Integer getMaxScriptNumber(String newCustomScriptNumber,String productVersion);
 	
 	public ScriptMaster findByScriptId(Integer scriptId);
+	
+	public ScriptMaster findByScriptNumberAndProductVersion(String newCustomScriptNumber,String productVersion);
   
 }
