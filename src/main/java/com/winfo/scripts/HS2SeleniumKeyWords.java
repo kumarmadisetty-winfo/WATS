@@ -12667,6 +12667,64 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
 			logger.error(e.getMessage());
 		}
+		// Hs2 Dropdown try catch wats-2815 hs2-7
+		try {
+			if (param1.equalsIgnoreCase("Offering Details") && (param2.equalsIgnoreCase("Facilitator Type"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				String xpath = "//*[normalize-space(text())='Offering Details']/following::label[normalize-space(text())='Facilitator Type']/following::a[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+				WebElement waittext = driver.findElement(By.xpath(xpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				waittext.click();
+				Thread.sleep(3000);
+
+				WebElement select = driver.findElement(By.xpath("//*[text() = \"" + keysToSend + "\"]"));
+				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				String xpath1 = "//*[normalize-space(text())='param1']/following::label[normalize-space(text())='param2']/following::a[1]";
+				String xpath2 = "//li[text() = 'keysToSend']";
+				String Fullpath = xpath1 + ";" + xpath2;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, Fullpath);
+				logger.info("Sucessfully select "+ keysToSend + " dropdownValue" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error(e.getMessage());
+		}
+		// Hs2 Dropdown try catch wats-2815 hs2-6
+		try {
+			if (param1.equalsIgnoreCase("Terminate Work Relationship") && (param2.equalsIgnoreCase("Revoke User Access"))) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				String xpath = "//td[text()='Enter Termination Info']//following::*[text()='Revoke User Access']//following::a[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+				WebElement waittext = driver.findElement(By.xpath(xpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				waittext.click();
+				Thread.sleep(3000);
+
+				WebElement select = driver.findElement(By.xpath("//li[text() = \"" + keysToSend + "\"]"));
+				clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				String xpath1 = "//td[text()='Enter Termination Info']//following::*[text()='Revoke User Access']//following::a[1]";
+				String xpath2 = "//li[text() = 'keysToSend']";
+				String Fullpath = xpath1 + ";" + xpath2;
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, Fullpath);
+				logger.info("Sucessfully select "+ keysToSend + " dropdownValue" + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+			logger.error(e.getMessage());
+		}
 		// Hs2 Dropdown try catch wats-2815 hs2-5
 		try {
 			if (param1.equalsIgnoreCase("Document Details") && (param2.equalsIgnoreCase("Document Type"))) {
