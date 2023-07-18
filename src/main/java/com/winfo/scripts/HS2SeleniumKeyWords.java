@@ -12706,7 +12706,6 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				WebElement waittext = driver.findElement(By.xpath(xpath));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				waittext.click();
 				Thread.sleep(3000);
 
