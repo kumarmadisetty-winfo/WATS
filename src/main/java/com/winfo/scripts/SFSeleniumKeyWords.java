@@ -42,6 +42,7 @@ import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 //import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
@@ -67,6 +68,7 @@ import com.aspose.cells.Row;
 import com.aspose.cells.Workbook;
 import com.aspose.cells.Worksheet;
 import com.itextpdf.text.DocumentException;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.service.SFInterface;
 import com.winfo.service.SeleniumKeyWordsInterface;
 import com.winfo.serviceImpl.AbstractSeleniumKeywords;
@@ -4259,7 +4261,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 		try {
 			if (param1.equalsIgnoreCase("Mark as Current Stage")) {
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 				wait.until(ExpectedConditions.presenceOfElementLocated(
 						By.xpath("//*[text()='"+param1+"']")));
 				WebElement waittext = driver.findElement(
@@ -4267,8 +4269,17 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				//waittext.click();
-				
+			
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				List<WebElement> elements = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[contains(text(), 'You encountered some errors when trying to save this record')]"), 1));
+				int length = elements.size();
+				if (length >=2){
+					String scripNumber = fetchMetadataVO.getScriptNumber();
+					logger.error("got error during clickButton" + scripNumber);
+					takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
+					throw new WatsEBSException(500, "got error during clickButton");
+				}
+
 				Thread.sleep(15000);
 				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 		
@@ -4281,10 +4292,11 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				return;
 			}
 		} catch (Exception e) {
+			// screenshotFail(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during clickButton" + scripNumber);
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
 			System.out.println(e);
+			throw new WatsEBSException(500, "got error during clickButton");
 		}
 		try {
 			if (param2.equalsIgnoreCase("Approve")) {
