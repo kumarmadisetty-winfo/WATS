@@ -63,7 +63,8 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 						.get().split("_"))
 						.skip(1).findFirst().get().replace(JSON, ""))+1;
 				updatedScriptMaterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
-				scriptMasterVO.updateFieldIfNotNull(dataBaseEntry);
+				updatedScriptMaterVO.checkNA();
+				scriptMasterVO.checkNA();
 				if(!scriptMasterVO.equals(updatedScriptMaterVO)){
 					saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 				}

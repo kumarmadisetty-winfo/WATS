@@ -2,6 +2,7 @@ package com.winfo.vo;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -161,24 +162,53 @@ public class ScriptMaterVO {
 		}
 	}
 	
+	//WATS-2793
 	public void updateFieldIfNotNullForRequestBody(DataBaseEntry dataBaseEntry) {
-		if (dependency != null) {
-			dependency = dataBaseEntry.getScriptDetailsByScriptId(Integer.parseInt(dependency)).getScriptNumber();
+
+		scriptMetaDatalist.stream().filter(Objects::nonNull)
+				.forEach(metaData -> {
+					metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
+					metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS"));
+					metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
+					metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES"));
+					metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
+				});
+		if (role != null) {
+			role = dataBaseEntry.getLookUpCodeByMeaning(role, "ROLE");
 		}
-		if (attribute1 != null) {
-			attribute1 = dataBaseEntry.getScriptDetailsByScriptId(Integer.parseInt(attribute1)).getScriptNumber();
+		if (subProcessArea != null) {
+			subProcessArea = dataBaseEntry.getLookUpCodeByMeaning(subProcessArea, "SUB_PROCESS_AREA");
 		}
-		if (standardCustom != null) {
-			standardCustom = dataBaseEntry.getMeaningByTargetCode(standardCustom, "STANDARD");
+		if (processArea != null) {
+			processArea = dataBaseEntry.getLookUpCodeByMeaning(processArea, "PROCESS");
 		}
-		if (testScriptStatus != null) {
-			testScriptStatus = dataBaseEntry.getMeaningByTargetCode(testScriptStatus, "STATUS");
+		if (module != null) { 
+			module = dataBaseEntry.getLookUpCodeByMeaning(module, "MODULE");
 		}
-		if (priority != null) {
-			priority = dataBaseEntry.getMeaningByTargetCode(priority, "PRIORITY");
+		if (targetApplication != null) {
+			targetApplication = dataBaseEntry.getLookUpCodeByMeaning(targetApplication, "TARGET_APPLICATION");
 		}
-		if (customerId != null) {
-			customerId = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(customerId));
+		if (productVersion != null) {
+			productVersion = dataBaseEntry.getLookUpCodeByMeaning(productVersion, "PRODUCT_VERSION");
 		}
+	}
+	public void checkNA() {
+		scriptMetaDatalist.stream()
+        .filter(metaData -> metaData.getAction() != null)
+        .forEach(metaData -> {
+            if("NA".equalsIgnoreCase(metaData.getValidationType())) {
+            	metaData.setValidationType(null);            	
+            }
+            if("NA".equalsIgnoreCase(metaData.getValidationName())) {
+            	metaData.setValidationName(null);            	
+            }
+            if("NA".equalsIgnoreCase(metaData.getDatatypes())) {
+            	metaData.setDatatypes(null);            	
+            }
+            if("NA".equalsIgnoreCase(metaData.getUniqueMandatory())) {
+            	metaData.setUniqueMandatory(null);            	
+            }
+        });
+		scriptMetaDatalist.sort(Comparator.comparing(ScriptMetaDataVO::getLineNumber));
 	}
 }
