@@ -15262,6 +15262,39 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		requiredValidation(driver, param1, param2, param3, fetchMetadataVO);
+		
+		try {
+            if (param1.equalsIgnoreCase("Project Details")&&(param2.equalsIgnoreCase("Net New Staffing Need") )){
+                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::button[@role='combobox'][1]")));
+                WebElement waittext = driver.findElement(By.xpath("//*[text()='"+param1+"']/following::*[text()='"+param2+"']/following::button[@role='combobox'][1]"));
+                Actions actions = new Actions(driver);
+                actions.moveToElement(waittext).build().perform();
+                clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+                Thread.sleep(1000);
+
+////div[@class=\"AFDetectExpansion\"]/following::span[text()=\""+param2+"\"]/following::span[starts-with(text(),\"" + keysToSend + "\")][1]
+
+                WebElement select = driver
+                        .findElement(By.xpath("//*[text()='"+param1+"']/following::span[text()='"+keysToSend+"'][1]"));
+
+                clickValidateXpath(driver, fetchMetadataVO, select, fetchConfigVO);
+                screenshot(driver, fetchMetadataVO, customerDetails);
+                String scripNumber = fetchMetadataVO.getScriptNumber();
+                String xpath = "//*[text()='param1']/following::*[text()='param2']/following::button[@role='combobox'][1]"
+                        + ";" + "//*[text()='param1']/following::span[text()='keysToSend'][1]";
+                String scriptID = fetchMetadataVO.getScriptId();
+                String lineNumber = fetchMetadataVO.getLineNumber();
+                service.saveXpathParams(scriptID, lineNumber, xpath);
+                logger.info("Sucessfully Clicked Schedule New Process or Name dropdownValues" + scripNumber);
+                return;
+            }
+
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScriptNumber();
+            logger.error("Failed during Schedule New Process or Name dropdownValues" + scripNumber);
+            screenshotFail(driver, fetchMetadataVO, customerDetails);
+        }
 		try {
 			if (param1.equalsIgnoreCase("Environment")){
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
