@@ -196,9 +196,6 @@ public class ScriptMaterVO {
 		if (targetApplication != null) {
 			targetApplication = dataBaseEntry.getLookUpCodeByMeaning(targetApplication, "TARGET_APPLICATION");
 		}
-		if (attribute1 != null) {
-			attribute1 = dataBaseEntry.findByScriptNumberAndProductVersion(attribute1,productVersion).toString();
-		}
 		if (productVersion != null) {
 			productVersion = dataBaseEntry.getLookUpCodeByMeaning(productVersion, "PRODUCT_VERSION");
 		}

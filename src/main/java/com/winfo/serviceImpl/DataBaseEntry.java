@@ -628,10 +628,6 @@ public class DataBaseEntry {
 		return lookUpCodeJpaRepository.getLookUpCodeByMeaning(meaning,lookUpName);
 	}
 	
-	public Integer findByScriptNumberAndProductVersion(String scriptNumber,String productVersion) {
-		return scriptMasterRepository.findByScriptNumberAndProductVersion(scriptNumber,productVersion).getScriptId();
-	}
-	
 	public TestSetLine getTestSetLineBySequenceNumber(String testSetId, String seqNumber) {
 		return testSetLinesRepository.findBySeqNum(Integer.parseInt(testSetId), Integer.parseInt(seqNumber));
 	}
