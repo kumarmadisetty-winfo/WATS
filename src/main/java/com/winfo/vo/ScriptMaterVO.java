@@ -2,6 +2,7 @@ package com.winfo.vo;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -161,18 +162,17 @@ public class ScriptMaterVO {
 		}
 	}
 	
+	//WATS-2793
 	public void updateFieldIfNotNullForRequestBody(DataBaseEntry dataBaseEntry) {
-		if (scriptMetaDatalist != null) {
-		    scriptMetaDatalist.stream()
-		        .filter(metaData -> metaData.getAction() != null)
-		        .forEach(metaData -> {
-		            metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
-		            metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS"));
-		            metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
-		            metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES"));
-		            metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
-		        });
-		}
+
+		scriptMetaDatalist.stream().filter(Objects::nonNull)
+				.forEach(metaData -> {
+					metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
+					metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS"));
+					metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
+					metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES"));
+					metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
+				});
 		if (role != null) {
 			role = dataBaseEntry.getLookUpCodeByMeaning(role, "ROLE");
 		}
