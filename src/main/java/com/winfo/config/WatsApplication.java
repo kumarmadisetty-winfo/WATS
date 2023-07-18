@@ -28,8 +28,4 @@ public class WatsApplication extends SpringBootServletInitializer {
 		return builder.sources(WatsApplication.class);
 	}
 
-    @Bean
-    RestTemplate restTemplate() {
-	    return new RestTemplate();
-	}
 }
