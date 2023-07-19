@@ -3296,7 +3296,30 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				logger.error("Failed during Republish clickButton" + scripNumber);
 				logger.error(e.getMessage());
 			}
-		
+		//HS2
+		try {
+			if (param1.equalsIgnoreCase("Create Project") && param2.equalsIgnoreCase("Save and Continue")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				String xpath = "//*[text()='Create Project']//following::span[text()='Save and Continue']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+				WebElement waittext = driver.findElement(By.xpath(xpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				Thread.sleep(6000);
+//				screenshot(driver, "", fetchMetadataVO, fetchConfigVO);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during Republish clickButton" + scripNumber);
+			logger.error(e.getMessage());
+		}
 		try {
 			if (param1.equalsIgnoreCase("Done")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
