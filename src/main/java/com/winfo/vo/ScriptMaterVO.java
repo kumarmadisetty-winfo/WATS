@@ -168,10 +168,7 @@ public class ScriptMaterVO {
 		scriptMetaDatalist.stream().filter(Objects::nonNull)
 				.forEach(metaData -> {
 					metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
-					metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS"));
-					metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
-					metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES"));
-					metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
+					metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaningForValidationName(metaData.getValidationName(), "API_VALIDATION"));
 				});
 		if (role != null) {
 			role = dataBaseEntry.getLookUpCodeByMeaning(role, "ROLE");
@@ -192,21 +189,21 @@ public class ScriptMaterVO {
 			productVersion = dataBaseEntry.getLookUpCodeByMeaning(productVersion, "PRODUCT_VERSION");
 		}
 	}
-	public void checkNA() {
+	public void changeNullToNA() {
 		scriptMetaDatalist.stream()
         .filter(metaData -> metaData.getAction() != null)
         .forEach(metaData -> {
-            if("NA".equalsIgnoreCase(metaData.getValidationType())) {
-            	metaData.setValidationType(null);            	
+            if(metaData.getValidationType()==null) {
+            	metaData.setValidationType("NA");            	
             }
-            if("NA".equalsIgnoreCase(metaData.getValidationName())) {
-            	metaData.setValidationName(null);            	
+            if(metaData.getValidationName()==null) {
+            	metaData.setValidationName("NA");            	
             }
-            if("NA".equalsIgnoreCase(metaData.getDatatypes())) {
-            	metaData.setDatatypes(null);            	
+            if(metaData.getDatatypes()==null) {
+            	metaData.setDatatypes("NA");            	
             }
-            if("NA".equalsIgnoreCase(metaData.getUniqueMandatory())) {
-            	metaData.setUniqueMandatory(null);            	
+            if(metaData.getUniqueMandatory()==null) {
+            	metaData.setUniqueMandatory("NA");            	
             }
         });
 		scriptMetaDatalist.sort(Comparator.comparing(ScriptMetaDataVO::getLineNumber));

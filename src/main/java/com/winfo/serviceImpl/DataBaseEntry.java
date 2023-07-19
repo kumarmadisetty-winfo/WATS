@@ -641,4 +641,11 @@ public class DataBaseEntry {
 			throws ClassNotFoundException, SQLException {
 		dao.updateTestSetLinesWarningMessage(test_script_param_id, error_message);
 	}
+	public String getLookUpCodeByMeaningForValidationName(String meaning, String lookUpName) {
+		try {
+			return lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName).getLookUpCode();			
+		}catch(NullPointerException e) {
+			return "NA";
+		}
+	}
 }
