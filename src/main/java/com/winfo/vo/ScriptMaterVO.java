@@ -169,6 +169,7 @@ public class ScriptMaterVO {
 				.forEach(metaData -> {
 					metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
 					metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
+					//TODO- Get lookup code from meaning for validation type, datatype, unique mandatory.
 				});
 		if (role != null) {
 			role = dataBaseEntry.getLookUpCodeByMeaning(role, "ROLE");
