@@ -240,6 +240,27 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 
+	public String takeScreenshotFail(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			CustomerProjectDto customerDetails) {
+		try {
+			TakesScreenshot ts = (TakesScreenshot) driver;
+			File source = ts.getScreenshotAs(OutputType.FILE);
+			String fileExtension = source.getName();
+			fileExtension = fileExtension.substring(fileExtension.indexOf("."));
+			String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(),
+					customerDetails.getTestSetName());
+			String imageName = createImageName(fetchMetadataVO, customerDetails, PNG_EXTENSION, "_Failed");
+
+			uploadObjectToObjectStore(source.getCanonicalPath(), folderName, imageName);
+			logger.info("Successfully failed Screenshot is taken " + imageName);
+			return folderName + FORWARD_SLASH + imageName;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("Exception while taking Screenshot" + e.getMessage());
+			return "Failed during taking Screenshot";
+		}
+	}
+
 	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(),
