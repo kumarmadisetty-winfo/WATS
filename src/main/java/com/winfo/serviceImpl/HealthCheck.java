@@ -152,7 +152,7 @@ public class HealthCheck {
 
 	public ResponseDto seleniumGridCheck() {
 		try {
-			String url = watsHubUrl.concat("status");
+			String url = watsHubUrl.concat("/status");
 			String result = restTemplate.getForObject(url, String.class);
 			ObjectMapper mapper = new ObjectMapper();
 			HubResponse hubResponse = mapper.readValue(result,HubResponse.class);
