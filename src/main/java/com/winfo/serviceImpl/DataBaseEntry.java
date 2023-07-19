@@ -625,7 +625,8 @@ public class DataBaseEntry {
 	}
 	
 	public String getLookUpCodeByMeaning(String meaning, String lookUpName) {
-		return lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName).getLookUpCode();
+		return lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName)==null ? meaning 
+				:lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName).getLookUpCode();			
 	}
 	
 	public TestSetLine getTestSetLineBySequenceNumber(String testSetId, String seqNumber) {
