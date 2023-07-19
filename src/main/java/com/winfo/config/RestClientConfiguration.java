@@ -27,7 +27,6 @@ public class RestClientConfiguration {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplateBuilder()
-        		.messageConverters(new MappingJackson2HttpMessageConverter())
                 .build();
     }
 }
