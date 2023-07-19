@@ -625,7 +625,11 @@ public class DataBaseEntry {
 	}
 	
 	public String getLookUpCodeByMeaning(String meaning, String lookUpName) {
-		return lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName).getLookUpCode();
+		try {
+			return lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName).getLookUpCode();			
+		}catch(Exception e) {
+			return meaning;
+		}
 	}
 	
 	public TestSetLine getTestSetLineBySequenceNumber(String testSetId, String seqNumber) {
@@ -640,12 +644,5 @@ public class DataBaseEntry {
 	public void updateTestSetLinesWarningMessage(String test_script_param_id, String error_message)
 			throws ClassNotFoundException, SQLException {
 		dao.updateTestSetLinesWarningMessage(test_script_param_id, error_message);
-	}
-	public String getLookUpCodeByMeaningForValidationName(String meaning, String lookUpName) {
-		try {
-			return lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName).getLookUpCode();			
-		}catch(NullPointerException e) {
-			return "NA";
-		}
 	}
 }

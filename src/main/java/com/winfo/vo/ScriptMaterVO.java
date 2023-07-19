@@ -168,7 +168,7 @@ public class ScriptMaterVO {
 		scriptMetaDatalist.stream().filter(Objects::nonNull)
 				.forEach(metaData -> {
 					metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
-					metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaningForValidationName(metaData.getValidationName(), "API_VALIDATION"));
+					metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
 				});
 		if (role != null) {
 			role = dataBaseEntry.getLookUpCodeByMeaning(role, "ROLE");
