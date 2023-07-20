@@ -126,4 +126,6 @@ public class Constants {
 	public static final String CUSTOMER_ERROR="Customer not found";
 	public static final String CUSTOM_SCRIPT="Custom";
 	public static final String SCRIPT_HEAL="Script Heal";
+	public static final String PASS="Pass";
+	public static final String FAIL="Fail";
 	}

@@ -37,11 +37,9 @@ public class GenerateTestRunPDFService extends AbstractSeleniumKeywords {
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true,
 					false);
-//			dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
-			int passCount=testSetLinesRepo.getScriptCountOfTestRun(testSetId,"Pass");
-			int failCount=testSetLinesRepo.getScriptCountOfTestRun(testSetId,"Fail");
-			System.out.println("passCount " +passCount);
-			System.out.println("Failcount " +failCount);
+			
+			int passCount=testSetLinesRepo.getScriptCountOfTestRun(testSetId,Constants.PASS);
+			int failCount=testSetLinesRepo.getScriptCountOfTestRun(testSetId,Constants.FAIL);
 			fetchConfigVO.setPasscount(passCount);
 			fetchConfigVO.setFailcount(failCount);
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
