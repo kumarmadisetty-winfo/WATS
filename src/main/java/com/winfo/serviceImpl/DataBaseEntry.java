@@ -403,10 +403,10 @@ public class DataBaseEntry {
 		return dao.getStatusAndSeqNum(testSetId);
 	}
 
-	@Transactional
-	public void setPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
-		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
-	}
+//	@Transactional
+//	public void setPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
+//		dao.getPassAndFailScriptCount(testRunId, fetchConfigVO);
+//	}
 
 	public void updateInProgressScriptStatus(String testSetLineId, Date startDate) {
 		dao.updateInProgressScriptStatus(testSetLineId, startDate);
