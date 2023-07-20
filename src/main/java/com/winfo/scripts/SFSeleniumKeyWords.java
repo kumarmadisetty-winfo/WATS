@@ -4269,10 +4269,16 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				//waittext.click();
-			
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
-				List<WebElement> elements = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[contains(text(), 'You encountered some errors when trying to save this record')]"), 1));
-				int length = elements.size();
+				List<WebElement> elements = null;
+				int length = 0;
+				try {
+					elements = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//*[contains(text(), 'You encountered some errors when trying to save this record')]"), 1));
+					length = elements.size();
+				} catch (Exception e) {
+					logger.error(e, e);
+				}
+				
 				if (length >=2){
 					String scripNumber = fetchMetadataVO.getScriptNumber();
 					logger.error("got error during clickButton" + scripNumber);
@@ -4283,7 +4289,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				Thread.sleep(15000);
 				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 		
-				String scripNumber = fetchMetadataVO.getScriptNumber();
+   				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
 				String xpath = "//*[text()='param1']";
 				String scriptID = fetchMetadataVO.getScriptId();
@@ -8271,10 +8277,11 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						.xpath("(//*[text()='"+param1+"'])[1]/following::span[contains(text(),'"+param2+"')][1]"));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 				//waittext.click();
-				
+				Thread.sleep(5000);
+				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "(//*[text()='param1'])[1]/following::span[contains(text(),'param2')][1]";
