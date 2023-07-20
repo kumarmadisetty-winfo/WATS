@@ -56,25 +56,25 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			String objectStorePath = HISTORY + FORWARD_SLASH + scriptId;
 			FileUtil.createDir(localPath);
 			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath + FORWARD_SLASH);
-			if (listOfFiles.size()>0) {
-				listOfSortedFiles(listOfFiles);
-				scriptHistoryNumber = Integer.parseInt(Arrays.stream(listOfFiles.stream()
-						.findFirst()
-						.get().split("_"))
-						.skip(1).findFirst().get().replace(JSON, ""))+1;
-				updatedScriptMaterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
-				updatedScriptMaterVO.changeNullToNA();
-				scriptMasterVO.changeNullToNA();
-				if(!scriptMasterVO.equals(updatedScriptMaterVO)){
+			updatedScriptMaterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
+			updatedScriptMaterVO.changeNullToNA();
+			scriptMasterVO.changeNullToNA();
+			if(!scriptMasterVO.equals(updatedScriptMaterVO)){
+				if (listOfFiles.size()>0) {
+					listOfSortedFiles(listOfFiles);
+					scriptHistoryNumber = Integer.parseInt(Arrays.stream(listOfFiles.stream()
+							.findFirst()
+							.get().split("_"))
+							.skip(1).findFirst().get().replace(JSON, ""))+1;
+						saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+				} else {
+					scriptHistoryNumber = 1;
 					saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 				}
-				else {
-					logger.info("No change present for creating a new history");
-					return new ResponseDto(HttpStatus.CONFLICT.value(), Constants.WARNING, "No change present for creating a new history");
-				}
-			} else {
-				scriptHistoryNumber = 1;
-				saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+			}
+			else {
+				logger.info("No change present for creating a new history");
+				return new ResponseDto(HttpStatus.CONFLICT.value(), Constants.WARNING, "No change present for creating a new history");
 			}
 			logger.info("Successfully Saved Version History");
 			return new ResponseDto(200, Constants.SUCCESS, "Successfully saved the history!");
