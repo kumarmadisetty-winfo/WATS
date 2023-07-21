@@ -3,23 +3,22 @@ package com.winfo.serviceImpl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import com.winfo.constants.TestScriptExecServiceEnum;
+import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.FileUtil;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.FetchConfigVO;
-import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service
@@ -28,6 +27,9 @@ public class GenerateTestRunPDFService extends AbstractSeleniumKeywords {
 	@Autowired
 	DataBaseEntry dataBaseEntry;
 	
+	@Autowired
+	TestSetLinesRepository testSetLinesRepo;
+	
 	@Async
 	public void testRunPdfGeneration(String testSetId, FetchConfigVO fetchConfigVO) throws Exception {
 		try {
@@ -35,7 +37,8 @@ public class GenerateTestRunPDFService extends AbstractSeleniumKeywords {
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			List<ScriptDetailsDto> fetchMetadataListVOFinal = dataBaseEntry.getScriptDetailsListVO(testSetId, null, true,
 					false);
-			dataBaseEntry.setPassAndFailScriptCount(testSetId, fetchConfigVO);
+			fetchConfigVO.setPasscount(testSetLinesRepo.getScriptCountOfTestRun(testSetId,Constants.PASS));
+			fetchConfigVO.setFailcount(testSetLinesRepo.getScriptCountOfTestRun(testSetId,Constants.FAIL));
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 			createDir(screenShotFolderPath);

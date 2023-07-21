@@ -686,46 +686,7 @@ public class DataBaseEntryDao {
 		}
 		return result;
 	}
-
-	public void getPassAndFailScriptCount(String testRunId, FetchConfigVO fetchConfigVO) {
-		String sqlQuery = "select count(status) from win_ta_test_set_lines where test_set_id=" + testRunId
-				+ "and status='Fail'";
-		String sqlPassQuery = "select count(status) from win_ta_test_set_lines where test_set_id=" + testRunId
-				+ "and status='Pass'";
-
-		Session session = em.unwrap(Session.class);
-
-		Integer failCount = 0;
-		Integer passCount = 0;
-		try {
-			NativeQuery<BigDecimal> query = session.createSQLQuery(sqlQuery);
-
-			List<BigDecimal> results = query.list();
-			if (results != null && !results.isEmpty()) {
-
-				BigDecimal bigDecimal = results.get(0);
-				failCount = Integer.parseInt(bigDecimal.toString());
-			}
-		} catch (Exception e) {
-			throw new WatsEBSException(600, "Unable to read the fail count");
-		}
-		try {
-			NativeQuery<BigDecimal> query1 = session.createSQLQuery(sqlPassQuery);
-
-			List<BigDecimal> results1 = query1.list();
-			if (results1 != null && !results1.isEmpty()) {
-
-				BigDecimal bigDecimal1 = results1.get(0);
-				passCount = Integer.parseInt(bigDecimal1.toString());
-			}
-			fetchConfigVO.setFailcount(failCount);
-			fetchConfigVO.setPasscount(passCount);
-		} catch (Exception e) {
-			throw new WatsEBSException(600, "Unable to read the pass count");
-		}
-
-	}
-
+	
 	public CustomerProjectDto getCustomerDetails(String testSetId) {
 		CustomerProjectDto customerDetails = null;
 		String qry = CUSTOMER_DLT_QRY + testSetId;
