@@ -3952,10 +3952,11 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		try {
 			if (param1.equalsIgnoreCase("Primary Project Location")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				String xpath = "(//input[@placeholder='Project / Assignment']/following::div[contains(@class,'search') and not(@style)])[1]/following::*[@data-columnid='primaryLocationId'][1]";
 				wait.until(ExpectedConditions.presenceOfElementLocated(
-						By.xpath("(//*[@data-columnid='primaryLocationId'])[1]")));
+						By.xpath(xpath)));
 				WebElement waittext = driver.findElement(
-						By.xpath("(//*[@data-columnid='primaryLocationId'])[1]"));
+						By.xpath(xpath));
 				Actions actions = new Actions(driver);
 				//actions.moveToElement(waittext).build().perform();
 				waittext.click();
@@ -3965,7 +3966,6 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
-				String xpath = "(//*[@data-columnid='primaryLocationId'])[1]";
 				String scriptID = fetchMetadataVO.getScriptId();
 				String lineNumber = fetchMetadataVO.getLineNumber();
 				service.saveXpathParams(scriptID, lineNumber, xpath);
@@ -12412,36 +12412,30 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 			screenshotFail(driver, fetchMetadataVO, customerDetails);
 		}
 		try {
-			if (param1.equalsIgnoreCase("Primary Project Location")){
-				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[@data-columnid=\"primaryLocationId\"])[1]//input[1]")));
-				WebElement waittill = driver.findElement(By.xpath("(//*[@data-columnid=\"primaryLocationId\"])[1]//input[1]"));
-//				Actions actions = new Actions(driver);
-//				actions.moveToElement(waittill).build().perform();
-//				clearMethod(driver, waittill);
-				//waittill.clear();
-				//typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
-				//waittill.sendKeys(Keys.BACK_SPACE);
-				JavascriptExecutor jse1 = (JavascriptExecutor) driver;
-				jse1.executeScript("arguments[0].value=\"\";", waittill);
-				waittill.sendKeys(keysToSend);
-				//waittill.clear();
-				//waittill.sendKeys(keysToSend);
-				//screenshot(driver, fetchMetadataVO, customerDetails);
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
-				String xpath = "(//*[@data-columnid=\"primaryLocationId\"])[1]//input[1]";
-				String scriptID = fetchMetadataVO.getScriptId();
-				String lineNumber = fetchMetadataVO.getLineNumber();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
-				return keysToSend;
-			}
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during Close Date sendValue" + scripNumber);
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			System.out.println(e);
-		}
+            if (param1.equalsIgnoreCase("Primary Project Location")){
+                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//input[@placeholder='Project / Assignment']/following::div[contains(@class,'search') and not(@style)])[1]/following::*[@data-columnid='primaryLocationId'][1]//input[1]")));
+                WebElement waittill = driver.findElement(By.xpath("(//input[@placeholder='Project / Assignment']/following::div[contains(@class,'search') and not(@style)])[1]/following::*[@data-columnid='primaryLocationId'][1]//input[1]"));
+
+                JavascriptExecutor jse1 = (JavascriptExecutor) driver;
+                jse1.executeScript("arguments[0].value=\"\";", waittill);
+                waittill.click();
+                waittill.sendKeys(keysToSend);
+				Thread.sleep(1000);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+                String scripNumber = fetchMetadataVO.getScriptNumber();
+                logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+                String xpath = "(//input[@placeholder='Project / Assignment']/following::div[contains(@class,'search') and not(@style)])[1]/following::*[@data-columnid='primaryLocationId'][1]";
+                String scriptID = fetchMetadataVO.getScriptId();
+                String lineNumber = fetchMetadataVO.getLineNumber();
+                service.saveXpathParams(scriptID, lineNumber, xpath);
+                return keysToSend;
+            }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScriptNumber();
+            logger.error("Failed during Close Date sendValue" + scripNumber);
+            screenshotFail(driver, fetchMetadataVO, customerDetails);
+        }
 		try {
 			if (param1.equalsIgnoreCase("Mon")){
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
