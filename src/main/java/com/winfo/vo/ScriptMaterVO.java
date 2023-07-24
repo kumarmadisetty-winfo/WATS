@@ -152,8 +152,11 @@ public class ScriptMaterVO {
 		    scriptMetaDatalist.stream()
 		        .filter(metaData -> metaData.getAction() != null)
 		        .forEach(metaData -> {
-		            String updatedAction = dataBaseEntry.getMeaningByTargetCode(metaData.getAction(), "ACTION");
-		            metaData.setAction(updatedAction);
+		            metaData.setAction(dataBaseEntry.getMeaningByTargetCode(metaData.getAction(), "ACTION"));
+		            metaData.setValidationType(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationType(), "IP_VALIDATIONS"));
+		            metaData.setValidationType(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationName(), "API_VALIDATION"));
+		            metaData.setDatatypes(dataBaseEntry.getMeaningByTargetCode(metaData.getDatatypes(), "DATATYPES"));
+		            metaData.setUniqueMandatory(dataBaseEntry.getMeaningByTargetCode(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
 		        });
 		    scriptMetaDatalist.sort(Comparator.comparing(ScriptMetaDataVO::getLineNumber));
 		}
@@ -168,7 +171,10 @@ public class ScriptMaterVO {
 		scriptMetaDatalist.stream().filter(Objects::nonNull)
 				.forEach(metaData -> {
 					metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
-					metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
+		            metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS"));
+		            metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
+		            metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES"));
+		            metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
 					//TODO- Get lookup code from meaning for validation type, datatype, unique mandatory.
 				});
 		if (role != null) {
