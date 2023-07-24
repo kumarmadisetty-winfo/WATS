@@ -19048,6 +19048,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			int lastDateIndex = 3;
 			int itdRecognizedRevenueIndex = 5;
 			int invoicedAmountColumnIndex = 6;
+			int reclassificationAmountColumnIndex = 7;
 
 			Map<String, Double> mapOfITD = new HashMap<>();
 			Map<String, Double> mapOfRevenue = new HashMap<>();
@@ -19124,16 +19125,21 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 				String lastDate = getCellValueAsString(row.getCellOrNull(lastDateIndex));
 				double itdRecognizedRevenue = getCellValueAsDouble(row.getCellOrNull(itdRecognizedRevenueIndex));
 				double invoicedAmount = getCellValueAsDouble(row.getCellOrNull(invoicedAmountColumnIndex));
+				double reclassificationAmount = getCellValueAsDouble(row.getCellOrNull(reclassificationAmountColumnIndex));
 
-				if (resultMap.containsKey(contractLineNumber) && itdRecognizedRevenue != invoicedAmount && lastDate.isEmpty()) {
+				if (resultMap.containsKey(contractLineNumber) && itdRecognizedRevenue != invoicedAmount
+						&& lastDate.isEmpty()) {
 					String valueType = resultMap.get(contractLineNumber);
 					if (valueType.equals("ITD Recognized Revenue") && itdRecognizedRevenue > 0) {
-						insertTransaction(driver, fetchConfigVO, contractNumber,
-								contractLineNumber, itdRecognizedRevenue);
+						insertTransaction(driver, fetchConfigVO, contractNumber, contractLineNumber,
+								itdRecognizedRevenue);
 					} else if (valueType.equals("ITD Invoiced Amount") && invoicedAmount > 0) {
-						insertTransaction(driver, fetchConfigVO, contractNumber,
-								contractLineNumber, invoicedAmount);
+						insertTransaction(driver, fetchConfigVO, contractNumber, contractLineNumber, invoicedAmount);
 					}
+				} else if (!lastDate.isEmpty() && invoicedAmount > reclassificationAmount
+						&& reclassificationAmount > 0) {
+					insertTransaction(driver, fetchConfigVO, contractNumber, contractLineNumber,
+							invoicedAmount - reclassificationAmount);
 				}
 			}
 
