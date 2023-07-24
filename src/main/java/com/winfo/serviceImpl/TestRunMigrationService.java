@@ -53,7 +53,6 @@ public class TestRunMigrationService {
 	
 	public String webClientService(List<TestRunMigrationDto> listOfTestRunMigrate, String customerUrl)
 			throws JsonMappingException, JsonProcessingException {
-
 		logger.info("TestRun Migrate json data " + listOfTestRunMigrate);
 		WebClient webClient = WebClient.create(customerUrl + "/testRunMigrationToCustomer");
 		Mono<String> result = webClient.post().syncBody(listOfTestRunMigrate).retrieve().bodyToMono(String.class);
@@ -142,18 +141,18 @@ public class TestRunMigrationService {
 							lookUpCodeDataTypes.put(scriptMetaData.getDatatypes(),
 									dataBaseEntryDao.getLookupCode(DATATYPES, scriptMetaData.getDatatypes()));
 						}
-						if (!NA.equals(scriptMetaData.getUniqueMandatory())) {
+						if (scriptMetaData.getUniqueMandatory()!=null && !NA.equals(scriptMetaData.getUniqueMandatory())) {
 							lookUpCodeUnique.put(scriptMetaData.getUniqueMandatory().toUpperCase(), dataBaseEntryDao
 									.getLookupCode(UNIQUE_MANDATORY, scriptMetaData.getUniqueMandatory()));
 						}
 
-						if (!NA.equals(scriptMetaData.getValidationName())) {
+						if (scriptMetaData.getValidationName()!=null && !NA.equals(scriptMetaData.getValidationName())) {
 							validationMap.put(scriptMetaData.getValidationName(),
 									dataBaseEntryDao.getLookupCode(scriptMetaData.getValidationType().toUpperCase(),
 											scriptMetaData.getValidationName()));
 						}
 
-						if (!NA.equals(scriptMetaData.getValidationType())) {
+						if (scriptMetaData.getValidationType()!=null && !NA.equals(scriptMetaData.getValidationType())) {
 							lookUpDataMap.put(scriptMetaData.getValidationType(), dataBaseEntryDao
 									.getLookUp(scriptMetaData.getValidationType().toUpperCase(), validationMap));
 
