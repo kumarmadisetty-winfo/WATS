@@ -19136,7 +19136,7 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 					} else if (valueType.equals("ITD Invoiced Amount") && invoicedAmount > 0) {
 						insertTransaction(driver, fetchConfigVO, contractNumber, contractLineNumber, invoicedAmount);
 					}
-				} else if (!lastDate.isEmpty() && invoicedAmount > reclassificationAmount
+				} else if (!(lastDate.isEmpty()) && invoicedAmount > reclassificationAmount
 						&& reclassificationAmount > 0) {
 					insertTransaction(driver, fetchConfigVO, contractNumber, contractLineNumber,
 							invoicedAmount - reclassificationAmount);
