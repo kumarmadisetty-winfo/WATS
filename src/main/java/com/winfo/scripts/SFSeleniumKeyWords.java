@@ -3337,9 +3337,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
                 String scripNumber = fetchMetadataVO.getScriptNumber();
                 logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
                 String xpath = "//*[text()='param1']/following::button[text()='param2'][1]";
-                String scriptID = fetchMetadataVO.getScriptId();
-                String lineNumber = fetchMetadataVO.getLineNumber();
-                service.saveXpathParams(scriptID, lineNumber, xpath);
+                service.saveXpathParams(fetchMetadataVO.getScriptId(), fetchMetadataVO.getLineNumber(), xpath);
                 return;
             }
         } catch (Exception e) {
@@ -3363,9 +3361,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
                 String scripNumber = fetchMetadataVO.getScriptNumber();
                 logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
                 String xpath = "//*[text()='param1']/following::button[text()='param2'][1]";
-                String scriptID = fetchMetadataVO.getScriptId();
-                String lineNumber = fetchMetadataVO.getLineNumber();
-                service.saveXpathParams(scriptID, lineNumber, xpath);
+                service.saveXpathParams(fetchMetadataVO.getScriptId(), fetchMetadataVO.getLineNumber(), xpath);
                 return;
             }
         } catch (Exception e) {
@@ -3389,9 +3385,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
                 String scripNumber = fetchMetadataVO.getScriptNumber();
                 logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
                 String xpath = "//*[text()='param1']";
-                String scriptID = fetchMetadataVO.getScriptId();
-                String lineNumber = fetchMetadataVO.getLineNumber();
-                service.saveXpathParams(scriptID, lineNumber, xpath);
+                service.saveXpathParams(fetchMetadataVO.getScriptId(), fetchMetadataVO.getLineNumber(), xpath);
                 return;
             }
         } catch (Exception e) {
@@ -3416,9 +3410,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
                 String scripNumber = fetchMetadataVO.getScriptNumber();
                 logger.info("Sucessfully Clicked Republish clickButton" + scripNumber);
                 String xpath = "//a[@data-qtip='Create Assignments']//span[contains(@aria-labelledby,'resourcerequestbutton') and @aria-hidden='false']";
-                String scriptID = fetchMetadataVO.getScriptId();
-                String lineNumber = fetchMetadataVO.getLineNumber();
-                service.saveXpathParams(scriptID, lineNumber, xpath);
+                service.saveXpathParams(fetchMetadataVO.getScriptId(), fetchMetadataVO.getLineNumber(), xpath);
                 return;
             }
         } catch (Exception e) {
@@ -7805,9 +7797,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked  clickButton" + scripNumber);
 				String xpath = "(//span[starts-with(text(),'RR-')])[1]";
-				String scriptID = fetchMetadataVO.getScriptId();
-				String lineNumber = fetchMetadataVO.getLineNumber();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
+				service.saveXpathParams(fetchMetadataVO.getScriptId(), fetchMetadataVO.getLineNumber(), xpath);
 				return;
 			}
 		} catch (Exception e) {
@@ -10723,10 +10713,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 						logger.info("Sucessfully Clicked Address Purpose clickCheckbox" + scripNumber);
 						String params = param1;
 						String xpath = "//*[text()='param1']/following::*[text()='keysToSend']/preceding::input[1]";
-						String scriptID = fetchMetadataVO.getScriptId();
-						String lineNumber = fetchMetadataVO.getLineNumber();
-						service.saveXpathParams(scriptID, lineNumber, xpath);
-
+						service.saveXpathParams(fetchMetadataVO.getScriptId(), fetchMetadataVO.getLineNumber(), xpath);
 						return;
 					}
 				} catch (Exception e) {
@@ -11963,9 +11950,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
 				String xpath = "(//td[contains(@class,'weekDay3')])[1]//input[1]";
-				String scriptID = fetchMetadataVO.getScriptId();
-				String lineNumber = fetchMetadataVO.getLineNumber();
-				service.saveXpathParams(scriptID, lineNumber, xpath);
+				service.saveXpathParams(fetchMetadataVO.getScriptId(), fetchMetadataVO.getLineNumber(), xpath);
 				return keysToSend;
 			}
 		} catch (Exception e) {
