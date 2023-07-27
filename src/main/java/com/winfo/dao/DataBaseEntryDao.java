@@ -835,10 +835,10 @@ public class DataBaseEntryDao {
 				scriptDetailsDto.setIssueKey(
 						NULL_STRING.equals(String.valueOf(obj[21])) ? null : String.valueOf(obj[21]));
 				
-				scriptDetailsDto.setUniqueMandatory(
+				scriptDetailsDto.setOracleReleaseYear(
 						NULL_STRING.equals(String.valueOf(obj[22])) ? null : String.valueOf(obj[22]));
 				
-				scriptDetailsDto.setOracleReleaseYear(
+				scriptDetailsDto.setUniqueMandatory(
 						NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
 				
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
