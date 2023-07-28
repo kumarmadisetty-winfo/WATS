@@ -194,10 +194,10 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 				updatedScriptMetaData.setDatatypes(metaData.getDatatypes());
 			} else {
 				updatedScriptMetaData = modelMapper.map(metaData, ScriptMetaData.class);
-				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
 				updatedScriptMetaData.setScriptNumber(updatedScriptDetails.getScriptNumber());
-				ScriptMetaData newObject = dataBaseEntry.saveScriptMetaData(updatedScriptMetaData);
+				dataBaseEntry.saveScriptMetaData(updatedScriptMetaData);
 			}
+			updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
 			scriptMetaDatalist.add(updatedScriptMetaData);
 		}
 				
