@@ -181,8 +181,8 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		ModelMapper modelMapper = new ModelMapper();
 		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
 		updatedScriptDetails.setScriptId(scriptId);
-		List<ScriptMetaData> scriptMetaDatalist=new ArrayList<ScriptMetaData>();
-		for (ScriptMetaDataVO metaData : updatedScriptMasterVO.getScriptMetaDatalist()) {
+		
+		updatedScriptDetails.setScriptMetaDatalist(updatedScriptMasterVO.getScriptMetaDatalist().parallelStream().map(metaData-> {		
 			ScriptMetaData updatedScriptMetaData =dataBaseEntry.getScriptMetaData(metaData.getLineNumber(),scriptMaster);
 			if (updatedScriptMetaData != null) {
 				updatedScriptMetaData.setStepDesc(metaData.getStepDesc());
@@ -192,43 +192,24 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 				updatedScriptMetaData.setValidationName(metaData.getValidationName());
 				updatedScriptMetaData.setUniqueMandatory(metaData.getUniqueMandatory());
 				updatedScriptMetaData.setDatatypes(metaData.getDatatypes());
+				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
 			} else {
 				updatedScriptMetaData = modelMapper.map(metaData, ScriptMetaData.class);
 				updatedScriptMetaData.setScriptNumber(updatedScriptDetails.getScriptNumber());
+				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
 				dataBaseEntry.saveScriptMetaData(updatedScriptMetaData);
 			}
-			updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
-			scriptMetaDatalist.add(updatedScriptMetaData);
-		}
-				
-//			List<ScriptMetaData> scriptMetaDatalist=updatedScriptMasterVO.getScriptMetaDatalist().stream().map(metaData-> {		
-//			ScriptMetaData updatedScriptMetaData =dataBaseEntry.getScriptMetaData(metaData.getLineNumber(),scriptMaster);
-//			System.out.println(updatedScriptMetaData.toString());
-//			if(updatedScriptMetaData!=null) {
-//				updatedScriptMetaData.setStepDesc(metaData.getStepDesc());
-//				updatedScriptMetaData.setInputParameter(metaData.getInputParameter());
-//				updatedScriptMetaData.setAction(metaData.getAction());
-//				updatedScriptMetaData.setValidationType(metaData.getValidationType());
-//				updatedScriptMetaData.setValidationName(metaData.getValidationName());
-//				updatedScriptMetaData.setUniqueMandatory(metaData.getUniqueMandatory());
-//				updatedScriptMetaData.setDatatypes(metaData.getDatatypes());
-//				}
-//			else {
-//				updatedScriptMetaData = modelMapper.map(metaData, ScriptMetaData.class);
-//				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
-//				updatedScriptMetaData.setScriptNumber(updatedScriptDetails.getScriptNumber());
-//				ScriptMetaData newObject=dataBaseEntry.saveScriptMetaData(updatedScriptMetaData);
-//				System.out.println(newObject);				
-//			}
-//			return updatedScriptMetaData;
-//		}).collect(Collectors.toList());
-		updatedScriptDetails.setScriptMetaDatalist(scriptMetaDatalist);
+			return updatedScriptMetaData;
+		}).collect(Collectors.toList()));
 		
-		List<ScriptMetaData> deletedScriptMetaData = scriptMaster.getScriptMetaDatalist().stream()
+		List<ScriptMetaData> deletedScriptMetaData = scriptMaster.getScriptMetaDatalist().parallelStream()
 				.filter(element -> !updatedScriptDetails.getScriptMetaDatalist().contains(element))
 				.collect(Collectors.toList());
 		
 		dataBaseEntry.saveScriptDetails(updatedScriptDetails);
+		updatedScriptDetails.getScriptMetaDatalist().stream().forEach(updatedMetaData -> {
+			dataBaseEntry.updateScriptParam(updatedMetaData);
+		});
 		if(deletedScriptMetaData.size()>0) {
 			deletedScriptMetaData.parallelStream().forEach(deleteddMetaData -> {
 				dataBaseEntry.deletecriptParam(deleteddMetaData);

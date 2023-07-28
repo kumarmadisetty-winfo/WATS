@@ -591,10 +591,32 @@ public class DataBaseEntry {
 	}
 	
 	public Integer updateScriptParam(ScriptMetaData updatedMetaData) {
-		return testSetScriptParamRepository.updateScriptParam(updatedMetaData.getDatatypes(), updatedMetaData.getUniqueMandatory(), 
-				updatedMetaData.getValidationType(),updatedMetaData.getValidationName(),updatedMetaData.getLineNumber(),
-				updatedMetaData.getInputParameter(),updatedMetaData.getAction() ,updatedMetaData.getStepDesc(),
-				updatedMetaData.getScriptMaster().getScriptId(),updatedMetaData.getScriptMetaDataId());
+		
+		List<TestSetLine> listOfTestSetLines=testSetLinesRepository.findByScriptId(updatedMetaData.getScriptMaster().getScriptId());
+		if(listOfTestSetLines.size()>0) {
+			long isScriptStepExistInTestRun=testSetScriptParamRepository.countByScriptIdAndMetadataId(updatedMetaData.getScriptMaster().getScriptId()
+					,updatedMetaData.getScriptMetaDataId());
+			if(isScriptStepExistInTestRun>0) {
+				testSetScriptParamRepository.updateScriptParam(updatedMetaData.getDatatypes(), updatedMetaData.getUniqueMandatory(), 
+						updatedMetaData.getValidationType(),updatedMetaData.getValidationName(),updatedMetaData.getLineNumber(),
+						updatedMetaData.getInputParameter(),updatedMetaData.getAction() ,updatedMetaData.getStepDesc(),
+						updatedMetaData.getScriptMaster().getScriptId(),updatedMetaData.getScriptMetaDataId());				
+			}
+			else {
+//				listOfTestSetLines.parallelStream().forEach(testSetLine->{
+//					testSetScriptParamRepository.updateScriptParam(updatedMetaData.getDatatypes(), updatedMetaData.getUniqueMandatory(), 
+//							updatedMetaData.getValidationType(),updatedMetaData.getValidationName(),updatedMetaData.getLineNumber(),
+//							updatedMetaData.getInputParameter(),updatedMetaData.getAction() ,updatedMetaData.getStepDesc(),
+//							updatedMetaData.getScriptMaster().getScriptId(),updatedMetaData.getScriptMetaDataId());	
+//				});
+			}
+		}
+		return 0;
+	}
+	
+	public List<TestSetScriptParam> getListOfScriptParam(ScriptMetaData updatedMetaData) {
+		return testSetScriptParamRepository.findByScriptIdAndMetadataId(updatedMetaData.getScriptMaster().getScriptId(),
+				updatedMetaData.getScriptMetaDataId());
 	}
 	
 	public Integer deletecriptParam(ScriptMetaData updatedMetaData) {
