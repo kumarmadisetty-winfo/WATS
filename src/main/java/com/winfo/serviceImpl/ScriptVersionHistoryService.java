@@ -223,16 +223,16 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 //			return updatedScriptMetaData;
 //		}).collect(Collectors.toList());
 		updatedScriptDetails.setScriptMetaDatalist(scriptMetaDatalist);
-		dataBaseEntry.saveScriptDetails(updatedScriptDetails);
-		updatedScriptDetails.getScriptMetaDatalist().stream().forEach(updatedMetaData -> {
-			dataBaseEntry.updateScriptParam(updatedMetaData);
-		});
+		
 		List<ScriptMetaData> deletedScriptMetaData = scriptMaster.getScriptMetaDatalist().stream()
-                .filter(element -> !updatedScriptDetails.getScriptMetaDatalist().contains(element))
-                .collect(Collectors.toList());
+				.filter(element -> !updatedScriptDetails.getScriptMetaDatalist().contains(element))
+				.collect(Collectors.toList());
+		
+		dataBaseEntry.saveScriptDetails(updatedScriptDetails);
 		if(deletedScriptMetaData.size()>0) {
 			deletedScriptMetaData.parallelStream().forEach(deleteddMetaData -> {
 				dataBaseEntry.deletecriptParam(deleteddMetaData);
+				dataBaseEntry.deleteScriptMetaData(deleteddMetaData.getLineNumber(),updatedScriptDetails);
 			});			
 		}
 	}
