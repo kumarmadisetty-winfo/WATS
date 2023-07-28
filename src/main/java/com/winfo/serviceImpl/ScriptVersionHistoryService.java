@@ -9,28 +9,37 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
 import com.winfo.utils.Constants;
 import com.winfo.utils.FileUtil;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptMaterVO;
+import com.winfo.vo.ScriptMetaDataVO;
 import com.winfo.vo.VersionHistoryDto;
 
 @Service
@@ -42,7 +51,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
 
-	public ResponseDto saveVersionHistory(Integer scriptId,ScriptMaterVO updatedScriptMaterVO) throws Exception {
+	public ResponseDto saveVersionHistory(Integer scriptId,ScriptMaterVO updatedScriptMasterVO) throws Exception {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -56,10 +65,10 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			String objectStorePath = HISTORY + FORWARD_SLASH + scriptId;
 			FileUtil.createDir(localPath);
 			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath + FORWARD_SLASH);
-			updatedScriptMaterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
-			updatedScriptMaterVO.changeNullToNA();
+			updatedScriptMasterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
+			updatedScriptMasterVO.changeNullToNA();
 			scriptMasterVO.changeNullToNA();
-			if(!scriptMasterVO.equals(updatedScriptMaterVO)){
+			if(!scriptMasterVO.equals(updatedScriptMasterVO)){
 				if (listOfFiles.size()>0) {
 					listOfSortedFiles(listOfFiles);
 					scriptHistoryNumber = Integer.parseInt(Arrays.stream(listOfFiles.stream()
@@ -67,10 +76,12 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 							.get().split("_"))
 							.skip(1).findFirst().get().replace(JSON, ""))+1;
 						saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+						
 				} else {
 					scriptHistoryNumber = 1;
-					saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 				}
+				saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+				updateScriptParam(scriptId,scriptMaster,updatedScriptMasterVO);
 			}
 			else {
 				logger.info("No change present for creating a new history");
@@ -166,4 +177,63 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		}
 	}
 
+	public void updateScriptParam(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
+		ModelMapper modelMapper = new ModelMapper();
+		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
+		updatedScriptDetails.setScriptId(scriptId);
+		List<ScriptMetaData> scriptMetaDatalist=new ArrayList<ScriptMetaData>();
+		for (ScriptMetaDataVO metaData : updatedScriptMasterVO.getScriptMetaDatalist()) {
+			ScriptMetaData updatedScriptMetaData =dataBaseEntry.getScriptMetaData(metaData.getLineNumber(),scriptMaster);
+			if (updatedScriptMetaData != null) {
+				updatedScriptMetaData.setStepDesc(metaData.getStepDesc());
+				updatedScriptMetaData.setInputParameter(metaData.getInputParameter());
+				updatedScriptMetaData.setAction(metaData.getAction());
+				updatedScriptMetaData.setValidationType(metaData.getValidationType());
+				updatedScriptMetaData.setValidationName(metaData.getValidationName());
+				updatedScriptMetaData.setUniqueMandatory(metaData.getUniqueMandatory());
+				updatedScriptMetaData.setDatatypes(metaData.getDatatypes());
+			} else {
+				updatedScriptMetaData = modelMapper.map(metaData, ScriptMetaData.class);
+				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
+				updatedScriptMetaData.setScriptNumber(updatedScriptDetails.getScriptNumber());
+				ScriptMetaData newObject = dataBaseEntry.saveScriptMetaData(updatedScriptMetaData);
+			}
+			scriptMetaDatalist.add(updatedScriptMetaData);
+		}
+				
+//			List<ScriptMetaData> scriptMetaDatalist=updatedScriptMasterVO.getScriptMetaDatalist().stream().map(metaData-> {		
+//			ScriptMetaData updatedScriptMetaData =dataBaseEntry.getScriptMetaData(metaData.getLineNumber(),scriptMaster);
+//			System.out.println(updatedScriptMetaData.toString());
+//			if(updatedScriptMetaData!=null) {
+//				updatedScriptMetaData.setStepDesc(metaData.getStepDesc());
+//				updatedScriptMetaData.setInputParameter(metaData.getInputParameter());
+//				updatedScriptMetaData.setAction(metaData.getAction());
+//				updatedScriptMetaData.setValidationType(metaData.getValidationType());
+//				updatedScriptMetaData.setValidationName(metaData.getValidationName());
+//				updatedScriptMetaData.setUniqueMandatory(metaData.getUniqueMandatory());
+//				updatedScriptMetaData.setDatatypes(metaData.getDatatypes());
+//				}
+//			else {
+//				updatedScriptMetaData = modelMapper.map(metaData, ScriptMetaData.class);
+//				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
+//				updatedScriptMetaData.setScriptNumber(updatedScriptDetails.getScriptNumber());
+//				ScriptMetaData newObject=dataBaseEntry.saveScriptMetaData(updatedScriptMetaData);
+//				System.out.println(newObject);				
+//			}
+//			return updatedScriptMetaData;
+//		}).collect(Collectors.toList());
+		updatedScriptDetails.setScriptMetaDatalist(scriptMetaDatalist);
+		dataBaseEntry.saveScriptDetails(updatedScriptDetails);
+		updatedScriptDetails.getScriptMetaDatalist().stream().forEach(updatedMetaData -> {
+			dataBaseEntry.updateScriptParam(updatedMetaData);
+		});
+		List<ScriptMetaData> deletedScriptMetaData = scriptMaster.getScriptMetaDatalist().stream()
+                .filter(element -> !updatedScriptDetails.getScriptMetaDatalist().contains(element))
+                .collect(Collectors.toList());
+		if(deletedScriptMetaData.size()>0) {
+			deletedScriptMetaData.parallelStream().forEach(deleteddMetaData -> {
+				dataBaseEntry.deletecriptParam(deleteddMetaData);
+			});			
+		}
+	}
 }

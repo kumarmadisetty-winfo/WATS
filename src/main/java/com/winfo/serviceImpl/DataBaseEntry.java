@@ -27,6 +27,7 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Customer;
 import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
@@ -34,8 +35,10 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.repository.CustomerRepository;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.repository.ScriptMetaDataRepository;
 import com.winfo.repository.SubscriptionRepository;
 import com.winfo.repository.TestSetLinesRepository;
+import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
@@ -68,6 +71,9 @@ public class DataBaseEntry {
 	SubscriptionRepository subscriptionRepository;
 	
 	@Autowired
+	TestSetScriptParamRepository testSetScriptParamRepository;
+
+	@Autowired
 	ApplicationContext appContext;
 	
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
@@ -78,6 +84,9 @@ public class DataBaseEntry {
 	@Autowired
 	private ScriptMasterRepository scriptMasterRepository;
 	
+	@Autowired
+	ScriptMetaDataRepository scriptMetaDataRepository;
+
 	@Autowired
 	private TestSetLinesRepository testSetLinesRepository;
 	
@@ -565,6 +574,29 @@ public class DataBaseEntry {
 
 	public ScriptMaster getScriptDetailsByScriptId(Integer scriptId) {
 		return scriptMasterRepository.findById(scriptId).get();
+	}
+	
+	public ScriptMaster saveScriptDetails(ScriptMaster scriptDetails) {
+		return scriptMasterRepository.save(scriptDetails);
+	}
+	
+	public ScriptMetaData saveScriptMetaData(ScriptMetaData scriptMetaData) {
+		return scriptMetaDataRepository.save(scriptMetaData);
+	}
+	public ScriptMetaData getScriptMetaData(int lineNumber,ScriptMaster scriptDetails) {
+		return scriptMetaDataRepository.findByLineNumberAndScriptMaster(lineNumber, scriptDetails);
+	}
+	
+	public Integer updateScriptParam(ScriptMetaData updatedMetaData) {
+		return testSetScriptParamRepository.updateScriptParam(updatedMetaData.getDatatypes(), updatedMetaData.getUniqueMandatory(), 
+				updatedMetaData.getValidationType(),updatedMetaData.getValidationName(),updatedMetaData.getLineNumber(),
+				updatedMetaData.getInputParameter(),updatedMetaData.getAction() ,updatedMetaData.getStepDesc(),
+				updatedMetaData.getScriptMaster().getScriptId(),updatedMetaData.getScriptMetaDataId());
+	}
+	
+	public Integer deletecriptParam(ScriptMetaData updatedMetaData) {
+		return testSetScriptParamRepository.deleteByScriptIdAndMetadataId(updatedMetaData.getScriptMaster().getScriptId(),
+				updatedMetaData.getScriptMetaDataId());
 	}
 	
 	public String getDirectoryPath() {
