@@ -133,9 +133,13 @@ public class SmartBearService {
 						.getProductVersion().replace("R13", "").trim()
 				+ "/"
 				+ databaseEntry.getScriptDetailsByScriptId(Integer.parseInt(fetchMetadataListVO.get(0).getScriptId()))
-						.getProcessArea();
+						.getProcessArea()
+				+ "/"
+				+ databaseEntry.getScriptDetailsByScriptId(Integer.parseInt(fetchMetadataListVO.get(0).getScriptId()))
+						.getModule();
 		Map<String, Object> scripts = callApi(smartBearVersion1Url + PROJECTS_PATH + projectId
-				+ "/tests/?Filter=(active=true) and (folder_name = '" + folderName + "')", HttpMethodConstants.GET, null);
+				+ "/tests/?Filter=(active=true) and (folder_name = '" + folderName + "')", HttpMethodConstants.GET,
+				null);
 
 		Optional<Map<String, Object>> optionalScript = ((List<Map<String, Object>>) scripts.get(RESULTS)).stream()
 				.filter(map -> ((List<Map<String, Object>>) map.get("custom_fields")).stream()
