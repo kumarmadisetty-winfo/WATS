@@ -590,7 +590,7 @@ public class DataBaseEntry {
 		return scriptMetaDataRepository.deleteByLineNumberAndScriptMaster(lineNumber, scriptDetails);
 	}
 	
-	public Integer updateScriptParam(ScriptMetaData updatedMetaData) {
+	public void updateScriptParam(ScriptMetaData updatedMetaData) {
 		
 		List<TestSetLine> listOfTestSetLines=testSetLinesRepository.findByScriptId(updatedMetaData.getScriptMaster().getScriptId());
 		if(listOfTestSetLines.size()>0) {
@@ -603,15 +603,24 @@ public class DataBaseEntry {
 						updatedMetaData.getScriptMaster().getScriptId(),updatedMetaData.getScriptMetaDataId());				
 			}
 			else {
-//				listOfTestSetLines.parallelStream().forEach(testSetLine->{
-//					testSetScriptParamRepository.updateScriptParam(updatedMetaData.getDatatypes(), updatedMetaData.getUniqueMandatory(), 
-//							updatedMetaData.getValidationType(),updatedMetaData.getValidationName(),updatedMetaData.getLineNumber(),
-//							updatedMetaData.getInputParameter(),updatedMetaData.getAction() ,updatedMetaData.getStepDesc(),
-//							updatedMetaData.getScriptMaster().getScriptId(),updatedMetaData.getScriptMetaDataId());	
-//				});
+				listOfTestSetLines.parallelStream().forEach(testSetLine->{
+					TestSetScriptParam testSetScriptParam=new TestSetScriptParam();
+					testSetScriptParam.setScriptNumber(testSetLine.getScriptNumber());
+					testSetScriptParam.setAction(updatedMetaData.getAction());
+					testSetScriptParam.setDataTypes(updatedMetaData.getDatatypes());
+					testSetScriptParam.setUniqueMandatory(updatedMetaData.getUniqueMandatory());
+					testSetScriptParam.setValidationType(updatedMetaData.getValidationType());
+					testSetScriptParam.setValidationName(updatedMetaData.getValidationName());
+					testSetScriptParam.setLineNumber(updatedMetaData.getLineNumber());
+					testSetScriptParam.setInputParameter(updatedMetaData.getInputParameter());
+					testSetScriptParam.setTestRunParamDesc(updatedMetaData.getStepDesc());
+					testSetScriptParam.setMetadataId(updatedMetaData.getScriptMetaDataId());
+					testSetScriptParam.setScriptId(testSetLine.getScriptId());
+					testSetScriptParam.setTestSetLine(testSetLine);
+					testSetScriptParamRepository.save(testSetScriptParam);
+				});
 			}
 		}
-		return 0;
 	}
 	
 	public List<TestSetScriptParam> getListOfScriptParam(ScriptMetaData updatedMetaData) {

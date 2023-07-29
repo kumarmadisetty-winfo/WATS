@@ -81,7 +81,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 					scriptHistoryNumber = 1;
 				}
 				saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
-				updateScriptParam(scriptId,scriptMaster,updatedScriptMasterVO);
+				updateScript(scriptId,scriptMaster,updatedScriptMasterVO);
 			}
 			else {
 				logger.info("No change present for creating a new history");
@@ -177,7 +177,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public void updateScriptParam(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
+	public void updateScript(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
 		ModelMapper modelMapper = new ModelMapper();
 		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
 		updatedScriptDetails.setScriptId(scriptId);
