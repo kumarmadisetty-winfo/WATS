@@ -11,7 +11,6 @@ import com.winfo.model.ScriptMaster;
 public interface ScriptMetaDataRepository extends JpaRepository<ScriptMetaData, Integer> {
 
 	ScriptMetaData findByLineNumberAndScriptMaster(Integer lineNumber,ScriptMaster scriptMaster);
-  
-	Integer deleteByLineNumberAndScriptMaster(Integer lineNumber,ScriptMaster scriptMaster);
 	
+	Integer deleteByScriptMetaDataId(Integer metaDataId);
 }

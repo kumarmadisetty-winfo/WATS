@@ -586,8 +586,8 @@ public class DataBaseEntry {
 	public ScriptMetaData getScriptMetaData(int lineNumber,ScriptMaster scriptDetails) {
 		return scriptMetaDataRepository.findByLineNumberAndScriptMaster(lineNumber, scriptDetails);
 	}
-	public Integer deleteScriptMetaData(int lineNumber,ScriptMaster scriptDetails) {
-		return scriptMetaDataRepository.deleteByLineNumberAndScriptMaster(lineNumber, scriptDetails);
+	public Integer deleteScriptMetaData(int metaDataId) {
+		return scriptMetaDataRepository.deleteByScriptMetaDataId(metaDataId);
 	}
 	
 	public void updateScriptParam(ScriptMetaData updatedMetaData) {

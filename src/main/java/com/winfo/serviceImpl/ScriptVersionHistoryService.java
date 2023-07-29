@@ -27,6 +27,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -177,6 +178,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		}
 	}
 
+//	@Transactional
 	public void updateScript(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
 		ModelMapper modelMapper = new ModelMapper();
 		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
@@ -203,7 +205,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		}).collect(Collectors.toList()));
 		
 		List<ScriptMetaData> deletedScriptMetaData = scriptMaster.getScriptMetaDatalist().parallelStream()
-				.filter(element -> !updatedScriptDetails.getScriptMetaDatalist().contains(element))
+				.filter(metaData -> !updatedScriptDetails.getScriptMetaDatalist().contains(metaData))
 				.collect(Collectors.toList());
 		
 		dataBaseEntry.saveScriptDetails(updatedScriptDetails);
@@ -213,7 +215,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		if(deletedScriptMetaData.size()>0) {
 			deletedScriptMetaData.parallelStream().forEach(deleteddMetaData -> {
 				dataBaseEntry.deletecriptParam(deleteddMetaData);
-				dataBaseEntry.deleteScriptMetaData(deleteddMetaData.getLineNumber(),updatedScriptDetails);
+				dataBaseEntry.deleteScriptMetaData(deleteddMetaData.getScriptMetaDataId());
 			});			
 		}
 	}
