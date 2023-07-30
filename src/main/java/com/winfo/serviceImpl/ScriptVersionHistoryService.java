@@ -178,7 +178,6 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		}
 	}
 
-//	@Transactional
 	public void updateScript(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
 		ModelMapper modelMapper = new ModelMapper();
 		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
@@ -204,12 +203,15 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			return updatedScriptMetaData;
 		}).collect(Collectors.toList()));
 		
+		List<Integer> listOfOldLineNumber = scriptMaster.getScriptMetaDatalist().parallelStream().map(ScriptMetaData::getLineNumber).collect(Collectors.toList());
+		List<Integer> listOfNewLineNumber = updatedScriptDetails.getScriptMetaDatalist().parallelStream().map(ScriptMetaData::getLineNumber).collect(Collectors.toList());
+		List<Integer> deletedLineNumber = listOfOldLineNumber.parallelStream()
+				.filter(lineNumber -> !listOfNewLineNumber.contains(lineNumber)).collect(Collectors.toList());
 		List<ScriptMetaData> deletedScriptMetaData = scriptMaster.getScriptMetaDatalist().parallelStream()
-				.filter(metaData -> !updatedScriptDetails.getScriptMetaDatalist().contains(metaData))
-				.collect(Collectors.toList());
+				.filter(metaData -> deletedLineNumber.contains(metaData.getLineNumber())).collect(Collectors.toList());
 		
 		dataBaseEntry.saveScriptDetails(updatedScriptDetails);
-		updatedScriptDetails.getScriptMetaDatalist().stream().forEach(updatedMetaData -> {
+		updatedScriptDetails.getScriptMetaDatalist().parallelStream().forEach(updatedMetaData -> {
 			dataBaseEntry.updateScriptParam(updatedMetaData);
 		});
 		if(deletedScriptMetaData.size()>0) {
