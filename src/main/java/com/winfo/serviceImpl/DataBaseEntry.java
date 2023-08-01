@@ -599,8 +599,8 @@ public class DataBaseEntry {
 			if(isScriptStepExistInTestRun>0) {
 				testSetScriptParamRepository.updateScriptParam(updatedMetaData.getDatatypes(), updatedMetaData.getUniqueMandatory(), 
 						updatedMetaData.getValidationType(),updatedMetaData.getValidationName(),updatedMetaData.getLineNumber(),
-						updatedMetaData.getInputParameter(),updatedMetaData.getAction() ,updatedMetaData.getStepDesc(),
-						updatedMetaData.getScriptMaster().getScriptId(),updatedMetaData.getScriptMetaDataId());				
+						updatedMetaData.getInputParameter(),updatedMetaData.getAction() ,updatedMetaData.getStepDesc(),updatedMetaData.getUpdatedBy(),
+						updatedMetaData.getScriptMaster().getScriptId(),updatedMetaData.getScriptMetaDataId());			
 			}
 			else {
 				listOfTestSetLines.parallelStream().forEach(testSetLine->{
@@ -615,6 +615,8 @@ public class DataBaseEntry {
 					testSetScriptParam.setInputParameter(updatedMetaData.getInputParameter());
 					testSetScriptParam.setTestRunParamDesc(updatedMetaData.getStepDesc());
 					testSetScriptParam.setMetadataId(updatedMetaData.getScriptMetaDataId());
+					testSetScriptParam.setCreatedBy(updatedMetaData.getCreatedBy());
+					testSetScriptParam.setCreationDate(updatedMetaData.getCreationDate());
 					testSetScriptParam.setScriptId(testSetLine.getScriptId());
 					testSetScriptParam.setTestSetLine(testSetLine);
 					testSetScriptParamRepository.save(testSetScriptParam);

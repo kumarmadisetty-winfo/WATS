@@ -7,10 +7,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -69,7 +71,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			updatedScriptMasterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
 			updatedScriptMasterVO.changeNullToNA();
 			scriptMasterVO.changeNullToNA();
-			if(!scriptMasterVO.equals(updatedScriptMasterVO)){
+			if(!scriptMasterVO.equals(updatedScriptMasterVO) || !scriptMasterVO.getScriptMetaDatalist().equals(updatedScriptMasterVO.getScriptMetaDatalist())){
 				if (listOfFiles.size()>0) {
 					listOfSortedFiles(listOfFiles);
 					scriptHistoryNumber = Integer.parseInt(Arrays.stream(listOfFiles.stream()
@@ -181,8 +183,8 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	public void updateScript(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
 		ModelMapper modelMapper = new ModelMapper();
 		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
+		updatedScriptDetails.setUpdateDate(new Date(Calendar.getInstance().getTime().getTime()));
 		updatedScriptDetails.setScriptId(scriptId);
-		
 		updatedScriptDetails.setScriptMetaDatalist(updatedScriptMasterVO.getScriptMetaDatalist().parallelStream().map(metaData-> {		
 			ScriptMetaData updatedScriptMetaData =dataBaseEntry.getScriptMetaData(metaData.getLineNumber(),scriptMaster);
 			if (updatedScriptMetaData != null) {
@@ -193,10 +195,14 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 				updatedScriptMetaData.setValidationName(metaData.getValidationName());
 				updatedScriptMetaData.setUniqueMandatory(metaData.getUniqueMandatory());
 				updatedScriptMetaData.setDatatypes(metaData.getDatatypes());
+ 				updatedScriptMetaData.setUpdatedBy(metaData.getUpdatedBy());
+				updatedScriptMetaData.setUpdateDate(updatedScriptDetails.getUpdateDate());
 				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
 			} else {
 				updatedScriptMetaData = modelMapper.map(metaData, ScriptMetaData.class);
 				updatedScriptMetaData.setScriptNumber(updatedScriptDetails.getScriptNumber());
+				updatedScriptMetaData.setCreatedBy(metaData.getCreatedBy());
+				updatedScriptMetaData.setCreationDate(updatedScriptDetails.getUpdateDate());
 				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
 				dataBaseEntry.saveScriptMetaData(updatedScriptMetaData);
 			}

@@ -14,10 +14,11 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	@Modifying
 	@Query("UPDATE TestSetScriptParam SET lineNumber = :lineNumber, inputParameter = :inputParameter,"
 			+ " action = :action, testRunParamDesc = :testRunParamDesc ,validationType = :validationType,"
-			+ "validationName = :validationName, dataTypes = :dataTypes, uniqueMandatory = :uniqueMandatory "
+			+ "validationName = :validationName, dataTypes = :dataTypes, uniqueMandatory = :uniqueMandatory,"
+			+ " lastUpdatedBy =:updatedBy, updateDate=sysdate "
 			+ "WHERE  metadataId = :metadataId AND scriptId = :scriptId")
 	Integer updateScriptParam(String dataTypes, String uniqueMandatory, String validationType,String validationName, 
-			Integer lineNumber, String inputParameter,String action ,String testRunParamDesc,Integer scriptId,Integer metadataId);
+			Integer lineNumber, String inputParameter,String action ,String testRunParamDesc, String updatedBy,Integer scriptId,Integer metadataId);
 	
 	Integer deleteByScriptIdAndMetadataId(Integer scriptId,Integer metadataId);
 	
