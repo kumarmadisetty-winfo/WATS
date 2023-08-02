@@ -630,7 +630,7 @@ public class DataBaseEntry {
 				updatedMetaData.getScriptMetaDataId());
 	}
 	
-	public Integer deletecriptParam(ScriptMetaData updatedMetaData) {
+	public Integer deleteTestScriptParam(ScriptMetaData updatedMetaData) {
 		return testSetScriptParamRepository.deleteByScriptIdAndMetadataId(updatedMetaData.getScriptMaster().getScriptId(),
 				updatedMetaData.getScriptMetaDataId());
 	}

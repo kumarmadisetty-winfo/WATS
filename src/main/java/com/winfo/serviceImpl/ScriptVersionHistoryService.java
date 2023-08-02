@@ -35,6 +35,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.winfo.config.WinfoTestCommonConfiguration;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
@@ -53,10 +54,11 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	public static final String TEMP = "temp";
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
-
+	@Autowired
+	private ObjectMapper mapper;
+	
 	public ResponseDto saveVersionHistory(Integer scriptId,ScriptMaterVO updatedScriptMasterVO) throws Exception {
 		try {
-			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(scriptId);
 			ScriptMaterVO scriptMasterVO = mapper.readValue(mapper.writeValueAsString(scriptMaster),
@@ -222,7 +224,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		});
 		if(deletedScriptMetaData.size()>0) {
 			deletedScriptMetaData.parallelStream().forEach(deleteddMetaData -> {
-				dataBaseEntry.deletecriptParam(deleteddMetaData);
+				dataBaseEntry.deleteTestScriptParam(deleteddMetaData);
 				dataBaseEntry.deleteScriptMetaData(deleteddMetaData.getScriptMetaDataId());
 			});			
 		}
