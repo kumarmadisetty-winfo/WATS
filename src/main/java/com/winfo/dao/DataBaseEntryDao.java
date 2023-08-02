@@ -1352,8 +1352,8 @@ public class DataBaseEntryDao {
 
 	}
 
-	public void updateExecStatusFlag(String testSetId) {
-		String updateQry = "UPDATE EXECUTE_STATUS SET STATUS_FLAG = 'I' WHERE TEST_RUN_ID = " + testSetId;
+	public void updateExecStatusFlag(String testSetId, String executedBy) {
+		String updateQry = "UPDATE EXECUTE_STATUS SET STATUS_FLAG = 'I', UPDATED_BY = "+executedBy+" UPDATED_DATE = "+new Date()+" WHERE TEST_RUN_ID = " + testSetId;
 
 		try {
 			Session session = em.unwrap(Session.class);
