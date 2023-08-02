@@ -1,15 +1,16 @@
 package com.winfo.vo;
 
+import java.sql.Date;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.winfo.serviceImpl.DataBaseEntry;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
@@ -70,6 +71,26 @@ public class ScriptMaterVO {
 	@JsonProperty("Expected Result")
 	@JsonAlias("expectedResult")
 	private String expectedResult;
+	
+	@EqualsAndHashCode.Exclude
+	@JsonProperty("Created By")
+	@JsonAlias("createdBy")
+	private String createdBy;
+
+	@EqualsAndHashCode.Exclude
+	@JsonProperty("Creation Date")
+	@JsonAlias("creationDate")
+	private Date creationDate;
+
+	@EqualsAndHashCode.Exclude
+	@JsonProperty("Updated By")
+	@JsonAlias("updatedBy")
+	private String updatedBy;
+
+	@EqualsAndHashCode.Exclude
+	@JsonProperty("Updated Date")
+	@JsonAlias("updateDate")
+	private Date updateDate;
 
 	@JsonProperty("Customer Id")
 	@JsonAlias("customerId")
@@ -119,6 +140,7 @@ public class ScriptMaterVO {
 	@JsonAlias("attribute10")
 	private String attribute10;
 
+	@EqualsAndHashCode.Exclude
 	@JsonProperty("Script Steps")
 	@JsonAlias("scriptMetaDatalist")
 	private List<ScriptMetaDataVO> scriptMetaDatalist;

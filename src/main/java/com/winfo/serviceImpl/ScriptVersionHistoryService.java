@@ -7,30 +7,42 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
+import com.winfo.model.ScriptMetaData;
 import com.winfo.utils.Constants;
 import com.winfo.utils.FileUtil;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptMaterVO;
+import com.winfo.vo.ScriptMetaDataVO;
 import com.winfo.vo.VersionHistoryDto;
 
 @Service
@@ -42,7 +54,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
 
-	public ResponseDto saveVersionHistory(Integer scriptId,ScriptMaterVO updatedScriptMaterVO) throws Exception {
+	public ResponseDto saveVersionHistory(Integer scriptId,ScriptMaterVO updatedScriptMasterVO) throws Exception {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -56,10 +68,10 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			String objectStorePath = HISTORY + FORWARD_SLASH + scriptId;
 			FileUtil.createDir(localPath);
 			List<String> listOfFiles = getListOfFileNamesPresentInObjectStore(objectStorePath + FORWARD_SLASH);
-			updatedScriptMaterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
-			updatedScriptMaterVO.changeNullToNA();
+			updatedScriptMasterVO.updateFieldIfNotNullForRequestBody(dataBaseEntry);
+			updatedScriptMasterVO.changeNullToNA();
 			scriptMasterVO.changeNullToNA();
-			if(!scriptMasterVO.equals(updatedScriptMaterVO)){
+			if(!scriptMasterVO.equals(updatedScriptMasterVO) || !scriptMasterVO.getScriptMetaDatalist().equals(updatedScriptMasterVO.getScriptMetaDatalist())){
 				if (listOfFiles.size()>0) {
 					listOfSortedFiles(listOfFiles);
 					scriptHistoryNumber = Integer.parseInt(Arrays.stream(listOfFiles.stream()
@@ -67,10 +79,12 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 							.get().split("_"))
 							.skip(1).findFirst().get().replace(JSON, ""))+1;
 						saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
+						
 				} else {
 					scriptHistoryNumber = 1;
 					saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 				}
+				updateScript(scriptId,scriptMaster,updatedScriptMasterVO);
 			}
 			else {
 				logger.info("No change present for creating a new history");
@@ -166,4 +180,51 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		}
 	}
 
+	public void updateScript(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
+		ModelMapper modelMapper = new ModelMapper();
+		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
+		updatedScriptDetails.setUpdateDate(new Date(Calendar.getInstance().getTime().getTime()));
+		updatedScriptDetails.setScriptId(scriptId);
+		updatedScriptDetails.setScriptMetaDatalist(updatedScriptMasterVO.getScriptMetaDatalist().parallelStream().map(metaData-> {		
+			ScriptMetaData updatedScriptMetaData =dataBaseEntry.getScriptMetaData(metaData.getLineNumber(),scriptMaster);
+			if (updatedScriptMetaData != null) {
+				updatedScriptMetaData.setStepDesc(metaData.getStepDesc());
+				updatedScriptMetaData.setInputParameter(metaData.getInputParameter());
+				updatedScriptMetaData.setAction(metaData.getAction());
+				updatedScriptMetaData.setValidationType(metaData.getValidationType());
+				updatedScriptMetaData.setValidationName(metaData.getValidationName());
+				updatedScriptMetaData.setUniqueMandatory(metaData.getUniqueMandatory());
+				updatedScriptMetaData.setDatatypes(metaData.getDatatypes());
+ 				updatedScriptMetaData.setUpdatedBy(metaData.getUpdatedBy());
+				updatedScriptMetaData.setUpdateDate(updatedScriptDetails.getUpdateDate());
+				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
+			} else {
+				updatedScriptMetaData = modelMapper.map(metaData, ScriptMetaData.class);
+				updatedScriptMetaData.setScriptNumber(updatedScriptDetails.getScriptNumber());
+				updatedScriptMetaData.setCreatedBy(metaData.getCreatedBy());
+				updatedScriptMetaData.setCreationDate(updatedScriptDetails.getUpdateDate());
+				updatedScriptMetaData.setScriptMaster(updatedScriptDetails);
+				dataBaseEntry.saveScriptMetaData(updatedScriptMetaData);
+			}
+			return updatedScriptMetaData;
+		}).collect(Collectors.toList()));
+		
+		List<Integer> listOfOldLineNumber = scriptMaster.getScriptMetaDatalist().parallelStream().map(ScriptMetaData::getLineNumber).collect(Collectors.toList());
+		List<Integer> listOfNewLineNumber = updatedScriptDetails.getScriptMetaDatalist().parallelStream().map(ScriptMetaData::getLineNumber).collect(Collectors.toList());
+		List<Integer> deletedLineNumber = listOfOldLineNumber.parallelStream()
+				.filter(lineNumber -> !listOfNewLineNumber.contains(lineNumber)).collect(Collectors.toList());
+		List<ScriptMetaData> deletedScriptMetaData = scriptMaster.getScriptMetaDatalist().parallelStream()
+				.filter(metaData -> deletedLineNumber.contains(metaData.getLineNumber())).collect(Collectors.toList());
+		
+		dataBaseEntry.saveScriptDetails(updatedScriptDetails);
+		updatedScriptDetails.getScriptMetaDatalist().parallelStream().forEach(updatedMetaData -> {
+			dataBaseEntry.updateScriptParam(updatedMetaData);
+		});
+		if(deletedScriptMetaData.size()>0) {
+			deletedScriptMetaData.parallelStream().forEach(deleteddMetaData -> {
+				dataBaseEntry.deletecriptParam(deleteddMetaData);
+				dataBaseEntry.deleteScriptMetaData(deleteddMetaData.getScriptMetaDataId());
+			});			
+		}
+	}
 }
