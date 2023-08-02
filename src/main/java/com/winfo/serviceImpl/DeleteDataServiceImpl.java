@@ -1,4 +1,4 @@
-package com.winfo.dao;
+package com.winfo.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.winfo.config.MessageUtil;
 import com.winfo.model.ScriptMaster;
+import com.winfo.service.DeleteDataService;
 import com.winfo.utils.Constants;
 import com.winfo.vo.DeleteScriptsData;
 import com.winfo.vo.DomGenericResponseBean;
 
 @Repository
-public class DeleteDataDAO {
+public class DeleteDataServiceImpl implements DeleteDataService {
 
 	@Autowired
 	private EntityManager entityManager;
