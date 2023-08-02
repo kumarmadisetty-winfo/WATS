@@ -55,10 +55,11 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
 	@Autowired
-	private ObjectMapper mapper;
+	private ModelMapper modelMapper;
 	
 	public ResponseDto saveVersionHistory(Integer scriptId,ScriptMaterVO updatedScriptMasterVO) throws Exception {
 		try {
+			ObjectMapper mapper = new ObjectMapper();
 			mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 			ScriptMaster scriptMaster = dataBaseEntry.getScriptDetailsByScriptId(scriptId);
 			ScriptMaterVO scriptMasterVO = mapper.readValue(mapper.writeValueAsString(scriptMaster),
@@ -183,7 +184,6 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	}
 
 	public void updateScript(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
-		ModelMapper modelMapper = new ModelMapper();
 		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
 		updatedScriptDetails.setUpdateDate(new Date(Calendar.getInstance().getTime().getTime()));
 		updatedScriptDetails.setScriptId(scriptId);
