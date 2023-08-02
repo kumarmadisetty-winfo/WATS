@@ -82,8 +82,8 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 						
 				} else {
 					scriptHistoryNumber = 1;
+					saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 				}
-				saveHistoryData(scriptHistoryNumber,mapper,localPath,scriptMasterVO,objectStorePath);
 				updateScript(scriptId,scriptMaster,updatedScriptMasterVO);
 			}
 			else {
