@@ -90,15 +90,15 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 				updateScript(scriptId,scriptMaster,updatedScriptMasterVO);
 			}
 			else {
-				logger.info("No change present for creating a new history");
-				return new ResponseDto(HttpStatus.CONFLICT.value(), Constants.WARNING, "No change present for creating a new history");
+				logger.info("No changes found in "+updatedScriptMasterVO.getScriptNumber());
+				return new ResponseDto(HttpStatus.CONFLICT.value(), Constants.WARNING, "No changes found in "+updatedScriptMasterVO.getScriptNumber());
 			}
-			logger.info("Successfully Saved Version History");
-			return new ResponseDto(200, Constants.SUCCESS, "Successfully saved the history!");
+			logger.info(updatedScriptMasterVO.getScriptNumber()+" is updated successfully");
+			return new ResponseDto(200, Constants.SUCCESS, updatedScriptMasterVO.getScriptNumber()+" is updated successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed to Save Version History " +e.getMessage());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
+			logger.error(updatedScriptMasterVO.getScriptNumber()+"has failed "+e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,updatedScriptMasterVO.getScriptNumber()+"has failed "+ e.getMessage());
 		}
 	}
 	
