@@ -34,7 +34,6 @@ public class TestSetScriptParam {
 	private Integer testRunScriptParamId;
 
 	@Column(name = "SCRIPT_ID")
-	
 	private Integer scriptId;
 
 	@Column(name = "SCRIPT_NUMBER")
