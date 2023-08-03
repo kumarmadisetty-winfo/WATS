@@ -35,6 +35,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.winfo.config.WinfoTestCommonConfiguration;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
@@ -53,7 +54,9 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	public static final String TEMP = "temp";
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
-
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	public ResponseDto saveVersionHistory(Integer scriptId,ScriptMaterVO updatedScriptMasterVO) throws Exception {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -87,15 +90,15 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 				updateScript(scriptId,scriptMaster,updatedScriptMasterVO);
 			}
 			else {
-				logger.info("No change present for creating a new history");
-				return new ResponseDto(HttpStatus.CONFLICT.value(), Constants.WARNING, "No change present for creating a new history");
+				logger.info("No changes found in "+updatedScriptMasterVO.getScriptNumber());
+				return new ResponseDto(HttpStatus.CONFLICT.value(), Constants.WARNING, "No changes found in "+updatedScriptMasterVO.getScriptNumber());
 			}
-			logger.info("Successfully Saved Version History");
-			return new ResponseDto(200, Constants.SUCCESS, "Successfully saved the history!");
+			logger.info(updatedScriptMasterVO.getScriptNumber()+" is updated successfully");
+			return new ResponseDto(200, Constants.SUCCESS, updatedScriptMasterVO.getScriptNumber()+" is updated successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed to Save Version History " +e.getMessage());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
+			logger.error(updatedScriptMasterVO.getScriptNumber()+"has failed "+e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,updatedScriptMasterVO.getScriptNumber()+"has failed "+ e.getMessage());
 		}
 	}
 	
@@ -181,7 +184,6 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 	}
 
 	public void updateScript(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
-		ModelMapper modelMapper = new ModelMapper();
 		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
 		updatedScriptDetails.setUpdateDate(new Date(Calendar.getInstance().getTime().getTime()));
 		updatedScriptDetails.setScriptId(scriptId);
@@ -222,7 +224,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 		});
 		if(deletedScriptMetaData.size()>0) {
 			deletedScriptMetaData.parallelStream().forEach(deleteddMetaData -> {
-				dataBaseEntry.deletecriptParam(deleteddMetaData);
+				dataBaseEntry.deleteTestScriptParam(deleteddMetaData);
 				dataBaseEntry.deleteScriptMetaData(deleteddMetaData.getScriptMetaDataId());
 			});			
 		}
