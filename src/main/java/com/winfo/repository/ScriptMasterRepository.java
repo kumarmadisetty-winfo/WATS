@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import com.winfo.model.ScriptMaster;
 
-@Repository
 public interface ScriptMasterRepository extends JpaRepository<ScriptMaster, Integer> {
 
 	List<ScriptMaster> findByTargetApplicationAndProductVersionAndModule(String targetApplication,String productVersion, String module);
@@ -19,5 +17,12 @@ public interface ScriptMasterRepository extends JpaRepository<ScriptMaster, Inte
 	public ScriptMaster findByScriptId(Integer scriptId);
 	
 	public ScriptMaster findByScriptNumberAndProductVersion(String newCustomScriptNumber,String productVersion);
+	
+	public List<ScriptMaster> findByProductVersion(String productVersion);
+	
+	@Query("from ScriptMaster where scriptId in :listOfScriptIds" )
+	List<ScriptMaster> findByScriptIds(List<Integer> listOfScriptIds);
+		
+	Integer deleteByScriptId(Integer scriptId);
   
 }
