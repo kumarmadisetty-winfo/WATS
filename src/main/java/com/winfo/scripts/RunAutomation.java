@@ -588,7 +588,7 @@ public class RunAutomation {
 										xpathPerformance.loginApplication(driver, fetchConfigVO,
 												fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 												fetchMetadataVO.getInputValue(),
-												dataBaseEntry.getPassword(testScriptDto.getExecutedBy(), userName, fetchConfigVO), customerDetails,count);
+												dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails,count);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
@@ -597,7 +597,7 @@ public class RunAutomation {
 									seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO,
 											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 											fetchMetadataVO.getInputValue(),
-											dataBaseEntry.getPassword(testScriptDto.getExecutedBy(), userName, fetchConfigVO), customerDetails);
+											dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 									userName = null;
 									break;
 								}
@@ -615,7 +615,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginSFApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(testScriptDto.getExecutedBy(), userName, fetchConfigVO),customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO),customerDetails);
 								userName = null;
 								break;
 							} else {
@@ -633,7 +633,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginSSOApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(testScriptDto.getExecutedBy(), userName, fetchConfigVO), customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 								userName = null;
 								break;
 							} else {
@@ -646,7 +646,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginOicApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(testScriptDto.getExecutedBy(), userName, fetchConfigVO), customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 								userName = null;
 								break;
 							} else {
@@ -660,7 +660,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginOicJob(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(testScriptDto.getExecutedBy(), userName, fetchConfigVO), customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 								userName = null;
 								break;
 							} else {
@@ -1440,7 +1440,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginInformaticaApplication(driver,
 										fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(testScriptDto.getExecutedBy(), userName, fetchConfigVO), customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 								userName = null;
 							}
 							break;
@@ -1642,7 +1642,7 @@ public class RunAutomation {
 					logger.error("Failed to Execute the " + "" + actionName);
 					logger.error(e.getMessage());
 					errorMessagesHandler.getError(actionName, fetchMetadataVO, fetchConfigVO, testScriptParamId,
-							message, param1, param2, dataBaseEntry.getPassword(testScriptDto.getExecutedBy(), userName, fetchConfigVO));
+							message, param1, param2, dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO));
 					isError = true;
 				}
 				if (isError) {
