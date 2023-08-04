@@ -34,6 +34,9 @@ public class ExecuteStatus {
 	@Column(name = "CREATED_BY")
 	private String createdBy;
 
+	@Column(name = "TEST_RUN_ID")
+	private String testRunId;
+
 	@Column(name = "CREATED_DATE")
 	@Temporal(TemporalType.DATE)
 	private Date createdDate;
