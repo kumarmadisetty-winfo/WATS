@@ -133,7 +133,10 @@ public class SmartBearService {
 						.getProductVersion().replace("R13", "").trim()
 				+ "/"
 				+ databaseEntry.getScriptDetailsByScriptId(Integer.parseInt(fetchMetadataListVO.get(0).getScriptId()))
-						.getProcessArea();
+						.getProcessArea()
+				+ "/"
+				+ databaseEntry.getScriptDetailsByScriptId(Integer.parseInt(fetchMetadataListVO.get(0).getScriptId()))
+						.getModule();
 		Map<String, Object> scripts = callApi(smartBearVersion1Url + PROJECTS_PATH + projectId
 				+ "/tests/?Filter=(active=true) and (folder_name = '" + folderName + "')", HttpMethodConstants.GET, null);
 
