@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.winfo.model.ScriptMaster;
 import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.repository.ScriptMetaDataRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.service.DeleteScriptsService;
 import com.winfo.utils.Constants;
@@ -27,48 +28,48 @@ public class DeleteScriptsServiceImpl implements DeleteScriptsService {
 
 	@Autowired
 	private ScriptMasterRepository scriptMasterRepository;
+	
+	@Autowired
+	private ScriptMetaDataRepository scriptMetaDataRepository;
 
 	@Transactional
-	public ResponseDto deleteData(@RequestBody DeleteScriptsVO deletescriptsdata) {
+	public ResponseDto deleteScriptsFromLibrary(@RequestBody DeleteScriptsVO deletescriptsdata) {
 
 		try {
-			List<ScriptMaster>listOfTotalDeletedScripts=new ArrayList<>();
-			List<ScriptMaster>listOfScriptsPresentInTestRun=new ArrayList<>();
 			String responseDescription;
 			if (deletescriptsdata.isDeleteAll()) {
 				List<ScriptMaster> listOfScriptsFromProductVersion = scriptMasterRepository.findByProductVersion(deletescriptsdata.getProductVersion());
-				List<ScriptMaster> listOfScriptsNotPresentInTestRun = listOfScriptsFromProductVersion.parallelStream()
-						.filter(scriptMaster -> testSetLinesRepository.countByScriptId(scriptMaster.getScriptId()) == 0).collect(Collectors.toList());
-				listOfScriptsPresentInTestRun=listOfScriptsFromProductVersion.parallelStream()
-						.filter(scriptMaster->!listOfScriptsNotPresentInTestRun.contains(scriptMaster)).collect(Collectors.toList());
-				listOfTotalDeletedScripts=listOfScriptsNotPresentInTestRun.parallelStream().map(scriptMaster ->{
-					scriptMasterRepository.deleteByScriptId(scriptMaster.getScriptId());
-					return scriptMaster;
-				}).collect(Collectors.toList());
+				responseDescription=deleteScripts(listOfScriptsFromProductVersion);
 			} else {
 				List<Integer> listOfScriptIds = deletescriptsdata.getScriptId();
 				List<ScriptMaster> listOfScripts = scriptMasterRepository.findByScriptIds(listOfScriptIds);
-				List<ScriptMaster> listOfScriptsNotPresentInTestRun = listOfScripts.parallelStream()
-						.filter(scriptMaster ->testSetLinesRepository.countByScriptId(scriptMaster.getScriptId()) == 0).collect(Collectors.toList());
-				listOfScriptsPresentInTestRun=listOfScripts.parallelStream()
-						.filter(scriptMaster->!listOfScriptsNotPresentInTestRun.contains(scriptMaster)).collect(Collectors.toList());
-				listOfTotalDeletedScripts=listOfScriptsNotPresentInTestRun.parallelStream().map(scriptMaster ->{
-					scriptMasterRepository.deleteByScriptId(scriptMaster.getScriptId());
-					return scriptMaster;
-				}).collect(Collectors.toList());
+				responseDescription=deleteScripts(listOfScripts);
 			}
-			
-			responseDescription=(listOfTotalDeletedScripts.size()==1?listOfTotalDeletedScripts.get(0).getScriptNumber()+" is successfully deleted"
-					:listOfTotalDeletedScripts.size()>1?listOfTotalDeletedScripts.size()+" scripts are successfully deleted":"");
-			responseDescription=(responseDescription!=""? responseDescription+", ":"")+(listOfScriptsPresentInTestRun.size()==1?
-					listOfScriptsPresentInTestRun.get(0).getScriptNumber()+" is not able to delete because this script is added in Test Runs"
-					:(listOfScriptsPresentInTestRun.size()>1?listOfScriptsPresentInTestRun.size()+ " scripts are not able to delete because those scripts are added in Test Runs":""));
-
 			logger.info(responseDescription);
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, responseDescription);
 		} catch (Exception e) {
 			logger.error("Error occurred while deleting scripts, " + e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
+	}
+	
+	public String deleteScripts(List<ScriptMaster> listOfTotalScriptsFromLibrary) {
+		List<ScriptMaster> listOfScriptsNotPresentInTestRun = listOfTotalScriptsFromLibrary.parallelStream()
+				.filter(scriptMaster ->testSetLinesRepository.countByScriptId(scriptMaster.getScriptId()) == 0).collect(Collectors.toList());
+		List<ScriptMaster> listOfScriptsPresentInTestRun=listOfTotalScriptsFromLibrary.parallelStream()
+				.filter(scriptMaster->!listOfScriptsNotPresentInTestRun.contains(scriptMaster)).collect(Collectors.toList());
+		List<ScriptMaster> listOfTotalDeletedScripts=listOfScriptsNotPresentInTestRun.parallelStream().map(scriptMaster ->{
+			scriptMetaDataRepository.deleteByScriptMaster(scriptMaster);
+			scriptMasterRepository.deleteByScriptId(scriptMaster.getScriptId());
+			return scriptMaster;
+		}).collect(Collectors.toList());
+		
+		String responseDescription=(listOfTotalDeletedScripts.size()==1?listOfTotalDeletedScripts.get(0).getScriptNumber()+" is successfully deleted"
+				:listOfTotalDeletedScripts.size()>1?listOfTotalDeletedScripts.size()+" scripts are successfully deleted":"");
+		responseDescription=(responseDescription!=""? responseDescription+", ":"")+(listOfScriptsPresentInTestRun.size()==1?
+				listOfScriptsPresentInTestRun.get(0).getScriptNumber()+" is not able to delete because this script is added in Test Runs"
+				:(listOfScriptsPresentInTestRun.size()>1?listOfScriptsPresentInTestRun.size()+ " scripts are not able to delete because those scripts are added in Test Runs":""));
+		
+		return responseDescription;
 	}
 }

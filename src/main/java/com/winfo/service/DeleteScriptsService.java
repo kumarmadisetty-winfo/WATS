@@ -10,5 +10,5 @@ import com.winfo.vo.ResponseDto;
 @Service
 public interface DeleteScriptsService {
 	
-	public  ResponseDto deleteData(@RequestBody DeleteScriptsVO deletescriptsdata) throws ParseException;
+	public  ResponseDto deleteScriptsFromLibrary(@RequestBody DeleteScriptsVO deletescriptsdata) throws ParseException;
 }

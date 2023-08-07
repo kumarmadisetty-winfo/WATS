@@ -14,14 +14,14 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import com.winfo.exception.WatsEBSException;
-import com.winfo.serviceImpl.DeleteScriptsServiceImpl;
+import com.winfo.service.DeleteScriptsService;
 import com.winfo.vo.DeleteScriptsVO;
 
 
 @RestController
 public class DeleteScriptController {
 	@Autowired
-	DeleteScriptsServiceImpl deleteDataServiceImpl;
+	DeleteScriptsService deleteDataService;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@DeleteMapping("/deleteScriptsFromLibrary")
@@ -30,7 +30,7 @@ public class DeleteScriptController {
 			+ "<B>DeleteAll:</B> If we pass deleteAll as 'true', it will delete all the scripts.")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Successfully deleted the scripts")})
 	public  ResponseEntity deleteScriptFromScriptLibrary(@RequestBody DeleteScriptsVO deleteScriptsVO) throws ParseException {
-		ResponseDto responseDto =deleteDataServiceImpl.deleteData(deleteScriptsVO); 
+		ResponseDto responseDto =deleteDataService.deleteScriptsFromLibrary(deleteScriptsVO); 
 		if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
 			return ResponseEntity.ok(responseDto);
 		} else {
