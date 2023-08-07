@@ -1516,6 +1516,10 @@ public class RunAutomation {
 							woodInterface.enterMultipleTransaction(driver, fetchConfigVO,
 									fetchMetadataVO, customerDetails);
 							break;
+						case "doubleClick":
+							sfInterface.doubleClick(driver, param1, param2,
+									fetchMetadataVO, fetchConfigVO, customerDetails);
+							break;
 						default:
 							logger.info("Action Name is not matched with " + "" + actionName);
 							break;
