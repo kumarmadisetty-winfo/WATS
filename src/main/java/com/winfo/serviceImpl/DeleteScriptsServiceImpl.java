@@ -1,13 +1,12 @@
 package com.winfo.serviceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.winfo.model.ScriptMaster;
@@ -19,7 +18,7 @@ import com.winfo.utils.Constants;
 import com.winfo.vo.DeleteScriptsVO;
 import com.winfo.vo.ResponseDto;
 
-@Repository
+@Service
 public class DeleteScriptsServiceImpl implements DeleteScriptsService {
 
 	public static final Logger logger = Logger.getLogger(DeleteScriptsServiceImpl.class);
