@@ -16788,11 +16788,11 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 	private String copyMethod(WebElement webElement, String value) {
 
-		String num = null;
+		String number = null;
 
 		try {
 
-			String number = webElement.getText();
+			number = webElement.getText();
 
 			logger.info("Successfully Copied the Number");
 
@@ -16803,7 +16803,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 		}
 
-		return num;
+		return number;
 
 	}
 
