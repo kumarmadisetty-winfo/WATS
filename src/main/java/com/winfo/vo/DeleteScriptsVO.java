@@ -10,12 +10,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class DeleteScriptsData {
+public class DeleteScriptsVO {
 
-	@JsonProperty("script_id")
-	private List<Integer> script_id = new ArrayList<Integer>();
+	@JsonProperty("scriptId")
+	private List<Integer> scriptId = new ArrayList<Integer>();
 
-	private String prod_ver;
+	@JsonProperty("productVersion")
+	private String productVersion;
 
 	@JsonProperty("deleteAll")
 	private boolean deleteAll;

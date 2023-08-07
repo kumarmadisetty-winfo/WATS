@@ -19,5 +19,12 @@ public interface ScriptMasterRepository extends JpaRepository<ScriptMaster, Inte
 	public ScriptMaster findByScriptId(Integer scriptId);
 	
 	public ScriptMaster findByScriptNumberAndProductVersion(String newCustomScriptNumber,String productVersion);
+	
+	public List<ScriptMaster> findByProductVersion(String productVersion);
+	
+	@Query("from ScriptMaster where scriptId in :listOfScriptIds" )
+	List<ScriptMaster> findByScriptIds(List<Integer> listOfScriptIds);
+		
+	Integer deleteByScriptId(Integer scriptId);
   
 }
