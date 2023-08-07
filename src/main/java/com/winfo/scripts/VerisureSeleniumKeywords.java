@@ -894,6 +894,50 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 	public void paste(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, String globalValueForSteps, CustomerProjectDto customerDetails)
 			throws Exception {
+		
+		try {
+			if (inputParam.equalsIgnoreCase("Process ID")) {
+				WebElement waittill = driver
+						.findElement(By.xpath("(//*[@title=\"Expense Reimbursement and Cash Advance Requests\"]/following::*[text()=\"Type\"]/preceding::input[@type=\"text\"])[2]"));
+				String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
+				String copynumberValue;
+				String inputValue = fetchMetadataVO.getInputValue();
+
+				String[] arrOfStr = inputValue.split(">", 5);
+				if (arrOfStr.length < 2) {
+					copynumberValue = inputValue;
+				} else {
+					String Testrun_name = arrOfStr[0];
+					String seq = arrOfStr[1];
+					// String Script_num=arrOfStr[2];
+					String line_number = arrOfStr[2];
+					copynumberValue = dynamicnumber.getCopynumber(Testrun_name, seq, line_number, testParamId,
+							testSetId);
+				}
+				String value = globalValueForSteps;
+				// String value = copynumber(driver, inputParam1, inputParam2, fetchMetadataVO,
+				// fetchConfigVO)
+				waittill.click();
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("arguments[0].value=\"" + copynumberValue + "\";", waittill);
+				Thread.sleep(3000);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				String xpath = "//span[text()=\"inputParam\"]/following::input[1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+
+				return;
+
+			}
+
+		} catch (Exception e) {
+
+			logger.error("Failed during paste a value " + e.getMessage());
+
+		}
+		
 		try {
 			if (inputParam.equalsIgnoreCase("Transaction")) {
 				WebElement waittill = driver
@@ -5721,6 +5765,42 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 	public void clickTableLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		
+		try {
+
+			if (param1.equalsIgnoreCase("Expense Reimbursement and Cash Advance Requests")) {
+
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+
+				wait.until(ExpectedConditions
+
+						.presenceOfElementLocated(By.xpath(("(//*[@title=\"Expense Reimbursement and Cash Advance Requests\"]/following::span[text()=\"Payment Requests\"]/following::a[not(@title) and text()])[2]"))));
+
+				WebElement waittext = driver
+						.findElement(By.xpath(("(//*[@title=\"Expense Reimbursement and Cash Advance Requests\"]/following::span[text()=\"Payment Requests\"]/following::a[not(@title) and text()])[2]")));
+
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+//				waittext.click();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(5000);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.info("Sucessfully Clicked TableLink " + scripNumber);
+				String xpath = "(//*[@title=\"Expense Reimbursement and Cash Advance Requests\"]/following::span[text()=\"Payment Requests\"]/following::a[not(@title) and text()])[2]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during click TableLink " + scripNumber);
+
+		}
+		
 		try {
 			if (param1.equalsIgnoreCase("Manage Negotiations") || param2.equalsIgnoreCase("Search Results")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6320,6 +6400,9 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		
+		
+		
 		try {
 			try {
 
