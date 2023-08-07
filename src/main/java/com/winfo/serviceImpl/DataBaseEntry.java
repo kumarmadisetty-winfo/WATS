@@ -48,6 +48,7 @@ import com.winfo.vo.FetchMetadataVO;
 import com.winfo.vo.FetchScriptVO;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.Status;
+import com.winfo.vo.TestScriptDto;
 
 @Service
 @RefreshScope
@@ -251,10 +252,10 @@ public class DataBaseEntry {
 		dao.updatePassedScriptLineStatus(null, null, firstStepScriptParamId + "", SCRIPT_PARAM_STATUS.FAIL.getLabel());
 	}
 
-	public void updateExecStatusIfTestRunIsCompleted(String testSetId) {
-		Integer inProgressCount = dao.getCountOfInProgressScript(testSetId);
+	public void updateExecStatusIfTestRunIsCompleted(TestScriptDto testScriptDto) {
+		Integer inProgressCount = dao.getCountOfInProgressScript(testScriptDto.getTestScriptNo());
 		if (inProgressCount.equals(0)) {
-			dao.updateExecStatusFlag(testSetId);
+			dao.updateExecStatusFlag(testScriptDto.getTestScriptNo(),testScriptDto.getExecutedBy());
 		}
 	}
 
@@ -341,7 +342,7 @@ public class DataBaseEntry {
 
 	@Transactional
 	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
-			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent) {
+			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent, String executedBy) {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(testRunName);
 		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
@@ -356,7 +357,7 @@ public class DataBaseEntry {
 		BigDecimal requestCount = (BigDecimal) dao.getRequestCountFromExecStatus(fetchScriptVO.getP_test_set_id());
 		emailParam.setRequestCount(requestCount.intValue());
 		if (requestCount.intValue() <= responseCount) {
-			dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
+			dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id(),executedBy);
 			dao.getPassAndFailCount(fetchScriptVO.getP_test_set_id(), emailParam);
 			dao.getUserAndPrjManagerName(emailParam.getExecutedBy(), fetchScriptVO.getP_test_set_id(), emailParam);
 			boolean sendMail = appContext.getBean(this.getClass())
@@ -367,7 +368,7 @@ public class DataBaseEntry {
 		} else {
 			Integer inProgressCount = dao.getCountOfInProgressScript(fetchScriptVO.getP_test_set_id());
 			if (inProgressCount.equals(0)) {
-				dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id());
+				dao.updateExecStatusFlag(fetchScriptVO.getP_test_set_id(),executedBy);
 			}
 		}
 		limitScriptExecutionService.insertTestRunScriptData(fetchMetadataListVO.get(0).getScriptId(),

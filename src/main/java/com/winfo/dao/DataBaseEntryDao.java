@@ -1352,8 +1352,11 @@ public class DataBaseEntryDao {
 
 	}
 
-	public void updateExecStatusFlag(String testSetId) {
-		String updateQry = "UPDATE EXECUTE_STATUS SET STATUS_FLAG = 'I' WHERE TEST_RUN_ID = " + testSetId;
+	public void updateExecStatusFlag(String testSetId, String executedBy) {
+		String executionTime = new SimpleDateFormat(SIMPLE_DATE).format(new Date());
+		String updateQry = "UPDATE EXECUTE_STATUS SET STATUS_FLAG = 'I', UPDATED_BY = '" + executedBy
+				+ "', UPDATED_DATE = TO_TIMESTAMP('" + executionTime + "','MM/DD/YYYY HH24:MI:SS') WHERE TEST_RUN_ID = "
+				+ testSetId;
 
 		try {
 			Session session = em.unwrap(Session.class);

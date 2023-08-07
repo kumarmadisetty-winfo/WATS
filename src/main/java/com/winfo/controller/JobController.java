@@ -45,11 +45,11 @@ public class JobController {
 	public ResponseEntity executeTestScript(@Valid @RequestBody TestScriptDto testScriptDto,
 			BindingResult bindingResult) throws Exception {
 
-		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null) {
+		if (testScriptDto != null && testScriptDto.getTestScriptNo() != null && testScriptDto.getExecutedBy() != null) {
 			logger.info(String.format("Test Script Run ID : %s ",  testScriptDto.getTestScriptNo()));
 			ResponseDto responseDto = healthCheck.sanityCheckMethod(testScriptDto.getTestScriptNo());
 			if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
-				runAutomation.run(testScriptDto.getTestScriptNo());
+				runAutomation.run(testScriptDto);
 			} else {
 				return new ResponseEntity(
 						new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Sanity check fail"),
