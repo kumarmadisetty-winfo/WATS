@@ -53,7 +53,7 @@ public class DeleteScriptsServiceImpl implements DeleteScriptsService {
 		}
 	}
 	
-	public String deleteScripts(List<ScriptMaster> listOfTotalScriptsFromLibrary) {
+	private String deleteScripts(List<ScriptMaster> listOfTotalScriptsFromLibrary) {
 		List<ScriptMaster> listOfScriptsNotPresentInTestRun = listOfTotalScriptsFromLibrary.parallelStream()
 				.filter(scriptMaster ->testSetLinesRepository.countByScriptId(scriptMaster.getScriptId()) == 0).collect(Collectors.toList());
 		List<ScriptMaster> listOfScriptsPresentInTestRun=listOfTotalScriptsFromLibrary.parallelStream()
