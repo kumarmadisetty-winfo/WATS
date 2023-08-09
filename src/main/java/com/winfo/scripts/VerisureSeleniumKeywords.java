@@ -1433,8 +1433,9 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 					("//div[contains(@style,\"display: block\")]//div[normalize-space(text())=\"" + param1 + "\"]")));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
-			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			screenshot(driver, fetchMetadataVO, customerDetails);
+			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+			
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 
 			String xpath = "//div[contains(@style,\"display: block\")]//div[normalize-space(text())=\"param1\"]";
@@ -17047,7 +17048,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			}
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked switchToParentWindow " + scripNumber);
-
+			Thread.sleep(3000);
 			renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
