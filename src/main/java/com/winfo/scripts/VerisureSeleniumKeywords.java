@@ -1352,6 +1352,34 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 	public void clickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
+			if (param1.equalsIgnoreCase("Excel (*.xls)")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(
+						By.xpath(("(//div[normalize-space(text())=\"" + param1 + "\"])[1]"))));
+				// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(("(//div[text()=\""
+				// + param1 + "\"])[1]")), param1));
+				WebElement waittext = driver
+						.findElement(By.xpath(("(//div[normalize-space(text())=\"" + param1 + "\"])[1]")));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(4000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);				
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				String params = param1;
+				String xpath = "(//div[normalize-space(text())=\"param1\"])[1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				logger.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during ClickMenu " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
 			if (param1.equalsIgnoreCase("PDF")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
