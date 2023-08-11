@@ -1,7 +1,6 @@
 
 package com.winfo.serviceImpl;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.google.gson.Gson;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.TestSet;
 import com.winfo.repository.TestSetRepository;
@@ -24,6 +24,7 @@ import com.winfo.vo.CopytestrunVo;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScheduleJobVO;
 import com.winfo.vo.ScheduleSubJobVO;
+import com.winfo.vo.ScheduleTestRunVO;
 
 import reactor.core.publisher.Mono;
 
@@ -32,7 +33,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 
 	public static final Logger logger = Logger.getLogger(ScheduleTestRunServiceImpl.class);
 	
-	@Value("${hubUrl}")
+	@Value("${apex.webservice.basePath}")
 	private String basePath;
 	
 	@Autowired
@@ -48,8 +49,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		try {	
 			AtomicInteger count=new AtomicInteger(1);
 			int jobId=userSchedulerJobRepository.getNewJobIdFromSequence();
-			scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
-				if(testRunVO.getNewTestRunName()!=null || !"".equals(testRunVO.getNewTestRunName())) {
+			for(ScheduleTestRunVO testRunVO: scheduleJobVO.getTestRuns()) {
+				if(testRunVO.getNewTestRunName()!=null && !"".equals(testRunVO.getNewTestRunName())) {
 					TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
 					CopytestrunVo copyTestrunvo =new CopytestrunVo();
 					copyTestrunvo.setConfiguration(scheduleJobVO.getConfigurationId());
@@ -61,7 +62,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 					copyTestrunvo.setRequestType("copyTestRun");
 					copyTestrunvo.setTestScriptNo(testRun.getTestRunId());
 					try {
-						testRunVO.setTemplateTestRun(String.valueOf(copyTestRunService.copyTestrun(copyTestrunvo)));
+						testRunVO.setTemplateTestRun(testSetRepository.findByTestRunId(copyTestRunService.copyTestrun(copyTestrunvo)).getTestRunName());
 					} catch (JsonMappingException e) {
 						logger.error(e.getMessage());
 						new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
@@ -78,18 +79,20 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				ScheduleSubJobVO scheduleSubJobVO=new ScheduleSubJobVO();
 				scheduleSubJobVO.setEmail(testRunVO.getNotification());
 				scheduleSubJobVO.setJobId(jobId);
-				scheduleSubJobVO.setStartDate(testRunVO.getStartDate().toString());
+				scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
 				scheduleSubJobVO.setSubJobName(newSubSchedularName);
 				scheduleSubJobVO.setTestRunName(testRun.getTestRunName());
 				scheduleSubJobVO.setTestSetId(testRun.getTestRunId());
 				scheduleSubJobVO.setProjectId(scheduleJobVO.getProjectId());
 				scheduleSubJobVO.setConfigurationId(scheduleJobVO.getConfigurationId());
 				scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
-				WebClient webClient = WebClient.create(basePath.substring(0, basePath.length()-1)+"3/wats/wats_workspace_prod/WATSservice/scheduleTestRun");
+				String url=basePath+"/WATSservice/scheduleTestRun";
+				System.out.println(new Gson().toJson(scheduleSubJobVO));
+				WebClient webClient = WebClient.create(basePath+"/WATSservice/scheduleTestRun");
 				Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve().bodyToMono(String.class);
 				result.block();
 				count.incrementAndGet();
-			});
+			};
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Successfully created new job");
 		}catch(Exception e) {
 			logger.error(e.getMessage());

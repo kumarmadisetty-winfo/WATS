@@ -9,5 +9,7 @@ import com.winfo.model.TestSet;
 public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 
 	TestSet findByTestRunName(String testRunName);
+	
+	TestSet findByTestRunId(Integer testRunId);
 
 }
