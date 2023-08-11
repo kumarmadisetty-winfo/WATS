@@ -10,7 +10,5 @@ import com.winfo.model.UserSchedulerJob;
 @Repository
 public interface UserSchedulerJobRepository extends JpaRepository<UserSchedulerJob, Integer>{
 
-	@Query(value = "SELECT WIN_TA_JOB_ID_SEQ.NEXTVAL from dual",nativeQuery = true) 
-	Integer getNewJobIdFromSequence();
 
 }

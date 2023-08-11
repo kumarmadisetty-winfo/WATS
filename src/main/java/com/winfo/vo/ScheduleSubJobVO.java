@@ -31,14 +31,6 @@ public class ScheduleSubJobVO {
 	@JsonProperty("Email")
 	@JsonAlias("email")
 	private String email;	
-
-	@JsonProperty("Project ID")
-	@JsonAlias("projectId")
-	private Integer projectId;	
-	
-	@JsonProperty("Configuration ID")
-	@JsonAlias("configurationId")
-	private Integer configurationId;	
 	
 	@JsonProperty("User Name")
 	@JsonAlias("userName")

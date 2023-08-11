@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class ScheduleTestRunVO {
 	
-	private String newTestRunName;
+	private String testRunName;
 	
 	private String templateTestRun;
 	

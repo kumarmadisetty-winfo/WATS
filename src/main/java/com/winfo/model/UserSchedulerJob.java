@@ -26,12 +26,6 @@ public class UserSchedulerJob {
 	@Column(name = "JOB_ID")
 	private Integer jobId;
 	
-	@Column(name = "PROJECT_ID")
-	private Integer projectId;
-	
-	@Column(name = "CONFIGURATION_ID")
-	private Integer configurationID;
-	
 	@Column(name = "DEPENDENCY")
 	private Integer dependency;
 
