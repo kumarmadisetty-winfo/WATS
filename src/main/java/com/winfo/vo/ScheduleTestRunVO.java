@@ -19,7 +19,6 @@ public class ScheduleTestRunVO {
 
 	private List<String> dependencies;
 
-//	@JsonFormat(pattern = "MM/dd/yyyy")
 	private String startDate;
 
 }
