@@ -1,9 +1,5 @@
 package com.winfo.vo;
-import java.sql.Date;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
 
 @Data
