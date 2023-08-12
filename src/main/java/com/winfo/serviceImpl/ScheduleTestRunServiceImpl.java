@@ -51,7 +51,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public  ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {	
 			AtomicInteger count=new AtomicInteger(1);
-			for(ScheduleTestRunVO testRunVO: scheduleJobVO.getTestRuns()) {
+			scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
 				if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
 					TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
 					CopytestrunVo copyTestrunvo =new CopytestrunVo();
@@ -103,7 +103,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve().bodyToMono(String.class);
 				result.block();
 				count.incrementAndGet();
-			};
+			});
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Successfully created new job");
 		}catch(Exception e) {
 			logger.error(e.getMessage());
