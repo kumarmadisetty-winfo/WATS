@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -70,6 +71,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		}
 	}
 	
+	@Transactional
 	public ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName().toUpperCase());
@@ -93,20 +95,22 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
 				listOfSubJob.parallelStream().forEach(subScheduleJob -> {
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
-						System.out.println(subScheduleJob.getStartDate());
-						System.out.println(testRunVO.getStartDate());
-						String convertedTime = convertTimeFormat(subScheduleJob.getStartDate());
-						System.out.println(convertedTime);
-						if (!testRunVO.getStartDate().equalsIgnoreCase(convertedTime)) {
+						Optional<String> dbTimeIntoJsonTimeFormat = convertTimeFormat(subScheduleJob.getStartDate());
+						if (dbTimeIntoJsonTimeFormat.isPresent() && !testRunVO.getStartDate().equalsIgnoreCase(dbTimeIntoJsonTimeFormat.get())) {
 							ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
 							scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
 							scheduleSubJobVO.setJobId(subScheduleJob.getJobId());
 							scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
 							scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
-							WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
-							Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
-									.bodyToMono(String.class);
-							result.block();
+							try {	
+								WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
+								Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
+										.bodyToMono(String.class);
+								result.block();
+							}catch(Exception e) {
+								logger.error(e.getMessage());
+								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Error occurred from APEX web service of edit scheduled job",e);
+							}
 						}
 					}
 				});
@@ -166,13 +170,18 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			scheduleSubJobVO.setTestRunName(testRun.getTestRunName());
 			scheduleSubJobVO.setTestSetId(testRun.getTestRunId());
 			scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
-			WebClient webClient = WebClient.create(basePath+"/WATSservice/scheduleTestRun");
-			Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve().bodyToMono(String.class);
-			result.block();
+			try {
+				WebClient webClient = WebClient.create(basePath + "/WATSservice/scheduleTestRun");
+				Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve().bodyToMono(String.class);
+				result.block();
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Error occurred from APEX web service of create scheduled job", e);
+			}
 		});
 	}
 	
-    public String convertTimeFormat(String inputTime) {
+    private Optional <String> convertTimeFormat(String inputTime) {
         try {
             String[] parts = inputTime.split(" ");
             String dateTimePart = parts[0] + "T" + parts[1];
@@ -191,10 +200,10 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yy hh.mm.ss.SSSSSSSSS a XXX");
             String formattedDate = offsetDateTime.format(outputFormatter);
             
-            return StringUtils.countMatches(formattedDate,'-')>2?formattedDate.replace("+", "").replaceFirst("(?s)-(?!.*-)", ""):formattedDate.replace("+", "");
+            return StringUtils.countMatches(formattedDate,'-')>2?Optional.of(formattedDate.replace("+", "").replaceFirst("(?s)-(?!.*-)", "")):Optional.of(formattedDate.replace("+", ""));
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        	logger.error(e.getMessage());
+            return Optional.empty();
         }
     }
 }
