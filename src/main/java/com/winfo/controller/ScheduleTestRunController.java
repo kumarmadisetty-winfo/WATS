@@ -37,6 +37,21 @@ public class ScheduleTestRunController {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@PostMapping("/editScheduledJob")
+	@ApiOperation( value="edit scheduled job for group of test run",notes = "")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Successfully updated the scheduled job")})
+	public  ResponseEntity editScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {
+		ResponseDto responseDto =scheduleTestRunService.editScheduledJob(scheduleJobVO); 
+		if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
+			return ResponseEntity.ok(responseDto);
+		} else {
+			return new ResponseEntity(
+					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error occured while scheduling a job"),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
 
 

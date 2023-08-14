@@ -9,4 +9,6 @@ import com.winfo.vo.ScheduleJobVO;
 public interface ScheduleTestRunService {
 	
 	public  ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO);
+	
+	public  ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO);
 }
