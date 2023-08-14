@@ -2226,6 +2226,7 @@ public abstract class AbstractSeleniumKeywords {
 			//         logger.error("Error converting Excel to PDF: " + e.getMessage());
 			//     }
 			// }
+			
 			if (isExcel) {
 				// Convert Excel to PDF logic using Aspose.Cells
 				try {
@@ -2234,6 +2235,9 @@ public abstract class AbstractSeleniumKeywords {
 		
 					// Create a PDF file path
 					String pdfFilePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf";
+
+					if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
+						new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
 			
 					// Save the Excel workbook as PDF using Aspose.Cells
 					excelWorkbook.save(pdfFilePath, SaveFormat.PDF);
@@ -2246,9 +2250,6 @@ public abstract class AbstractSeleniumKeywords {
 					logger.error("Error converting Excel to PDF using Aspose.Cells: " + e.getMessage());
 				}
 			}
-
-			if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
-				new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
 
 			if (oldFile.exists()) {
 				if (oldFile.renameTo(new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"))) {
