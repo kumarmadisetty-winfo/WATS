@@ -38,7 +38,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Workbook;
+// import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -128,6 +128,8 @@ import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 import reactor.core.publisher.Mono;
+import com.aspose.cells.Workbook;
+import com.aspose.cells.SaveFormat;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -2177,52 +2179,72 @@ public abstract class AbstractSeleniumKeywords {
 			
 			boolean isExcel = fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".xlsx");
 			
-			if (isExcel) {
-			    // Convert Excel to PDF logic using Apache POI and iText
-			    try {
-			        // Load the Excel file
-			        Workbook excelWorkbook = WorkbookFactory.create(oldFile);
+			// if (isExcel) {
+			//     // Convert Excel to PDF logic using Apache POI and iText
+			//     try {
+			//         // Load the Excel file
+			//         Workbook excelWorkbook = WorkbookFactory.create(oldFile);
 
-			        // Create a PDF document
-			        Document pdfDocument = new Document(PageSize.A4);
-			        PdfWriter pdfWriter = PdfWriter.getInstance(pdfDocument, new FileOutputStream(
-			                fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"));
-			        pdfDocument.open();
+			//         // Create a PDF document
+			//         Document pdfDocument = new Document(PageSize.A4);
+			//         PdfWriter pdfWriter = PdfWriter.getInstance(pdfDocument, new FileOutputStream(
+			//                 fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"));
+			//         pdfDocument.open();
 
-			        // Iterate through Excel sheets and add them to the PDF
-			        for (int sheetIndex = 0; sheetIndex < excelWorkbook.getNumberOfSheets(); sheetIndex++) {
-			            // Create a new page in the PDF for each sheet
-			            pdfDocument.newPage();
+			//         // Iterate through Excel sheets and add them to the PDF
+			//         for (int sheetIndex = 0; sheetIndex < excelWorkbook.getNumberOfSheets(); sheetIndex++) {
+			//             // Create a new page in the PDF for each sheet
+			//             pdfDocument.newPage();
 
-			            // Get the current Excel sheet
-			            org.apache.poi.ss.usermodel.Sheet excelSheet = excelWorkbook.getSheetAt(sheetIndex);
+			//             // Get the current Excel sheet
+			//             org.apache.poi.ss.usermodel.Sheet excelSheet = excelWorkbook.getSheetAt(sheetIndex);
 			            
-			         // Iterate through rows and cells in the Excel sheet
-			            for (int rowIndex = 0; rowIndex < excelSheet.getPhysicalNumberOfRows(); rowIndex++) {
-			                org.apache.poi.ss.usermodel.Row row = excelSheet.getRow(rowIndex);
-			                if (row != null) {
-			                    for (int cellIndex = 0; cellIndex < row.getPhysicalNumberOfCells(); cellIndex++) {
-			                        org.apache.poi.ss.usermodel.Cell cell = row.getCell(cellIndex);
-			                        if (cell != null) {
-			                            // Read the cell value and add it to the PDF
-			                            pdfDocument.add(new com.itextpdf.text.Paragraph(cell.toString()));
-			                        }
-			                    }
-			                }
-			            }
-			        }
+			//          // Iterate through rows and cells in the Excel sheet
+			//             for (int rowIndex = 0; rowIndex < excelSheet.getPhysicalNumberOfRows(); rowIndex++) {
+			//                 org.apache.poi.ss.usermodel.Row row = excelSheet.getRow(rowIndex);
+			//                 if (row != null) {
+			//                     for (int cellIndex = 0; cellIndex < row.getPhysicalNumberOfCells(); cellIndex++) {
+			//                         org.apache.poi.ss.usermodel.Cell cell = row.getCell(cellIndex);
+			//                         if (cell != null) {
+			//                             // Read the cell value and add it to the PDF
+			//                             pdfDocument.add(new com.itextpdf.text.Paragraph(cell.toString()));
+			//                         }
+			//                     }
+			//                 }
+			//             }
+			//         }
 
-			        // Close the PDF document
-			        pdfDocument.close();
-			        pdfWriter.close();
+			//         // Close the PDF document
+			//         pdfDocument.close();
+			//         pdfWriter.close();
 
-			        // Delete the original Excel file
-			        oldFile.delete();
+			//         // Delete the original Excel file
+			//         oldFile.delete();
 
-			        logger.info("Excel to PDF conversion successful");
-			    } catch (Exception e) {
-			        logger.error("Error converting Excel to PDF: " + e.getMessage());
-			    }
+			//         logger.info("Excel to PDF conversion successful");
+			//     } catch (Exception e) {
+			//         logger.error("Error converting Excel to PDF: " + e.getMessage());
+			//     }
+			// }
+			if (isExcel) {
+				// Convert Excel to PDF logic using Aspose.Cells
+				try {
+					// Load the Excel file using Aspose.Cells
+					Workbook excelWorkbook = new Workbook(oldFile.getAbsolutePath());
+		
+					// Create a PDF file path
+					String pdfFilePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf";
+			
+					// Save the Excel workbook as PDF using Aspose.Cells
+					excelWorkbook.save(pdfFilePath, SaveFormat.PDF);
+			
+					// Delete the original Excel file
+					oldFile.delete();
+			
+					logger.info("Excel to PDF conversion using Aspose.Cells successful");
+				} catch (Exception e) {
+					logger.error("Error converting Excel to PDF using Aspose.Cells: " + e.getMessage());
+				}
 			}
 
 			if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
