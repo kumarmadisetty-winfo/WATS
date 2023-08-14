@@ -61,7 +61,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	@Transactional
 	public  ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {	
-			AtomicInteger count=new AtomicInteger(1);
+			AtomicInteger count=new AtomicInteger(0);
 			createSchedule(scheduleJobVO,scheduleJobVO.getTestRuns(),count);
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Successfully created new job");
 		}catch(Exception e) {
@@ -85,12 +85,12 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						.filter(subJob -> newAddedSubJobNames.contains(subJob.getTemplateTestRun()))
 						.collect(Collectors.toList());
 				if (newAddedSubJobs.size() > 0) {
-					AtomicInteger count = new AtomicInteger(listOfSubJob.size() + 1);
+					AtomicInteger count = new AtomicInteger(listOfSubJob.size());
 					createSchedule(scheduleJobVO, newAddedSubJobs, count);
 				}
 			}
 
-			for (ScheduleTestRunVO testRunVO : scheduleJobVO.getTestRuns()) {
+			scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
 				listOfSubJob.parallelStream().forEach(subScheduleJob -> {
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
 						System.out.println(subScheduleJob.getStartDate());
@@ -110,7 +110,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						}
 					}
 				});
-			}
+			});
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Successfully updated the job");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -120,6 +120,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	
 	public void createSchedule(ScheduleJobVO scheduleJobVO, List<ScheduleTestRunVO> listOfTestRunInJob,AtomicInteger count) {
 		listOfTestRunInJob.parallelStream().forEach(testRunVO->{
+			count.incrementAndGet();
 			if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
 				TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
 				CopytestrunVo copyTestrunvo =new CopytestrunVo();
@@ -168,7 +169,6 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			WebClient webClient = WebClient.create(basePath+"/WATSservice/scheduleTestRun");
 			Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve().bodyToMono(String.class);
 			result.block();
-			count.incrementAndGet();
 		});
 	}
 	
