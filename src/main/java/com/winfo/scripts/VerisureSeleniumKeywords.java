@@ -17088,35 +17088,6 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 		}
 	}
 
-	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			CustomerProjectDto customerDetails) throws Exception {
-		try {
-			Thread.sleep(8000);
-			Set<String> set = driver.getWindowHandles();
-			Iterator<String> itr = set.iterator();
-			while (itr.hasNext()) {
-				String childWindow = itr.next();
-				driver.switchTo().window(childWindow);
-			}
-			driver.close();
-			Set<String> set1 = driver.getWindowHandles();
-			Iterator<String> itr1 = set1.iterator();
-			while (itr1.hasNext()) {
-				String childWindow = itr1.next();
-				driver.switchTo().window(childWindow);
-			}
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Sucessfully Clicked switchToParentWindowWithoutPDF " + scripNumber);
-
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during switchToParentWindow " + scripNumber);
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			e.printStackTrace();
-			throw e;
-		}
-	}
-
 
 	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
