@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
@@ -385,7 +386,7 @@ public class RunAutomation {
 				logger.info("Successfully created PDFs - " + allFutureResults.get());
 				
 				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(), fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
-				if(StringUtils.isNoneBlank(testScriptDto.getJobId())) {
+				if(testScriptDto.getJobId()!=null) {
 				userSchedulerJobRepository.updateEndDateInUserSchedulerJob(new Date(),customerDetails.getTestSetName(),testScriptDto.getJobId());
 				}
 				
@@ -394,10 +395,10 @@ public class RunAutomation {
 							.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
 				// check dependency and return test run id, if any dependency then call cloudRun method
-				if (StringUtils.isNoneBlank(testScriptDto.getJobId())) {
+				if(testScriptDto.getJobId()!=null) {
 					Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
-							.findByJobIdAndDependency(testScriptDto.getJobId(), testScriptDto.getTestScriptNo());
-					if (StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
+							.findByJobIdAndDependency(testScriptDto.getJobId(), Integer.parseInt(testScriptDto.getTestScriptNo()));
+					if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
 						TestScriptDto dependencyTestScriptDto = new TestScriptDto();
 						dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
 						dependencyTestScriptDto
@@ -407,13 +408,13 @@ public class RunAutomation {
 				}
 				
 				// send scheduler level notification email if jobId is present
-				if (StringUtils.isNoneBlank(testScriptDto.getJobId())) {
+				if(testScriptDto.getJobId()!=null) {
 					Optional<List<UserSchedulerJob>> listOfUserSchedulerJob = userSchedulerJobRepository
 							.findByJobId(testScriptDto.getJobId());
 					// check the size of the user scheduler job list
-					if (listOfUserSchedulerJob.get().size() > 0) {
-
+					//if (listOfUserSchedulerJob.isPresent() && listOfUserSchedulerJob.get().size() > 0) {
 						List<UserSchedulerJob> listOfUserSchedulerJobWithEndDate = listOfUserSchedulerJob.get().stream()
+								.filter(Objects::nonNull)
 								.map(job -> {
 									if (job.getEndDate() != null) {
 										return job;
@@ -421,19 +422,25 @@ public class RunAutomation {
 									return null;
 								}).filter(Objects::nonNull).collect(Collectors.toList());
 
-						if (listOfUserSchedulerJobWithEndDate.size() == listOfUserSchedulerJob.get().size()) {
-							// send notifications to users
-							List<TestSet> testSetIds = userSchedulerJobRepository.findByTestRuns(testScriptDto.getJobId());
-							
-							List<Integer> testRunIds = testSetIds.stream().map(testSet -> testSet.getTestRunId()).collect(Collectors.toList());
-							String listTestSetIds = testRunIds.stream().map(String::valueOf).collect(Collectors.joining(","));
-							String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName()).collect(Collectors.joining(","));
-							
-							
-							Scheduler jobName = schedulerRepository.findByJobId(Integer.parseInt(testScriptDto.getJobId()));
-							testRunsNotificationEmail(jobName.getJobName(),testLinesDetails,listTestSetIds,testScriptDto.getJobId(),testRunNames);
+						if (listOfUserSchedulerJob.isPresent()) {
+							if (listOfUserSchedulerJobWithEndDate.size() == listOfUserSchedulerJob.get().size()) {
+								// send notifications to users
+								List<TestSet> testSetIds = userSchedulerJobRepository
+										.findByTestRuns(testScriptDto.getJobId());
+
+								List<Integer> testRunIds = testSetIds.stream().map(testSet -> testSet.getTestRunId())
+										.collect(Collectors.toList());
+								String listTestSetIds = testRunIds.stream().map(String::valueOf)
+										.collect(Collectors.joining(","));
+								String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName())
+										.collect(Collectors.joining(","));
+
+								Scheduler scheduler = schedulerRepository.findByJobId(testScriptDto.getJobId());
+								dataBaseEntry.testRunsNotificationEmail(scheduler.getJobName(), testLinesDetails, listTestSetIds,
+										testScriptDto.getJobId(), testRunNames);
+							}
 						}
-					}
+				//	}
 				}
 				
 				increment = 0;
@@ -455,17 +462,7 @@ public class RunAutomation {
 		return executeTestrunVo;
 	}
 	
-	@SuppressWarnings("unused")
-	private void testRunsNotificationEmail(String jobName,List<ScriptDetailsDto> fetchMetadataListVO,
-			String testRunIds,String jobId,String testRunNames) {
-		
-		EmailParamDto emailParam = new EmailParamDto();
-		emailParam.setJobName(jobName);
-		emailParam.setTestSetName(testRunNames);
-		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
-		dao.getUserAndPrjManagerNameAndTestRuns(emailParam.getExecutedBy(), testRunIds, emailParam,jobId);
-		sendMailServiceImpl.sendMail(emailParam);
-	}
+
 
 	public void executorMethod(String testRunId, FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> testLinesDetails,
 			Entry<Integer, List<ScriptDetailsDto>> metaData, Map<Integer, Status> scriptStatus,

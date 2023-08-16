@@ -383,6 +383,19 @@ public class DataBaseEntry {
 				fetchMetadataListVO.get(0).getScriptNumber(), fetchConfigVO.getStatus1(), fetchConfigVO.getStarttime(),
 				fetchConfigVO.getEndtime(), fetchScriptVO.getP_test_set_id());
 	}
+	
+	@SuppressWarnings("unused")
+	@Transactional
+	public void testRunsNotificationEmail(String jobName,List<ScriptDetailsDto> fetchMetadataListVO,
+			String testRunIds,Integer jobId,String testRunNames) {
+		
+		EmailParamDto emailParam = new EmailParamDto();
+		emailParam.setJobName(jobName);
+		emailParam.setTestSetName(testRunNames);
+		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
+		dao.getUserAndPrjManagerNameAndTestRuns(emailParam.getExecutedBy(), testRunIds, emailParam,jobId);
+		sendMailServiceImpl.schedulerSendMail(emailParam);
+	}
 
 	public String pdfGenerationEnabled(long testSetId) {
 		return dao.getTestSetPdfGenerationEnableStatus(testSetId);

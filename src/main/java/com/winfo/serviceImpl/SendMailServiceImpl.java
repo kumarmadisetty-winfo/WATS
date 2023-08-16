@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.winfo.exception.WatsEBSException;
@@ -202,6 +203,45 @@ public class SendMailServiceImpl {
 		} catch (MessagingException e) {
 			e.printStackTrace();
 			throw new WatsEBSException(500, "Exception occured while sending mail for script run.", e);
+		}
+	}
+	
+	public void schedulerSendMail(EmailParamDto emailParamDto) {
+		Session session = getSession();
+		String subject = "FYI-Execution successfully completed  for " + emailParamDto.getJobName();
+
+		String body = "<html>\r\n" + "<body>\r\n"
+				+ "        <p>Hi,<br><br>This notification is to update you that the execution of <b>"
+				+ emailParamDto.getJobName()
+				+ "</b> has completed successfully.\r\n"
+				+ "         <br><br>Please login in Winfo Automation Test tool to review full results.<br><br>\r\n"
+				+ "       <br>Please click <a href='" + link + "'><b>here</b></a> to open login page.<br><br>\r\n"
+				+ "        Thanks,<br><b>Winfo Test Automation</b>.\r\n" + "        </p>\r\n" + "    </body>\r\n"
+				+ "</html>";
+
+		try {
+
+			MimeMessage message = new MimeMessage(session);
+			message.setHeader("Content-Type", "text/html; charset=UTF-8");
+			message.setFrom(new InternetAddress(userName));
+			message.setSentDate(new Date());
+			message.setRecipients(Message.RecipientType.TO,
+					emailParamDto.getReceiver() != null ? InternetAddress.parse(emailParamDto.getReceiver()) : null);
+			message.addRecipients(Message.RecipientType.CC,
+					emailParamDto.getCcPerson() != null ? InternetAddress.parse(emailParamDto.getCcPerson()) : null);
+
+			message.setSubject(subject);
+
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setText(body, "utf-8", "html");
+			MimeMultipart multipart = new MimeMultipart();
+			multipart.addBodyPart(messageBodyPart);
+			message.setContent(multipart);
+			Transport.send(message);
+
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while sending mail for Scheduler Job ", e);
 		}
 	}
 

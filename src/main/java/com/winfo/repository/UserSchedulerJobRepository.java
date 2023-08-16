@@ -20,10 +20,12 @@ public interface UserSchedulerJobRepository extends JpaRepository<UserSchedulerJ
 	@Modifying
     @Transactional
     @Query("update UserSchedulerJob set endDate=:endDate where comments=:testRunName and jobId=:jobId")
-    int updateEndDateInUserSchedulerJob(Date endDate, String testRunName,String jobId);
+    int updateEndDateInUserSchedulerJob(Date endDate, String testRunName,int jobId);
 	
-	Optional<List<UserSchedulerJob>> findByJobId(String jobId);
-	Optional<UserSchedulerJob> findByJobIdAndDependency(String jobId,String dependency);
-	@Query("select TestSet from UserSchedulerJob, TestSet where comments=testRunName and jobId=:jobId")
-	List<TestSet> findByTestRuns(String jobId);
+	Optional<List<UserSchedulerJob>> findByJobId(int jobId);
+	
+	Optional<UserSchedulerJob> findByJobIdAndDependency(int jobId,int dependency);
+	
+	@Query("select t1 from UserSchedulerJob uj, TestSet t1 where uj.comments=t1.testRunName and uj.jobId=:jobId")
+	List<TestSet> findByTestRuns(int jobId);
 }

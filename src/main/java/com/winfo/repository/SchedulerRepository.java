@@ -9,6 +9,6 @@ import com.winfo.model.Scheduler;
 public interface SchedulerRepository extends JpaRepository<Scheduler, Integer>{
 
 	Scheduler findByJobName(String jobName);
-	Scheduler findByJobId(Integer jobId);
+	Scheduler findByJobId(int jobId);
 
 }

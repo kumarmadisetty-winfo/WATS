@@ -1314,12 +1314,13 @@ public class DataBaseEntryDao {
 		}
 	}
 	
-	public void getUserAndPrjManagerNameAndTestRuns(String userName, String listTestSetIds, EmailParamDto emailParam,String jobId) {
+
+	public void getUserAndPrjManagerNameAndTestRuns(String userName, String listTestSetIds, EmailParamDto emailParam,Integer jobId) {
 
 		String fetchUserName = "SELECT EMAIL\r\n" + "FROM WIN_TA_USERS\r\n" + "WHERE UPPER(USER_ID) = UPPER('"
 				+ userName + "')";
 
-		String fetchManagerName = "SELECT PROJ.PROJECT_MANAGER_EMAIL\r\n"
+		String projectManagerEmail = "SELECT PROJ.PROJECT_MANAGER_EMAIL\r\n"
 				+ "FROM WIN_TA_TEST_SET TS,WIN_TA_PROJECTS PROJ\r\n" + "WHERE TS.PROJECT_ID=PROJ.PROJECT_ID\r\n"
 				+ "AND TS.TEST_SET_ID IN (" + listTestSetIds + ")" + "AND ROWNUM=1";
 		
@@ -1330,7 +1331,7 @@ public class DataBaseEntryDao {
 		try {
 			Session session = em.unwrap(Session.class);
 			String user = (String) session.createSQLQuery(fetchUserName).getSingleResult();
-			List<String> manager = session.createSQLQuery(fetchManagerName).list();
+			List<String> managerEmails = session.createSQLQuery(projectManagerEmail).list();
 			List<String> client_ids = session.createSQLQuery(clientIdQuery).list();
 			if(client_ids.size()>0){
 				String listOfEmails = client_ids.stream().filter(Objects::nonNull).map(clientId ->{
@@ -1340,7 +1341,8 @@ public class DataBaseEntryDao {
 			} else {
 				emailParam.setReceiver(user);
 			}
-			emailParam.setCcPerson(manager.parallelStream().collect(Collectors.joining(",")));
+			emailParam.setCcPerson(managerEmails.stream().filter(Objects::nonNull).collect(Collectors.joining(",")));
+			
 		} catch (Exception e) {
 			throw new WatsEBSException(500, "Exception occured while fetching email for user.", e);
 		}
