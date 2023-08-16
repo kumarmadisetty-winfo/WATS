@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -38,9 +39,16 @@ import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
 import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
+import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.model.Scheduler;
+import com.winfo.model.TestSet;
+import com.winfo.model.UserSchedulerJob;
+import com.winfo.repository.SchedulerRepository;
+import com.winfo.repository.TestSetRepository;
+import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.service.SFInterface;
 import com.winfo.service.WoodInterface;
 import com.winfo.serviceImpl.DataBaseEntry;
@@ -49,6 +57,7 @@ import com.winfo.serviceImpl.GraphQLService;
 import com.winfo.serviceImpl.JiraTicketBugService;
 import com.winfo.serviceImpl.LimitScriptExecutionService;
 import com.winfo.serviceImpl.ScriptXpathService;
+import com.winfo.serviceImpl.SendMailServiceImpl;
 import com.winfo.serviceImpl.SmartBearService;
 import com.winfo.serviceImpl.TestCaseDataService;
 import com.winfo.serviceImpl.TestScriptExecService;
@@ -58,12 +67,14 @@ import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.FileUtil;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
+import com.winfo.vo.EmailParamDto;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.FetchMetadataVO;
 import com.winfo.vo.FetchScriptVO;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptDetailsDto;
 import com.winfo.vo.Status;
+import com.winfo.vo.TestScriptDto;
 
 @Service
 
@@ -107,6 +118,16 @@ public class RunAutomation {
 	GraphQLService graphQLService;
 	@Autowired
 	SmartBearService smartBearService;
+	@Autowired
+	UserSchedulerJobRepository userSchedulerJobRepository;
+	@Autowired
+	SendMailServiceImpl sendMailServiceImpl;
+	@Autowired
+	TestSetRepository testSetRepository;
+	@Autowired
+	DataBaseEntryDao dao;
+	@Autowired
+	SchedulerRepository schedulerRepository;
 
 
 	@Autowired
@@ -138,17 +159,17 @@ public class RunAutomation {
 	long increment = 0;
 
 	@Async
-	public ResponseDto run(String testRunId) throws MalformedURLException {
-		logger.info("Test Run Id : " + testRunId);
+	public ResponseDto run(TestScriptDto testScriptDto) throws MalformedURLException {
+		logger.info("Test Run Id : " + testScriptDto.getTestScriptNo());
 
 		ResponseDto executeTestrunVo;
-		String checkPackage = dataBaseEntry.getPackage(testRunId);
+		String checkPackage = dataBaseEntry.getPackage(testScriptDto.getTestScriptNo());
 		if (checkPackage != null && checkPackage.toLowerCase().contains(Constants.EBS)) {
-			executeTestrunVo = ebsRun(testRunId);
+			executeTestrunVo = ebsRun(testScriptDto.getTestScriptNo());
 		} else {
-			executeTestrunVo = cloudRun(testRunId);
+			executeTestrunVo = cloudRun(testScriptDto);
 		}
-		logger.info("End of Test Script Run : " + testRunId);
+		logger.info("End of Test Script Run : " + testScriptDto.getTestScriptNo());
 
 		return executeTestrunVo;
 	}
@@ -197,8 +218,9 @@ public class RunAutomation {
 		return executeTestrunVo;
 	}
 
-	public ResponseDto cloudRun(String testSetId) throws MalformedURLException {
+	public ResponseDto cloudRun(TestScriptDto testScriptDto) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
+		String testSetId = testScriptDto.getTestScriptNo();
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
@@ -363,13 +385,60 @@ public class RunAutomation {
 				logger.info("Successfully created PDFs - " + allFutureResults.get());
 				
 				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(), fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
+				if(StringUtils.isNoneBlank(testScriptDto.getJobId())) {
+				userSchedulerJobRepository.updateEndDateInUserSchedulerJob(new Date(),customerDetails.getTestSetName(),testScriptDto.getJobId());
+				}
 				
-				increment = 0;
-
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 					seleniumFactory.getInstanceObj(fetchConfigVO.getINSTANCE_NAME())
 							.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
+				// check dependency and return test run id, if any dependency then call cloudRun method
+				if (StringUtils.isNoneBlank(testScriptDto.getJobId())) {
+					Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
+							.findByJobIdAndDependency(testScriptDto.getJobId(), testScriptDto.getTestScriptNo());
+					if (StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
+						TestScriptDto dependencyTestScriptDto = new TestScriptDto();
+						dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
+						dependencyTestScriptDto
+								.setTestScriptNo(String.valueOf(testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId()));
+						cloudRun(dependencyTestScriptDto);
+					}
+				}
+				
+				// send scheduler level notification email if jobId is present
+				if (StringUtils.isNoneBlank(testScriptDto.getJobId())) {
+					Optional<List<UserSchedulerJob>> listOfUserSchedulerJob = userSchedulerJobRepository
+							.findByJobId(testScriptDto.getJobId());
+					// check the size of the user scheduler job list
+					if (listOfUserSchedulerJob.get().size() > 0) {
+
+						List<UserSchedulerJob> listOfUserSchedulerJobWithEndDate = listOfUserSchedulerJob.get().stream()
+								.map(job -> {
+									if (job.getEndDate() != null) {
+										return job;
+									}
+									return null;
+								}).filter(Objects::nonNull).collect(Collectors.toList());
+
+						if (listOfUserSchedulerJobWithEndDate.size() == listOfUserSchedulerJob.get().size()) {
+							// send notifications to users
+							List<TestSet> testSetIds = userSchedulerJobRepository.findByTestRuns(testScriptDto.getJobId());
+							
+							List<Integer> testRunIds = testSetIds.stream().map(testSet -> testSet.getTestRunId()).collect(Collectors.toList());
+							String listTestSetIds = testRunIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+							String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName()).collect(Collectors.joining(","));
+							
+							
+							Scheduler jobName = schedulerRepository.findByJobId(Integer.parseInt(testScriptDto.getJobId()));
+							testRunsNotificationEmail(jobName.getJobName(),testLinesDetails,listTestSetIds,testScriptDto.getJobId(),testRunNames);
+						}
+					}
+				}
+				
+				increment = 0;
+
+				
 				executeTestrunVo.setStatusCode(200);
 				executeTestrunVo.setStatusMessage("SUCCESS");
 				executeTestrunVo.setStatusDescr("SUCCESS");
@@ -384,6 +453,18 @@ public class RunAutomation {
 			dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId, "Y");
 		}
 		return executeTestrunVo;
+	}
+	
+	@SuppressWarnings("unused")
+	private void testRunsNotificationEmail(String jobName,List<ScriptDetailsDto> fetchMetadataListVO,
+			String testRunIds,String jobId,String testRunNames) {
+		
+		EmailParamDto emailParam = new EmailParamDto();
+		emailParam.setJobName(jobName);
+		emailParam.setTestSetName(testRunNames);
+		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
+		dao.getUserAndPrjManagerNameAndTestRuns(emailParam.getExecutedBy(), testRunIds, emailParam,jobId);
+		sendMailServiceImpl.sendMail(emailParam);
 	}
 
 	public void executorMethod(String testRunId, FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> testLinesDetails,
