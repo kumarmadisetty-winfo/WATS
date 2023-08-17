@@ -211,9 +211,10 @@ public class SendMailServiceImpl {
 		String subject = "FYI-Execution successfully completed  for " + emailParamDto.getJobName();
 
 		String body = "<html>\r\n" + "<body>\r\n"
-				+ "        <p>Hi,<br><br>This notification is to update you that the execution of <b>"
-				+ emailParamDto.getJobName()
-				+ "</b> has completed successfully.\r\n"
+				+ "        <p>Hi,<br><br>This notification is to update you that the execution of job : <b>"
+				+ emailParamDto.getJobName() + ".<br><br>"
+				+ emailParamDto.getTestSetName() + "</b>" + " these testruns " 
+				+ "has completed successfully.\r\n"
 				+ "         <br><br>Please login in Winfo Automation Test tool to review full results.<br><br>\r\n"
 				+ "       <br>Please click <a href='" + link + "'><b>here</b></a> to open login page.<br><br>\r\n"
 				+ "        Thanks,<br><b>Winfo Test Automation</b>.\r\n" + "        </p>\r\n" + "    </body>\r\n"
