@@ -2244,10 +2244,10 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + keysToSend
 						+ "\"]/following::img[@title=\"" + param1 + "\"]"));
 				Actions actions = new Actions(driver);
+				screenshot(driver, fetchMetadataVO, customerDetails);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked Review installments selectAValue " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"keysToSend\"]/following::img[@title=\"param1\"]";
@@ -2355,9 +2355,10 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),\"" + param1
 					+ "\")]/following::span[normalize-space(text())=\"" + keysToSend + "\"][1]"));
 			Thread.sleep(2000);
+			screenshot(driver, fetchMetadataVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::span[normalize-space(text())=\"keysToSend\"][1]";
@@ -17145,7 +17146,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			logger.error("Failed during window Handle " + e.getMessage());
 		}
 		try {
-			Thread.sleep(20000);
+			Thread.sleep(2000);
 			String mainWindow = driver.getWindowHandle();
 			Set<String> set = driver.getWindowHandles();
 			Iterator<String> itr = set.iterator();
