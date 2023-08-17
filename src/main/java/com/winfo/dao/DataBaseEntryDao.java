@@ -30,12 +30,10 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.QueryException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
@@ -1291,23 +1289,13 @@ public class DataBaseEntryDao {
 				+ "FROM WIN_TA_TEST_SET TS,WIN_TA_PROJECTS PROJ\r\n" + "WHERE TS.PROJECT_ID=PROJ.PROJECT_ID\r\n"
 				+ "AND TS.TEST_SET_ID = " + testSetId + "\r\n" + "AND ROWNUM=1";
 		
-		String clientIdQuery = "select client_id from win_ta_user_scheduler_jobs us, win_ta_test_set ts " +
-                "where us.end_date is null " +
-                "and UPPER(US.comments)=" +
-                "UPPER((select distinct test_set_name from win_ta_test_set where test_set_id=" + testSetId + "";
 
 		try {
 			Session session = em.unwrap(Session.class);
 			String user = (String) session.createSQLQuery(fetchUserName).getSingleResult();
 			String manager = (String) session.createSQLQuery(fetchManagerName).getSingleResult();
-			String client_ids = (String) session.createSQLQuery(clientIdQuery).getSingleResult();
-			if(StringUtils.isNotBlank(client_ids)){
-				String listOfEmails = Arrays.asList(client_ids).stream().filter(email -> !user.equalsIgnoreCase(email)).collect(Collectors.joining(","));
-				emailParam.setReceiver(user+","+listOfEmails);
-			} else {
-				emailParam.setReceiver(user);
-			}
 			
+			emailParam.setReceiver(user);
 			emailParam.setCcPerson(manager);
 		} catch (Exception e) {
 			throw new WatsEBSException(500, "Exception occured while fetching email for user.", e);

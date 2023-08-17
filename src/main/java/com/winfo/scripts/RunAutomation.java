@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -34,7 +36,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.lowagie.text.DocumentException;
 import com.winfo.Factory.SeleniumKeywordsFactory;
@@ -68,7 +69,6 @@ import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.utils.FileUtil;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
-import com.winfo.vo.EmailParamDto;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.FetchMetadataVO;
 import com.winfo.vo.FetchScriptVO;
@@ -387,7 +387,10 @@ public class RunAutomation {
 				
 				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(), fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
 				if(testScriptDto.getJobId()!=null) {
-				userSchedulerJobRepository.updateEndDateInUserSchedulerJob(new Date(),customerDetails.getTestSetName(),testScriptDto.getJobId());
+					dataBaseEntry.testRunsNotificationEmail(customerDetails.getTestSetName(),testLinesDetails,testScriptDto.getJobId(),customerDetails.getTestSetId());
+					//String FORMAT = "dd-MMM-yyyy HH:mm:ss.SSS";
+					LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
+					userSchedulerJobRepository.updateEndDateInUserSchedulerJob(localDate,customerDetails.getTestSetName(),testScriptDto.getJobId());
 				}
 				
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -436,7 +439,7 @@ public class RunAutomation {
 										.collect(Collectors.joining(","));
 
 								Scheduler scheduler = schedulerRepository.findByJobId(testScriptDto.getJobId());
-								dataBaseEntry.testRunsNotificationEmail(scheduler.getJobName(), testLinesDetails, listTestSetIds,
+								dataBaseEntry.schedulerNotificationEmail(scheduler.getJobName(), testLinesDetails, listTestSetIds,
 										testScriptDto.getJobId(), testRunNames);
 							}
 						}

@@ -1,7 +1,7 @@
 
 package com.winfo.repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public interface UserSchedulerJobRepository extends JpaRepository<UserSchedulerJ
 	@Modifying
     @Transactional
     @Query("update UserSchedulerJob set endDate=:endDate where comments=:testRunName and jobId=:jobId")
-    int updateEndDateInUserSchedulerJob(Date endDate, String testRunName,int jobId);
+    int updateEndDateInUserSchedulerJob(LocalDateTime endDate, String testRunName,int jobId);
 	
 	Optional<List<UserSchedulerJob>> findByJobId(int jobId);
 	
@@ -28,4 +28,6 @@ public interface UserSchedulerJobRepository extends JpaRepository<UserSchedulerJ
 	
 	@Query("select t1 from UserSchedulerJob uj, TestSet t1 where uj.comments=t1.testRunName and uj.jobId=:jobId")
 	List<TestSet> findByTestRuns(int jobId);
+
+	Optional<UserSchedulerJob> findByJobIdAndComments(int jobId,String testRunName);
 }

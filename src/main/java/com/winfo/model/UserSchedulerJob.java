@@ -1,6 +1,7 @@
 package com.winfo.model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,7 +43,7 @@ public class UserSchedulerJob {
 	private Date startDate;
 	
 	@Column(name = "END_DATE")
-	private Date endDate;
+	private LocalDateTime endDate;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;

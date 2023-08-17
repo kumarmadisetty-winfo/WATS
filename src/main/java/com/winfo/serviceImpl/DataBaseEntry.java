@@ -3,17 +3,19 @@ package com.winfo.serviceImpl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.model.User;
+import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.CustomerRepository;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.ScriptMasterRepository;
@@ -39,6 +43,8 @@ import com.winfo.repository.ScriptMetaDataRepository;
 import com.winfo.repository.SubscriptionRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetScriptParamRepository;
+import com.winfo.repository.UserRepository;
+import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
@@ -89,6 +95,10 @@ public class DataBaseEntry {
 
 	@Autowired
 	private TestSetLinesRepository testSetLinesRepository;
+	@Autowired
+	UserRepository userRepository;
+	@Autowired
+	UserSchedulerJobRepository userSchedulerJobRepository;
 	
 	public void updateStartAndEndTimeForTestSetTable(String testSetId, Date startTime, Date endTime) {
 		dao.updateStartAndEndTimeForTestSetTable(testSetId, startTime, endTime);
@@ -386,7 +396,7 @@ public class DataBaseEntry {
 	
 	@SuppressWarnings("unused")
 	@Transactional
-	public void testRunsNotificationEmail(String jobName,List<ScriptDetailsDto> fetchMetadataListVO,
+	public void schedulerNotificationEmail(String jobName,List<ScriptDetailsDto> fetchMetadataListVO,
 			String testRunIds,Integer jobId,String testRunNames) {
 		
 		EmailParamDto emailParam = new EmailParamDto();
@@ -396,6 +406,36 @@ public class DataBaseEntry {
 		dao.getUserAndPrjManagerNameAndTestRuns(emailParam.getExecutedBy(), testRunIds, emailParam,jobId);
 		sendMailServiceImpl.schedulerSendMail(emailParam);
 	}
+	
+	@SuppressWarnings("unused")
+	@Transactional
+	public void testRunsNotificationEmail(String testSetName,List<ScriptDetailsDto> fetchMetadataListVO,
+			Integer jobId,String testSetId) {
+		EmailParamDto emailParam = new EmailParamDto();
+		emailParam.setTestSetName(testSetName);
+		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
+		dao.getPassAndFailCount(testSetId, emailParam);
+		BigDecimal requestCount = (BigDecimal) dao.getRequestCountFromExecStatus(testSetId);
+		emailParam.setRequestCount(requestCount.intValue());
+
+		String userEmail = userRepository.findByUserId(emailParam.getExecutedBy().toUpperCase());
+		String testRunEmails = null;
+		Optional<UserSchedulerJob> userSchedulerJob = userSchedulerJobRepository.findByJobIdAndComments(jobId,testSetName);
+		if(userSchedulerJob.isPresent()) {
+			if(userSchedulerJob.get().getEndDate()== null) {
+				testRunEmails = userSchedulerJob.get().getClientId();
+				String listOfEmails = Arrays.asList(testRunEmails).stream()
+				.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
+				if(StringUtils.isNoneBlank(listOfEmails)) {
+					emailParam.setReceiver(listOfEmails);
+				}
+			}
+		}
+		if(StringUtils.isNoneBlank(emailParam.getReceiver())) {
+			sendMailServiceImpl.sendMail(emailParam);
+		}
+	}
+	
 
 	public String pdfGenerationEnabled(long testSetId) {
 		return dao.getTestSetPdfGenerationEnableStatus(testSetId);
