@@ -162,7 +162,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				}
 			}		
 			TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
-			String newSubSchedularName=jobName+"ADDEDNUM"+count.incrementAndGet();
+			String newSubSchedularName=jobName+Constants.ADDEDNUM+count.incrementAndGet();
 			ScheduleSubJobVO scheduleSubJobVO=new ScheduleSubJobVO();
 			scheduleSubJobVO.setEmail(testRunVO.getNotification());
 			scheduleSubJobVO.setJobId(jobId);
