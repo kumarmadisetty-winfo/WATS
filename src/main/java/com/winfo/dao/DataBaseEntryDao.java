@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,7 +34,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.QueryException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
@@ -1287,13 +1288,49 @@ public class DataBaseEntryDao {
 		String fetchManagerName = "SELECT PROJ.PROJECT_MANAGER_EMAIL\r\n"
 				+ "FROM WIN_TA_TEST_SET TS,WIN_TA_PROJECTS PROJ\r\n" + "WHERE TS.PROJECT_ID=PROJ.PROJECT_ID\r\n"
 				+ "AND TS.TEST_SET_ID = " + testSetId + "\r\n" + "AND ROWNUM=1";
+		
 
 		try {
 			Session session = em.unwrap(Session.class);
 			String user = (String) session.createSQLQuery(fetchUserName).getSingleResult();
 			String manager = (String) session.createSQLQuery(fetchManagerName).getSingleResult();
+			
 			emailParam.setReceiver(user);
 			emailParam.setCcPerson(manager);
+		} catch (Exception e) {
+			throw new WatsEBSException(500, "Exception occured while fetching email for user.", e);
+		}
+	}
+	
+
+	public void getUserAndPrjManagerNameAndTestRuns(String userName, String listTestSetIds, EmailParamDto emailParam,Integer jobId) {
+
+		String fetchUserName = "SELECT EMAIL\r\n" + "FROM WIN_TA_USERS\r\n" + "WHERE UPPER(USER_ID) = UPPER('"
+				+ userName + "')";
+
+		String projectManagerEmail = "SELECT PROJ.PROJECT_MANAGER_EMAIL\r\n"
+				+ "FROM WIN_TA_TEST_SET TS,WIN_TA_PROJECTS PROJ\r\n" + "WHERE TS.PROJECT_ID=PROJ.PROJECT_ID\r\n"
+				+ "AND TS.TEST_SET_ID IN (" + listTestSetIds + ")" + "AND ROWNUM=1";
+		
+		String clientIdQuery = "select client_id from win_ta_user_scheduler_jobs us " +
+                "where us.end_date is not null " +
+                "and job_id=" + jobId + "";
+
+		try {
+			Session session = em.unwrap(Session.class);
+			String user = (String) session.createSQLQuery(fetchUserName).getSingleResult();
+			List<String> managerEmails = session.createSQLQuery(projectManagerEmail).list();
+			List<String> client_ids = session.createSQLQuery(clientIdQuery).list();
+			if(client_ids.size()>0){
+				String listOfEmails = client_ids.stream().filter(Objects::nonNull).map(clientId ->{
+					return Arrays.asList(clientId).stream().filter(email -> !user.equalsIgnoreCase(email)).collect(Collectors.joining(","));
+				}).collect(Collectors.joining(","));
+				emailParam.setReceiver(user+","+listOfEmails);
+			} else {
+				emailParam.setReceiver(user);
+			}
+			emailParam.setCcPerson(managerEmails.stream().filter(Objects::nonNull).collect(Collectors.joining(",")));
+			
 		} catch (Exception e) {
 			throw new WatsEBSException(500, "Exception occured while fetching email for user.", e);
 		}

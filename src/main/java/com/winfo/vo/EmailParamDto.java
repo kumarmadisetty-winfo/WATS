@@ -22,5 +22,7 @@ public class EmailParamDto {
 	private String testSetName;
 
 	private String executedBy;
+	
+	private String jobName;
 
 }

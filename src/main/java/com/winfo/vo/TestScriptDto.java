@@ -6,5 +6,6 @@ import lombok.Data;
 public class TestScriptDto {
 
 	private String testScriptNo = "false";
+	private Integer jobId;
 
 }
