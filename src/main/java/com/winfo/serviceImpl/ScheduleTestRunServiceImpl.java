@@ -84,9 +84,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName().toUpperCase());
-			List<UserSchedulerJob> listOfSubJob = userSchedulerJobRepository.findByJobId(scheduler.getJobId());
-			if (scheduleJobVO.getTestRuns().size() > listOfSubJob.size()) {
-				List<String> listOfSubJobFromDB = listOfSubJob.parallelStream().map(UserSchedulerJob::getComments)
+			Optional<List<UserSchedulerJob>> listOfSubJob = userSchedulerJobRepository.findByJobId(scheduler.getJobId());
+			if (scheduleJobVO.getTestRuns().size() > listOfSubJob.get().size()) {
+				List<String> listOfSubJobFromDB = listOfSubJob.get().parallelStream().map(UserSchedulerJob::getComments)
 						.collect(Collectors.toList());
 				List<String> listOfSubJobFromVO = scheduleJobVO.getTestRuns().parallelStream()
 						.map(ScheduleTestRunVO::getTemplateTestRun).collect(Collectors.toList());
@@ -96,13 +96,13 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						.filter(subJob -> newAddedSubJobNames.contains(subJob.getTemplateTestRun()))
 						.collect(Collectors.toList());
 				if (newAddedSubJobs.size() > 0) {
-					AtomicInteger count = new AtomicInteger(listOfSubJob.size());
+					AtomicInteger count = new AtomicInteger(listOfSubJob.get().size());
 					createSchedule(scheduleJobVO, newAddedSubJobs, count,scheduler);
 				}
 			}
 
 			scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
-				listOfSubJob.parallelStream().forEach(subScheduleJob -> {
+				listOfSubJob.get().parallelStream().forEach(subScheduleJob -> {
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
 						Optional<String> dbTimeIntoJsonTimeFormat = convertTimeFormat(subScheduleJob.getStartDate());
 						if (dbTimeIntoJsonTimeFormat.isPresent() && !testRunVO.getStartDate().equalsIgnoreCase(dbTimeIntoJsonTimeFormat.get())
