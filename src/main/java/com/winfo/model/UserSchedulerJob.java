@@ -40,7 +40,7 @@ public class UserSchedulerJob {
 	private String clientId;
 
 	@Column(name = "START_DATE")
-	private Date startDate;
+	private String startDate;
 	
 	@Column(name = "END_DATE")
 	private LocalDateTime endDate;
