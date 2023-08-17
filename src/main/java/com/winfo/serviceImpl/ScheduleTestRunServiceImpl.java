@@ -1,8 +1,6 @@
 
 package com.winfo.serviceImpl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -63,8 +61,19 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public  ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {	
 			AtomicInteger count=new AtomicInteger(0);
-			createSchedule(scheduleJobVO,scheduleJobVO.getTestRuns(),count);
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Successfully created new job");
+			Scheduler scheduler =schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName().toUpperCase());
+			if(scheduler==null) {
+				scheduler=new Scheduler();
+				scheduler.setConfigurationId(scheduleJobVO.getConfigurationId());
+				scheduler.setProjectId(scheduleJobVO.getProjectId());
+				scheduler.setCreatedBy(scheduleJobVO.getSchedulerEmail());
+				scheduler.setCreationDate(new Date());
+				scheduler.setEmail(scheduleJobVO.getSchedulerEmail());
+				scheduler.setJobName(scheduleJobVO.getSchedulerName().toUpperCase());
+				scheduler=schedulerRepository.save(scheduler);
+			}
+			int jobId=createSchedule(scheduleJobVO,scheduleJobVO.getTestRuns(),count,scheduler);
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, jobId+":"+scheduleJobVO.getSchedulerName()+" Successfully created new job");
 		}catch(Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
@@ -88,7 +97,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						.collect(Collectors.toList());
 				if (newAddedSubJobs.size() > 0) {
 					AtomicInteger count = new AtomicInteger(listOfSubJob.size());
-					createSchedule(scheduleJobVO, newAddedSubJobs, count);
+					createSchedule(scheduleJobVO, newAddedSubJobs, count,scheduler);
 				}
 			}
 
@@ -117,14 +126,16 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 					}
 				});
 			});
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Successfully updated the job");
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, scheduler.getJobId()+":"+scheduler.getJobName()+" Successfully updated the job");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
 	}
 	
-	public void createSchedule(ScheduleJobVO scheduleJobVO, List<ScheduleTestRunVO> listOfTestRunInJob,AtomicInteger count) {
+	public int createSchedule(ScheduleJobVO scheduleJobVO, List<ScheduleTestRunVO> listOfTestRunInJob,AtomicInteger count,Scheduler scheduler) {
+		String jobName = scheduler.getJobName();
+		int jobId = scheduler.getJobId();
 		listOfTestRunInJob.parallelStream().forEach(testRunVO->{
 			count.incrementAndGet();
 			if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
@@ -151,22 +162,11 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 				}
 			}		
-			Scheduler scheduler =schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName().toUpperCase());
-			if(scheduler==null) {
-				scheduler=new Scheduler();
-				scheduler.setConfigurationId(scheduleJobVO.getConfigurationId());
-				scheduler.setProjectId(scheduleJobVO.getProjectId());
-				scheduler.setCreatedBy(scheduleJobVO.getSchedulerEmail());
-				scheduler.setCreationDate(new Date());
-				scheduler.setEmail(scheduleJobVO.getSchedulerEmail());
-				scheduler.setJobName(scheduleJobVO.getSchedulerName().toUpperCase());
-				scheduler=schedulerRepository.save(scheduler);
-			}
 			TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
-			String newSubSchedularName=scheduler.getJobName()+"ADDEDNUM"+count;
+			String newSubSchedularName=jobName+"ADDEDNUM"+count;
 			ScheduleSubJobVO scheduleSubJobVO=new ScheduleSubJobVO();
 			scheduleSubJobVO.setEmail(testRunVO.getNotification());
-			scheduleSubJobVO.setJobId(scheduler.getJobId());
+			scheduleSubJobVO.setJobId(jobId);
 			scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
 			scheduleSubJobVO.setSubJobName(newSubSchedularName);
 			scheduleSubJobVO.setTestRunName(testRun.getTestRunName());
@@ -181,6 +181,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Error occurred from APEX web service of create scheduled job", e);
 			}
 		});
+		return jobId;
 	}
 	
     private Optional <String> convertTimeFormat(String inputTime) {
