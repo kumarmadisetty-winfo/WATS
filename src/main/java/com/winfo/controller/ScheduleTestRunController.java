@@ -25,7 +25,7 @@ public class ScheduleTestRunController {
 	ScheduleTestRunService scheduleTestRunService;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@PostMapping("/schedule ")
+	@PostMapping("/schedule")
 	@ApiOperation( value="Create new scheduled job for group of test run",notes = "")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Successfully created the scheduled job")})
 	public  ResponseEntity createScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {
@@ -40,7 +40,7 @@ public class ScheduleTestRunController {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@PutMapping("/schedule ")
+	@PutMapping("/schedule")
 	@ApiOperation( value="edit scheduled job for group of test run",notes = "")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Successfully updated the scheduled job")})
 	public  ResponseEntity editScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {

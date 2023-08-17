@@ -96,12 +96,14 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				listOfSubJob.parallelStream().forEach(subScheduleJob -> {
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
 						Optional<String> dbTimeIntoJsonTimeFormat = convertTimeFormat(subScheduleJob.getStartDate());
-						if (dbTimeIntoJsonTimeFormat.isPresent() && !testRunVO.getStartDate().equalsIgnoreCase(dbTimeIntoJsonTimeFormat.get())) {
+						if (dbTimeIntoJsonTimeFormat.isPresent() && !testRunVO.getStartDate().equalsIgnoreCase(dbTimeIntoJsonTimeFormat.get())
+								|| !testRunVO.getNotification().equalsIgnoreCase(subScheduleJob.getClientId())) {
 							ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
 							scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
 							scheduleSubJobVO.setJobId(subScheduleJob.getJobId());
 							scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
 							scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
+							scheduleSubJobVO.setEmail(testRunVO.getNotification());
 							try {	
 								WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
 								Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
