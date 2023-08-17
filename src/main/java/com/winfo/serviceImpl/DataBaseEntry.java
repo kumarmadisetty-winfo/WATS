@@ -426,12 +426,12 @@ public class DataBaseEntry {
 				testRunEmails = userSchedulerJob.get().getClientId();
 				String listOfEmails = Arrays.asList(testRunEmails).stream()
 				.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
-				if(StringUtils.isNoneBlank(listOfEmails)) {
+				if(StringUtils.isNotBlank(listOfEmails)) {
 					emailParam.setReceiver(listOfEmails);
 				}
 			}
 		}
-		if(StringUtils.isNoneBlank(emailParam.getReceiver())) {
+		if(StringUtils.isNotBlank(emailParam.getReceiver())) {
 			sendMailServiceImpl.sendMail(emailParam);
 		}
 	}
