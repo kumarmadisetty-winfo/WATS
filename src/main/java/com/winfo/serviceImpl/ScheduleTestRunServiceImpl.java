@@ -137,7 +137,6 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		String jobName = scheduler.getJobName();
 		int jobId = scheduler.getJobId();
 		listOfTestRunInJob.parallelStream().forEach(testRunVO->{
-			count.incrementAndGet();
 			if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
 				TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
 				CopytestrunVo copyTestrunvo =new CopytestrunVo();
@@ -163,7 +162,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				}
 			}		
 			TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
-			String newSubSchedularName=jobName+"ADDEDNUM"+count;
+			String newSubSchedularName=jobName+"ADDEDNUM"+count.incrementAndGet();
 			ScheduleSubJobVO scheduleSubJobVO=new ScheduleSubJobVO();
 			scheduleSubJobVO.setEmail(testRunVO.getNotification());
 			scheduleSubJobVO.setJobId(jobId);
