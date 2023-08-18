@@ -3,6 +3,7 @@ package com.winfo.serviceImpl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -73,7 +74,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				scheduler=schedulerRepository.save(scheduler);
 			}
 			int jobId=createSchedule(scheduleJobVO,scheduleJobVO.getTestRuns(),count,scheduler);
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, jobId+":"+scheduleJobVO.getSchedulerName()+" Successfully created new job");
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, jobId+":Successfully created new "+scheduleJobVO.getSchedulerName()+" job");
 		}catch(Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
@@ -86,13 +87,13 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName().toUpperCase());
 			Optional<List<UserSchedulerJob>> listOfSubJob = userSchedulerJobRepository.findByJobId(scheduler.getJobId());
 			if (scheduleJobVO.getTestRuns().size() > listOfSubJob.get().size()) {
-				List<String> listOfSubJobFromDB = listOfSubJob.get().parallelStream().map(UserSchedulerJob::getComments)
+				List<String> listOfSubJobFromDB = listOfSubJob.get().parallelStream().filter(Objects::nonNull).map(UserSchedulerJob::getComments)
 						.collect(Collectors.toList());
-				List<String> listOfSubJobFromVO = scheduleJobVO.getTestRuns().parallelStream()
+				List<String> listOfSubJobFromVO = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
 						.map(ScheduleTestRunVO::getTemplateTestRun).collect(Collectors.toList());
-				List<String> newAddedSubJobNames = listOfSubJobFromVO.parallelStream()
+				List<String> newAddedSubJobNames = listOfSubJobFromVO.parallelStream().filter(Objects::nonNull)
 						.filter(subJobName -> !listOfSubJobFromDB.contains(subJobName)).collect(Collectors.toList());
-				List<ScheduleTestRunVO> newAddedSubJobs = scheduleJobVO.getTestRuns().parallelStream()
+				List<ScheduleTestRunVO> newAddedSubJobs = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
 						.filter(subJob -> newAddedSubJobNames.contains(subJob.getTemplateTestRun()))
 						.collect(Collectors.toList());
 				if (newAddedSubJobs.size() > 0) {
@@ -101,8 +102,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				}
 			}
 
-			scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
-				listOfSubJob.get().parallelStream().forEach(subScheduleJob -> {
+			scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull).forEach(testRunVO->{
+				listOfSubJob.get().parallelStream().filter(Objects::nonNull).forEach(subScheduleJob -> {
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
 						Optional<String> dbTimeIntoJsonTimeFormat = convertTimeFormat(subScheduleJob.getStartDate());
 						if (dbTimeIntoJsonTimeFormat.isPresent() && !testRunVO.getStartDate().equalsIgnoreCase(dbTimeIntoJsonTimeFormat.get())
@@ -126,7 +127,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 					}
 				});
 			});
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, scheduler.getJobId()+":"+scheduler.getJobName()+" Successfully updated the job");
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, scheduler.getJobId()+":Successfully updated the "+scheduler.getJobName()+" job");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
@@ -136,7 +137,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public int createSchedule(ScheduleJobVO scheduleJobVO, List<ScheduleTestRunVO> listOfTestRunInJob,AtomicInteger count,Scheduler scheduler) {
 		String jobName = scheduler.getJobName();
 		int jobId = scheduler.getJobId();
-		listOfTestRunInJob.parallelStream().forEach(testRunVO->{
+		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO->{
 			count.incrementAndGet();
 			if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
 				TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
