@@ -2126,6 +2126,33 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			throws Exception {
 		try {
 
+			if (keysToSend.equalsIgnoreCase("VSD Transaction Details.xdo")) {
+				Thread.sleep(5000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				String xpath = "(//*[text()='VSD Transaction Details.xdo'])[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+				WebElement waittext = driver.findElement(By.xpath(xpath));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(2000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+				Thread.sleep(5000);
+				
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.info("Sucessfully Clicked selectAValue " + scripNumber);
+				// String xpath = "//*[contains(text(),\"param1\")]/following::*[normalize-space(text())=\"keysToSend\"][1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during selectAValue " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+
 			if (param1.equalsIgnoreCase("Locations")) {
 				Thread.sleep(5000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
