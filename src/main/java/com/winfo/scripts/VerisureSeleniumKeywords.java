@@ -12900,17 +12900,11 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 				String valueXpath = "//*[text()=\"" + keysToSend + "\"]";
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(valueXpath)));
 				WebElement valueElement = driver.findElement(By.xpath(valueXpath));
-				try{
-					Actions actions3 = new Actions(driver);
-					actions3.moveToElement(valueElement).build().perform();
-					valueElement.click();
-					Thread.sleep(3000);
-					System.out.println("try block worked");
-				} catch (Exception e){
-					clickValidateXpath(driver, fetchMetadataVO, valueElement, fetchConfigVO, customerDetails);
-					System.out.println("catch block worked");
-				}
-	
+				
+				Actions actions3 = new Actions(driver);
+				actions3.moveToElement(valueElement).build().perform();
+				valueElement.click();
+			
 
 				Thread.sleep(3000);
 				String okXpath = "//*[text()='Select Values']/following::*[text()='OK']";
