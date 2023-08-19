@@ -12895,6 +12895,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 				String matchCasecheckBoxXpath = "//*[@name='matchCase']";
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(matchCasecheckBoxXpath)));
 				WebElement matchCaseCheck = driver.findElement(By.xpath(matchCasecheckBoxXpath));
+				matchCaseCheck.click();
 				Thread.sleep(2000);
 
 				String valueXpath = "//*[text()=\"" + keysToSend + "\"]";
