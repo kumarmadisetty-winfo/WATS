@@ -3269,7 +3269,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		
 		try {
-			if (param1.equalsIgnoreCase("Create ASN") && param2.equalsIgnoreCase("Create ASN")) {
+		if (param1.equalsIgnoreCase("Create ASN") && param2.equalsIgnoreCase("Create ASN")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()=\"" + param1 + "\"]/following::span[text()=\"" + param2 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//h1[text()=\"" + param1 + "\"]/following::span[text()=\"" + param2 + "\"]"));
@@ -12802,6 +12802,129 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 	public void dropdownValues(WebDriver driver, String param1, String param2, String param3, String keysToSend,
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
+		try {
+			if (param1.equalsIgnoreCase("VSD Transaction Details") && param2.equalsIgnoreCase("Primary Ledger")) {
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+				String primaryKeyXpath = "//*[text()='Primary Ledger']/following::span[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+
+
+				String searchXpath = "(//*[text()='Search ...'])[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(searchXpath)));
+				driver.findElement(By.xpath(searchXpath)).click();
+				Thread.sleep(2000);
+
+
+				String enterPrimaryXpath = "(//*[text()='Search']/following::*[text()='Name']/following::input)[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(enterPrimaryXpath)));
+				WebElement enterPrimary = driver.findElement(By.xpath(enterPrimaryXpath));
+				Actions actions1 = new Actions(driver);
+				actions1.moveToElement(enterPrimary).build().perform();
+				typeIntoValidxpath(driver, keysToSend, enterPrimary, fetchConfigVO,fetchMetadataVO);
+				Thread.sleep(2000);
+
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(2000);
+
+
+				String valueXpath = "//div[text()=\"" + keysToSend + "\"]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(valueXpath)));
+				WebElement valueElement = driver.findElement(By.xpath(valueXpath));
+				Actions actions3 = new Actions(driver);
+				actions3.moveToElement(valueElement).build().perform();
+				valueElement.click();
+				Thread.sleep(3000);
+
+				String moveImageXpath = "//img[contains(@id,'div_input_searchDialog_moveImg')]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(moveImageXpath)));
+				WebElement moveImage =driver.findElement(By.xpath(moveImageXpath));
+				Actions actions2 = new Actions(driver);
+				actions1.moveToElement(moveImage).build().perform();
+				moveImage.click();
+
+				Thread.sleep(3000);
+				String okXpath = "//*[text()='OK']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(okXpath)));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				driver.findElement(By.xpath(okXpath)).click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during dropdown VSD Transaction Details > Primary Ledger " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+			if (param1.equalsIgnoreCase("Supplier") && param2.equalsIgnoreCase("")) {
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+				String primaryKeyXpath = "//*[contains(@id,'c_1_dropdownIcon')]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+
+
+				String searchXpath = "//*[text()='More/Search...']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(searchXpath)));
+				driver.findElement(By.xpath(searchXpath)).click();
+				Thread.sleep(2000);
+
+
+				String enterPrimaryXpath = "(//*[text()='Select Values']/following::*[text()='Name']/following::input)[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(enterPrimaryXpath)));
+				WebElement enterPrimary = driver.findElement(By.xpath(enterPrimaryXpath));
+				Actions actions1 = new Actions(driver);
+				actions1.moveToElement(enterPrimary).build().perform();
+				// actions1.click(enterPrimary).build().perform();
+				typeIntoValidxpath(driver, keysToSend, enterPrimary, fetchConfigVO,fetchMetadataVO);
+				// for (char c : keysToSend.toCharArray()) {
+				// 	((JavascriptExecutor) driver).executeScript("arguments[0].value += arguments[1];", enterPrimary, Character.toString(c));
+				// }
+
+				Thread.sleep(2000);
+
+
+				// enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(2000);
+				String matchCasecheckBoxXpath = "//*[@name='matchCase']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(matchCasecheckBoxXpath)));
+				WebElement matchCaseCheck = driver.findElement(By.xpath(matchCasecheckBoxXpath));
+				Thread.sleep(2000);
+
+				String valueXpath = "//*[text()=\"" + keysToSend + "\"]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(valueXpath)));
+				WebElement valueElement = driver.findElement(By.xpath(valueXpath));
+				try{
+					Actions actions3 = new Actions(driver);
+					actions3.moveToElement(valueElement).build().perform();
+					valueElement.click();
+					Thread.sleep(3000);
+					System.out.println("try block worked");
+				} catch (Exception e){
+					clickValidateXpath(driver, fetchMetadataVO, valueElement, fetchConfigVO, customerDetails);
+					System.out.println("catch block worked");
+				}
+	
+
+				Thread.sleep(3000);
+				String okXpath = "//*[text()='Select Values']/following::*[text()='OK']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(okXpath)));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				driver.findElement(By.xpath(okXpath)).click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during dropdown VSD Transaction Details > Primary Ledger " + scripNumber);
+			logger.error(e.getMessage());
+		}
 		try {
 			if ((param1.equalsIgnoreCase("Offer Team") && param2.equalsIgnoreCase("Recruiter"))) {
 				Thread.sleep(6000);
