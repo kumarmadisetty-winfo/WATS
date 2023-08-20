@@ -12818,6 +12818,12 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 				driver.findElement(By.xpath(searchXpath)).click();
 				Thread.sleep(2000);
 
+				
+				String removeXpath = "//*[text()='Remove All']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(removeXpath)));
+				driver.findElement(By.xpath(removeXpath)).click();
+				Thread.sleep(2000);
+
 
 				String enterPrimaryXpath = "(//*[text()='Search']/following::*[text()='Name']/following::input)[1]";
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(enterPrimaryXpath)));
