@@ -2126,6 +2126,33 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			throws Exception {
 		try {
 
+			if (keysToSend.equalsIgnoreCase("VSD Transaction Details.xdo")) {
+				Thread.sleep(5000);
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				String xpath = "(//*[text()='VSD Transaction Details.xdo'])[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+				WebElement waittext = driver.findElement(By.xpath(xpath));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(2000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+				Thread.sleep(5000);
+				
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.info("Sucessfully Clicked selectAValue " + scripNumber);
+				// String xpath = "//*[contains(text(),\"param1\")]/following::*[normalize-space(text())=\"keysToSend\"][1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during selectAValue " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+
 			if (param1.equalsIgnoreCase("Locations")) {
 				Thread.sleep(5000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2244,10 +2271,10 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 				WebElement waittext = driver.findElement(By.xpath("//*[normalize-space(text())=\"" + keysToSend
 						+ "\"]/following::img[@title=\"" + param1 + "\"]"));
 				Actions actions = new Actions(driver);
+				screenshot(driver, fetchMetadataVO, customerDetails);
 				actions.moveToElement(waittext).build().perform();
 				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 				Thread.sleep(2000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked Review installments selectAValue " + scripNumber);
 				String xpath = "//*[normalize-space(text())=\"keysToSend\"]/following::img[@title=\"param1\"]";
@@ -2355,9 +2382,10 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			WebElement waittext = driver.findElement(By.xpath("//*[contains(text(),\"" + param1
 					+ "\")]/following::span[normalize-space(text())=\"" + keysToSend + "\"][1]"));
 			Thread.sleep(2000);
+			screenshot(driver, fetchMetadataVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 			Thread.sleep(5000);
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked selectAValue " + scripNumber);
 			String xpath = "//*[contains(text(),\"param1\")]/following::span[normalize-space(text())=\"keysToSend\"][1]";
@@ -3241,7 +3269,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		
 		try {
-			if (param1.equalsIgnoreCase("Create ASN") && param2.equalsIgnoreCase("Create ASN")) {
+		if (param1.equalsIgnoreCase("Create ASN") && param2.equalsIgnoreCase("Create ASN")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[text()=\"" + param1 + "\"]/following::span[text()=\"" + param2 + "\"]")));
 				WebElement waittext = driver.findElement(By.xpath("//h1[text()=\"" + param1 + "\"]/following::span[text()=\"" + param2 + "\"]"));
@@ -12775,6 +12803,130 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
+			if (param1.equalsIgnoreCase("VSD Transaction Details") && param2.equalsIgnoreCase("Primary Ledger")) {
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+				String primaryKeyXpath = "//*[text()='Primary Ledger']/following::span[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+
+
+				String searchXpath = "(//*[text()='Search ...'])[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(searchXpath)));
+				driver.findElement(By.xpath(searchXpath)).click();
+				Thread.sleep(2000);
+
+				
+				String removeXpath = "//*[text()='Remove All']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(removeXpath)));
+				driver.findElement(By.xpath(removeXpath)).click();
+				Thread.sleep(2000);
+
+
+				String enterPrimaryXpath = "(//*[text()='Search']/following::*[text()='Name']/following::input)[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(enterPrimaryXpath)));
+				WebElement enterPrimary = driver.findElement(By.xpath(enterPrimaryXpath));
+				Actions actions1 = new Actions(driver);
+				actions1.moveToElement(enterPrimary).build().perform();
+				typeIntoValidxpath(driver, keysToSend, enterPrimary, fetchConfigVO,fetchMetadataVO);
+				Thread.sleep(2000);
+
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(2000);
+
+
+				String valueXpath = "//div[text()=\"" + keysToSend + "\"]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(valueXpath)));
+				WebElement valueElement = driver.findElement(By.xpath(valueXpath));
+				Actions actions3 = new Actions(driver);
+				actions3.moveToElement(valueElement).build().perform();
+				valueElement.click();
+				Thread.sleep(3000);
+
+				String moveImageXpath = "//img[contains(@id,'div_input_searchDialog_moveImg')]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(moveImageXpath)));
+				WebElement moveImage =driver.findElement(By.xpath(moveImageXpath));
+				Actions actions2 = new Actions(driver);
+				actions1.moveToElement(moveImage).build().perform();
+				moveImage.click();
+
+				Thread.sleep(3000);
+				String okXpath = "//*[text()='OK']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(okXpath)));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				driver.findElement(By.xpath(okXpath)).click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during dropdown VSD Transaction Details > Primary Ledger " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+			if (param1.equalsIgnoreCase("Supplier") && param2.equalsIgnoreCase("")) {
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+				String primaryKeyXpath = "//*[contains(@id,'c_1_dropdownIcon')]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+
+
+				String searchXpath = "//*[text()='More/Search...']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(searchXpath)));
+				driver.findElement(By.xpath(searchXpath)).click();
+				Thread.sleep(2000);
+
+
+				String enterPrimaryXpath = "(//*[text()='Select Values']/following::*[text()='Name']/following::input)[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(enterPrimaryXpath)));
+				WebElement enterPrimary = driver.findElement(By.xpath(enterPrimaryXpath));
+				Actions actions1 = new Actions(driver);
+				actions1.moveToElement(enterPrimary).build().perform();
+				// actions1.click(enterPrimary).build().perform();
+				typeIntoValidxpath(driver, keysToSend, enterPrimary, fetchConfigVO,fetchMetadataVO);
+				// for (char c : keysToSend.toCharArray()) {
+				// 	((JavascriptExecutor) driver).executeScript("arguments[0].value += arguments[1];", enterPrimary, Character.toString(c));
+				// }
+
+				Thread.sleep(2000);
+
+
+				// enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(2000);
+				String matchCasecheckBoxXpath = "//*[@name='matchCase']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(matchCasecheckBoxXpath)));
+				WebElement matchCaseCheck = driver.findElement(By.xpath(matchCasecheckBoxXpath));
+				matchCaseCheck.click();
+				Thread.sleep(2000);
+
+				String valueXpath = "//*[text()=\"" + keysToSend + "\"]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(valueXpath)));
+				WebElement valueElement = driver.findElement(By.xpath(valueXpath));
+				
+				Actions actions3 = new Actions(driver);
+				actions3.moveToElement(valueElement).build().perform();
+				valueElement.click();
+			
+
+				Thread.sleep(3000);
+				String okXpath = "//*[text()='Select Values']/following::*[text()='OK']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(okXpath)));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				driver.findElement(By.xpath(okXpath)).click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during dropdown VSD Transaction Details > Primary Ledger " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
 			if ((param1.equalsIgnoreCase("Offer Team") && param2.equalsIgnoreCase("Recruiter"))) {
 				Thread.sleep(6000);
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -17145,7 +17297,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			logger.error("Failed during window Handle " + e.getMessage());
 		}
 		try {
-			Thread.sleep(20000);
+			Thread.sleep(2000);
 			String mainWindow = driver.getWindowHandle();
 			Set<String> set = driver.getWindowHandles();
 			Iterator<String> itr = set.iterator();
