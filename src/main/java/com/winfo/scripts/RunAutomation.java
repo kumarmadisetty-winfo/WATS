@@ -403,9 +403,7 @@ public class RunAutomation {
 				// check dependency and return test run id, if any dependency then call cloudRun method
 				if(testScriptDto.getJobId()!=null) {
 					int isTestRunPassed=testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
-					if(isTestRunPassed>0) {
-						checkDependencyTestRun(testScriptDto.getJobId(), Integer.parseInt(testScriptDto.getTestScriptNo()));
-					}else {
+					if(isTestRunPassed==0){
 						Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
 								.findByJobIdAndDependency(testScriptDto.getJobId(), Integer.parseInt(testScriptDto.getTestScriptNo()));
 						if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
@@ -1814,14 +1812,4 @@ public class RunAutomation {
 						customerDetails.getTestSetName(), seqNumber);
 		logger.info("Successfully downloaded ScreenShots");
 	}
-	private void checkDependencyTestRun(int jobId,int testSetId) {
-		Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
-				.findByJobIdAndDependency(jobId,testSetId);
-		if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
-			LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
-			userSchedulerJobRepository.updateEndDateInUserSchedulerJob(localDate,dependencyTestRun.get().getComments(),jobId);
-			checkDependencyTestRun(jobId,testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId());
-		}
-	}
-
 }
