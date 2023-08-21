@@ -49,6 +49,7 @@ import com.winfo.model.Scheduler;
 import com.winfo.model.TestSet;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.SchedulerRepository;
+import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.service.SFInterface;
@@ -125,6 +126,8 @@ public class RunAutomation {
 	SendMailServiceImpl sendMailServiceImpl;
 	@Autowired
 	TestSetRepository testSetRepository;
+	@Autowired
+	TestSetLinesRepository testSetLinesRepository;
 	@Autowired
 	DataBaseEntryDao dao;
 	@Autowired
@@ -399,14 +402,17 @@ public class RunAutomation {
 				}
 				// check dependency and return test run id, if any dependency then call cloudRun method
 				if(testScriptDto.getJobId()!=null) {
-					Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
-							.findByJobIdAndDependency(testScriptDto.getJobId(), Integer.parseInt(testScriptDto.getTestScriptNo()));
-					if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
-						TestScriptDto dependencyTestScriptDto = new TestScriptDto();
-						dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
-						dependencyTestScriptDto
-								.setTestScriptNo(String.valueOf(testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId()));
-						cloudRun(dependencyTestScriptDto);
+					int isTestRunPassed=testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
+					if(isTestRunPassed==0){
+						Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
+								.findByJobIdAndDependency(testScriptDto.getJobId(), Integer.parseInt(testScriptDto.getTestScriptNo()));
+						if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
+							TestScriptDto dependencyTestScriptDto = new TestScriptDto();
+							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
+							dependencyTestScriptDto
+							.setTestScriptNo(String.valueOf(testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId()));
+							cloudRun(dependencyTestScriptDto);
+						}						
 					}
 				}
 				
@@ -1806,6 +1812,4 @@ public class RunAutomation {
 						customerDetails.getTestSetName(), seqNumber);
 		logger.info("Successfully downloaded ScreenShots");
 	}
-	
-
 }
