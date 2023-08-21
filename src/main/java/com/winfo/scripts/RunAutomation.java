@@ -402,8 +402,8 @@ public class RunAutomation {
 				}
 				// check dependency and return test run id, if any dependency then call cloudRun method
 				if(testScriptDto.getJobId()!=null) {
-					Boolean isTestRunPassed=testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
-					if(isTestRunPassed==false) {
+					int isTestRunPassed=testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
+					if(isTestRunPassed>0) {
 						checkDependencyTestRun(testScriptDto.getJobId(), Integer.parseInt(testScriptDto.getTestScriptNo()));
 					}else {
 						Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository

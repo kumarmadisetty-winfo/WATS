@@ -15,8 +15,8 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	@Query("select count(*) from TestSetLine where test_set_id=:testSetId and status=:scriptStatus")
 	int getScriptCountOfTestRun(String testSetId ,String scriptStatus);
 	
-	@Query("select case when (count(*) >0) then false else true end from TestSetLine where test_set_id=:testSetId and upper(status) in ('NEW','IN-PROGRESS','FAIL','IN-QUEUE','STOPPED') ")
-	Boolean checkIsTestRunPassed(String testSetId);
+	@Query("select count(*) from TestSetLine where test_set_id=:testSetId and upper(status) in ('NEW','IN-PROGRESS','FAIL','IN-QUEUE','STOPPED')")
+	Integer checkIsTestRunPassed(String testSetId);
 	
 	long countByScriptId(Integer scriptId);
 	
