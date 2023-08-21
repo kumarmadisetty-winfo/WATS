@@ -62,7 +62,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public  ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {	
 			AtomicInteger count=new AtomicInteger(0);
-			Scheduler scheduler =schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName().toUpperCase());
+			Scheduler scheduler =schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			if(scheduler==null) {
 				scheduler=new Scheduler();
 				scheduler.setConfigurationId(scheduleJobVO.getConfigurationId());
@@ -70,7 +70,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				scheduler.setCreatedBy(scheduleJobVO.getSchedulerEmail());
 				scheduler.setCreationDate(new Date());
 				scheduler.setEmail(scheduleJobVO.getSchedulerEmail());
-				scheduler.setJobName(scheduleJobVO.getSchedulerName().toUpperCase());
+				scheduler.setJobName(scheduleJobVO.getSchedulerName().replaceAll("\\s+", " "));
 				scheduler=schedulerRepository.save(scheduler);
 			}
 			int jobId=createSchedule(scheduleJobVO,scheduleJobVO.getTestRuns(),count,scheduler);
@@ -84,7 +84,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	@Transactional
 	public ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
-			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName().toUpperCase());
+			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			Optional<List<UserSchedulerJob>> listOfSubJob = userSchedulerJobRepository.findByJobId(scheduler.getJobId());
 			if (scheduleJobVO.getTestRuns().size() > listOfSubJob.get().size()) {
 				List<String> listOfSubJobFromDB = listOfSubJob.get().parallelStream().filter(Objects::nonNull).map(UserSchedulerJob::getComments)
@@ -135,7 +135,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	}
 	
 	public int createSchedule(ScheduleJobVO scheduleJobVO, List<ScheduleTestRunVO> listOfTestRunInJob,AtomicInteger count,Scheduler scheduler) {
-		String jobName = scheduler.getJobName();
+		String jobName = scheduler.getJobName().replaceAll("\\s", "").toUpperCase();
 		int jobId = scheduler.getJobId();
 		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO->{
 			if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
