@@ -6510,6 +6510,96 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 
 			}
 			// Here adding code for Scanned invoices in AP.453
+			try {
+				if (param1.equalsIgnoreCase("Balance") && param2.equalsIgnoreCase("Export")) {
+					Thread.sleep(1000);
+					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+					String xpath = "(//a[text()='Export'])[3]";
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath(xpath)));
+					WebElement waittext = driver.findElement(By.xpath(xpath));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					waittext.click();
+					screenshot(driver, fetchMetadataVO, customerDetails);
+					Thread.sleep(2000);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
+					logger.info("Sucessfully Clicked Export clickLink " + scripNumber);
+					// String xpath = "//a[normalize-space(text())=\"param1\"]";
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
+					service.saveXpathParams(scriptID, lineNumber, xpath);
+
+					return;
+				}
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.error("Failed during Export clickLink " + scripNumber);
+				logger.error(e.getMessage());
+			}
+
+			try {
+				if (param1.equalsIgnoreCase("Formatted")) {
+					Thread.sleep(5000);
+					WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+					String xpath = "(//td[text()='Formatted'])[4]";
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+					WebElement waittext = driver.findElement(By.xpath(xpath));
+					// Actions actions = new Actions(driver);
+					try {
+						// actions.moveToElement(waittext).build().perform();
+						// waittext.click();
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+						logger.info("Went to try block for Clicking Formatted");
+					} catch (Exception e){
+						// actions.moveToElement(waittext).perform();
+						logger.info("Went to catch block for Clicking Formatted");
+					}
+			
+					screenshot(driver, fetchMetadataVO, customerDetails);
+					Thread.sleep(2000);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
+					logger.info("Sucessfully Clicked Export clickLink " + scripNumber);
+					// String xpath = "//a[normalize-space(text())=\"param1\"]";
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
+					service.saveXpathParams(scriptID, lineNumber, xpath);
+
+					return;
+				}
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.error("Failed during Export clickLink " + scripNumber);
+				logger.error(e.getMessage());
+			}
+			try {
+				if (param1.equalsIgnoreCase("Excel")) {
+					Thread.sleep(1000);
+					WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+					String xpath = "(//*[text()='Excel'])[8]";
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath(xpath)));
+					WebElement waittext = driver.findElement(By.xpath(xpath));
+					Actions actions = new Actions(driver);
+					actions.moveToElement(waittext).build().perform();
+					waittext.click();
+					screenshot(driver, fetchMetadataVO, customerDetails);
+					Thread.sleep(2000);
+					String scripNumber = fetchMetadataVO.getScriptNumber();
+					logger.info("Sucessfully Clicked Export clickLink " + scripNumber);
+					// String xpath = "//a[normalize-space(text())=\"param1\"]";
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
+					service.saveXpathParams(scriptID, lineNumber, xpath);
+
+					return;
+				}
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.error("Failed during Export clickLink " + scripNumber);
+				logger.error(e.getMessage());
+			}
+
 
 			try {
 
