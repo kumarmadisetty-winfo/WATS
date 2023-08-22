@@ -1,7 +1,6 @@
 package com.winfo.reports;
 
 import java.io.FileOutputStream;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -27,16 +26,15 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.winfo.controller.JobController;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.Scheduler;
-import com.winfo.model.TestSet;
 import com.winfo.repository.ConfigurationRepository;
 import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.utils.DateUtils;
+import com.winfo.utils.StringUtils;
 
 @Service
 public class PDFGenerator {
@@ -137,9 +135,9 @@ public class PDFGenerator {
 			table.addCell(
 					createCell(new Paragraph(failPercent(passAndFailCount.get("pass"), passAndFailCount.get("fail"))),
 							Element.ALIGN_RIGHT, cellFont));
-			table.addCell(createCell(new Paragraph(String.valueOf(startTime.replace("+", "+0"))), Element.ALIGN_LEFT,
+			table.addCell(createCell(new Paragraph(String.valueOf(startTime.replace("+", "+0")).substring(0, 19)), Element.ALIGN_LEFT,
 					cellFont));
-			table.addCell(createCell(new Paragraph(String.valueOf(endtime)), Element.ALIGN_LEFT, cellFont));
+			table.addCell(createCell(new Paragraph(String.valueOf(endtime).substring(0, 19)), Element.ALIGN_LEFT, cellFont));
 			if (endTime != null && startTime != null) {
 				table.addCell(createCell(
 						new Paragraph((String.valueOf(DateUtils.convertMiliSecToDayFormat(
@@ -182,6 +180,7 @@ public class PDFGenerator {
 
 	private static void startingDetails(Document document, String name, String projectName, String configurationName,
 			String email, String startTime, String endTime) throws DocumentException {
+		String endtime = getEndTime(LocalDateTime.parse(endTime));
 		PdfPTable firstLine = new PdfPTable(2);
 		firstLine.setWidthPercentage(70);
 		Font customFont = FontFactory.getFont("Arial", 10);
@@ -201,11 +200,11 @@ public class PDFGenerator {
 		cell4.setBorderWidth(0);
 		cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell4);
-		PdfPCell cell5 = new PdfPCell(new Paragraph("Start Time : " + startTime, customFont));
+		PdfPCell cell5 = new PdfPCell(new Paragraph("Start Time : " + startTime.substring(0, 19), customFont));
 		cell5.setBorderWidth(0);
 		cell5.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell5);
-		PdfPCell cell6 = new PdfPCell(new Paragraph("End Time : " + endTime, customFont));
+		PdfPCell cell6 = new PdfPCell(new Paragraph("End Time : " + endtime.substring(0, 19), customFont));
 		cell6.setBorderWidth(0);
 		cell6.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell6);
