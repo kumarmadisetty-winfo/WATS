@@ -14,6 +14,9 @@ public interface ProjectRepository extends JpaRepository<Project, Integer>{
 	
 	@Query("select max(projectName) from Project where projectName like ?1%")
 	public String getMaxProjectName(String oldProjectName);
+	
+	@Query("select projectName from Project where projectId = ?1")
+	public String getProjectNameById(int projectId);
 }
 
 

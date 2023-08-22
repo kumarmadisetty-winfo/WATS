@@ -1279,6 +1279,32 @@ public class DataBaseEntryDao {
 		}
 
 	}
+	
+	@Transactional
+	public Map<String, Integer> getPassAndFailCount(String testSetId) {
+		String passQry = "SELECT COUNT(1) FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID = " + testSetId
+				+ " AND UPPER(STATUS) = 'PASS'\r\n" + " AND ENABLED = 'Y'";
+		String failQry = "SELECT COUNT(1) FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID = " + testSetId
+				+ " AND UPPER(STATUS) = 'FAIL' AND ENABLED = 'Y'";
+
+		try {
+			Session session = em.unwrap(Session.class);
+
+			BigDecimal passCount = (BigDecimal) session.createSQLQuery(passQry).getSingleResult();
+			BigDecimal failCount = (BigDecimal) session.createSQLQuery(failQry).getSingleResult();
+			Map<String, Integer> map=new HashMap<String, Integer>();
+			map.put("pass", passCount.intValue());	
+			map.put("fail", failCount.intValue());
+//			
+			return map;
+
+		} catch (Exception e) {
+			throw new WatsEBSException(500,
+					"Exception occured while fetching total pass and fail count for test run script.", e);
+		}
+
+	}
+
 
 	public void getUserAndPrjManagerName(String userName, String testSetId, EmailParamDto emailParam) {
 

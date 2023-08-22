@@ -1,0 +1,273 @@
+package com.winfo.reports;
+
+import java.io.FileOutputStream;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.model.Scheduler;
+import com.winfo.repository.ConfigurationRepository;
+import com.winfo.repository.ProjectRepository;
+import com.winfo.repository.SchedulerRepository;
+import com.winfo.repository.TestSetRepository;
+import com.winfo.repository.UserSchedulerJobRepository;
+import com.winfo.utils.DateUtils;
+
+
+@Service
+public class PDFGenerator {
+
+//	@Autowired
+	private static SchedulerRepository schedulerRepository;
+	
+//	@Autowired
+	private static ProjectRepository projectRepository;
+	
+//	@Autowired
+	private static ConfigurationRepository configurationRepository;
+	
+//	@Autowired
+	private static UserSchedulerJobRepository userSchedulerJobRepository;
+	
+//	@Autowired
+	private static TestSetRepository testSetRepository;
+	
+//	@Autowired
+	private static DataBaseEntryDao dataBaseEntryDao;
+	
+	public PDFGenerator(SchedulerRepository schedulerRepository, ProjectRepository projectRepository, ConfigurationRepository configurationRepository, 
+			UserSchedulerJobRepository userSchedulerJobRepository, TestSetRepository testSetRepository, DataBaseEntryDao dataBaseEntryDao) {
+		this.schedulerRepository = schedulerRepository;
+		this.projectRepository = projectRepository;
+		this.configurationRepository = configurationRepository;
+		this.userSchedulerJobRepository = userSchedulerJobRepository;
+		this.testSetRepository = testSetRepository;
+		this.dataBaseEntryDao = dataBaseEntryDao;
+		
+	}
+	
+	
+	
+	public static void createPDF(int jobId, String pdfpath, String cutomerName) throws Exception {
+		
+		Scheduler scheduler = schedulerRepository.findByJobId(jobId);
+		String projectName = projectRepository.getProjectNameById(scheduler.getProjectId());
+		String configurationName = configurationRepository.getConfigNameUsingId(scheduler.getConfigurationId());
+		List<Object[]> startAndendTime = userSchedulerJobRepository.getMinandMaxTime(jobId);
+
+		Document document = new Document(PageSize.A3);
+		PdfWriter writer = PdfWriter.getInstance(document,
+				new FileOutputStream(pdfpath+"\\"+cutomerName+"\\"+scheduler.getJobId()+".pdf"));
+		document.open();
+
+		PdfPTable heading = new PdfPTable(1);
+		Font customFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13);
+		PdfPCell headcell = new PdfPCell(new Paragraph("Scheduler Summery Report", customFont));
+		headcell.setBorderWidth(0);
+		headcell.setBackgroundColor(new BaseColor(167, 216, 241));
+		headcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+		headcell.setVerticalAlignment(Element.ALIGN_CENTER);
+		headcell.setFixedHeight(20);
+		heading.setWidthPercentage(100);
+		heading.addCell(headcell);
+		heading.setHorizontalAlignment(Element.ALIGN_TOP);
+		document.add(heading);
+		for (int i = 0; i < 1; i++) {
+			document.add(new Paragraph("\n"));
+		}
+		
+		startingDetails(document, scheduler.getJobName(), projectName, configurationName, scheduler.getEmail(), String.valueOf(startAndendTime.get(0)[0]),String.valueOf(startAndendTime.get(0)[1]));
+		Font titleFont = FontFactory.getFont("Open Sans", BaseFont.IDENTITY_H, 12, Font.BOLD, BaseColor.BLACK);
+		String[] headers = { "S.No", "Test Run Name", "Pass", "Fail", "Pass %", "Fail %", "Start Time", "End Time",
+				"Total Duration" };
+		
+		PdfPTable table = createTable(9);
+		addTableHeader(table, titleFont, headers);
+		List<String>  noOfRuns =  userSchedulerJobRepository.getTestSetNames(jobId);
+		int pass = 0;
+		int fail = 0;
+		Map<String, Map<String, Integer>> testRuns = new HashMap<>();
+		for (int i = 0; i < noOfRuns.size();i++) {
+			int testSetId = testSetRepository.getTestSetId(noOfRuns.get(i));
+			Map<String, Integer> passAndFailCount = dataBaseEntryDao.getPassAndFailCount(String.valueOf(testSetId));
+			 String startTime = userSchedulerJobRepository.getStartTime(noOfRuns.get(i), jobId);
+			 LocalDateTime endTime =  userSchedulerJobRepository.getEndTime(noOfRuns.get(i), jobId);
+//			DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S XXXXX");
+//			OffsetDateTime odtInstanceAtOffset = OffsetDateTime.parse(startTime.replace("+","+0"), DATE_TIME_FORMATTER);
+//			String startTime1 = odtInstanceAtOffset.toInstant().atOffset( ZoneOffset.UTC )                                
+//			.format(DateTimeFormatter.ofPattern( "uuuu-MM-dd HH:mm:ss" )   
+//			);			
+//			LocalDateTime endTime =  LocalDateTime.parse("2023-08-22T11:14:45.747182"); 
+//			ZoneOffset offset = ZoneOffset.UTC;
+//			OffsetDateTime odt = endTime.atOffset(offset);
+//			String endTime1 = odt.toInstant().atOffset( ZoneOffset.UTC )                                
+//					.format(DateTimeFormatter.ofPattern( "uuuu-MM-dd HH:mm:ss" )   
+//					);
+//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+	        // Parse the strings into LocalDateTime objects
+//	        LocalDateTime dateTime1 = LocalDateTime.parse(startTime1, formatter);
+//	        LocalDateTime dateTime2 = LocalDateTime.parse(endTime1, formatter);
+
+	        // Calculate the duration between the two timestamps
+//	        Duration duration = Duration.between(dateTime1, dateTime2);
+//	        System.out.println(duration.toHours()+" Hours");
+//	        String[] starttime=startTime.split("\\+");
+	        
+	        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+	        LocalDateTime localDateTime = LocalDateTime.parse(endTime.toString(), inputFormatter);
+
+			// Define the desired timezone offset (+05:30)
+			ZoneOffset desiredOffset = ZoneOffset.ofHoursMinutes(5, 30);
+
+			// Convert LocalDateTime to OffsetDateTime with the desired offset
+			OffsetDateTime offsetDateTime = localDateTime.atOffset(desiredOffset);
+	        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS ZZZ");
+
+	        // Convert LocalDateTime to the desired format
+	        String endtime = offsetDateTime.format(outputFormatter);
+	        endtime = endtime.replace("+0530", "+05:30");
+
+	        System.out.println("Formatted Date: " + endtime);
+	        
+			pass = pass + passAndFailCount.get("pass");
+			fail = fail + passAndFailCount.get("fail");
+			Font cellFont = FontFactory.getFont("Arial", 12);
+			table.setWidths(new float[] { 0.50f, 1.0f, 0.45f, 0.40f, 0.60f,0.60f,1.60f,1.60f,1.20f});
+
+	        table.setWidthPercentage(100);
+			table.addCell(createCell(new Paragraph(String.valueOf(i+1)), Element.ALIGN_RIGHT, cellFont));
+			table.addCell(createCell(new Paragraph(noOfRuns.get(i)), Element.ALIGN_LEFT, cellFont));
+			table.addCell(createCell(new Paragraph(String.valueOf(passAndFailCount.get("pass"))), Element.ALIGN_RIGHT, cellFont));
+			table.addCell(createCell(new Paragraph(String.valueOf(passAndFailCount.get("fail"))), Element.ALIGN_RIGHT, cellFont));
+			table.addCell(createCell(new Paragraph(passPercent(passAndFailCount.get("pass"), passAndFailCount.get("fail"))), Element.ALIGN_RIGHT, cellFont));
+			table.addCell(createCell(new Paragraph(failPercent(passAndFailCount.get("pass"), passAndFailCount.get("fail"))), Element.ALIGN_RIGHT, cellFont));
+			table.addCell(createCell(new Paragraph(String.valueOf(startTime.replace("+", "+0"))), Element.ALIGN_LEFT, cellFont));
+			table.addCell(createCell(new Paragraph(String.valueOf(endtime)), Element.ALIGN_LEFT, cellFont));
+			if (endTime != null && startTime != null) {
+				table.addCell(createCell(
+						new Paragraph((String.valueOf(DateUtils
+								.convertMiliSecToDayFormat(DateUtils.findTimeDifference(startTime.replace("+", "+0"), endtime))))),
+						Element.ALIGN_RIGHT, cellFont));
+			} else {
+				table.addCell(createCell(new Paragraph(String.valueOf("time")), Element.ALIGN_RIGHT, cellFont));
+			}
+			testRuns.put(noOfRuns.get(i), passAndFailCount);
+		}
+		for(int i=0;i<4;i++) {
+        	document.add(new Paragraph("\n"));
+        }
+		document.add(table);
+		RingChart ringChart = new RingChart();
+		ringChart.createPDF(writer, pass, fail);
+		GroupedStackedBarChart barChartToPDFExample2 = new GroupedStackedBarChart();
+		barChartToPDFExample2.createBar(document, testRuns);
+		System.out.println("PDF document with chart created successfully.");
+		document.close();
+	}
+
+	private static void startingDetails(Document document, String name, String projectName, String configurationName, String email, String startTime, String endTime) throws DocumentException {
+		PdfPTable firstLine = new PdfPTable(2);
+		firstLine.setWidthPercentage(70);
+		Font customFont = FontFactory.getFont("Arial", 10);
+		PdfPCell cell1 = new PdfPCell(new Paragraph("Name : " + name, customFont));
+		cell1.setBorderWidth(0);
+		cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+		firstLine.addCell(cell1);
+		PdfPCell cell2 = new PdfPCell(new Paragraph("Project : " + projectName, customFont));
+//		cell2.addElement(new Phrase("Project : " + projectName));
+		cell2.setBorderWidth(0);
+		cell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+		firstLine.addCell(cell2);
+		PdfPCell cell3 = new PdfPCell(new Paragraph("Configuration : " + configurationName, customFont));
+//		cell3.addElement(new Phrase("Configuration : " + configurationName));
+		cell3.setBorderWidth(0);
+		cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+		firstLine.addCell(cell3);
+		PdfPCell cell4 = new PdfPCell(new Paragraph("Email : " + email, FontFactory.getFont("Arial", 9)));
+//		cell4.addElement(new Phrase("Email : " + email));
+		cell4.setBorderWidth(0);
+		cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
+		firstLine.addCell(cell4);
+		PdfPCell cell5 = new PdfPCell(new Paragraph("Start Time : " + startTime, customFont));
+//		cell5.addElement(new Phrase("Start Time : " + startTime));
+		cell5.setBorderWidth(0);
+		cell5.setHorizontalAlignment(Element.ALIGN_LEFT);
+		firstLine.addCell(cell5);
+		PdfPCell cell6 = new PdfPCell(new Paragraph("End Time : " + endTime, customFont));
+//		cell6.addElement(new Phrase("End Time : " + endTime));
+		cell6.setBorderWidth(0);
+		cell6.setHorizontalAlignment(Element.ALIGN_LEFT);
+		firstLine.addCell(cell6);
+		firstLine.setHorizontalAlignment(Element.ALIGN_LEFT);
+		document.add(firstLine);
+
+	}
+	
+	private static PdfPTable createTable(int column) throws com.itextpdf.text.DocumentException {
+		PdfPTable table = new PdfPTable(column);
+		table.setWidthPercentage(100);
+		return table;
+	}
+
+	private static void addTableHeader(PdfPTable table, Font font, String[] headers) {
+		Arrays.stream(headers).map(header -> {
+			PdfPCell headerCell = new PdfPCell(new Phrase(header, font));
+			headerCell.setBackgroundColor(new BaseColor(167, 216, 241));
+			headerCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			headerCell.setPadding(5);
+			return headerCell;
+		}).forEach(table::addCell);
+	}
+
+	private static PdfPCell createCell(Paragraph content, int horizontalAlignment, Font font) {
+		PdfPCell cell = new PdfPCell(content);
+		
+		cell.setHorizontalAlignment(horizontalAlignment);
+		cell.setVerticalAlignment(Element.ALIGN_CENTER);
+		cell.setPadding(10);
+		cell.setMinimumHeight(40f);
+
+		return cell;
+	}
+
+	private static String failPercent(Integer pass, Integer fail) {
+		try {
+			return String.valueOf(((fail * 100) / (pass + fail)));
+		} catch (Exception e) {
+			return "0";
+		}
+		
+	}
+
+	private static String passPercent(Integer pass, Integer fail) {
+		try {
+			return String.valueOf(((pass * 100) / (pass + fail)));
+		} catch (Exception e) {
+			return "0";
+		}
+	}
+}

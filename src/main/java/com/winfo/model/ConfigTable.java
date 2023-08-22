@@ -22,4 +22,7 @@ public class ConfigTable {
 	@Column(name = "CUSTOMER_ID")
 	private Integer customerId;
 	
+	@Column(name="CONFIG_NAME")
+	private String configurationName;
+	
 }
