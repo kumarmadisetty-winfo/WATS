@@ -6581,7 +6581,12 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 					actions.moveToElement(waittext).build().perform();
 					waittext.click();
 					screenshot(driver, fetchMetadataVO, customerDetails);
-					Thread.sleep(2000);
+					Thread.sleep(4000);
+					try {
+						renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+					} catch (Exception e){
+						logger.info("Excel not able to attach");
+					}
 					String scripNumber = fetchMetadataVO.getScriptNumber();
 					logger.info("Sucessfully Clicked Export clickLink " + scripNumber);
 					// String xpath = "//a[normalize-space(text())=\"param1\"]";
@@ -10142,6 +10147,27 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked sendValue " + scripNumber);
 			String xpath = "(//*[normalize-space(text())=\"param1\"]/following::label[normalize-space(text())=\"param2\"]/following::input)[1]";
+			String scriptID = fetchMetadataVO.getScriptId();
+			String lineNumber = fetchMetadataVO.getLineNumber();
+			service.saveXpathParams(scriptID, lineNumber, xpath);
+			return keysToSend;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during sendValue " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+			String xpath = "//h1[text()=\"" + param1 + "\"]//following::label[text()=\"" + param2 + "\"]//following::input[1]";
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+			// Thread.sleep(5000);
+			WebElement waittill = driver.findElement(By.xpath(xpath));
+			Actions actions = new Actions(driver);
+			actions.moveToElement(waittill).build().perform();
+			typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+			Thread.sleep(2000);
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.info("Sucessfully entered value for " + param1 + " and " + param2 + scripNumber);
 			String scriptID = fetchMetadataVO.getScriptId();
 			String lineNumber = fetchMetadataVO.getLineNumber();
 			service.saveXpathParams(scriptID, lineNumber, xpath);
