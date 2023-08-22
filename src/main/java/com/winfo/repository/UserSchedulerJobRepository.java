@@ -37,10 +37,7 @@ public interface UserSchedulerJobRepository extends JpaRepository<UserSchedulerJ
 	
 	@Query("select comments from UserSchedulerJob where jobId = ?1")
 	public List<String> getTestSetNames(int jobId);
-
-	@Query("select startDate from UserSchedulerJob where comments = ?1 and jobId = ?2")
-	String getStartTime(String jobName, Integer jobId);
-
-	@Query("select endDate from UserSchedulerJob where comments = ?1 and jobId = ?2")
-	LocalDateTime getEndTime(String jobName, Integer jobId);
+	
+	UserSchedulerJob findByCommentsAndJobId(String comments, Integer jobId); 
+	
 }
