@@ -3354,6 +3354,7 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 			logger.error("Failed during clickButton " + scripNumber);
 			logger.error(e.getMessage());
 		}
+
 		try {
 			if (param1.equalsIgnoreCase("Create Work Definition") && param2.equalsIgnoreCase("x")) {
 					WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6688,7 +6689,16 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 				logger.error("Failed during Export clickLink " + scripNumber);
 				logger.error(e.getMessage());
 			}
-
+			try {
+				if (param1.equalsIgnoreCase("Attach Excel")) {
+						renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+						return;
+					}
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.error("Failed during renaming downloaded file " + scripNumber);
+				logger.error(e.getMessage());
+			}
 
 			try {
 				if (param1.equalsIgnoreCase("Formatted")) {
@@ -6734,12 +6744,12 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 					waittext.click();
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					Thread.sleep(20000);
-					try {
-						renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
-						logger.info("converted excel into pdf");
-					} catch (Exception e){
-						logger.error("Excel not able to attach");
-					}
+					// try {
+					// 	renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+					// 	logger.info("converted excel into pdf");
+					// } catch (Exception e){
+					// 	logger.error("Excel not able to attach");
+					// }
 					String scripNumber = fetchMetadataVO.getScriptNumber();
 					logger.info("Sucessfully Clicked Export clickLink " + scripNumber);
 					// String xpath = "//a[normalize-space(text())=\"param1\"]";
