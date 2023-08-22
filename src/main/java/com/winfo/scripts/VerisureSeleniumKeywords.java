@@ -6545,17 +6545,14 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 					String xpath = "(//td[text()='Formatted'])[4]";
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
 					WebElement waittext = driver.findElement(By.xpath(xpath));
-					// Actions actions = new Actions(driver);
-					try {
-						// actions.moveToElement(waittext).build().perform();
-						// waittext.click();
-						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
-						logger.info("Went to try block for Clicking Formatted");
-					} catch (Exception e){
-						// actions.moveToElement(waittext).perform();
-						logger.info("Went to catch block for Clicking Formatted");
-					}
-			
+					Actions actions = new Actions(driver);
+					// JavascriptExecutor js = (JavascriptExecutor) driver;
+					// js.executeScript("arguments[0].style.border='2px solid yellow'", waittext);
+					Thread.sleep(1000);
+					
+					actions.moveToElement(waittext).build().perform();
+					waittext.click();
+					// clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
 					screenshot(driver, fetchMetadataVO, customerDetails);
 					Thread.sleep(2000);
 					String scripNumber = fetchMetadataVO.getScriptNumber();
