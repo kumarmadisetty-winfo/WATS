@@ -416,9 +416,10 @@ public class RunAutomation {
 								.findByJobIdAndDependency(testScriptDto.getJobId(), Integer.parseInt(testScriptDto.getTestScriptNo()));
 						if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
 							TestScriptDto dependencyTestScriptDto = new TestScriptDto();
+							int testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId();
 							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
-							dependencyTestScriptDto
-							.setTestScriptNo(String.valueOf(testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId()));
+							dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
+							testSetLinesRepository.updateTestRunScriptEnable(String.valueOf(testRunId));
 							cloudRun(dependencyTestScriptDto);
 						}						
 					}
