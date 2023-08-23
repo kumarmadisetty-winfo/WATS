@@ -129,4 +129,6 @@ public class Constants {
 	public static final String PASS="Pass";
 	public static final String FAIL="Fail";
 	public static final String ADDEDNUM="ADDEDNUM";
+	public static final String INPROGRESS="IN-PROGRESS";
+	public static final String COMPLETED="COMPLETED";
 	}

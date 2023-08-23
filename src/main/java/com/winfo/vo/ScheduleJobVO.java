@@ -19,4 +19,6 @@ public class ScheduleJobVO {
 	private List<ScheduleTestRunVO> testRuns;
 	
 	private int jobId;
+	
+	private String status;
 }
