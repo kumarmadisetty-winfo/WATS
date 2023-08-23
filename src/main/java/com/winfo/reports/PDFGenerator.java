@@ -97,9 +97,8 @@ public class PDFGenerator {
 		heading.addCell(headcell);
 		heading.setHorizontalAlignment(Element.ALIGN_TOP);
 		document.add(heading);
-		for (int i = 0; i < 1; i++) {
-			document.add(new Paragraph("\n"));
-		}
+	
+		document.add(new Paragraph("\n"));
 
 		startingDetails(document, scheduler.getJobName(), projectName, configurationName, scheduler.getEmail(),
 				String.valueOf(startAndendTime.get(0)[0]), String.valueOf(startAndendTime.get(0)[1]));
