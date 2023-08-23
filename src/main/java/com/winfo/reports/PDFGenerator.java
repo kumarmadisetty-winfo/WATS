@@ -81,15 +81,13 @@ public class PDFGenerator {
 		List<Object[]> startAndendTime = userSchedulerJobRepository.getMinandMaxTime(jobId);
 
 		Document document = new Document(PageSize.A3);
-//		PdfWriter writer = PdfWriter.getInstance(document,
-//				new FileOutputStream(pdfpath + "//" + cutomerName + scheduler.getJobId() + ".pdf"));
 		PdfWriter writer = PdfWriter.getInstance(document,
 				new FileOutputStream(pdfpath + "//" + cutomerName + "//" + scheduler.getJobId() + ".pdf"));
 		document.open();
 
 		PdfPTable heading = new PdfPTable(1);
 		Font customFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13);
-		PdfPCell headcell = new PdfPCell(new Paragraph("Scheduler Summery Report", customFont));
+		PdfPCell headcell = new PdfPCell(new Paragraph("Scheduler Summary Report", customFont));
 		headcell.setBorderWidth(0);
 		headcell.setBackgroundColor(new BaseColor(167, 216, 241));
 		headcell.setHorizontalAlignment(Element.ALIGN_LEFT);
