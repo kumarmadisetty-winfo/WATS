@@ -48,6 +48,7 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Scheduler;
 import com.winfo.model.TestSet;
 import com.winfo.model.UserSchedulerJob;
+import com.winfo.reports.PDFGenerator;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
@@ -102,6 +103,10 @@ public class RunAutomation {
 	TestCaseDataService dataService;
 	@Autowired
 	DataBaseEntry dataBaseEntry;
+	
+	@Autowired
+	PDFGenerator schedulePdfGenerator;
+	
 	public String c_url = null;
 
 	@Autowired
@@ -443,7 +448,7 @@ public class RunAutomation {
 										.collect(Collectors.joining(","));
 								String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName())
 										.collect(Collectors.joining(","));
-
+								schedulePdfGenerator.createPDF(testScriptDto.getJobId(),fetchConfigVO.getPDF_PATH(),customerDetails.getCustomerName());
 								Scheduler scheduler = schedulerRepository.findByJobId(testScriptDto.getJobId());
 								dataBaseEntry.schedulerNotificationEmail(scheduler.getJobName(), testLinesDetails, listTestSetIds,
 										testScriptDto.getJobId(), testRunNames);

@@ -29,4 +29,15 @@ public interface UserSchedulerJobRepository extends JpaRepository<UserSchedulerJ
 	List<TestSet> findByTestRuns(int jobId);
 
 	Optional<UserSchedulerJob> findByJobIdAndComments(int jobId,String testRunName);
+	
+//	List<UserSchedulerJob> findByJobId(Integer jobId);
+	
+	@Query("select min(startDate), max(endDate) from UserSchedulerJob where jobId = ?1")
+	public List<Object[]> getMinandMaxTime(int jobId);
+	
+	@Query("select comments from UserSchedulerJob where jobId = ?1")
+	public List<String> getTestSetNames(int jobId);
+	
+	UserSchedulerJob findByCommentsAndJobId(String comments, Integer jobId); 
+	
 }
