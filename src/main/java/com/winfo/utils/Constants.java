@@ -131,4 +131,5 @@ public class Constants {
 	public static final String ADDEDNUM="ADDEDNUM";
 	public static final String INPROGRESS="IN-PROGRESS";
 	public static final String COMPLETED="COMPLETED";
+	public static final String NEW="NEW";
 	}
