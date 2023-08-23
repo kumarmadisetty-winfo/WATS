@@ -27,5 +27,5 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	@Modifying
 	@Transactional
 	@Query("update TestSetLine set enabled='Y' where test_set_id=:testSetId")
-	int updateScriptEnable(String testSetId);
+	int updateTestRunScriptEnable(String testSetId);
 }

@@ -419,7 +419,7 @@ public class RunAutomation {
 							int testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId();
 							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
 							dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
-							testSetLinesRepository.updateScriptEnable(String.valueOf(testRunId));
+							testSetLinesRepository.updateTestRunScriptEnable(String.valueOf(testRunId));
 							cloudRun(dependencyTestScriptDto);
 						}						
 					}
