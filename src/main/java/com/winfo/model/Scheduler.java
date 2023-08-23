@@ -49,5 +49,8 @@ public class Scheduler {
 	
 	@Column(name = "UPDATE_DATE")
 	private Date updatedDate;
+	
+	@Column(name="STATUS")
+	private String status;
 
 }

@@ -230,6 +230,9 @@ public class RunAutomation {
 	public ResponseDto cloudRun(TestScriptDto testScriptDto) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		String testSetId = testScriptDto.getTestScriptNo();
+		if(testScriptDto.getJobId()!=null) { 
+		schedulerRepository.updateSchedulerStatus(Constants.INPROGRESS, testScriptDto.getJobId());
+		}
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
@@ -448,6 +451,7 @@ public class RunAutomation {
 										.collect(Collectors.joining(","));
 								String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName())
 										.collect(Collectors.joining(","));
+								schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, testScriptDto.getJobId());
 								schedulePdfGenerator.createPDF(testScriptDto.getJobId(),fetchConfigVO.getPDF_PATH(),customerDetails.getCustomerName());
 								Scheduler scheduler = schedulerRepository.findByJobId(testScriptDto.getJobId());
 								dataBaseEntry.schedulerNotificationEmail(scheduler.getJobName(), testLinesDetails, listTestSetIds,
