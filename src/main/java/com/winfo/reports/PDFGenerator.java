@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -28,33 +30,33 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.Scheduler;
+import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.ConfigurationRepository;
 import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.utils.DateUtils;
-import com.winfo.utils.StringUtils;
 
 @Service
 public class PDFGenerator {
 
-//	@Autowired
+
 	private static SchedulerRepository schedulerRepository;
 
-//	@Autowired
+
 	private static ProjectRepository projectRepository;
 
-//	@Autowired
+
 	private static ConfigurationRepository configurationRepository;
 
-//	@Autowired
+
 	private static UserSchedulerJobRepository userSchedulerJobRepository;
 
-//	@Autowired
+
 	private static TestSetRepository testSetRepository;
 
-//	@Autowired
+
 	private static DataBaseEntryDao dataBaseEntryDao;
 
 	public static final Logger logger = Logger.getLogger(PDFGenerator.class);
@@ -102,7 +104,7 @@ public class PDFGenerator {
 		startingDetails(document, scheduler.getJobName(), projectName, configurationName, scheduler.getEmail(),
 				String.valueOf(startAndendTime.get(0)[0]), String.valueOf(startAndendTime.get(0)[1]));
 		Font titleFont = FontFactory.getFont("Open Sans", BaseFont.IDENTITY_H, 12, Font.BOLD, BaseColor.BLACK);
-		String[] headers = { "S.No", "Test Run Name", "Pass", "Fail", "Pass %", "Fail %", "Start Time", "End Time",
+		String[] headers = { "S.No", "Test Run Name", "Pass", "Fail", "Pass %", "Fail %", "Start Date", "End Date",
 				"Total Duration" };
 
 		PdfPTable table = createTable(9);
@@ -111,13 +113,14 @@ public class PDFGenerator {
 		int pass = 0;
 		int fail = 0;
 		Map<String, Map<String, Integer>> testRuns = new HashMap<>();
+		
 		for (int i = 0; i < noOfRuns.size(); i++) {
 			int testSetId = testSetRepository.findByTestRunName(noOfRuns.get(i)).getTestRunId();
 			Map<String, Integer> passAndFailCount = dataBaseEntryDao.getPassAndFailCount(String.valueOf(testSetId));
-			String startTime = userSchedulerJobRepository.findByCommentsAndJobId(noOfRuns.get(i), jobId).getStartDate();
-			LocalDateTime endTime = userSchedulerJobRepository.findByCommentsAndJobId(noOfRuns.get(i), jobId).getEndDate();
-//			LocalDateTime endTime =  LocalDateTime.parse("2023-08-22T11:14:45.747182"); 
-			String endtime = getEndTime(endTime);
+			UserSchedulerJob schedularRecords = userSchedulerJobRepository.findByCommentsAndJobId(noOfRuns.get(i), jobId);
+            String startTime=schedularRecords.getStartDate();
+            String endtime = getEndTime(schedularRecords.getEndDate());
+			//LocalDateTime endTime =  LocalDateTime.parse("2023-08-22T11:14:45.747182"); 
 			pass = pass + passAndFailCount.get("pass");
 			fail = fail + passAndFailCount.get("fail");
 			Font cellFont = FontFactory.getFont("Arial", 12);
@@ -138,7 +141,7 @@ public class PDFGenerator {
 			table.addCell(createCell(new Paragraph(String.valueOf(startTime.replace("+", "+0")).substring(0, 19)), Element.ALIGN_LEFT,
 					cellFont));
 			table.addCell(createCell(new Paragraph(String.valueOf(endtime).substring(0, 19)), Element.ALIGN_LEFT, cellFont));
-			if (endTime != null && startTime != null) {
+			if (endtime != null && startTime != null) {
 				table.addCell(createCell(
 						new Paragraph((String.valueOf(DateUtils.convertMiliSecToDayFormat(
 								DateUtils.findTimeDifference(startTime.replace("+", "+0"), endtime))))),
@@ -148,9 +151,13 @@ public class PDFGenerator {
 			}
 			testRuns.put(noOfRuns.get(i), passAndFailCount);
 		}
-		for (int i = 0; i < 4; i++) {
-			document.add(new Paragraph("\n"));
-		}
+		IntStream.range(0, 4).forEach(i-> {
+			try {
+				document.add(new Paragraph("\n"));
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+		});
 		document.add(table);
 		RingChart ringChart = new RingChart();
 		ringChart.createPDF(writer, pass, fail);
@@ -171,8 +178,8 @@ public class PDFGenerator {
 			DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS ZZZ");
 			endtime = offsetDateTime.format(outputFormatter);
 			endtime = endtime.replace("+0530", "+05:30");
-		} catch (Exception e) {
-			logger.error("Failed to convert EndTime format " + e.getMessage());
+		} catch (DateTimeParseException  e) {
+			logger.error("Failed to parse EndDate " + e.getMessage());
 		}
 		return endtime;
 

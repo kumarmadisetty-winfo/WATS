@@ -5,12 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.GroupedStackedBarRenderer;
 import org.jfree.data.category.CategoryDataset;
@@ -47,10 +47,14 @@ public class GroupedStackedBarChart {
 
 		// Set the position and alignment of the chart image in the PDF
 		chartPdfImage.setAlignment(Image.ALIGN_CENTER);
-		
-		for(int i=0;i<4;i++) {
-        	document.add(new Paragraph("\n"));
-        }
+
+		IntStream.range(0, 4).forEach(i-> {
+			try {
+				document.add(new Paragraph("\n"));
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+		});
 
 		// Add the chart image to the PDF
 		try {
