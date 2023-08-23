@@ -81,8 +81,10 @@ public class PDFGenerator {
 		List<Object[]> startAndendTime = userSchedulerJobRepository.getMinandMaxTime(jobId);
 
 		Document document = new Document(PageSize.A3);
+//		PdfWriter writer = PdfWriter.getInstance(document,
+//				new FileOutputStream(pdfpath + "//" + cutomerName + scheduler.getJobId() + ".pdf"));
 		PdfWriter writer = PdfWriter.getInstance(document,
-				new FileOutputStream(pdfpath + "\\" + cutomerName + "\\" + scheduler.getJobId() + ".pdf"));
+				new FileOutputStream(pdfpath + "//" + cutomerName + "//" + scheduler.getJobId() + ".pdf"));
 		document.open();
 
 		PdfPTable heading = new PdfPTable(1);
