@@ -74,7 +74,8 @@ public class PDFGenerator {
 	}
 
 	public static void createPDF(int jobId, String pdfpath, String cutomerName) throws Exception {
-
+		logger.info("Schedule Report Started");
+		try {
 		Scheduler scheduler = schedulerRepository.findByJobId(jobId);
 		String projectName = projectRepository.getProjectNameById(scheduler.getProjectId());
 		String configurationName = configurationRepository.getConfigNameUsingId(scheduler.getConfigurationId());
@@ -162,8 +163,13 @@ public class PDFGenerator {
 		ringChart.createPDF(writer, pass, fail);
 		GroupedStackedBarChart barChartToPDFExample2 = new GroupedStackedBarChart();
 		barChartToPDFExample2.createBar(document, testRuns);
-		System.out.println("PDF document with chart created successfully.");
+		logger.info("Schedule Report Created Successfully");
 		document.close();
+		}
+		catch(Exception e)
+		{
+			logger.error("Exception occured while creating schedule report " +e.getMessage());
+		}
 	}
 
 	public static String getEndTime(LocalDateTime endTime) {

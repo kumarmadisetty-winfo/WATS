@@ -28,6 +28,7 @@ import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Customer;
 import com.winfo.model.LookUpCode;
+import com.winfo.model.Scheduler;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
@@ -38,6 +39,7 @@ import com.winfo.model.User;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.CustomerRepository;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.repository.ScriptMetaDataRepository;
 import com.winfo.repository.SubscriptionRepository;
@@ -78,6 +80,9 @@ public class DataBaseEntry {
 	
 	@Autowired
 	TestSetScriptParamRepository testSetScriptParamRepository;
+	
+	@Autowired
+	SchedulerRepository schedulerRepository;
 
 	@Autowired
 	ApplicationContext appContext;
@@ -421,15 +426,20 @@ public class DataBaseEntry {
 		String userEmail = userRepository.findByUserId(emailParam.getExecutedBy().toUpperCase());
 		String testRunEmails = null;
 		Optional<UserSchedulerJob> userSchedulerJob = userSchedulerJobRepository.findByJobIdAndComments(jobId,testSetName);
-		if(userSchedulerJob.isPresent()) {
-			if(userSchedulerJob.get().getEndDate()== null) {
+		if (userSchedulerJob.isPresent()) {
+			if (userSchedulerJob.get().getEndDate() == null) {
 				testRunEmails = userSchedulerJob.get().getClientId();
-				if(testRunEmails!=null) {
-				String listOfEmails = Arrays.asList(testRunEmails).stream()
-				.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
-				if(StringUtils.isNotBlank(listOfEmails)) {
-					emailParam.setReceiver(listOfEmails);
-				}
+				if (testRunEmails != null) {
+					String listOfEmails = Arrays.asList(testRunEmails).stream()
+							.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
+					if (StringUtils.isNotBlank(listOfEmails)) {
+						emailParam.setReceiver(listOfEmails);
+					}
+				} else {
+					Scheduler scheduler = schedulerRepository.findByJobId(jobId);
+					if (!userEmail.equalsIgnoreCase(scheduler.getEmail())) {
+						emailParam.setReceiver(scheduler.getEmail());
+					}
 				}
 			}
 		}
