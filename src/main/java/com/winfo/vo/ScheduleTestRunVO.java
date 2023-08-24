@@ -13,5 +13,7 @@ public class ScheduleTestRunVO {
 	private String autoIncrement;
 
 	private String startDate;
+	
+	private String type;
 
 }
