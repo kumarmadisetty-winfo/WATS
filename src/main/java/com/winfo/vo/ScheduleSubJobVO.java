@@ -35,4 +35,8 @@ public class ScheduleSubJobVO {
 	@JsonProperty("User Name")
 	@JsonAlias("userName")
 	private String userName;	
+	
+	@JsonProperty("Type")
+	@JsonAlias("type")
+	private String type;	
 }
