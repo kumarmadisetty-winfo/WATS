@@ -92,9 +92,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						.collect(Collectors.toList());
 				List<String> listOfSubJobFromVO = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
 						.map(ScheduleTestRunVO::getTemplateTestRun).collect(Collectors.toList());
-				List<String> newAddedSubJobNames = listOfSubJobFromVO.parallelStream().filter(Objects::nonNull)
+				List<String> newAddedSubJobNames = listOfSubJobFromVO.stream().filter(Objects::nonNull)
 						.filter(subJobName -> !listOfSubJobFromDB.contains(subJobName)).collect(Collectors.toList());
-				List<ScheduleTestRunVO> newAddedSubJobs = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
+				List<ScheduleTestRunVO> newAddedSubJobs = scheduleJobVO.getTestRuns().stream().filter(Objects::nonNull)
 						.filter(subJob -> newAddedSubJobNames.contains(subJob.getTemplateTestRun()))
 						.collect(Collectors.toList());
 				if (newAddedSubJobs.size() > 0) {
@@ -103,8 +103,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				}
 			}
 
-			scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull).forEach(testRunVO->{
-				listOfSubJob.get().parallelStream().filter(Objects::nonNull).forEach(subScheduleJob -> {
+			scheduleJobVO.getTestRuns().stream().filter(Objects::nonNull).forEach(testRunVO->{
+				listOfSubJob.get().stream().filter(Objects::nonNull).forEach(subScheduleJob -> {
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
 						Optional<String> dbTimeIntoJsonTimeFormat = convertTimeFormat(subScheduleJob.getStartDate());
 						if (dbTimeIntoJsonTimeFormat.isPresent() && !testRunVO.getStartDate().equalsIgnoreCase(dbTimeIntoJsonTimeFormat.get())
@@ -138,7 +138,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public int createSchedule(ScheduleJobVO scheduleJobVO, List<ScheduleTestRunVO> listOfTestRunInJob,AtomicInteger count,Scheduler scheduler) {
 		String jobName = scheduler.getJobName().replaceAll("\\s", "").toUpperCase();
 		int jobId = scheduler.getJobId();
-		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO->{
+		listOfTestRunInJob.stream().filter(Objects::nonNull).forEach(testRunVO->{
 			if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
 				TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
 				CopytestrunVo copyTestrunvo =new CopytestrunVo();
@@ -185,6 +185,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		});
 		return jobId;
 	}
+	
 	
     private Optional <String> convertTimeFormat(String inputTime) {
         try {
