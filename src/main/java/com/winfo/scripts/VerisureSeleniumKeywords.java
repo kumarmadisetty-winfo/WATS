@@ -13782,8 +13782,15 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 		try {
 			if (param1.equalsIgnoreCase("VSD Transaction Details") && param2.equalsIgnoreCase("Primary Ledger")) {
 				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-				String primaryKeyXpath = "//*[text()='Primary Ledger']/following::span[1]";
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				String primaryKeyXpath;
+				try {
+					primaryKeyXpath = "//*[text()='*Primary Ledger']//following::span[1]";
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+					
+				} catch (Exception e){
+					primaryKeyXpath = "//*[text()='Primary Ledger']//following::span[1]";
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				}
 				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
