@@ -424,10 +424,12 @@ public class DataBaseEntry {
 		if(userSchedulerJob.isPresent()) {
 			if(userSchedulerJob.get().getEndDate()== null) {
 				testRunEmails = userSchedulerJob.get().getClientId();
+				if(testRunEmails!=null) {
 				String listOfEmails = Arrays.asList(testRunEmails).stream()
 				.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
 				if(StringUtils.isNotBlank(listOfEmails)) {
 					emailParam.setReceiver(listOfEmails);
+				}
 				}
 			}
 		}
