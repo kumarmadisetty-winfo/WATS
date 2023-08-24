@@ -87,7 +87,7 @@ public class PDFGenerator {
 
 		PdfPTable heading = new PdfPTable(1);
 		Font customFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 13);
-		PdfPCell headcell = new PdfPCell(new Paragraph("Scheduler Summary Report", customFont));
+		PdfPCell headcell = new PdfPCell(new Paragraph("Schedule Summary Report", customFont));
 		headcell.setBorderWidth(0);
 		headcell.setBackgroundColor(new BaseColor(167, 216, 241));
 		headcell.setHorizontalAlignment(Element.ALIGN_LEFT);
