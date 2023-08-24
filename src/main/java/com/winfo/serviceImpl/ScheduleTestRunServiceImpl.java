@@ -103,31 +103,30 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				}
 			}
 
-			scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull).forEach(testRunVO->{
-				listOfSubJob.get().parallelStream().filter(Objects::nonNull).forEach(subScheduleJob -> {
+		 	for(ScheduleTestRunVO testRunVO:scheduleJobVO.getTestRuns()) {
+		 		for(UserSchedulerJob subScheduleJob:listOfSubJob.get()) {
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
-						Optional<String> dbTimeIntoJsonTimeFormat = convertTimeFormat(subScheduleJob.getStartDate());
-						if (dbTimeIntoJsonTimeFormat.isPresent() && !testRunVO.getStartDate().equalsIgnoreCase(dbTimeIntoJsonTimeFormat.get())
-								|| !testRunVO.getNotification().equalsIgnoreCase(subScheduleJob.getClientId())) {
-							ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
-							scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
-							scheduleSubJobVO.setJobId(subScheduleJob.getJobId());
-							scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
-							scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
-							scheduleSubJobVO.setEmail(testRunVO.getNotification());
-							try {	
-								WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
-								Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
-										.bodyToMono(String.class);
-								result.block();
-							}catch(Exception e) {
-								logger.error(e.getMessage());
-								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Error occurred from APEX web service of edit scheduled job",e);
-							}
+						ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
+						scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
+						scheduleSubJobVO.setJobId(subScheduleJob.getJobId());
+						scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
+						scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
+						scheduleSubJobVO.setEmail(testRunVO.getNotification());
+						try {
+							WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
+							Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
+									.bodyToMono(String.class);
+							result.block();
+						} catch (Exception e) {
+							logger.error(e.getMessage());
+							throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+									"Error occurred from APEX web service of edit scheduled job", e);
 						}
 					}
-				});
-			});
+				}
+				;
+			}
+			;
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, scheduler.getJobId()+":Successfully updated the "+scheduler.getJobName()+" job");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
