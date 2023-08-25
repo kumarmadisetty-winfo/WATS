@@ -219,8 +219,7 @@ public abstract class AbstractSeleniumKeywords {
 
 	}
 
-	public String takeScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
-			CustomerProjectDto customerDetails) {
+	public String takeScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
@@ -240,8 +239,7 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 
-	public String takeScreenshotFail(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
-			CustomerProjectDto customerDetails) {
+	public String takeScreenshotFail(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
@@ -261,56 +259,20 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 
-	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
-		try {
-			String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(),
-					customerDetails.getTestSetName());
-			String imageName = createImageName(fetchMetadataVO, customerDetails, PNG_EXTENSION, "_Passed");
-
-			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
-//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
-			File file = new File(System.getProperty("java.io.tmpdir") + File.separator + imageName + PNG_EXTENSION);
-			ImageIO.write(bufferedImage, "PNG", file);
-
-			uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
-
-			logger.info("Successfully Screenshot is taken " + imageName);
-			return folderName + FORWARD_SLASH + imageName;
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Failed During Taking screenshot ");
-			logger.error("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
-		}
+	public String screenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails)
+	{
+		 return fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 	}
 
-	public String screenshotFail(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
-			CustomerProjectDto customerDetails) {
-		try {
-			String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(),
-					customerDetails.getTestSetName());
-			String imageName = createImageName(fetchMetadataVO, customerDetails, PNG_EXTENSION, "_Failed");
-			BufferedImage bufferedImage = Shutterbug.shootPage(driver, Capture.FULL).getImage();
-//			Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
-			File file = new File(System.getProperty("java.io.tmpdir") + File.separator + imageName);
-			ImageIO.write(bufferedImage, "PNG", file);
-			uploadObjectToObjectStore(file.getCanonicalPath(), folderName, imageName);
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.info("Successfully Failed Screenshot is Taken " + scripNumber);
-			return folderName + FORWARD_SLASH + imageName;
-		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			e.printStackTrace();
-			logger.error("Failed during screenshotFail Action. " + scripNumber);
-			logger.error("Exception while taking Screenshot" + e.getMessage());
-			return e.getMessage();
-//			throw e;
-		}
-	}
 
-	public String fullPagePassedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
-			CustomerProjectDto customerDetails) {
+	public String screenshotFail(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) 
+	{
+		  return fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
+	}
+	
+		
+
+	public String fullPagePassedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 
 			String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(),
@@ -334,8 +296,7 @@ public abstract class AbstractSeleniumKeywords {
 		}
 	}
 	
-	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
-			CustomerProjectDto customerDetails) {
+	public String fullPageFailedScreenshot(WebDriver driver, ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) {
 		try {
 			String folderName = createFolderName(SCREENSHOT, FORWARD_SLASH, customerDetails.getCustomerName(),
 					customerDetails.getTestSetName());
