@@ -92,9 +92,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						.collect(Collectors.toList());
 				List<String> listOfSubJobFromVO = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
 						.map(ScheduleTestRunVO::getTemplateTestRun).collect(Collectors.toList());
-				List<String> newAddedSubJobNames = listOfSubJobFromVO.stream().filter(Objects::nonNull)
+				List<String> newAddedSubJobNames = listOfSubJobFromVO.parallelStream().filter(Objects::nonNull)
 						.filter(subJobName -> !listOfSubJobFromDB.contains(subJobName)).collect(Collectors.toList());
-				List<ScheduleTestRunVO> newAddedSubJobs = scheduleJobVO.getTestRuns().stream().filter(Objects::nonNull)
+				List<ScheduleTestRunVO> newAddedSubJobs = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
 						.filter(subJob -> newAddedSubJobNames.contains(subJob.getTemplateTestRun()))
 						.collect(Collectors.toList());
 				if (newAddedSubJobs.size() > 0) {
