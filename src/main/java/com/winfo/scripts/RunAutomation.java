@@ -230,8 +230,10 @@ public class RunAutomation {
 	public ResponseDto cloudRun(TestScriptDto testScriptDto) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		String testSetId = testScriptDto.getTestScriptNo();
-		if(testScriptDto.getJobId()!=null) { 
-		schedulerRepository.updateSchedulerStatus(Constants.INPROGRESS, testScriptDto.getJobId());
+		Integer jobId=0;
+		if(StringUtils.isNotBlank(testScriptDto.getJobId())) {
+			jobId = Integer.parseInt(testScriptDto.getJobId());
+		schedulerRepository.updateSchedulerStatus(Constants.INPROGRESS, jobId);
 		}
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
@@ -397,11 +399,11 @@ public class RunAutomation {
 				logger.info("Successfully created PDFs - " + allFutureResults.get());
 				
 				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(), fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
-				if(testScriptDto.getJobId()!=null) {
-					dataBaseEntry.testRunsNotificationEmail(customerDetails.getTestSetName(),testLinesDetails,testScriptDto.getJobId(),customerDetails.getTestSetId());
+				if(jobId!=null) {
+					dataBaseEntry.testRunsNotificationEmail(customerDetails.getTestSetName(),testLinesDetails,jobId,customerDetails.getTestSetId());
 					//String FORMAT = "dd-MMM-yyyy HH:mm:ss.SSS";
 					LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
-					userSchedulerJobRepository.updateEndDateInUserSchedulerJob(localDate,customerDetails.getTestSetName(),testScriptDto.getJobId());
+					userSchedulerJobRepository.updateEndDateInUserSchedulerJob(localDate,customerDetails.getTestSetName(),jobId);
 				}
 				
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -409,11 +411,11 @@ public class RunAutomation {
 							.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
 				// check dependency and return test run id, if any dependency then call cloudRun method
-				if(testScriptDto.getJobId()!=null) {
+				if(jobId!=null) {
 					int isTestRunPassed=testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
 					if(isTestRunPassed==0){
 						Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
-								.findByJobIdAndDependency(testScriptDto.getJobId(), Integer.parseInt(testScriptDto.getTestScriptNo()));
+								.findByJobIdAndDependency(jobId, Integer.parseInt(testScriptDto.getTestScriptNo()));
 						if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
 							TestScriptDto dependencyTestScriptDto = new TestScriptDto();
 							int testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId();
@@ -426,9 +428,9 @@ public class RunAutomation {
 				}
 				
 				// send scheduler level notification email if jobId is present
-				if(testScriptDto.getJobId()!=null) {
+				if(jobId!=null) {
 					Optional<List<UserSchedulerJob>> listOfUserSchedulerJob = userSchedulerJobRepository
-							.findByJobId(testScriptDto.getJobId());
+							.findByJobId(jobId);
 					// check the size of the user scheduler job list
 					//if (listOfUserSchedulerJob.isPresent() && listOfUserSchedulerJob.get().size() > 0) {
 						List<UserSchedulerJob> listOfUserSchedulerJobWithEndDate = listOfUserSchedulerJob.get().stream()
@@ -444,7 +446,7 @@ public class RunAutomation {
 							if (listOfUserSchedulerJobWithEndDate.size() == listOfUserSchedulerJob.get().size()) {
 								// send notifications to users
 								List<TestSet> testSetIds = userSchedulerJobRepository
-										.findByTestRuns(testScriptDto.getJobId());
+										.findByTestRuns(jobId);
 
 								List<Integer> testRunIds = testSetIds.stream().map(testSet -> testSet.getTestRunId())
 										.collect(Collectors.toList());
@@ -452,11 +454,11 @@ public class RunAutomation {
 										.collect(Collectors.joining(","));
 								String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName())
 										.collect(Collectors.joining(","));
-								schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, testScriptDto.getJobId());
-								schedulePdfGenerator.createPDF(testScriptDto.getJobId(),fetchConfigVO.getPDF_PATH(),customerDetails.getCustomerName());
-								Scheduler scheduler = schedulerRepository.findByJobId(testScriptDto.getJobId());
+								schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, jobId);
+								schedulePdfGenerator.createPDF(jobId,fetchConfigVO.getPDF_PATH(),customerDetails.getCustomerName());
+								Scheduler scheduler = schedulerRepository.findByJobId(jobId);
 								dataBaseEntry.schedulerNotificationEmail(scheduler.getJobName(), testLinesDetails, listTestSetIds,
-										testScriptDto.getJobId(), testRunNames);
+										jobId, testRunNames);
 							}
 						}
 				//	}
