@@ -102,8 +102,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 					createSchedule(scheduleJobVO, newAddedSubJobs, count,scheduler);
 				}
 			}
-		 	for(ScheduleTestRunVO testRunVO:scheduleJobVO.getTestRuns()) {
-		 		for(UserSchedulerJob subScheduleJob:listOfSubJob.get()) {
+		 	scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
+		 	listOfSubJob.get().parallelStream().forEach(subScheduleJob->{
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
 						ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
 						scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
@@ -122,10 +122,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 									"Error occurred from APEX web service of edit scheduled job", e);
 						}
 					}
-				}
-				;
-			}
-			;
+				});
+			});
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, scheduler.getJobId()+":Successfully updated the "+scheduler.getJobName()+" job");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
