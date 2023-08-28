@@ -1,5 +1,7 @@
 package com.winfo.repository;
 
+import java.util.Date;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,8 +19,8 @@ public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 	
 	@Modifying
 	@Transactional
-	@Query("UPDATE TestSet SET lastExecutBy = SYSDATE, lastUpdatedBy = lastUpdatedBy, updateDate = SYSDATE, testRunMode = 'ACTIVE' WHERE testRunId =: testSetId")
-	int updateTestRunExecution(String testSetId,String LastUpdatedBy);
+	@Query("UPDATE TestSet SET lastExecutBy =:date, lastUpdatedBy =:lastUpdatedBy, updateDate =:date, testRunMode = 'ACTIVE' WHERE testRunId =:testSetId")
+	int updateTestRunExecution(String lastUpdatedBy,int testSetId, Date date);
 	
 
 }

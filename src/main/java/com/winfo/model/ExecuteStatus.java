@@ -31,11 +31,11 @@ public class ExecuteStatus {
 	private Integer executionStatus;
 	
 	
-	@Column(name = "EXECUTED_BY")
-	private String executedBy;
-	
-	@Column(name = "TEST_RUN_ID")
-	private Integer testRunId;
+//	@Column(name = "EXECUTED_BY")
+//	private String executedBy;
+//	
+//	@Column(name = "TEST_RUN_ID")
+//	private Integer testRunId;
 	
 	
 }

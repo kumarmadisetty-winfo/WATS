@@ -47,6 +47,7 @@ import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Scheduler;
 import com.winfo.model.TestSet;
+import com.winfo.model.TestSetExecutionStatus;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.reports.PDFGenerator;
 import com.winfo.repository.SchedulerRepository;
@@ -54,7 +55,6 @@ import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.service.SFInterface;
-import com.winfo.service.UpdateTestSetRecords;
 import com.winfo.service.WoodInterface;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.ErrorMessagesHandler;
@@ -66,6 +66,7 @@ import com.winfo.serviceImpl.SendMailServiceImpl;
 import com.winfo.serviceImpl.SmartBearService;
 import com.winfo.serviceImpl.TestCaseDataService;
 import com.winfo.serviceImpl.TestScriptExecService;
+import com.winfo.serviceImpl.UpdateTestSetRecords;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -426,8 +427,14 @@ public class RunAutomation {
 							int testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId();
 							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
 							dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
-							testSetLinesRepository.updateTestRunScriptEnable(String.valueOf(testRunId));
-							updateTestSetService.updateDependencyTestRunDetails(String.valueOf(testRunId), dependencyTestRun.get().getUpdatedBy(), dependencyTestRun.get().getComments().toString(), jobId, dependencyTestRun.get().getCreatedBy());
+							testSetLinesRepository.updateTestRunScriptEnable(testRunId);
+							TestSetExecutionStatus testSetExecutionStatus=new TestSetExecutionStatus();
+//							testSetExecutionStatus.setExecuteByMail(null);
+							testSetExecutionStatus.setExecutedBy(testLinesDetails.get(0).getExecutedBy());
+							testSetExecutionStatus.setTestRunId(testRunId);
+							testSetExecutionStatus.setExecutionDate(new Date());
+							
+							updateTestSetService.updateDependencyTestRunDetails(testRunId, testLinesDetails.get(0).getExecutedBy(), dependencyTestRun.get().getComments(), jobId, testSetExecutionStatus);
 							cloudRun(dependencyTestScriptDto); 
 						}						
 					}

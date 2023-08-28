@@ -252,7 +252,7 @@ public class SendMailServiceImpl {
 	public void initiationSendMail(EmailParamDto emailParamDto) {
 		Session session = getSession();
 		String subject = "FYI-Execution initiated for " + emailParamDto.getTestSetName();
-		String date=DateUtils.getSysdate("DD-MON-YYYY");
+		String date=DateUtils.getSysdate("dd-MMM-YYYY");
 		LocalTime time=LocalTime.now();
 		
 

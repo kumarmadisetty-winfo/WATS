@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,7 +19,8 @@ import lombok.Data;
 public class TestSetExecutionStatus {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testSetExecutionStatus_generator")
+	@SequenceGenerator(name = "testSetExecutionStatus_generator", sequenceName = "TEST_RUN_EXEC_SEQ", allocationSize = 1)
     @Column(name = "EXECUTION_ID")
     private Integer executionId;
 
