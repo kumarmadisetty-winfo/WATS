@@ -100,6 +100,9 @@ public class TestSet {
 
 	@Column(name = "PDF_GENERATION")
 	private String pdfGenerationEnabled;
+	
+	@Column(name = "CPY_INCR_FLAG")
+	private String copyIncreamentFlag;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
 	private List<TestSetLine> testRunScriptDatalist = new ArrayList<>();
