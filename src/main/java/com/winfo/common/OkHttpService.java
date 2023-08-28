@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.winfo.exception.WatsEBSException;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -25,7 +26,10 @@ public class OkHttpService {
 	
 	@Autowired
 	private OkHttpClient okHttpClient;
-
+	
+	private static final String SERVICE_NAME = "application";
+	
+	@CircuitBreaker(name = SERVICE_NAME, fallbackMethod = "getDefaultException")
 	public void attachPdf(String url, String filePath, String authHeader) {
 		logger.info("Received details as input in attachPdf method");
 		try {
@@ -64,6 +68,22 @@ public class OkHttpService {
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
 		} catch (Exception ex) {
 			logger.error("Error while calling API: {}", ex.getMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+		}
+	}
+	
+	public void getDefaultException(Exception ex) {
+		if (ex instanceof NotFoundException) {
+			logger.error("Endpoint not found");
+			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+		} else if (ex instanceof WatsEBSException) {
+			logger.error("Authentication Error");
+			throw new WatsEBSException(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+		} else if (ex instanceof InternalServerErrorException) {
+			logger.error("Internal server error");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+		} else {
+			logger.error("Error while calling API: Internal server error");
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
 		}
 	}

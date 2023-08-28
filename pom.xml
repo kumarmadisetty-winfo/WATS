@@ -513,6 +513,12 @@
 			<groupId>com.oracle.oci.sdk</groupId>
 			<artifactId>oci-java-sdk-identity</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-circuitbreaker -->
+		<dependency>
+		    <groupId>io.github.resilience4j</groupId>
+		    <artifactId>resilience4j-spring-boot2</artifactId>
+		    <version>1.7.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>wats</finalName>
