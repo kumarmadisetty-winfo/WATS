@@ -12860,6 +12860,35 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		requiredValidation(driver, param1, param2, null, fetchMetadataVO);
 
 		try {
+			if (param1.equalsIgnoreCase("Recognize Revenue")&&(param2.equalsIgnoreCase("Recognition Date"))){
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='"+param1+"']/following::*[contains(text(),'"+param2+"')]/following::input[1]")));
+				WebElement waittill = driver.findElement(By.xpath("//div[text()='"+param1+"']/following::*[contains(text(),'"+param2+"')]/following::input[1]"));
+				Actions actions = new Actions(driver);
+				//actions.moveToElement(waittill).build().perform();
+			//	scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
+				waittill.clear();
+				waittill.click();
+				typeIntoValidxpath(driver, keysToSend, waittill, fetchConfigVO, fetchMetadataVO);
+				Thread.sleep(5000);
+				//waittill.sendKeys(keysToSend);
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				tab(driver, fetchMetadataVO, fetchConfigVO,customerDetails);
+				takeScreenshot(driver, fetchMetadataVO, customerDetails);
+				//screenshot(driver, fetchMetadataVO, customerDetails);
+				logger.info("Sucessfully Clicked Close Date sendValue" + scripNumber);
+				String xpath = "//div[text()='param1']/following::*[contains(text(),'param2')]/following::input[1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return keysToSend;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during Close Date sendValue" + scripNumber);
+			screenshotFail(driver, fetchMetadataVO, customerDetails);
+		}
+		try {
 			if (param1.equalsIgnoreCase("Journal Line Items")){
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[text()='"+param1+"']/following::*[text()='Line Type']/preceding::input[1]")));
@@ -14108,6 +14137,7 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].value=\"" + keysToSend+" " + "\";", waittill);
 				waittill.sendKeys(Keys.BACK_SPACE);
+				Thread.sleep(5000);
 				//waittill.sendKeys(keysToSend);
 				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
