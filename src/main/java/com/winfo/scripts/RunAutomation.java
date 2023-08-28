@@ -54,6 +54,7 @@ import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.service.SFInterface;
+import com.winfo.service.UpdateTestSetRecords;
 import com.winfo.service.WoodInterface;
 import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.ErrorMessagesHandler;
@@ -144,6 +145,10 @@ public class RunAutomation {
 	
 	@Autowired
 	SFInterface sfInterface;
+	@Autowired
+	UpdateTestSetRecords updateTestSetService;
+	
+	
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -422,7 +427,8 @@ public class RunAutomation {
 							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
 							dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
 							testSetLinesRepository.updateTestRunScriptEnable(String.valueOf(testRunId));
-							cloudRun(dependencyTestScriptDto);
+							updateTestSetService.updateDependencyTestRunDetails(String.valueOf(testRunId), dependencyTestRun.get().getUpdatedBy(), dependencyTestRun.get().getComments().toString(), jobId, dependencyTestRun.get().getCreatedBy());
+							cloudRun(dependencyTestScriptDto); 
 						}						
 					}
 				}
