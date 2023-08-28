@@ -12,6 +12,16 @@ import com.winfo.repository.TestSetScriptParamRepository;
 @Service
 public class UpdateTestSetRecords {
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@Autowired
 	private TestSetLinesRepository testSetLinesRepository;
 
@@ -21,6 +31,26 @@ public class UpdateTestSetRecords {
 	@Autowired
 	private TestSetExecutionStatusRepository testSetExecutionStatusRepository;
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void updateStatusStartTimeEndTimeTetSetLines(String testSetId) {
 		testSetLinesRepository.updateStatusStartTimeEndTimeTetSetLines(testSetId);
 	}
