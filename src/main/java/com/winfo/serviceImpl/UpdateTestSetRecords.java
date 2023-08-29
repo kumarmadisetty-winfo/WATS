@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.dao.DataBaseEntryDao;
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.Scheduler;
 import com.winfo.model.TestSetExecutionStatus;
 import com.winfo.model.UserSchedulerJob;
@@ -82,31 +83,31 @@ public class UpdateTestSetRecords {
 	@Transactional
 	public void initiationSendMail(String testSetName, Integer jobId, String executedBy, int testSetId) {
 		try {
-		EmailParamDto emailParam = new EmailParamDto();
-		emailParam.setTestSetName(testSetName);
-		dataBaseEntryDao.getUserAndPrjManagerName(executedBy, String.valueOf(testSetId), emailParam);
-		String userEmail = userRepository.findByUserId(executedBy.toUpperCase());
-		String testRunEmails = null;
-		Optional<UserSchedulerJob> userSchedulerJob = userSchedulerJobRepository.findByJobIdAndComments(jobId,
-				testSetName);
-		if (userSchedulerJob.isPresent()) {
-			testRunEmails = userSchedulerJob.get().getClientId();
-			if (testRunEmails != null) {
-				String listOfEmails = Arrays.asList(testRunEmails).stream()
-						.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
-				if (StringUtils.isNotBlank(listOfEmails)) {
-					emailParam.setReceiver(listOfEmails);
-				}
-			} else {
-				Scheduler scheduler = schedulerRepository.findByJobId(jobId);
-				if (!userEmail.equalsIgnoreCase(scheduler.getEmail())) {
-					emailParam.setReceiver(scheduler.getEmail());
+			EmailParamDto emailParam = new EmailParamDto();
+			emailParam.setTestSetName(testSetName);
+			dataBaseEntryDao.getUserAndPrjManagerName(executedBy, String.valueOf(testSetId), emailParam);
+			String userEmail = userRepository.findByUserId(executedBy.toUpperCase());
+			String testRunEmails = null;
+			Optional<UserSchedulerJob> userSchedulerJob = userSchedulerJobRepository.findByJobIdAndComments(jobId,
+					testSetName);
+			if (userSchedulerJob.isPresent()) {
+				testRunEmails = userSchedulerJob.get().getClientId();
+				if (testRunEmails != null) {
+					String listOfEmails = Arrays.asList(testRunEmails).stream()
+							.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
+					if (StringUtils.isNotBlank(listOfEmails)) {
+						emailParam.setReceiver(listOfEmails);
+					}
+				} else {
+					Scheduler scheduler = schedulerRepository.findByJobId(jobId);
+					if (!userEmail.equalsIgnoreCase(scheduler.getEmail())) {
+						emailParam.setReceiver(scheduler.getEmail());
+					}
 				}
 			}
-		}
-		sendMailService.initiationSendMail(emailParam);
-		}catch(Exception e) {
-			logger.error("Failed during sending scheduler initiation mail ");
+			sendMailService.initiationSendMail(emailParam);
+		}catch(WatsEBSException e) {
+			logger.error("Failed during sending schedule testrun initiation mail ");
 		}
 		
 	}
