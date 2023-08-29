@@ -13,23 +13,20 @@ import lombok.Data;
 @Table(name = "EXECUTE_STATUS")
 @Data
 public class ExecuteStatus {
-	
+
 	@EmbeddedId
-	private ExecuteStatusPK executeStatusPK;	
-	
+	private ExecuteStatusPK executeStatusPK;
+
 	@Column(name = "TEST_RUN_NAME")
 	private String testRunName;
-	
+
 	@Column(name = "STATUS_FLAG")
 	private Character flag;
-	
+
 	@Column(name = "EXECUTION_DATE")
 	private Date executionDate;
-	
-	
+
 	@Column(name = "EXECUTE_STATUS")
 	private Integer executionStatus;
-	
-	
-	
+
 }

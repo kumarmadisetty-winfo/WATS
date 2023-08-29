@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.model.TestSetScriptParam;
 
@@ -25,5 +26,10 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	List<TestSetScriptParam> findByScriptIdAndMetadataId(Integer scriptId,Integer metadataId);
 	
 	long countByScriptIdAndMetadataId(Integer scriptId,Integer metadataId);
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE TestSetScriptParam s SET s.lineExecutionStatus = 'New', s.lineErrorMessage = NULL WHERE s.testSetLine.testRunScriptId IN (SELECT l.testRunScriptId FROM TestSetLine l WHERE l.testRun.testRunId = :testSetId AND l.enabled = 'Y' AND UPPER(l.status) != 'PASS')")
+	int updateLineExecutiStatusAndLineErrorMsg(int testSetId);
 
 }

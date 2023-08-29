@@ -2,6 +2,7 @@ package com.winfo.serviceImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.winfo.exception.WatsEBSException;
+import com.winfo.utils.DateUtils;
 import com.winfo.vo.EmailParamDto;
 
 @Service
@@ -243,6 +245,47 @@ public class SendMailServiceImpl {
 		} catch (MessagingException e) {
 			e.printStackTrace();
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while sending mail for Scheduler Job ", e);
+		}
+	}
+	
+	
+	public void initiationSendMail(EmailParamDto emailParamDto) {
+		Session session = getSession();
+		String subject = "FYI-Execution initiated for " + emailParamDto.getTestSetName();
+		String date=DateUtils.getSysdate("dd-MMM-YYYY");
+		LocalTime time=LocalTime.now();
+		
+
+		String body = "<html>\r\n" + "<body>\r\n"
+				+ "        <p>Hi,<br><br>This notification is to update you that the execution of <b>"
+				+ emailParamDto.getTestSetName() + "commenced at " +date+ "at time " +time+ ".<br><br>"
+				+"Next notification will be sent once the execution is completed."
+				+ "        Thanks,<br><b>Winfo Test Automation</b>.\r\n" + "        </p>\r\n" + "    </body>\r\n"
+				+ "</html>";
+
+		try {
+
+			MimeMessage message = new MimeMessage(session);
+			message.setHeader("Content-Type", "text/html; charset=UTF-8");
+			message.setFrom(new InternetAddress(userName));
+			message.setSentDate(new Date());
+			message.setRecipients(Message.RecipientType.TO,
+					emailParamDto.getReceiver() != null ? InternetAddress.parse(emailParamDto.getReceiver()) : null);
+			message.addRecipients(Message.RecipientType.CC,
+					emailParamDto.getCcPerson() != null ? InternetAddress.parse(emailParamDto.getCcPerson()) : null);
+
+			message.setSubject(subject);
+
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setText(body, "utf-8", "html");
+			MimeMultipart multipart = new MimeMultipart();
+			multipart.addBodyPart(messageBodyPart);
+			message.setContent(multipart);
+			Transport.send(message);
+
+		} catch (MessagingException e) {
+			logger.error("Exception occured while sending initiation mail " +e.getMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while sending initiation mail ", e);
 		}
 	}
 

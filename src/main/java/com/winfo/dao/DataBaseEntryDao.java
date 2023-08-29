@@ -1292,7 +1292,7 @@ public class DataBaseEntryDao {
 		
 	}
 
-
+	@Transactional
 	public void getUserAndPrjManagerName(String userName, String testSetId, EmailParamDto emailParam) {
 
 		String fetchUserName = "SELECT EMAIL\r\n" + "FROM WIN_TA_USERS\r\n" + "WHERE UPPER(USER_ID) = UPPER('"
@@ -1315,7 +1315,6 @@ public class DataBaseEntryDao {
 		}
 	}
 	
-
 	public void getUserAndPrjManagerNameAndTestRuns(String userName, String listTestSetIds, EmailParamDto emailParam,Integer jobId) {
 
 		String fetchUserName = "SELECT EMAIL\r\n" + "FROM WIN_TA_USERS\r\n" + "WHERE UPPER(USER_ID) = UPPER('"
@@ -1380,7 +1379,8 @@ public class DataBaseEntryDao {
 		}
 		return count;
 	}
-
+	
+	@Transactional
 	public Integer updateExecStatusTable(String testSetId) {
 		Integer id = null;
 		try {

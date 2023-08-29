@@ -47,6 +47,7 @@ import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Scheduler;
 import com.winfo.model.TestSet;
+import com.winfo.model.TestSetExecutionStatus;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.reports.PDFGenerator;
 import com.winfo.repository.SchedulerRepository;
@@ -65,6 +66,7 @@ import com.winfo.serviceImpl.SendMailServiceImpl;
 import com.winfo.serviceImpl.SmartBearService;
 import com.winfo.serviceImpl.TestCaseDataService;
 import com.winfo.serviceImpl.TestScriptExecService;
+import com.winfo.serviceImpl.UpdateTestSetRecords;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -144,6 +146,10 @@ public class RunAutomation {
 	
 	@Autowired
 	SFInterface sfInterface;
+	@Autowired
+	UpdateTestSetRecords updateTestSetService;
+	
+	
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -421,9 +427,19 @@ public class RunAutomation {
 							int testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId();
 							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
 							dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
-							testSetLinesRepository.updateTestRunScriptEnable(String.valueOf(testRunId));
-							cloudRun(dependencyTestScriptDto);
+							testSetLinesRepository.updateTestRunScriptEnable(testRunId);
+							TestSetExecutionStatus testSetExecutionStatus=new TestSetExecutionStatus();
+//							testSetExecutionStatus.setExecuteByMail(null);
+							testSetExecutionStatus.setExecutedBy(testLinesDetails.get(0).getExecutedBy());
+							testSetExecutionStatus.setTestRunId(testRunId);
+							testSetExecutionStatus.setExecutionDate(new Date());
+							testSetExecutionStatus.setRequestCount(0);
+							testSetExecutionStatus.setResponseCount(0);
+							updateTestSetService.updateDependencyTestRunDetails(testRunId, testLinesDetails.get(0).getExecutedBy(), dependencyTestRun.get().getComments(), jobId, testSetExecutionStatus);
+							cloudRun(dependencyTestScriptDto); 
 						}						
+					}else {
+						schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, jobId);
 					}
 				}
 				
