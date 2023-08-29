@@ -104,6 +104,9 @@ public class TestSet {
 	@Column(name = "CPY_INCR_FLAG")
 	private String copyIncreamentFlag;
 
+	@Column(name = "REFERENCE_TEST_RUN")
+	private Integer referenceTestRunId;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
 	private List<TestSetLine> testRunScriptDatalist = new ArrayList<>();
 
