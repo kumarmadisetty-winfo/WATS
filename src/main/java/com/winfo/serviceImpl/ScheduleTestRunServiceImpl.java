@@ -135,7 +135,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		String jobName = scheduler.getJobName().replaceAll("\\s", "").toUpperCase();
 		int jobId = scheduler.getJobId();
 		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO->{
-			if("Template".equalsIgnoreCase(testRunVO.getType())) {
+			if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
 				TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
 				CopytestrunVo copyTestrunvo =new CopytestrunVo();
 				copyTestrunvo.setConfiguration(scheduleJobVO.getConfigurationId());
