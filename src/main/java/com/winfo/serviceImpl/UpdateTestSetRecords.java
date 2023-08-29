@@ -64,20 +64,23 @@ public class UpdateTestSetRecords {
 
 	public void updateDependencyTestRunDetails(int testSetId, String executedBy, String testSetName, Integer jobId,
 			 TestSetExecutionStatus testSetExecutionStatus) {
-		testSetRepo.updateTestRunExecution(executedBy, testSetId,new Date());
-		executeStatusRepo.updateTestRunExecutionStatus(executedBy, testSetName, testSetId);
-		testSetLinesRepository.updateStatusStartTimeEndTimeTetSetLines(testSetId);
-		testSetScriptParamRepository.updateLineExecutiStatusAndLineErrorMsg(testSetId);
-		testSetLinesRepository.updateTestRunScriptEnable(testSetId);
-		List<TestSetExecutionStatus> testSetExcecutionStatus = testSetExecutionStatusRepository.findByTestRunId(testSetId);
-		if(testSetExcecutionStatus.size()==0) {
-		insertTestSetExecutionStatusRecord(testSetExecutionStatus);
+		try {
+			testSetRepo.updateTestRunExecution(executedBy, testSetId, new Date());
+			executeStatusRepo.updateTestRunExecutionStatus(executedBy, testSetName, testSetId);
+			testSetLinesRepository.updateStatusStartTimeEndTimeTetSetLines(testSetId);
+			testSetScriptParamRepository.updateLineExecutiStatusAndLineErrorMsg(testSetId);
+			testSetLinesRepository.updateTestRunScriptEnable(testSetId);
+			List<TestSetExecutionStatus> testSetExcecutionStatus = testSetExecutionStatusRepository
+					.findByTestRunId(testSetId);
+			if (testSetExcecutionStatus.size() == 0) {
+				insertTestSetExecutionStatusRecord(testSetExecutionStatus);
+			} else {
+				dataBaseEntryDao.updateExecStatusTable(String.valueOf(testSetId));
+			}
+			initiationSendMail(testSetName, jobId, executedBy, testSetId);
+		} catch (Exception e) {
+			logger.error("Exception occured while updating dependency testRun detailes");
 		}
-		else {
-			dataBaseEntryDao.updateExecStatusTable(String.valueOf(testSetId));
-		}
-		initiationSendMail(testSetName, jobId, executedBy, testSetId);
-		
 	}
 
 	@Transactional
