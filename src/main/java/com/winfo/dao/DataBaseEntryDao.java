@@ -1380,7 +1380,8 @@ public class DataBaseEntryDao {
 		}
 		return count;
 	}
-
+	
+	@Transactional
 	public Integer updateExecStatusTable(String testSetId) {
 		Integer id = null;
 		try {
