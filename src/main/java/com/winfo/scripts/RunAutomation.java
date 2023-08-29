@@ -433,7 +433,8 @@ public class RunAutomation {
 							testSetExecutionStatus.setExecutedBy(testLinesDetails.get(0).getExecutedBy());
 							testSetExecutionStatus.setTestRunId(testRunId);
 							testSetExecutionStatus.setExecutionDate(new Date());
-							
+							testSetExecutionStatus.setRequestCount(0);
+							testSetExecutionStatus.setResponseCount(0);
 							updateTestSetService.updateDependencyTestRunDetails(testRunId, testLinesDetails.get(0).getExecutedBy(), dependencyTestRun.get().getComments(), jobId, testSetExecutionStatus);
 							cloudRun(dependencyTestScriptDto); 
 						}						
