@@ -30,12 +30,6 @@ public class ExecuteStatus {
 	@Column(name = "EXECUTE_STATUS")
 	private Integer executionStatus;
 	
-	
-//	@Column(name = "EXECUTED_BY")
-//	private String executedBy;
-//	
-//	@Column(name = "TEST_RUN_ID")
-//	private Integer testRunId;
-	
+
 	
 }
