@@ -284,7 +284,7 @@ public class SendMailServiceImpl {
 			Transport.send(message);
 
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			logger.error("Exception occured while sending initiation mail " +e.getMessage());
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while sending initiation mail ", e);
 		}
 	}

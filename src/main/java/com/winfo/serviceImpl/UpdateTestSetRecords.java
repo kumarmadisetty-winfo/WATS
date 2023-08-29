@@ -70,7 +70,7 @@ public class UpdateTestSetRecords {
 		insertTestSetExecutionStatusRecord(testSetExecutionStatus);
 		}
 		else {
-			Integer responseCount = dataBaseEntryDao.updateExecStatusTable(String.valueOf(testSetId));
+			dataBaseEntryDao.updateExecStatusTable(String.valueOf(testSetId));
 		}
 		initiationSendMail(testSetName, jobId, executedBy, testSetId);
 		
