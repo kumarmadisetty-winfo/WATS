@@ -75,16 +75,12 @@ public class OkHttpService {
 	public void getDefaultException(Exception ex) {
 		if (ex instanceof NotFoundException) {
 			logger.error("Endpoint not found");
-			throw new WatsEBSException(HttpStatus.NOT_FOUND.value(), ex.getMessage());
 		} else if (ex instanceof WatsEBSException) {
 			logger.error("Authentication Error");
-			throw new WatsEBSException(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
 		} else if (ex instanceof InternalServerErrorException) {
 			logger.error("Internal server error");
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
 		} else {
 			logger.error("Error while calling API: Internal server error");
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
 		}
 	}
 }
