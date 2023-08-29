@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -25,9 +28,17 @@ public class GroupedStackedBarChart {
 
 	
 	public void createBar(Document document, Map<String, Map<String, Integer>> testRuns) throws DocumentException, IOException {
+		List<Integer> countPassFail = new ArrayList<Integer>();
+		for(Map.Entry<String, Map<String, Integer>> entry : testRuns.entrySet()) {
+			int value = (entry.getValue().get("pass")+entry.getValue().get("fail"));
+			countPassFail.add(value);
+		}
+		Integer max = Collections.max(countPassFail);
+		System.out.println(max);
 		CategoryDataset dataset = createDataset(testRuns);
-		JFreeChart chart = createChart(dataset);
-
+		JFreeChart chart = createChart(dataset,max);
+		
+		
 		int width = 560; // Adjust the width of the chart image
 		int height = 300; // Adjust the height of the chart image
 
@@ -74,7 +85,7 @@ public class GroupedStackedBarChart {
 		return dataset;
 	}
 
-	private static JFreeChart createChart(CategoryDataset dataset) {
+	private static JFreeChart createChart(CategoryDataset dataset, Integer max) {
 		JFreeChart chart = ChartFactory.createBarChart("", "", "", dataset);
 
 		CategoryPlot plot = chart.getCategoryPlot();
@@ -87,9 +98,9 @@ public class GroupedStackedBarChart {
 		plot.setRenderer(renderer);
 		plot.setBackgroundPaint(new Color(225, 230, 235));
 		  NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-		    double minValue = 0.0;
-		    double maxValue = 100.0;
-		    yAxis.setRange(minValue, maxValue);
+//		    yAxis.setRange(0, max);
+		    yAxis.setAutoRangeMinimumSize(max);
+		    yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		return chart;
 	}
 
