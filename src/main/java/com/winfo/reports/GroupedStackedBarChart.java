@@ -34,7 +34,6 @@ public class GroupedStackedBarChart {
 			countPassFail.add(value);
 		}
 		Integer max = Collections.max(countPassFail);
-		System.out.println(max);
 		CategoryDataset dataset = createDataset(testRuns);
 		JFreeChart chart = createChart(dataset,max);
 		
