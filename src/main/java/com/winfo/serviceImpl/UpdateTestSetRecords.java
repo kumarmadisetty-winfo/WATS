@@ -2,6 +2,7 @@ package com.winfo.serviceImpl;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ public class UpdateTestSetRecords {
 	
 	@Autowired
 	DataBaseEntryDao dataBaseEntryDao;
-
+	
 	@Autowired
 	SchedulerRepository schedulerRepository;
 	
@@ -64,13 +65,19 @@ public class UpdateTestSetRecords {
 		testSetLinesRepository.updateStatusStartTimeEndTimeTetSetLines(testSetId);
 		testSetScriptParamRepository.updateLineExecutiStatusAndLineErrorMsg(testSetId);
 		testSetLinesRepository.updateTestRunScriptEnable(testSetId);
+		List<TestSetExecutionStatus> testSetExcecutionStatus = testSetExecutionStatusRepository.findByTestRunId(testSetId);
+		if(testSetExcecutionStatus.size()==0) {
 		insertTestSetExecutionStatusRecord(testSetExecutionStatus);
-		InitiationSendMail(testSetName, jobId, executedBy, testSetId);
+		}
+		else {
+			Integer responseCount = dataBaseEntryDao.updateExecStatusTable(String.valueOf(testSetId));
+		}
+		initiationSendMail(testSetName, jobId, executedBy, testSetId);
 		
 	}
 
 	@Transactional
-	public void InitiationSendMail(String testSetName, Integer jobId, String executedBy, int testSetId) {
+	public void initiationSendMail(String testSetName, Integer jobId, String executedBy, int testSetId) {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(testSetName);
 		dataBaseEntryDao.getUserAndPrjManagerName(executedBy, String.valueOf(testSetId), emailParam);
