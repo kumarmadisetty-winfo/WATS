@@ -438,6 +438,8 @@ public class RunAutomation {
 							updateTestSetService.updateDependencyTestRunDetails(testRunId, testLinesDetails.get(0).getExecutedBy(), dependencyTestRun.get().getComments(), jobId, testSetExecutionStatus);
 							cloudRun(dependencyTestScriptDto); 
 						}						
+					}else {
+						schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, jobId);
 					}
 				}
 				
