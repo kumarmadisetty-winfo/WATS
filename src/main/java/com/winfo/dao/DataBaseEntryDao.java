@@ -1315,7 +1315,6 @@ public class DataBaseEntryDao {
 		}
 	}
 	
-	@Transactional
 	public void getUserAndPrjManagerNameAndTestRuns(String userName, String listTestSetIds, EmailParamDto emailParam,Integer jobId) {
 
 		String fetchUserName = "SELECT EMAIL\r\n" + "FROM WIN_TA_USERS\r\n" + "WHERE UPPER(USER_ID) = UPPER('"
