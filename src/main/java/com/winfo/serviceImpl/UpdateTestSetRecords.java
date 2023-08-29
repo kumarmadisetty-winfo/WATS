@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +58,8 @@ public class UpdateTestSetRecords {
 
 	@Autowired
 	private TestSetExecutionStatusRepository testSetExecutionStatusRepository;
+	
+	public static final Logger logger = Logger.getLogger(UpdateTestSetRecords.class);
 
 	public void updateDependencyTestRunDetails(int testSetId, String executedBy, String testSetName, Integer jobId,
 			 TestSetExecutionStatus testSetExecutionStatus) {
@@ -78,6 +81,7 @@ public class UpdateTestSetRecords {
 
 	@Transactional
 	public void initiationSendMail(String testSetName, Integer jobId, String executedBy, int testSetId) {
+		try {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(testSetName);
 		dataBaseEntryDao.getUserAndPrjManagerName(executedBy, String.valueOf(testSetId), emailParam);
@@ -101,6 +105,10 @@ public class UpdateTestSetRecords {
 			}
 		}
 		sendMailService.initiationSendMail(emailParam);
+		}catch(Exception e) {
+			logger.error("Failed during sending scheduler initiation mail ");
+		}
+		
 	}
 
 	@Transactional
