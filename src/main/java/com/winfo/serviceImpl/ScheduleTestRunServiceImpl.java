@@ -64,6 +64,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			AtomicInteger count=new AtomicInteger(0);
 			Scheduler scheduler =schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			if(scheduler==null) {
+				logger.info("Create Schedule object ::" + scheduleJobVO.toString());
 				scheduler=new Scheduler();
 				scheduler.setConfigurationId(scheduleJobVO.getConfigurationId());
 				scheduler.setProjectId(scheduleJobVO.getProjectId());
@@ -86,12 +87,17 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
+			logger.info(String.format("Schedule job name:"+scheduler.getJobName()+"Schedule job id:"+scheduler.getJobId()));
 			Optional<List<UserSchedulerJob>> listOfSubJob = userSchedulerJobRepository.findByJobId(scheduler.getJobId());
 			if (scheduleJobVO.getTestRuns().size() > listOfSubJob.get().size()) {
 				List<String> listOfSubJobFromDB = listOfSubJob.get().parallelStream().filter(Objects::nonNull).map(UserSchedulerJob::getComments)
 						.collect(Collectors.toList());
+				logger.info(String.format("list of schedule TestRuns from DB :"+
+						listOfSubJobFromDB.stream().collect(Collectors.joining(","))));
 				List<String> listOfSubJobFromVO = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
 						.map(ScheduleTestRunVO::getTemplateTestRun).collect(Collectors.toList());
+				logger.info(String.format("list of schedule TestRuns from edit :"+
+						listOfSubJobFromVO.stream().collect(Collectors.joining(","))));
 				List<String> newAddedSubJobNames = listOfSubJobFromVO.parallelStream().filter(Objects::nonNull)
 						.filter(subJobName -> !listOfSubJobFromDB.contains(subJobName)).collect(Collectors.toList());
 				List<ScheduleTestRunVO> newAddedSubJobs = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
@@ -134,9 +140,12 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public int createSchedule(ScheduleJobVO scheduleJobVO, List<ScheduleTestRunVO> listOfTestRunInJob,AtomicInteger count,Scheduler scheduler) {
 		String jobName = scheduler.getJobName().replaceAll("\\s", "").toUpperCase();
 		int jobId = scheduler.getJobId();
+		logger.info(String.format("Schedule job name:"+jobName+"Schedule job id:"+jobId));
 		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO->{
 			if(testRunVO.getTestRunName()!=null && !"".equals(testRunVO.getTestRunName())) {
 				TestSet testRun=testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+				logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s",
+						testRun.getTestRunId(),testRunVO.getTestRunName(),scheduleJobVO.getProjectId()));
 				CopytestrunVo copyTestrunvo =new CopytestrunVo();
 				copyTestrunvo.setConfiguration(scheduleJobVO.getConfigurationId());
 				copyTestrunvo.setCreatedBy(scheduleJobVO.getSchedulerEmail());
@@ -170,6 +179,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			scheduleSubJobVO.setTestSetId(testRun.getTestRunId());
 			scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
 			scheduleSubJobVO.setType(testRunVO.getType());
+			logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s",
+					testRun.getTestRunId(),testRun.getTestRunName(),scheduleJobVO.getProjectId()));
+			logger.info("WebClient URL:"+(basePath + "/WATSservice/scheduleTestRun"));
 			try {
 				WebClient webClient = WebClient.create(basePath + "/WATSservice/scheduleTestRun");
 				Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve().bodyToMono(String.class);
@@ -181,31 +193,4 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		});
 		return jobId;
 	}
-	
-	
-    private Optional <String> convertTimeFormat(String inputTime) {
-        try {
-            String[] parts = inputTime.split(" ");
-            String dateTimePart = parts[0] + "T" + parts[1];
-            String offsetPart = parts[2];
-
-            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.S");
-            LocalDateTime localDateTime = LocalDateTime.parse(dateTimePart, inputFormatter);
-
-            String sign = offsetPart.startsWith("+") ? "+" : "-";
-            int offsetHours = Integer.parseInt(offsetPart.substring(1, offsetPart.indexOf(":")));
-            int offsetMinutes = Integer.parseInt(offsetPart.substring(offsetPart.indexOf(":") + 1));
-
-            ZoneOffset zoneOffset = ZoneOffset.ofHoursMinutes(Integer.parseInt(sign + offsetHours), offsetMinutes);
-            OffsetDateTime offsetDateTime = localDateTime.atOffset(zoneOffset);
-
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd-MMM-yy hh.mm.ss.SSSSSSSSS a XXX");
-            String formattedDate = offsetDateTime.format(outputFormatter);
-            
-            return StringUtils.countMatches(formattedDate,'-')>2?Optional.of(formattedDate.replace("+", "").replaceFirst("(?s)-(?!.*-)", "")):Optional.of(formattedDate.replace("+", ""));
-        } catch (Exception e) {
-        	logger.error(e.getMessage());
-            return Optional.empty();
-        }
-    }
 }
