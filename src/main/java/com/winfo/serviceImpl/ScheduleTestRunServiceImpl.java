@@ -72,7 +72,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				scheduler.setCreationDate(new Date());
 				scheduler.setEmail(scheduleJobVO.getSchedulerEmail());
 				scheduler.setJobName(scheduleJobVO.getSchedulerName().replaceAll("\\s+", " "));
-				scheduler.setStatus(Constants.NEW);
+				scheduler.setStatus(Constants.YET_TO_START);
 				scheduler=schedulerRepository.save(scheduler);
 			}
 			int jobId=createSchedule(scheduleJobVO,scheduleJobVO.getTestRuns(),count,scheduler);

@@ -56,5 +56,9 @@ public class UserSchedulerJob {
 	
 	@Column(name = "UPDATED_DATE")
 	private Date updatedDate;
+	
+	@Column(name = "STATUS")
+	private String status;
+	
 
 }
