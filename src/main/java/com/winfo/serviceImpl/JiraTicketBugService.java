@@ -84,7 +84,7 @@ public class JiraTicketBugService {
 		return response;
 	}
 
-	public String webClient1(String jiraattachmenturl, String testrunname, Integer seqnum, String scriptnumber,
+	public String failedPdfAttatchmentToJira(String jiraattachmenturl, String testrunname, Integer seqnum, String scriptnumber,
 			Integer testsetid, Integer testSetLineId) {
 		String response = null;
 		try {
@@ -119,12 +119,16 @@ public class JiraTicketBugService {
 //			List<FetchMetadataVO> fetchMetadataListVO = te stRunService.getFetchMetaData(args, uri);
 			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(String.valueOf(testsetid));
 			int runCount = limitScriptExecutionDao.getFailScriptRunCount(testSetLineId.toString(), testsetid.toString());
+			if(runCount!=0 && customerDetails.getCustomerName()!=null && customerDetails.getTestSetName()!=null) {
 			File filenew = new File(fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + "_" + "RUN"+ runCount +".pdf");
 			logger.info("jira pdf path= " + filenew);
 			builder.part("file", new FileSystemResource(filenew));
+			logger.info("Successfully attached the failed PDF to the jira");
+			}
 		} catch (Exception e) {
 			logger.error("Failed during Multi Value Map " +e.getMessage());
+			logger.error("Failed to attach the failed PDF to the jira");
 		}
 		return builder.build();
 	}
@@ -283,7 +287,7 @@ public class JiraTicketBugService {
 				if (issuekey != null) {
 					String jiraattachmenturl = jiraissueurl + issuekey + "/attachments";
 
-					String jiraattachemtresponse = webClient1(jiraattachmenturl, slist.getTestSetName(),
+					String jiraattachemtresponse = failedPdfAttatchmentToJira(jiraattachmenturl, slist.getTestSetName(),
 							slist.getSeqNum(), slist.getScriptNumber(), slist.getTestSetId(),slist.getTestSetLineId());
 
 					// String jiraattachemtresponse= webClient1(jiraissueurlattachment);
