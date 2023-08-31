@@ -422,11 +422,11 @@ public class RunAutomation {
 					if(isTestRunPassed==0){
 						//pass
 						userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,customerDetails.getTestSetName(),jobId,Constants.PASS);
-						
+						logger.info("Updated endDate and pass status of the testRun " +customerDetails.getTestSetName());
 						Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
 								.findByJobIdAndDependency(jobId, Integer.parseInt(testScriptDto.getTestScriptNo()));
 						if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
-							TestScriptDto dependencyTestScriptDto = new TestScriptDto();
+							logger.info("Started execution for DependencyTestRun " +dependencyTestRun.get().getComments());							TestScriptDto dependencyTestScriptDto = new TestScriptDto();
 							int testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId();
 							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
 							dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
@@ -474,6 +474,7 @@ public class RunAutomation {
 								String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName())
 										.collect(Collectors.joining(","));
 								schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, jobId);
+								logger.info("Updated schedule status as completed");
 								schedulePdfGenerator.createPDF(jobId,fetchConfigVO.getPDF_PATH(),customerDetails.getCustomerName());
 								Scheduler scheduler = schedulerRepository.findByJobId(jobId);
 								dataBaseEntry.schedulerNotificationEmail(scheduler.getJobName(), testLinesDetails, listTestSetIds,
@@ -512,7 +513,8 @@ public class RunAutomation {
 			dependencyTestRunExecute(jobId, testRunId, dependencyTestRun.get().getComments());
 		}else {
 			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,testSetName,jobId,"fail");
-		}
+			logger.info("Updated fail status for the testRun " +testSetName);
+			}
 	}
 	
 
