@@ -132,5 +132,6 @@ public class Constants {
 	public static final String INPROGRESS="IN-PROGRESS";
 	public static final String COMPLETED="COMPLETED";
 	public static final String NEW="NEW";
+	public static final String YET_TO_START="Yet To Start";
 	public static final String TYPE="Testrun";
 	}

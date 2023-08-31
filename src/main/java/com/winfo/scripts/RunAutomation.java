@@ -408,8 +408,7 @@ public class RunAutomation {
 				if(jobId!=null) {
 					dataBaseEntry.testRunsNotificationEmail(customerDetails.getTestSetName(),testLinesDetails,jobId,customerDetails.getTestSetId());
 					//String FORMAT = "dd-MMM-yyyy HH:mm:ss.SSS";
-					LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
-					userSchedulerJobRepository.updateEndDateInUserSchedulerJob(localDate,customerDetails.getTestSetName(),jobId);
+					
 				}
 				
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -418,8 +417,12 @@ public class RunAutomation {
 				}
 				// check dependency and return test run id, if any dependency then call cloudRun method
 				if(jobId!=null) {
+					LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
 					int isTestRunPassed=testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
 					if(isTestRunPassed==0){
+						//pass
+						userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,customerDetails.getTestSetName(),jobId,Constants.PASS);
+						
 						Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
 								.findByJobIdAndDependency(jobId, Integer.parseInt(testScriptDto.getTestScriptNo()));
 						if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
@@ -439,10 +442,10 @@ public class RunAutomation {
 							cloudRun(dependencyTestScriptDto); 
 						}						
 					}else {
-						schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, jobId);
+						// updating fail status for dependent testrun
+						dependencyTestRunExecute(jobId, testScriptDto.getTestScriptNo(),customerDetails.getTestSetName());
 					}
 				}
-				
 				// send scheduler level notification email if jobId is present
 				if(jobId!=null) {
 					Optional<List<UserSchedulerJob>> listOfUserSchedulerJob = userSchedulerJobRepository
@@ -497,6 +500,19 @@ public class RunAutomation {
 			dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId, "Y");
 		}
 		return executeTestrunVo;
+	}
+	
+	private void dependencyTestRunExecute(Integer jobId,String testSetId,String testSetName) {
+		LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
+		Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
+				.findByJobIdAndDependency(jobId, Integer.parseInt(testSetId));
+		if(dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
+			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,testSetName,jobId,Constants.FAIL);
+			String testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId().toString();
+			dependencyTestRunExecute(jobId, testRunId, dependencyTestRun.get().getComments());
+		}else {
+			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,testSetName,jobId,"fail");
+		}
 	}
 	
 
