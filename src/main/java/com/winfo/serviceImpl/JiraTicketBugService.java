@@ -36,6 +36,7 @@ import com.winfo.config.MessageUtil;
 import com.winfo.dao.JiraTicketBugDao;
 import com.winfo.scripts.RunAutomation;
 import com.winfo.vo.BugDetails;
+import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.FetchMetadataVO;
@@ -67,6 +68,9 @@ public class JiraTicketBugService {
 
 	@Autowired
 	TestCaseDataService dataService;
+	
+	@Autowired
+	DataBaseEntry dataBaseEntry;
 
 	public String webClient(String jiraissueurl, JSONObject jsonobject) {
 
@@ -109,21 +113,15 @@ public class JiraTicketBugService {
 		try {
 			String args = testsetid.toString();
 			FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(args);
-			final String uri = fetchConfigVO.getURI_TEST_SCRIPTS() + args;
-			List<FetchMetadataVO> fetchMetadataListVO = testRunService.getFetchMetaData(args, uri);
-
-			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
-			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
-
-			// File filenew=new
-			// File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
-			File filenew = new File(fetchConfigVO.getPDF_PATH() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
+//			final String uri = fetchConfigVO.getURI_TEST_SCRIPTS() + args;
+//			List<FetchMetadataVO> fetchMetadataListVO = te stRunService.getFetchMetaData(args, uri);
+			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(String.valueOf(testsetid));
+			File filenew = new File(fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
 					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");
-
 			logger.info("jira pdf path= " + filenew);
 			builder.part("file", new FileSystemResource(filenew));
 		} catch (Exception e) {
-			logger.error("Fail during Multi Value Map " +e.getMessage());
+			logger.error("Failed during Multi Value Map " +e.getMessage());
 		}
 		return builder.build();
 	}
@@ -298,6 +296,8 @@ public class JiraTicketBugService {
 			}
 
 		}
+		
+		
 
 		logger.info(count + " Record(s) Updated.");
 		String finalIssuekey=String.join("','", issueKeyList);
