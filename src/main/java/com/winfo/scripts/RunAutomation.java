@@ -473,6 +473,7 @@ public class RunAutomation {
 										.collect(Collectors.joining(","));
 								String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName())
 										.collect(Collectors.joining(","));
+								logger.info("TestRun Names : " + testRunNames);
 								schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, jobId);
 								logger.info("Updated schedule status as completed");
 								schedulePdfGenerator.createPDF(jobId,fetchConfigVO.getPDF_PATH(),customerDetails.getCustomerName());
@@ -509,6 +510,7 @@ public class RunAutomation {
 				.findByJobIdAndDependency(jobId, Integer.parseInt(testSetId));
 		if(dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
 			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,testSetName,jobId,Constants.FAIL);
+			logger.info("Updated fail status for the testRun " +testSetName);
 			String testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId().toString();
 			dependencyTestRunExecute(jobId, testRunId, dependencyTestRun.get().getComments());
 		}else {
