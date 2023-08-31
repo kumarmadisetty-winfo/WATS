@@ -127,8 +127,7 @@ public class JiraTicketBugService {
 			logger.info("Successfully attached the failed PDF to the jira");
 			}
 		} catch (Exception e) {
-			logger.error("Failed during Multi Value Map " +e.getMessage());
-			logger.error("Failed to attach the failed PDF to the jira");
+			logger.error("Failed to attach the failed PDF to the jira " +e.getMessage());
 		}
 		return builder.build();
 	}
