@@ -427,7 +427,6 @@ public class RunAutomation {
 						Optional<List<UserSchedulerJob>> dependencyTestRun = userSchedulerJobRepository
 								.findByJobIdAndDependency(jobId, Integer.parseInt(testScriptDto.getTestScriptNo()));
 						if(dependencyTestRun.isPresent()) {
-						
 						dependencyTestRun.get().parallelStream().filter(Objects::nonNull).forEach(dependency -> {
 							if (dependency!=null && StringUtils.isNotBlank(dependency.getComments())) {
 								logger.info("Started execution for DependencyTestRun "
