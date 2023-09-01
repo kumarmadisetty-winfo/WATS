@@ -40,4 +40,10 @@ public interface UserSchedulerJobRepository extends JpaRepository<UserSchedulerJ
 	
 	UserSchedulerJob findByCommentsAndJobId(String comments, Integer jobId); 
 	
+	
+	@Modifying
+    @Transactional
+    @Query("update UserSchedulerJob set status=:status where comments=:testRunName and jobId=:jobId")
+    int updateScheduleTestRunStatus(String testRunName,int jobId, String status);
+	
 }
