@@ -236,15 +236,17 @@ public class RunAutomation {
 	public ResponseDto cloudRun(TestScriptDto testScriptDto) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		String testSetId = testScriptDto.getTestScriptNo();
+		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 		Integer jobId=0;
-		if(StringUtils.isNotBlank(testScriptDto.getJobId())) {
+		if (StringUtils.isNotBlank(testScriptDto.getJobId())) {
 			jobId = Integer.parseInt(testScriptDto.getJobId());
-		schedulerRepository.updateSchedulerStatus(Constants.INPROGRESS, jobId);
+			schedulerRepository.updateSchedulerStatus(Constants.INPROGRESS, jobId);
+			userSchedulerJobRepository.updateScheduleTestRunStatus(customerDetails.getTestSetName(), jobId,
+					Constants.INPROGRESS);
+
 		}
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
-//			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
-			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			logger.info(String.format("Customer Id : %s, Customer Name : %s, Project Name : %s  " , customerDetails.getCustomerId(), customerDetails.getCustomerName(), customerDetails.getProjectName()));
 			logger.debug(String.format("Management Tool Enabled value : %s ", fetchConfigVO.getMANAGEMENT_TOOL_ENABLED()));
 			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
