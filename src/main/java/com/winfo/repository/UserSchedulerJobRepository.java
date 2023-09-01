@@ -23,7 +23,7 @@ public interface UserSchedulerJobRepository extends JpaRepository<UserSchedulerJ
 	
 	Optional<List<UserSchedulerJob>> findByJobId(int jobId);
 	
-	Optional<UserSchedulerJob> findByJobIdAndDependency(int jobId,int dependency);
+	Optional<List<UserSchedulerJob>> findByJobIdAndDependency(int jobId,int dependency);
 	
 	@Query("select t1 from UserSchedulerJob uj, TestSet t1 where uj.comments=t1.testRunName and uj.jobId=:jobId")
 	List<TestSet> findByTestRuns(int jobId);
