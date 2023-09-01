@@ -534,6 +534,7 @@ public class RunAutomation {
 					logger.info("Updated fail status for the testRun " + testSetName);
 					String testRunId = testSetRepository.findByTestRunName(dependency.getComments()).getTestRunId()
 							.toString();
+					logger.info("Dependency TestRunName " +dependency.getComments());
 					dependencyTestRunExecute(jobId, testRunId, dependency.getComments());
 				}
 			});
