@@ -134,6 +134,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			});
 		 	scheduler.setStatus(Constants.YET_TO_START);
 		 	scheduler.setUpdatedBy(scheduleJobVO.getSchedulerEmail());
+		 	scheduler.setEmail(scheduleJobVO.getSchedulerEmail());
 		 	scheduler.setUpdatedDate(new Date());
 		 	schedulerRepository.save(scheduler);
 		 	return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, scheduler.getJobId()+":Successfully updated the "+scheduler.getJobName()+" job");
