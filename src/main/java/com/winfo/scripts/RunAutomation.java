@@ -416,35 +416,53 @@ public class RunAutomation {
 							.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
 				// check dependency and return test run id, if any dependency then call cloudRun method
-				if(jobId!=null) {
+				if (jobId != null) {
 					LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
-					int isTestRunPassed=testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
-					if(isTestRunPassed==0){
-						//pass
-						userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,customerDetails.getTestSetName(),jobId,Constants.PASS);
-						logger.info("Updated endDate and pass status of the testRun " +customerDetails.getTestSetName());
-						Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
+					int isTestRunPassed = testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
+					if (isTestRunPassed == 0) {
+						// pass
+						userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,
+								customerDetails.getTestSetName(), jobId, Constants.PASS);
+						logger.info("Updated endDate and pass status of the testRun " + customerDetails.getTestSetName());
+						Optional<List<UserSchedulerJob>> dependencyTestRun = userSchedulerJobRepository
 								.findByJobIdAndDependency(jobId, Integer.parseInt(testScriptDto.getTestScriptNo()));
-						if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
-							logger.info("Started execution for DependencyTestRun " +dependencyTestRun.get().getComments());							TestScriptDto dependencyTestScriptDto = new TestScriptDto();
-							int testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId();
-							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
-							dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
-							testSetLinesRepository.updateTestRunScriptEnable(testRunId);
-							TestSetExecutionStatus testSetExecutionStatus=new TestSetExecutionStatus();
-//							testSetExecutionStatus.setExecuteByMail(null);
-							testSetExecutionStatus.setExecutedBy(testLinesDetails.get(0).getExecutedBy());
-							testSetExecutionStatus.setTestRunId(testRunId);
-							testSetExecutionStatus.setExecutionDate(new Date());
-							testSetExecutionStatus.setRequestCount(0);
-							testSetExecutionStatus.setResponseCount(0);
-							updateTestSetService.updateDependencyTestRunDetails(testRunId, testLinesDetails.get(0).getExecutedBy(), dependencyTestRun.get().getComments(), jobId, testSetExecutionStatus);
-							cloudRun(dependencyTestScriptDto); 
-						}						
-					}else {
+						if(dependencyTestRun.isPresent()) {
+						dependencyTestRun.get().parallelStream().filter(Objects::nonNull).forEach(dependency -> {
+							if (dependency!=null && StringUtils.isNotBlank(dependency.getComments())) {
+								logger.info("Started execution for DependencyTestRun "
+										+ dependency.getComments());
+								TestScriptDto dependencyTestScriptDto = new TestScriptDto();
+								int testRunId = testSetRepository.findByTestRunName(dependency.getComments())
+										.getTestRunId();
+								dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
+								dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
+								testSetLinesRepository.updateTestRunScriptEnable(testRunId);
+								TestSetExecutionStatus testSetExecutionStatus = new TestSetExecutionStatus();
+//							    testSetExecutionStatus.setExecuteByMail(null);
+								testSetExecutionStatus.setExecutedBy(testLinesDetails.get(0).getExecutedBy());
+								testSetExecutionStatus.setTestRunId(testRunId);
+								testSetExecutionStatus.setExecutionDate(new Date());
+								testSetExecutionStatus.setRequestCount(0);
+								testSetExecutionStatus.setResponseCount(0);
+								updateTestSetService.updateDependencyTestRunDetails(testRunId,
+										testLinesDetails.get(0).getExecutedBy(), dependency.getComments(), dependency.getJobId(),
+										testSetExecutionStatus);
+								try {
+									cloudRun(dependencyTestScriptDto);
+								} catch (MalformedURLException ex) {
+									logger.error(
+											"Exception occured while executing schedule dependent testRun execution "
+													+ ex.getMessage());
+								}
+							}
+						});
+						}
+					} else {
 						// updating fail status for dependent testrun
-						dependencyTestRunExecute(jobId, testScriptDto.getTestScriptNo(),customerDetails.getTestSetName());
+						dependencyTestRunExecute(jobId, testScriptDto.getTestScriptNo(),
+								customerDetails.getTestSetName());
 					}
+
 				}
 				// send scheduler level notification email if jobId is present
 				if(jobId!=null) {
@@ -504,19 +522,27 @@ public class RunAutomation {
 		return executeTestrunVo;
 	}
 	
-	private void dependencyTestRunExecute(Integer jobId,String testSetId,String testSetName) {
+	private void dependencyTestRunExecute(Integer jobId, String testSetId, String testSetName) {
 		LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
-		Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
-				.findByJobIdAndDependency(jobId, Integer.parseInt(testSetId));
-		if(dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
-			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,testSetName,jobId,Constants.FAIL);
-			logger.info("Updated fail status for the testRun " +testSetName);
-			String testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId().toString();
-			dependencyTestRunExecute(jobId, testRunId, dependencyTestRun.get().getComments());
-		}else {
-			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,testSetName,jobId,"fail");
-			logger.info("Updated fail status for the testRun " +testSetName);
-			}
+		Optional<List<UserSchedulerJob>> dependencyTestRun = userSchedulerJobRepository.findByJobIdAndDependency(jobId,
+				Integer.parseInt(testSetId));
+		if(dependencyTestRun.isPresent()) {
+		dependencyTestRun.get().parallelStream().forEach(dependency -> {
+				if (!dependencyTestRun.isEmpty() && StringUtils.isNotBlank(dependency.getComments())) {
+					userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate, testSetName, jobId,
+							Constants.FAIL);
+					logger.info("Updated fail status for the testRun " + testSetName);
+					String testRunId = testSetRepository.findByTestRunName(dependency.getComments()).getTestRunId()
+							.toString();
+					logger.info("Dependency TestRunName " +dependency.getComments());
+					dependencyTestRunExecute(jobId, testRunId, dependency.getComments());
+				}
+			});
+		} else {
+			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate, testSetName, jobId, Constants.FAIL);
+			logger.info("Updated fail status for the testRun " + testSetName);
+		}
+
 	}
 	
 
