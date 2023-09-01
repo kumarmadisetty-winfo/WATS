@@ -34,11 +34,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.config.MessageUtil;
 import com.winfo.dao.JiraTicketBugDao;
-import com.winfo.scripts.RunAutomation;
+import com.winfo.dao.LimitScriptExecutionDao;
 import com.winfo.vo.BugDetails;
+import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.FetchConfigVO;
-import com.winfo.vo.FetchMetadataVO;
 import com.winfo.vo.TestRunVO;
 
 import reactor.core.publisher.Mono;
@@ -67,6 +67,12 @@ public class JiraTicketBugService {
 
 	@Autowired
 	TestCaseDataService dataService;
+	
+	@Autowired
+	DataBaseEntry dataBaseEntry;
+	
+	@Autowired
+	LimitScriptExecutionDao limitScriptExecutionDao;
 
 	public String webClient(String jiraissueurl, JSONObject jsonobject) {
 
@@ -78,8 +84,8 @@ public class JiraTicketBugService {
 		return response;
 	}
 
-	public String webClient1(String jiraattachmenturl, String testrunname, Integer seqnum, String scriptnumber,
-			Integer testsetid) {
+	public String failedPdfAttatchmentToJira(String jiraattachmenturl, String testrunname, Integer seqnum, String scriptnumber,
+			Integer testsetid, Integer testSetLineId) {
 		String response = null;
 		try {
 			// public String webClient1(String jiraattachmenturl) {
@@ -87,7 +93,7 @@ public class JiraTicketBugService {
 					.defaultHeaders(httpHeaders -> httpHeaders.setBasicAuth(userName, password))
 					.defaultHeader("X-Atlassian-Token", "no-check").build();
 			Mono<String> result = webClient.post().uri(jiraattachmenturl).contentType(MediaType.MULTIPART_FORM_DATA)
-					.body(BodyInserters.fromMultipartData(fromFile(testrunname, seqnum, scriptnumber, testsetid)))
+					.body(BodyInserters.fromMultipartData(fromFile(testrunname, seqnum, scriptnumber, testsetid,testSetLineId)))
 					.retrieve()
 
 					// .body(BodyInserters.fromMultipartData(fromFile ()))
@@ -102,28 +108,26 @@ public class JiraTicketBugService {
 	}
 
 	public MultiValueMap<String, HttpEntity<?>> fromFile(String testrunname, Integer seqnum, String scriptnumber,
-			Integer testsetid) {
+			Integer testsetid, Integer testSetLineId) {
 
 		// public MultiValueMap<String, HttpEntity<?>> fromFile() {
 		MultipartBodyBuilder builder = new MultipartBodyBuilder();
 		try {
 			String args = testsetid.toString();
 			FetchConfigVO fetchConfigVO = testRunService.getFetchConfigVO(args);
-			final String uri = fetchConfigVO.getURI_TEST_SCRIPTS() + args;
-			List<FetchMetadataVO> fetchMetadataListVO = testRunService.getFetchMetaData(args, uri);
-
-			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
-			// File filenew=new File("C:\\temptesting\\1_RTR.GL.116.pdf");
-
-			// File filenew=new
-			// File(fetchConfigVO.getPdf_path()+"/"+testrunname+"/"+seqnum.toString()+"_"+scriptnumber+".pdf");
-			File filenew = new File(fetchConfigVO.getPDF_PATH() + fetchMetadataListVO.get(0).getCustomer_name() + "/"
-					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + ".pdf");
-
+//			final String uri = fetchConfigVO.getURI_TEST_SCRIPTS() + args;
+//			List<FetchMetadataVO> fetchMetadataListVO = te stRunService.getFetchMetaData(args, uri);
+			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(String.valueOf(testsetid));
+			int runCount = limitScriptExecutionDao.getFailScriptRunCount(testSetLineId.toString(), testsetid.toString());
+			if(runCount!=0 && customerDetails.getCustomerName()!=null && customerDetails.getTestSetName()!=null) {
+			File filenew = new File(fetchConfigVO.getPDF_PATH() + customerDetails.getCustomerName() + "/"
+					+ testrunname + "/" + seqnum.toString() + "_" + scriptnumber + "_" + "RUN"+ runCount +".pdf");
 			logger.info("jira pdf path= " + filenew);
 			builder.part("file", new FileSystemResource(filenew));
+			logger.info("Successfully attached the failed PDF to the jira");
+			}
 		} catch (Exception e) {
-			logger.error("Fail during Multi Value Map " +e.getMessage());
+			logger.error("Failed to attach the failed PDF to the jira " +e.getMessage());
 		}
 		return builder.build();
 	}
@@ -282,8 +286,8 @@ public class JiraTicketBugService {
 				if (issuekey != null) {
 					String jiraattachmenturl = jiraissueurl + issuekey + "/attachments";
 
-					String jiraattachemtresponse = webClient1(jiraattachmenturl, slist.getTestSetName(),
-							slist.getSeqNum(), slist.getScriptNumber(), slist.getTestSetId());
+					String jiraattachemtresponse = failedPdfAttatchmentToJira(jiraattachmenturl, slist.getTestSetName(),
+							slist.getSeqNum(), slist.getScriptNumber(), slist.getTestSetId(),slist.getTestSetLineId());
 
 					// String jiraattachemtresponse= webClient1(jiraissueurlattachment);
 
@@ -298,6 +302,8 @@ public class JiraTicketBugService {
 			}
 
 		}
+		
+		
 
 		logger.info(count + " Record(s) Updated.");
 		String finalIssuekey=String.join("','", issueKeyList);

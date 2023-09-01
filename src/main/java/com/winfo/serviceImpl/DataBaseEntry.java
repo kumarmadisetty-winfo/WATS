@@ -415,36 +415,43 @@ public class DataBaseEntry {
 	@SuppressWarnings("unused")
 	@Transactional
 	public void testRunsNotificationEmail(String testSetName,List<ScriptDetailsDto> fetchMetadataListVO,
-			Integer jobId,String testSetId) {
-		EmailParamDto emailParam = new EmailParamDto();
-		emailParam.setTestSetName(testSetName);
-		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
-		dao.getPassAndFailCount(testSetId, emailParam);
-		BigDecimal requestCount = (BigDecimal) dao.getRequestCountFromExecStatus(testSetId);
-		emailParam.setRequestCount(requestCount.intValue());
-
-		String userEmail = userRepository.findByUserId(emailParam.getExecutedBy().toUpperCase());
-		String testRunEmails = null;
-		Optional<UserSchedulerJob> userSchedulerJob = userSchedulerJobRepository.findByJobIdAndComments(jobId,testSetName);
-		if (userSchedulerJob.isPresent()) {
-			if (userSchedulerJob.get().getEndDate() == null) {
-				testRunEmails = userSchedulerJob.get().getClientId();
-				if (testRunEmails != null) {
-					String listOfEmails = Arrays.asList(testRunEmails).stream()
-							.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
-					if (StringUtils.isNotBlank(listOfEmails)) {
-						emailParam.setReceiver(listOfEmails);
-					}
-				} else {
-					Scheduler scheduler = schedulerRepository.findByJobId(jobId);
-					if (!userEmail.equalsIgnoreCase(scheduler.getEmail())) {
-						emailParam.setReceiver(scheduler.getEmail());
+			Integer jobId, String testSetId) {
+		try {
+			EmailParamDto emailParam = new EmailParamDto();
+			emailParam.setTestSetName(testSetName);
+			emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
+			dao.getPassAndFailCount(testSetId, emailParam);
+			BigDecimal requestCount = (BigDecimal) dao.getRequestCountFromExecStatus(testSetId);
+			emailParam.setRequestCount(requestCount.intValue());
+			String userEmail = userRepository.findByUserId(emailParam.getExecutedBy().toUpperCase());
+			logger.info("User Email : " +userEmail);
+			String testRunEmails = null;
+			Optional<UserSchedulerJob> userSchedulerJob = userSchedulerJobRepository.findByJobIdAndComments(jobId,
+					testSetName);
+			if (userSchedulerJob.isPresent()) {
+				if (userSchedulerJob.get().getEndDate() == null) {
+					testRunEmails = userSchedulerJob.get().getClientId();
+					if (testRunEmails != null) {
+						String listOfEmails = Arrays.asList(testRunEmails).stream()
+								.filter(email -> !(userEmail.equalsIgnoreCase(email))).collect(Collectors.joining(","));
+						logger.info("List Of Emails : " + listOfEmails);
+						if (StringUtils.isNotBlank(listOfEmails)) {
+							emailParam.setReceiver(listOfEmails);
+						}
+					} else {
+						Scheduler scheduler = schedulerRepository.findByJobId(jobId);
+						if (!userEmail.equalsIgnoreCase(scheduler.getEmail())) {
+							emailParam.setReceiver(scheduler.getEmail());
+						}
 					}
 				}
 			}
-		}
-		if(StringUtils.isNotBlank(emailParam.getReceiver())) {
-			sendMailServiceImpl.sendMail(emailParam);
+			if (StringUtils.isNotBlank(emailParam.getReceiver())) {
+				sendMailServiceImpl.sendMail(emailParam);
+			}
+			logger.info("Successfully sent testrun notification email");
+		} catch (Exception e) {
+			logger.error("Exception occured while sending testrun notification email " + e.getMessage());
 		}
 	}
 	

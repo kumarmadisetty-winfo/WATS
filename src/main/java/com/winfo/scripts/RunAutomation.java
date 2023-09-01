@@ -408,8 +408,7 @@ public class RunAutomation {
 				if(jobId!=null) {
 					dataBaseEntry.testRunsNotificationEmail(customerDetails.getTestSetName(),testLinesDetails,jobId,customerDetails.getTestSetId());
 					//String FORMAT = "dd-MMM-yyyy HH:mm:ss.SSS";
-					LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
-					userSchedulerJobRepository.updateEndDateInUserSchedulerJob(localDate,customerDetails.getTestSetName(),jobId);
+					
 				}
 				
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
@@ -418,12 +417,16 @@ public class RunAutomation {
 				}
 				// check dependency and return test run id, if any dependency then call cloudRun method
 				if(jobId!=null) {
+					LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
 					int isTestRunPassed=testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
 					if(isTestRunPassed==0){
+						//pass
+						userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,customerDetails.getTestSetName(),jobId,Constants.PASS);
+						logger.info("Updated endDate and pass status of the testRun " +customerDetails.getTestSetName());
 						Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
 								.findByJobIdAndDependency(jobId, Integer.parseInt(testScriptDto.getTestScriptNo()));
 						if (dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
-							TestScriptDto dependencyTestScriptDto = new TestScriptDto();
+							logger.info("Started execution for DependencyTestRun " +dependencyTestRun.get().getComments());							TestScriptDto dependencyTestScriptDto = new TestScriptDto();
 							int testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId();
 							dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
 							dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
@@ -439,10 +442,10 @@ public class RunAutomation {
 							cloudRun(dependencyTestScriptDto); 
 						}						
 					}else {
-						schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, jobId);
+						// updating fail status for dependent testrun
+						dependencyTestRunExecute(jobId, testScriptDto.getTestScriptNo(),customerDetails.getTestSetName());
 					}
 				}
-				
 				// send scheduler level notification email if jobId is present
 				if(jobId!=null) {
 					Optional<List<UserSchedulerJob>> listOfUserSchedulerJob = userSchedulerJobRepository
@@ -470,7 +473,9 @@ public class RunAutomation {
 										.collect(Collectors.joining(","));
 								String testRunNames = testSetIds.stream().map(testSet -> testSet.getTestRunName())
 										.collect(Collectors.joining(","));
+								logger.info("TestRun Names : " + testRunNames);
 								schedulerRepository.updateSchedulerStatus(Constants.COMPLETED, jobId);
+								logger.info("Updated schedule status as completed");
 								schedulePdfGenerator.createPDF(jobId,fetchConfigVO.getPDF_PATH(),customerDetails.getCustomerName());
 								Scheduler scheduler = schedulerRepository.findByJobId(jobId);
 								dataBaseEntry.schedulerNotificationEmail(scheduler.getJobName(), testLinesDetails, listTestSetIds,
@@ -497,6 +502,21 @@ public class RunAutomation {
 			dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId, "Y");
 		}
 		return executeTestrunVo;
+	}
+	
+	private void dependencyTestRunExecute(Integer jobId,String testSetId,String testSetName) {
+		LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
+		Optional<UserSchedulerJob> dependencyTestRun = userSchedulerJobRepository
+				.findByJobIdAndDependency(jobId, Integer.parseInt(testSetId));
+		if(dependencyTestRun.isPresent() && StringUtils.isNotBlank(dependencyTestRun.get().getComments())) {
+			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,testSetName,jobId,Constants.FAIL);
+			logger.info("Updated fail status for the testRun " +testSetName);
+			String testRunId = testSetRepository.findByTestRunName(dependencyTestRun.get().getComments()).getTestRunId().toString();
+			dependencyTestRunExecute(jobId, testRunId, dependencyTestRun.get().getComments());
+		}else {
+			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate,testSetName,jobId,"fail");
+			logger.info("Updated fail status for the testRun " +testSetName);
+			}
 	}
 	
 
