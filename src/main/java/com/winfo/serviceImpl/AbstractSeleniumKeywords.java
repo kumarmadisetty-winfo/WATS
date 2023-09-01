@@ -447,6 +447,7 @@ public abstract class AbstractSeleniumKeywords {
 		fetchConfigVO.setFailcount(failCount);
 		fetchConfigVO.setOtherCount(other);
 	}
+	
 	public List<String> getPdf(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails, String status) {
 		String folder = createFolder(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION(), customerDetails.getCustomerName(),
@@ -455,10 +456,8 @@ public abstract class AbstractSeleniumKeywords {
 		Map<Integer, List<File>> filesMap = new TreeMap<>();
 		Map<String, String> seqNumMap = new HashMap<>();
 		List<String> targetPdfList = new ArrayList<>();
-//		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
-//			seqNumMap.put(obj[0].toString(), obj[1].toString());
-//		}
-		Map<String, String> seqNumMap1 = fetchConfigVO.getSeqNumAndStatus()
+
+		Map<String, String> sequenceNumberStatusMap = fetchConfigVO.getSeqNumAndStatus()
 			    .stream()
 			    .collect(Collectors.toMap(
 			        obj -> obj[0].toString(),
@@ -466,10 +465,7 @@ public abstract class AbstractSeleniumKeywords {
 			    ));
 
 		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
-//		for (String fileNames : fileSeqList) {
-//			fileNames = new File(folder + fileNames + PNG_EXTENSION).exists() ? fileNames + PNG_EXTENSION : fileNames;
-//			fileNames = (!(fileNames.endsWith(PNG_EXTENSION))
-//					&& (new File(folder + fileNames + JPG_EXTENSION).exists())) ? fileNames + JPG_EXTENSION : fileNames;
+
 		List<String> fileNames = fileSeqList.stream()
 			    .map(fileName -> {
 			        String fullFileName = folder + fileName;
@@ -486,7 +482,7 @@ public abstract class AbstractSeleniumKeywords {
 			if (newFile.exists()) {
 				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
 
-				if (seqNumMap1.get(seqNum.toString()).equals(status)) {
+				if (sequenceNumberStatusMap.get(seqNum.toString()).equals(status)) {
 					filesMap.putIfAbsent(seqNum, new ArrayList<>());
 					filesMap.get(seqNum).add(newFile);
 					targetPdfList.add(newFile.getName());
@@ -503,71 +499,12 @@ public abstract class AbstractSeleniumKeywords {
 		  return getPdf(fetchMetadataListVO, fetchConfigVO, customerDetails, PASS);
 	}
 
-//		String folder = createFolder(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION(), customerDetails.getCustomerName(),
-//				customerDetails.getTestSetName());
-//
-//		Map<Integer, List<File>> filesMap = new TreeMap<>();
-//		List<String> targetPassedPdf = new ArrayList<>();
-//		Map<String, String> seqNumMap = new HashMap<>();
-//		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
-//			seqNumMap.put(obj[0].toString(), obj[1].toString());
-//		}
-//		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
-//		for (String fileNames : fileSeqList) {
-//			if (fileNames.endsWith(PASSED)) {
-//				fileNames = new File(folder + fileNames + PNG_EXTENSION).exists() ? fileNames + PNG_EXTENSION
-//						: fileNames;
-//				fileNames = (!(fileNames.endsWith(PNG_EXTENSION))
-//						&& (new File(folder + fileNames + JPG_EXTENSION).exists())) ? fileNames + JPG_EXTENSION
-//								: fileNames;
-//				File newFile = new File(folder + fileNames);
-//				if (newFile.exists()) {
-//					Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
-//					if (seqNumMap.get(seqNum.toString()).equals(PASS)) {
-//						filesMap.putIfAbsent(seqNum, new ArrayList<>());
-//						filesMap.get(seqNum).add(newFile);
-//						targetPassedPdf.add(newFile.getName());
-//					}
-//				}
-//			}
-//		}
-//
-//		return targetPassedPdf;
-//	}
-
+		
 	public List<String> getFailedPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		return getPdf(fetchMetadataListVO, fetchConfigVO, customerDetails, FAIL);
 	}
-//		String folder = createFolder(fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION(), customerDetails.getCustomerName(),
-//				customerDetails.getTestSetName());
-//
-//		Map<String, String> seqNumMap = new HashMap<>();
-//		for (Object[] obj : fetchConfigVO.getSeqNumAndStatus()) {
-//			seqNumMap.put(obj[0].toString(), obj[1].toString());
-//		}
-//		List<String> targetFailedPdf = new ArrayList<>();
-//		List<String> fileSeqList = fileSeqContainer(fetchMetadataListVO, customerDetails.getTestSetName());
-//		Map<Integer, List<File>> filesMap = new TreeMap<>();
-//		for (String fileNames : fileSeqList) {
-//			fileNames = new File(folder + fileNames + PNG_EXTENSION).exists() ? fileNames + PNG_EXTENSION : fileNames;
-//			fileNames = (!(fileNames.endsWith(PNG_EXTENSION))
-//					&& (new File(folder + fileNames + JPG_EXTENSION).exists())) ? fileNames + JPG_EXTENSION : fileNames;
-//			File newFile = new File(folder + fileNames);
-//			if (newFile.exists()) {
-//				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
-//				if (seqNumMap.get(seqNum.toString()).equals(FAIL)) {
-//					if (!filesMap.containsKey(seqNum)) {
-//						filesMap.put(seqNum, new ArrayList<File>());
-//					}
-//					filesMap.get(seqNum).add(newFile);
-//					targetFailedPdf.add(newFile.getName());
-//				}
-//			}
-//		}
-//
-//		return targetFailedPdf;
-//	}
+
 
 	public List<String> getDetailPdfNew(List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
