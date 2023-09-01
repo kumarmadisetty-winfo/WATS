@@ -13782,8 +13782,15 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 		try {
 			if (param1.equalsIgnoreCase("VSD Transaction Details") && param2.equalsIgnoreCase("Primary Ledger")) {
 				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-				String primaryKeyXpath = "//*[text()='Primary Ledger']/following::span[1]";
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				String primaryKeyXpath;
+				try {
+					primaryKeyXpath = "//*[text()='*Primary Ledger']//following::span[1]";
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+					
+				} catch (Exception e){
+					primaryKeyXpath = "//*[text()='Primary Ledger']//following::span[1]";
+					wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				}
 				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
@@ -13796,10 +13803,10 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 				Thread.sleep(2000);
 
 				
-				String removeXpath = "//*[text()='Remove All']";
-				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(removeXpath)));
-				driver.findElement(By.xpath(removeXpath)).click();
-				Thread.sleep(2000);
+				// String removeXpath = "//*[text()='Remove All']";
+				// wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(removeXpath)));
+				// driver.findElement(By.xpath(removeXpath)).click();
+				// Thread.sleep(2000);
 
 
 				String enterPrimaryXpath = "(//*[text()='Search']/following::*[text()='Name']/following::input)[1]";
@@ -13823,6 +13830,198 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 				Thread.sleep(3000);
 
 				String moveImageXpath = "//img[contains(@id,'div_input_searchDialog_moveImg')]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(moveImageXpath)));
+				WebElement moveImage =driver.findElement(By.xpath(moveImageXpath));
+				Actions actions2 = new Actions(driver);
+				actions1.moveToElement(moveImage).build().perform();
+				moveImage.click();
+
+				Thread.sleep(3000);
+				String okXpath = "//*[text()='OK']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(okXpath)));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				driver.findElement(By.xpath(okXpath)).click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during dropdown VSD Transaction Details > Primary Ledger " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+			if (param1.equalsIgnoreCase("VSD On Hand Stock Report") && param2.equalsIgnoreCase("Legal Entity:")) {
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+				String primaryKeyXpath = "//*[text()=\"" + param2 + "\"]/following::a[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+
+
+				String searchXpath = "(//*[text()='Search ...'])[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(searchXpath)));
+				driver.findElement(By.xpath(searchXpath)).click();
+				Thread.sleep(2000);
+
+				
+				// String removeXpath = "//*[text()='Remove All']";
+				// wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(removeXpath)));
+				// driver.findElement(By.xpath(removeXpath)).click();
+				// Thread.sleep(2000);
+
+
+				String enterPrimaryXpath = "(//*[text()='Search']/following::*[text()='Name']/following::input)[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(enterPrimaryXpath)));
+				WebElement enterPrimary = driver.findElement(By.xpath(enterPrimaryXpath));
+				Actions actions1 = new Actions(driver);
+				actions1.moveToElement(enterPrimary).build().perform();
+				typeIntoValidxpath(driver, keysToSend, enterPrimary, fetchConfigVO,fetchMetadataVO);
+				Thread.sleep(2000);
+
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(2000);
+
+
+				String valueXpath = "(//div[text()=\"" + keysToSend + "\"])[2]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(valueXpath)));
+				WebElement valueElement = driver.findElement(By.xpath(valueXpath));
+				Actions actions3 = new Actions(driver);
+				actions3.moveToElement(valueElement).build().perform();
+				valueElement.click();
+				Thread.sleep(3000);
+
+				// String moveImageXpath = "//img[contains(@id,'div_input_searchDialog_moveImg')]";
+				// wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(moveImageXpath)));
+				// WebElement moveImage =driver.findElement(By.xpath(moveImageXpath));
+				// Actions actions2 = new Actions(driver);
+				// actions1.moveToElement(moveImage).build().perform();
+				// moveImage.click();
+
+				Thread.sleep(3000);
+				String okXpath = "//*[text()='OK']";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(okXpath)));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				driver.findElement(By.xpath(okXpath)).click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during dropdown VSD On Hand Stock Report > Legal Entity:" + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+			if (param1.equalsIgnoreCase("VSD On Hand Stock Report") && param2.equalsIgnoreCase("Inventory Organization:")) {
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+				String primaryKeyXpath = "///*[text()='Inventory Organization:']/following::a[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+
+
+				String searchXpath = "(//Span[text()='Search ...'])[2]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(searchXpath)));
+				driver.findElement(By.xpath(searchXpath)).click();
+				Thread.sleep(2000);
+
+				
+				// String removeXpath = "//*[text()='Remove All']";
+				// wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(removeXpath)));
+				// driver.findElement(By.xpath(removeXpath)).click();
+				// Thread.sleep(2000);
+
+
+				String enterPrimaryXpath = "(//*[text()='Search']/following::*[text()='Name']/following::input)[3]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(enterPrimaryXpath)));
+				WebElement enterPrimary = driver.findElement(By.xpath(enterPrimaryXpath));
+				Actions actions1 = new Actions(driver);
+				actions1.moveToElement(enterPrimary).build().perform();
+				typeIntoValidxpath(driver, keysToSend, enterPrimary, fetchConfigVO,fetchMetadataVO);
+				Thread.sleep(2000);
+
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(2000);
+
+
+				String valueXpath = "(//div[text()=\"" + keysToSend + "\"])[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(valueXpath)));
+				WebElement valueElement = driver.findElement(By.xpath(valueXpath));
+				Actions actions3 = new Actions(driver);
+				actions3.moveToElement(valueElement).build().perform();
+				valueElement.click();
+				Thread.sleep(3000);
+
+				String moveImageXpath = "//img[contains(@id,'div_input_searchDialog_moveImg')]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(moveImageXpath)));
+				WebElement moveImage =driver.findElement(By.xpath(moveImageXpath));
+				Actions actions2 = new Actions(driver);
+				actions1.moveToElement(moveImage).build().perform();
+				moveImage.click();
+
+				Thread.sleep(3000);
+				String okXpath = "(//*[text()='OK'])[2]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(okXpath)));
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				driver.findElement(By.xpath(okXpath)).click();
+				return;
+			}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during dropdown VSD On Hand Stock Report > Inventory Organization: " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
+			if (param1.equalsIgnoreCase("VSD On Hand Stock Report") && param2.equalsIgnoreCase("Subinventory Organization:")) {
+				WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+				String primaryKeyXpath = "//*[text()=\"" + param2 + "\"]/following::a[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(primaryKeyXpath)));
+				WebElement waittext = driver.findElement(By.xpath(primaryKeyXpath));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+
+
+				String searchXpath = "(//Span[text()='Search ...'])[3]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(searchXpath)));
+				driver.findElement(By.xpath(searchXpath)).click();
+				Thread.sleep(2000);
+
+				
+				String removeXpath = "//*[@id=\"xdo:xdo:_paramsP_SUBINV_ID_div_input_searchDialog_removeAllImg\"]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(removeXpath)));
+				driver.findElement(By.xpath(removeXpath)).click();
+				Thread.sleep(2000);
+
+
+				String enterPrimaryXpath = "(//*[text()='Search']/following::*[text()='Name']/following::input)[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(enterPrimaryXpath)));
+				WebElement enterPrimary = driver.findElement(By.xpath(enterPrimaryXpath));
+				Actions actions1 = new Actions(driver);
+				actions1.moveToElement(enterPrimary).build().perform();
+				typeIntoValidxpath(driver, keysToSend, enterPrimary, fetchConfigVO,fetchMetadataVO);
+				Thread.sleep(2000);
+
+				enter(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+				Thread.sleep(2000);
+
+
+				String valueXpath = "(//div[text()=\"" + keysToSend + "\"])[1]";
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(valueXpath)));
+				WebElement valueElement = driver.findElement(By.xpath(valueXpath));
+				Actions actions3 = new Actions(driver);
+				actions3.moveToElement(valueElement).build().perform();
+				valueElement.click();
+				Thread.sleep(3000);
+
+				String moveImageXpath = "//*[@id=\"xdo:xdo:_paramsP_SUBINV_ID_div_input_searchDialog_moveImg\"]";
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(moveImageXpath)));
 				WebElement moveImage =driver.findElement(By.xpath(moveImageXpath));
 				Actions actions2 = new Actions(driver);

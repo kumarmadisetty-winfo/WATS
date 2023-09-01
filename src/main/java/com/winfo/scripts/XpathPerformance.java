@@ -2675,4 +2675,37 @@ public class XpathPerformance {
 			throw e;
 		}
 	}
+
+    public void rightClickElement(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+            FetchConfigVO fetchConfigVO, int count, CustomerProjectDto customerDetails) throws Exception {
+//         int count=0;
+		String action = fetchMetadataVO.getAction();
+		String scriptID = fetchMetadataVO.getScriptId();
+		String testSetLine=fetchMetadataVO.getTestSetLineId();
+
+		String lineNumber = fetchMetadataVO.getLineNumber();
+		String xpathlocation = service.getXpathParams(scriptID, lineNumber,testSetLine);
+
+		if (xpathlocation != null) {
+			try {
+				WebElement waittill = driver.findElement(By.xpath(xpathlocation));
+				Actions actions = new Actions(driver);
+				actions.contextClick(waittill).build().perform();
+				Thread.sleep(2000);
+				fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				logger.info("Successfully Executed right clicked Element "  + fetchMetadataVO.getScriptNumber());
+				return;
+			} catch (Exception e) {
+				logger.error("Count value exceeds the limit " + count);
+				logger.error("Failed During right clicking element " + fetchMetadataVO.getScriptNumber());
+				fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
+				throw e;
+
+			}
+
+		} else {
+			throw new Exception("XpathLocation is null");
+		}
+	}
 }
