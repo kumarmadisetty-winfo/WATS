@@ -1880,12 +1880,17 @@ public class RunAutomation {
 
 	private void downloadScreenShot(FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			CustomerProjectDto customerDetails, boolean evidenceReport) {
-		String seqNumber = evidenceReport ? null : fetchMetadataVO.getSeqNum();
-		String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
-				+ File.separator + customerDetails.getTestSetName() + File.separator;
-		seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
-				.downloadScreenshotsFromObjectStore(screenShotFolder, customerDetails.getCustomerName(),
-						customerDetails.getTestSetName(), seqNumber);
-		logger.info("Successfully downloaded ScreenShots");
+		try {
+			String seqNumber = evidenceReport ? null : fetchMetadataVO.getSeqNum();
+			String screenShotFolder = fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
+					+ File.separator + customerDetails.getTestSetName() + File.separator;
+			seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
+					.downloadScreenshotsFromObjectStore(screenShotFolder, customerDetails.getCustomerName(),
+							customerDetails.getTestSetName(), seqNumber);
+			logger.info("Successfully downloaded ScreenShots");
+		} catch (Exception e) {
+			logger.error("Failed to download screenshots from objectstore " + customerDetails.getTestSetName() + " "
+					+ fetchMetadataVO.getScriptNumber() + " " + e.getMessage());
+		}
 	}
 }
