@@ -182,7 +182,7 @@ public class RunAutomation {
 		ResponseDto executeTestrunVo;
 		String checkPackage = dataBaseEntry.getPackage(testScriptDto.getTestScriptNo());
 		if (checkPackage != null && checkPackage.toLowerCase().contains(Constants.EBS)) {
-			executeTestrunVo = ebsRun(testScriptDto.getTestScriptNo());
+			executeTestrunVo = ebsRun(testScriptDto);
 		} else {
 			executeTestrunVo = cloudRun(testScriptDto);
 		}
@@ -194,9 +194,10 @@ public class RunAutomation {
 	public ResponseDto ebsRun(TestScriptDto testScriptDto) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		try {
+			String testSetId = testScriptDto.getTestScriptNo();
+			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 			dataBaseEntry.updatePdfGenerationEnableStatus(testScriptDto.getTestScriptNo(), BOOLEAN_STATUS.TRUE.getLabel());
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testScriptDto.getTestScriptNo());
-			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testScriptDto.getTestScriptNo());
 			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testScriptDto.getTestScriptNo(), null, false,
 					true);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);

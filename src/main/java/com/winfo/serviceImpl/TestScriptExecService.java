@@ -621,7 +621,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if (scriptStatus != null) {
 				dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(), scriptStatus);
 			}
-			TestScriptDto testScriptDto = new TestScriptDto(args.getTestSetId(),args.getExecutedBy());
+			TestScriptDto testScriptDto = new TestScriptDto();
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 			if (e instanceof WatsEBSException) {
 				throw e;
