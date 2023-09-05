@@ -5737,6 +5737,16 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				logger.error("Failed during Approve clickLink" + scripNumber);
 
 			}
+			try {
+				if (param1.equalsIgnoreCase("Attach Excel")) {
+						renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+						return;
+					}
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.error("Failed during renaming downloaded file " + scripNumber);
+				logger.error(e.getMessage());
+			}
 
 			// Here adding code for Scanned invoices in AP.453
 

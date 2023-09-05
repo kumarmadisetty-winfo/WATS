@@ -1249,6 +1249,21 @@ public class RunAutomation {
 								break;
 
 							}
+						case "rightClickElement" :
+							try {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+									xpathPerformance.rightClickElement(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
+											count, customerDetails);
+									break;
+								} else {
+									throw new Exception("ScriptNotValid");
+								}
+							} catch (Exception e) {
+								logger.error("failed during");
+							}
+							
+
 
 						case "switchToFrame":
 							try {
