@@ -1888,6 +1888,9 @@ public class RunAutomation {
 					.downloadScreenshotsFromObjectStore(screenShotFolder, customerDetails.getCustomerName(),
 							customerDetails.getTestSetName(), seqNumber);
 			logger.info("Successfully downloaded ScreenShots");
+		} catch (WatsEBSException ex) {
+			logger.error("Failed to download screenshots from objectstore " + customerDetails.getTestSetName() + " "
+					+ fetchMetadataVO.getScriptNumber() + " " + ex.getMessage());
 		} catch (Exception e) {
 			logger.error("Failed to download screenshots from objectstore " + customerDetails.getTestSetName() + " "
 					+ fetchMetadataVO.getScriptNumber() + " " + e.getMessage());
