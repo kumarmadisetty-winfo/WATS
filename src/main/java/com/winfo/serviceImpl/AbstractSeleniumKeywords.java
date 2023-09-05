@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -46,7 +46,6 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
-import org.jfree.util.Log;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -87,6 +86,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
@@ -126,6 +126,8 @@ import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 import reactor.core.publisher.Mono;
+import com.aspose.cells.Workbook;
+import com.aspose.cells.SaveFormat;
 
 @Service
 public abstract class AbstractSeleniumKeywords {
@@ -2127,9 +2129,33 @@ public abstract class AbstractSeleniumKeywords {
 					.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
 					.append(customerDetails.getTestSetName()).append("_Passed");
 			String newName = newNameBuffer.toString();
+			
+			boolean isExcel = fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".xlsx");
+			
+			
+			if (isExcel) {
+				// Convert Excel to PDF logic using Aspose.Cells
+				try {
+					// Load the Excel file using Aspose.Cells
+					Workbook excelWorkbook = new Workbook(oldFile.getAbsolutePath());
+		
+					// Create a PDF file path
+					String pdfFilePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf";
 
-			if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
-				new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
+					if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
+						new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
+			
+					// Save the Excel workbook as PDF using Aspose.Cells
+					excelWorkbook.save(pdfFilePath, SaveFormat.PDF);
+			
+					// Delete the original Excel file
+					oldFile.delete();
+			
+					logger.info("Excel to PDF conversion using Aspose.Cells successful");
+				} catch (Exception e) {
+					logger.error("Error converting Excel to PDF using Aspose.Cells: " + e.getMessage());
+				}
+			}
 
 			if (oldFile.exists()) {
 				if (oldFile.renameTo(new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"))) {

@@ -26,6 +26,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -189,13 +191,13 @@ public class RunAutomation {
 		return executeTestrunVo;
 	}
 
-	public ResponseDto ebsRun(String testSetId) throws MalformedURLException {
+	public ResponseDto ebsRun(TestScriptDto testScriptDto) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		try {
-			dataBaseEntry.updatePdfGenerationEnableStatus(testSetId, BOOLEAN_STATUS.TRUE.getLabel());
-			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
-			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
-			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testSetId, null, false,
+			dataBaseEntry.updatePdfGenerationEnableStatus(testScriptDto.getTestScriptNo(), BOOLEAN_STATUS.TRUE.getLabel());
+			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testScriptDto.getTestScriptNo());
+			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testScriptDto.getTestScriptNo());
+			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testScriptDto.getTestScriptNo(), null, false,
 					true);
 //			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
 
@@ -205,7 +207,7 @@ public class RunAutomation {
 			// Independent
 			for (Entry<Integer, List<ScriptDetailsDto>> metaData : metaDataMap.entrySet()) {
 				logger.info("Running Independent - " + metaData.getKey());
-				testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, true, customerDetails);
+				testScriptExecService.executorMethodPyJab(testScriptDto, fetchConfigVO, metaData, true, customerDetails);
 			}
 
 			ExecutorService executordependent = Executors.newFixedThreadPool(fetchConfigVO.getPARALLEL_DEPENDENT());
@@ -216,7 +218,7 @@ public class RunAutomation {
 					boolean run = dataBaseEntry.checkRunStatusOfTestRunLevelDependantScript(
 							metaData.getValue().get(0).getDependencyScriptNumber());
 					logger.info("Dependant Script run status " + metaData.getValue().get(0).getScriptId() + " " + run);
-					testScriptExecService.executorMethodPyJab(testSetId, fetchConfigVO, metaData, run, customerDetails);
+					testScriptExecService.executorMethodPyJab(testScriptDto, fetchConfigVO, metaData, run, customerDetails);
 				});
 			}
 			executordependent.shutdown();
@@ -225,7 +227,7 @@ public class RunAutomation {
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
 		} catch (Exception e) {
-			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
+			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 			if (e instanceof WatsEBSException)
 				throw e;
 			throw new WatsEBSException(500, "Exception Occured while creating script for Test Run", e);
@@ -247,13 +249,15 @@ public class RunAutomation {
 		}
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
+//			List<FetchMetadataVO> fetchMetadataListVO = dataBaseEntry.getMetaDataVOList(testSetId, null, false, true);
+			CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testScriptDto.getTestScriptNo());
 			logger.info(String.format("Customer Id : %s, Customer Name : %s, Project Name : %s  " , customerDetails.getCustomerId(), customerDetails.getCustomerName(), customerDetails.getProjectName()));
 			logger.debug(String.format("Management Tool Enabled value : %s ", fetchConfigVO.getMANAGEMENT_TOOL_ENABLED()));
 			if("YES".equalsIgnoreCase(fetchConfigVO.getMANAGEMENT_TOOL_ENABLED())){
 				String key = graphQLService.createTestRunInJiraXrayCloud(customerDetails);
 				fetchConfigVO.setTestRunIssueId(key);
 			}
-			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testSetId, null, false,
+			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testScriptDto.getTestScriptNo(), null, false,
 					true);
 
 			SortedMap<Integer, List<ScriptDetailsDto>> dependentScriptMap = new TreeMap<Integer, List<ScriptDetailsDto>>();
@@ -273,13 +277,13 @@ public class RunAutomation {
 						logger.info("Start of Independent Script Execution of " + scriptNumber);
 						try {
 							long starttimeIntermediate = System.currentTimeMillis();
-							String flag = dataBaseEntry.getTrMode(testSetId, fetchConfigVO);
+							String flag = dataBaseEntry.getTrMode(testScriptDto.getTestScriptNo(), fetchConfigVO);
 							if (flag.equalsIgnoreCase("STOPPED")) {
 								metaData.getValue().clear();
 								executor.shutdown();
 								logger.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
-								executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
+								executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
 										customerDetails);
 							}
 							long i = System.currentTimeMillis() - starttimeIntermediate;
@@ -313,14 +317,14 @@ public class RunAutomation {
 									+ run);
 
 							try {
-								String flag = dataBaseEntry.getTrMode(testSetId, fetchConfigVO);
+								String flag = dataBaseEntry.getTrMode(testScriptDto.getTestScriptNo(), fetchConfigVO);
 								if (flag.equalsIgnoreCase("STOPPED")) {
 									metaData.getValue().clear();
 									executor.shutdown();
 									logger.info("Script Termination is Succeed");
 								} else {
 									if (run) {
-										executorMethod(testSetId, fetchConfigVO, testLinesDetails, metaData,
+										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 												scriptStatus, customerDetails);
 									} else {
 										String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
@@ -358,7 +362,7 @@ public class RunAutomation {
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
 												post.getP_status());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true);
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy());
 
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
@@ -383,10 +387,10 @@ public class RunAutomation {
 
 				}
 				downloadScreenShot(fetchConfigVO, testLinesDetails.get(0), customerDetails, true);
-				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry.getScriptDetailsListVO(testSetId,
+				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry.getScriptDetailsListVO(testScriptDto.getTestScriptNo(),
 						null, true, false);
 
-				dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.GENERATING);
+				dataBaseEntry.updateStatusOfPdfGeneration(testScriptDto.getTestScriptNo(),Constants.GENERATING);
 				CompletableFuture<String> completableFuture1 = seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
 						.createPdf(fetchMetadataListVOforEvidence, fetchConfigVO, "Passed_Report.pdf", customerDetails);	
 				CompletableFuture<String> completableFuture2 = seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
@@ -397,10 +401,10 @@ public class RunAutomation {
 				CompletableFuture<Void> resultantCf = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()]));
 				CompletableFuture<List<String>> allFutureResults = resultantCf.thenApply(t ->{
 					FileUtil.deleteScreenshotAndPdfDirectoryFromTemp(fetchConfigVO, customerDetails);
-					dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
+					dataBaseEntry.updateStatusOfPdfGeneration(testScriptDto.getTestScriptNo(),Constants.PASSED);
 					return completableFutures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 				}).exceptionally((e)->{
-					dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
+					dataBaseEntry.updateStatusOfPdfGeneration(testScriptDto.getTestScriptNo(),Constants.PASSED);
 					logger.info("Exception occurred while generating PDFs");
 					return null;
 				});
@@ -519,7 +523,7 @@ public class RunAutomation {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error in Cloud test run method " + e.getMessage());
-			dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId, "Y");
+			dataBaseEntry.updateEnabledStatusForTestSetLine(testScriptDto.getTestScriptNo(), "Y");
 		}
 		return executeTestrunVo;
 	}
@@ -549,7 +553,7 @@ public class RunAutomation {
 	
 
 
-	public void executorMethod(String testRunId, FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> testLinesDetails,
+	public void executorMethod(TestScriptDto testScriptDto, FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> testLinesDetails,
 			Entry<Integer, List<ScriptDetailsDto>> metaData, Map<Integer, Status> scriptStatus,
 			CustomerProjectDto customerDetails) throws Exception {
 		List<String> failList = new ArrayList<>();
@@ -580,7 +584,7 @@ public class RunAutomation {
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(testRunId, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passUrl, failUrl, detailUrl, scriptUrl);
+			switchActions(testScriptDto, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passUrl, failUrl, detailUrl, scriptUrl);
 
 		}
 		catch (WebDriverException e) {
@@ -608,7 +612,7 @@ public class RunAutomation {
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
 				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
-						customerDetails.getTestSetName(),false);
+						customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy());
 
 				failList.add(scriptId);
 			}
@@ -626,7 +630,7 @@ public class RunAutomation {
 	int passcount = 0;
 	int failcount = 0;
 
-	public void switchActions(String param, WebDriver driver, List<ScriptDetailsDto> fetchMetadataListVO,
+	public void switchActions(TestScriptDto testScriptDto, WebDriver driver, List<ScriptDetailsDto> fetchMetadataListVO,
 			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial, String scriptId, String passurl, String failurl, String detailurl, String scripturl)
 			throws Exception {
 
@@ -720,7 +724,7 @@ public class RunAutomation {
 							excelMetadataListVO.add(fetchMetadataVO);
 						}
 						startExcelAction = false;
-						testScriptExecService.runExcelSteps(param, excelMetadataListVO, fetchConfigVO, true,
+						testScriptExecService.runExcelSteps(testScriptDto, excelMetadataListVO, fetchConfigVO, true,
 								customerDetails,auditTrial);
 						logger.info("Size of Excel MetadataList " + excelMetadataListVO.size());
 						List<Integer> stepIdList = excelMetadataListVO.stream().map(e -> e.getTestScriptParamId())
@@ -748,7 +752,7 @@ public class RunAutomation {
 										xpathPerformance.loginApplication(driver, fetchConfigVO,
 												fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 												fetchMetadataVO.getInputValue(),
-												dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails,count);
+												dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails,count);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
@@ -757,7 +761,7 @@ public class RunAutomation {
 									seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO,
 											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 											fetchMetadataVO.getInputValue(),
-											dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails);
+											dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 									userName = null;
 									break;
 								}
@@ -775,7 +779,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginSFApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(param, userName, fetchConfigVO),customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO),customerDetails);
 								userName = null;
 								break;
 							} else {
@@ -793,7 +797,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginSSOApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 								userName = null;
 								break;
 							} else {
@@ -806,7 +810,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginOicApplication(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 								userName = null;
 								break;
 							} else {
@@ -820,7 +824,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginOicJob(driver, fetchConfigVO,
 										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 								userName = null;
 								break;
 							} else {
@@ -1409,6 +1413,21 @@ public class RunAutomation {
 								break;
 
 							}
+						case "rightClickElement" :
+							try {
+								if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+									xpathPerformance.rightClickElement(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
+											count, customerDetails);
+									break;
+								} else {
+									throw new Exception("ScriptNotValid");
+								}
+							} catch (Exception e) {
+								logger.error("failed during");
+							}
+							
+
 
 						case "switchToFrame":
 							try {
@@ -1600,7 +1619,7 @@ public class RunAutomation {
 								seleniumFactory.getInstanceObj(instanceName).loginInformaticaApplication(driver,
 										fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 										fetchMetadataVO.getInputValue(),
-										dataBaseEntry.getPassword(param, userName, fetchConfigVO), customerDetails);
+										dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO), customerDetails);
 								userName = null;
 							}
 							break;
@@ -1679,6 +1698,10 @@ public class RunAutomation {
 							woodInterface.enterMultipleTransaction(driver, fetchConfigVO,
 									fetchMetadataVO, customerDetails);
 							break;
+						case "doubleClick":
+							sfInterface.doubleClick(driver, param1, param2,
+									fetchMetadataVO, fetchConfigVO, customerDetails);
+							break;
 						default:
 							logger.info("Action Name is not matched with " + "" + actionName);
 							break;
@@ -1750,7 +1773,7 @@ public class RunAutomation {
 
 								dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 								dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
-										fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false);
+										fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy());
 
 								dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 							} catch (Exception e) {
@@ -1802,7 +1825,7 @@ public class RunAutomation {
 					logger.error("Failed to Execute the " + "" + actionName);
 					logger.error(e.getMessage());
 					errorMessagesHandler.getError(actionName, fetchMetadataVO, fetchConfigVO, testScriptParamId,
-							message, param1, param2, dataBaseEntry.getPassword(param, userName, fetchConfigVO));
+							message, param1, param2, dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO));
 					isError = true;
 				}
 				if (isError) {
@@ -1829,7 +1852,7 @@ public class RunAutomation {
 
 						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 						dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
-								fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false);
+								fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy());
 
 						dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 
