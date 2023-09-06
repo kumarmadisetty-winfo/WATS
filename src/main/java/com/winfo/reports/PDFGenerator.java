@@ -1,12 +1,16 @@
 package com.winfo.reports;
 
 import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,9 +142,9 @@ public class PDFGenerator {
 			table.addCell(
 					createCell(new Paragraph(failPercent(passAndFailCount.get("pass"), passAndFailCount.get("fail"))),
 							Element.ALIGN_RIGHT, cellFont));
-			table.addCell(createCell(new Paragraph(String.valueOf(startTime.replace("+", "+0")).substring(0, 19)), Element.ALIGN_LEFT,
+			table.addCell(createCell(new Paragraph(dateFormatConversion(String.valueOf(startTime.replace("+", "+0")).substring(0, 19)).toUpperCase()), Element.ALIGN_LEFT,
 					cellFont));
-			table.addCell(createCell(new Paragraph(String.valueOf(endtime).substring(0, 19)), Element.ALIGN_LEFT, cellFont));
+			table.addCell(createCell(new Paragraph(dateFormatConversion(String.valueOf(endtime).substring(0, 19)).toUpperCase()), Element.ALIGN_LEFT, cellFont));
 			if (endtime != null && startTime != null) {
 				table.addCell(createCell(
 						new Paragraph((String.valueOf(DateUtils.convertMiliSecToDayFormat(
@@ -191,8 +195,18 @@ public class PDFGenerator {
 	}
 
 	private static void startingDetails(Document document, String name, String projectName, String configurationName,
-			String email, String startTime, String endTime) throws DocumentException {
-		String endtime = getEndTime(LocalDateTime.parse(endTime));
+			String email, String startTime, String endTime) throws DocumentException, ParseException {
+		
+//		 String endtime = null;
+		try {
+			startTime = dateFormatConversion(startTime.substring(0,19)).toUpperCase();
+			endTime = dateFormatConversion(getEndTime(LocalDateTime.parse(endTime)).substring(0,19)).toUpperCase();
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			logger.error("Failed to convert Start and end date format " +e.getMessage());
+		}
+		
 		PdfPTable firstLine = new PdfPTable(2);
 		firstLine.setWidthPercentage(70);
 		Font customFont = FontFactory.getFont("Arial", 10);
@@ -212,17 +226,25 @@ public class PDFGenerator {
 		cell4.setBorderWidth(0);
 		cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell4);
-		PdfPCell cell5 = new PdfPCell(new Paragraph("Start Time : " + startTime.substring(0, 19), customFont));
+		PdfPCell cell5 = new PdfPCell(new Paragraph("Start Time : " + startTime, customFont));
 		cell5.setBorderWidth(0);
 		cell5.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell5);
-		PdfPCell cell6 = new PdfPCell(new Paragraph("End Time : " + endtime.substring(0, 19), customFont));
+		PdfPCell cell6 = new PdfPCell(new Paragraph("End Time : " + endTime, customFont));
 		cell6.setBorderWidth(0);
 		cell6.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell6);
 		firstLine.setHorizontalAlignment(Element.ALIGN_LEFT);
 		document.add(firstLine);
 
+	}
+	
+	private static String dateFormatConversion(String time) throws ParseException
+	{
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = dateFormat.parse(time);
+        DateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss aa");
+        return simpleDateFormat.format(date);
 	}
 
 	private static PdfPTable createTable(int column) throws com.itextpdf.text.DocumentException {

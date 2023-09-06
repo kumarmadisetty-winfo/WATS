@@ -41,14 +41,16 @@ public class MessageQueueDto implements Serializable {
 	
 	private AuditScriptExecTrail autditTrial;
 	private AUDIT_TRAIL_STAGES stage;
+	private String executedBy;
 	
 	public MessageQueueDto(@NotNull String testSetId, @NotNull String testSetLineId, String scriptPath,
-			AuditScriptExecTrail autditTrial) {
+			AuditScriptExecTrail autditTrial,String executedBy) {
 		super();
 		this.testSetId = testSetId;
 		this.testSetLineId = testSetLineId;
 		this.scriptPath = scriptPath;
 		this.autditTrial = autditTrial;
+		this.executedBy = executedBy;
 	}
 	
 }
