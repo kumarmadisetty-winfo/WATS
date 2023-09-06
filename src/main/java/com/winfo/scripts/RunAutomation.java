@@ -411,7 +411,7 @@ public class RunAutomation {
 				logger.info("Successfully created PDFs - " + allFutureResults.get());
 				
 				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(), fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
-				if(jobId!=null) {
+				if(jobId!=0) {
 					dataBaseEntry.testRunsNotificationEmail(customerDetails.getTestSetName(),testLinesDetails,jobId,customerDetails.getTestSetId());
 					//String FORMAT = "dd-MMM-yyyy HH:mm:ss.SSS";
 					
@@ -422,7 +422,7 @@ public class RunAutomation {
 							.uploadPdfToSharepoint(fetchMetadataListVOforEvidence, fetchConfigVO, customerDetails);
 				}
 				// check dependency and return test run id, if any dependency then call cloudRun method
-				if (jobId != null) {
+				if (jobId != 0) {
 					LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
 					int isTestRunPassed = testSetLinesRepository.checkIsTestRunPassed(testScriptDto.getTestScriptNo());
 					if (isTestRunPassed == 0) {
@@ -471,7 +471,7 @@ public class RunAutomation {
 
 				}
 				// send scheduler level notification email if jobId is present
-				if(jobId!=null) {
+				if(jobId!=0) {
 					Optional<List<UserSchedulerJob>> listOfUserSchedulerJob = userSchedulerJobRepository
 							.findByJobId(jobId);
 					// check the size of the user scheduler job list
