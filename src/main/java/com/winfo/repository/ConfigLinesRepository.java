@@ -7,7 +7,7 @@ import com.winfo.model.ConfigLines;
 
 public interface ConfigLinesRepository extends JpaRepository<ConfigLines, Integer>{
 	
-	@Query("Select valueName from ConfigLines where configurationId=:configId and keyName='PDF_PATH'")
-	String getPdfPathusingConfigurationIdAndkeyName(int configId);
+	@Query("Select valueName from ConfigLines where configurationId=:configId and keyName=:keyName")
+	String getPdfPathusingConfigurationIdAndkeyName(int configId,String keyName);
 
 }

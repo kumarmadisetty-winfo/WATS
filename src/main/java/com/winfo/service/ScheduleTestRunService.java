@@ -11,4 +11,6 @@ public interface ScheduleTestRunService {
 	public  ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO);
 	
 	public  ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO);
+	
+	public  ResponseDto generateScheduleTestRunReport(int jobId);
 }
