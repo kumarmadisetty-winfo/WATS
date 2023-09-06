@@ -1,11 +1,11 @@
 package com.winfo.controller;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,14 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.exception.WatsEBSException;
-import com.winfo.reports.PDFGenerator;
-import com.winfo.repository.ConfigLinesRepository;
-import com.winfo.repository.ConfigurationRepository;
-import com.winfo.repository.CustomerRepository;
-import com.winfo.repository.SchedulerRepository;
-import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.service.ScheduleTestRunService;
-import com.winfo.utils.Constants;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScheduleJobVO;
 
@@ -33,10 +26,6 @@ import io.swagger.annotations.ApiResponses;
 public class ScheduleTestRunController {
 	@Autowired
 	ScheduleTestRunService scheduleTestRunService;
-	@Autowired
-	UserSchedulerJobRepository userSchedulerJobRepository;
-	@Autowired
-	SchedulerRepository schedulerRepository;
 	
 	
 	public static final Logger logger = Logger.getLogger(ScheduleTestRunController.class);
@@ -72,11 +61,11 @@ public class ScheduleTestRunController {
 		}
 	}
 	
-	@PostMapping(value = "/generateScheduleTestRunReport/{jobId}")
-	@ApiOperation( value="Generate Schedule TestRun Report",notes = "To generate Schedule TestRun Report(Detailed Report), we should pass jobId")	
-	@ApiResponses( value = { @ApiResponse( code=200,message="Generated Schedule TestRun Report Succesfully")})
-	public ResponseDto generateScheduleTestRunReport(@PathVariable int jobId){
-		return scheduleTestRunService.generateScheduleTestRunReport(jobId);
+	@GetMapping(value = "/scheduleReport/{jobId}")
+	@ApiOperation( value="Generate schedule summary testrun report",notes = "To generate schedule summary testrun report, we should pass jobId")	
+	@ApiResponses( value = { @ApiResponse( code=200,message="Generated schedule summary testrun report succesfully")})
+	public ResponseDto generateScheduleSummaryTestRunReport(@PathVariable int jobId){
+		return scheduleTestRunService.generateScheduleSummaryTestRunReport(jobId);
 
 	}
 }
