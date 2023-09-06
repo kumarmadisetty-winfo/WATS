@@ -60,5 +60,7 @@ public class UserSchedulerJob {
 	@Column(name = "STATUS")
 	private String status;
 	
+	@Column(name = "SEQUENCE_NUMBER")
+	private Integer sequenceNumber;
 
 }

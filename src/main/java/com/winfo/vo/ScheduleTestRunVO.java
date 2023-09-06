@@ -16,4 +16,5 @@ public class ScheduleTestRunVO {
 	
 	private String type;
 
+	private int sequenceNumber;
 }

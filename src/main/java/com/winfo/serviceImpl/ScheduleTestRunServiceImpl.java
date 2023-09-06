@@ -119,6 +119,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						scheduleSubJobVO.setEmail(testRunVO.getNotification());
 						scheduleSubJobVO.setTestRunName(subScheduleJob.getComments());
 						scheduleSubJobVO.setTestSetId(testSetRepository.findByTestRunName(subScheduleJob.getComments()).getTestRunId());
+						scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
+						scheduleSubJobVO.setType(testRunVO.getType());
 						try {
 							WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
 							Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
@@ -186,6 +188,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			scheduleSubJobVO.setTestSetId(testRun.getTestRunId());
 			scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
 			scheduleSubJobVO.setType(testRunVO.getType());
+			scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
 			logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s",
 					testRun.getTestRunId(),testRun.getTestRunName(),scheduleJobVO.getProjectId()));
 			logger.info("WebClient URL:"+(basePath + "/WATSservice/scheduleTestRun"));
