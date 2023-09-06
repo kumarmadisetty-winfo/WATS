@@ -11,4 +11,9 @@ public interface ConfigurationRepository extends JpaRepository<ConfigTable, Inte
 	
 	@Query("select configurationName from ConfigTable where configurationId = ?1")
 	public String getConfigNameUsingId(int configId);
+	
+	@Query("select customerId from ConfigTable where configurationId = ?1")
+	int getCustomerIdUsingconfigurationId(int configId);
+	
+	
 }
