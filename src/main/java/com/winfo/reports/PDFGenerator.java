@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.BaseColor;
@@ -40,7 +41,9 @@ import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
+import com.winfo.utils.Constants;
 import com.winfo.utils.DateUtils;
+import com.winfo.vo.ResponseDto;
 
 @Service
 public class PDFGenerator {
@@ -77,8 +80,9 @@ public class PDFGenerator {
 
 	}
 
-	public static void createPDF(int jobId, String pdfpath, String cutomerName) throws Exception {
-		logger.info("Schedule Report Started");
+	public static ResponseDto createPDF(int jobId, String pdfpath, String cutomerName) throws Exception {
+		logger.info("Started schedule testrun report generation : " +jobId);
+		ResponseDto response=null;
 		try {
 		Scheduler scheduler = schedulerRepository.findByJobId(jobId);
 		String projectName = projectRepository.getProjectNameById(scheduler.getProjectId());
@@ -128,7 +132,8 @@ public class PDFGenerator {
 			pass = pass + passAndFailCount.get("pass");
 			fail = fail + passAndFailCount.get("fail");
 			Font cellFont = FontFactory.getFont("Arial", 12);
-			table.setWidths(new float[] { 0.50f, 1.0f, 0.45f, 0.40f, 0.60f, 0.60f, 1.60f, 1.60f, 1.20f });
+			table.setWidths(new float[] { 0.50f, 1.80f, 0.45f, 0.45f, 0.60f, 0.60f, 1.00f, 1.00f, 1.10f });
+//			table.setWidths(new float[] { 0.50f, 1.80f, 0.45f, 0.45f, 0.60f, 0.60f, 0.90f, 0.90f, 1.10f });
 			table.setWidthPercentage(100);
 			table.addCell(createCell(new Paragraph(String.valueOf(i + 1)), Element.ALIGN_RIGHT, cellFont));
 			table.addCell(createCell(new Paragraph(noOfRuns.get(i)), Element.ALIGN_LEFT, cellFont));
@@ -153,7 +158,7 @@ public class PDFGenerator {
 			} else {
 				table.addCell(createCell(new Paragraph(String.valueOf("0")), Element.ALIGN_RIGHT, cellFont));
 			}
-			testRuns.put(noOfRuns.get(i), passAndFailCount);
+			testRuns.put(String.valueOf(i + 1), passAndFailCount);
 		}
 		IntStream.range(0, 4).forEach(i-> {
 			try {
@@ -167,13 +172,16 @@ public class PDFGenerator {
 		ringChart.createPDF(writer, pass, fail);
 		GroupedStackedBarChart barChartToPDFExample2 = new GroupedStackedBarChart();
 		barChartToPDFExample2.createBar(document, testRuns);
-		logger.info("Schedule Report Created Successfully");
 		document.close();
+		logger.info("Schedule Report Created Successfully");
+		response = new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Schedule summary report regeneration has done successfully");
 		}
 		catch(Exception e)
 		{
 			logger.error("Exception occured while creating schedule report " +e.getMessage());
+			response = new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, "Exception occured while regenerating the schedule summary report");
 		}
+		return response;
 	}
 
 	public static String getEndTime(LocalDateTime endTime) {
@@ -196,20 +204,16 @@ public class PDFGenerator {
 
 	private static void startingDetails(Document document, String name, String projectName, String configurationName,
 			String email, String startTime, String endTime) throws DocumentException, ParseException {
-		
-//		 String endtime = null;
 		try {
 			startTime = dateFormatConversion(startTime.substring(0,19)).toUpperCase();
 			endTime = dateFormatConversion(getEndTime(LocalDateTime.parse(endTime)).substring(0,19)).toUpperCase();
-			
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			logger.error("Failed to convert Start and end date format " +e.getMessage());
 		}
 		
 		PdfPTable firstLine = new PdfPTable(2);
 		firstLine.setWidthPercentage(70);
-		Font customFont = FontFactory.getFont("Arial", 10);
+		Font customFont = FontFactory.getFont("Arial", 12);
 		PdfPCell cell1 = new PdfPCell(new Paragraph("Name : " + name, customFont));
 		cell1.setBorderWidth(0);
 		cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -222,7 +226,7 @@ public class PDFGenerator {
 		cell3.setBorderWidth(0);
 		cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell3);
-		PdfPCell cell4 = new PdfPCell(new Paragraph("Email : " + email, FontFactory.getFont("Arial", 9)));
+		PdfPCell cell4 = new PdfPCell(new Paragraph("Email : " + email, FontFactory.getFont("Arial", 10)));
 		cell4.setBorderWidth(0);
 		cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell4);
@@ -271,7 +275,6 @@ public class PDFGenerator {
 		cell.setVerticalAlignment(Element.ALIGN_CENTER);
 		cell.setPadding(10);
 		cell.setMinimumHeight(40f);
-
 		return cell;
 	}
 
@@ -281,7 +284,6 @@ public class PDFGenerator {
 		} catch (Exception e) {
 			return "0";
 		}
-
 	}
 
 	private static String passPercent(Integer pass, Integer fail) {

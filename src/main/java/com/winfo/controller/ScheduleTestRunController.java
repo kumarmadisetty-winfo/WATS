@@ -1,13 +1,27 @@
 package com.winfo.controller;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.winfo.exception.WatsEBSException;
+import com.winfo.reports.PDFGenerator;
+import com.winfo.repository.TestSetRepository;
+import com.winfo.repository.UserSchedulerJobRepository;
+import com.winfo.service.ScheduleTestRunService;
+import com.winfo.serviceImpl.DataBaseEntry;
+import com.winfo.serviceImpl.TestScriptExecService;
+import com.winfo.utils.Constants;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScheduleJobVO;
 
@@ -15,14 +29,21 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import com.winfo.exception.WatsEBSException;
-import com.winfo.service.ScheduleTestRunService;
-
 
 @RestController
 public class ScheduleTestRunController {
 	@Autowired
 	ScheduleTestRunService scheduleTestRunService;
+	@Autowired
+	UserSchedulerJobRepository userSchedulerJobRepository;
+	@Autowired
+	TestSetRepository testSetRepository;
+	@Autowired
+	DataBaseEntry dataBaseEntry;
+	@Autowired
+	TestScriptExecService testScriptExecService;
+	
+	public static final Logger logger = Logger.getLogger(ScheduleTestRunController.class);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/schedule")
@@ -52,6 +73,34 @@ public class ScheduleTestRunController {
 					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error occured while scheduling a job"),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@PostMapping(value = "/generateScheduleTestRunReport/{jobId}")
+	@ApiOperation( value="Generate Schedule TestRun Report",notes = "To generate Schedule TestRun Report(Detailed Report), we should pass jobId")	
+	@ApiResponses( value = { @ApiResponse( code=200,message="Generated Schedule TestRun Report Succesfully")})
+	public ResponseDto generateScheduleTestRunReport(@PathVariable int jobId){
+		ResponseDto response = null;
+		try {
+			logger.info("Started schedule testrun report regeneration : " + jobId);
+			List<String> testSetNames = userSchedulerJobRepository.getTestSetNames(jobId);
+			String testSetId = testSetRepository.findByTestRunName(testSetNames.get(0)).getTestRunId().toString();
+			String customerName = dataBaseEntry.getCustomerDetails(testSetId).getCustomerName();
+			String pdfPath = testScriptExecService.fetchConfigVO(testSetId).getPDF_PATH();
+			logger.info("PdfPath : " + pdfPath + "," + " customerName : " +customerName);
+			if (StringUtils.isNotBlank(pdfPath) && StringUtils.isNotBlank(customerName)) {
+				response=PDFGenerator.createPDF(jobId, pdfPath, customerName);
+				if(response.getStatusCode()==200) {
+				logger.info("Schedule testrun report regeneration has done successfully : " + jobId);
+				}
+			} else {
+				logger.info("Pdf path and customerName should not be null");
+				response = new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, "Exception occured while regenerating the schedule summary report");
+			}
+		} catch (Exception e) {
+			logger.error("Exception occured while regenerating the schedule testrun report : " + jobId);
+		}
+		return response;
+
 	}
 }
 
