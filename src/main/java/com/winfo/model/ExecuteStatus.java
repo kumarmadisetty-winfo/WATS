@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 
@@ -29,4 +31,17 @@ public class ExecuteStatus {
 	@Column(name = "EXECUTE_STATUS")
 	private Integer executionStatus;
 
+	@Column(name = "CREATED_BY")
+	private String createdBy;
+
+	@Column(name = "CREATED_DATE")
+	@Temporal(TemporalType.DATE)
+	private Date createdDate;
+
+	@Column(name = "UPDATED_BY")
+	private String updatedBy;
+
+	@Column(name = "UPDATED_DATE")
+	@Temporal(TemporalType.DATE)
+	private Date updatedDate;
 }

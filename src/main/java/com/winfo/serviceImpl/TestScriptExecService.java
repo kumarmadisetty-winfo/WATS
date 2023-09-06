@@ -72,6 +72,7 @@ import com.winfo.vo.MessageQueueDto;
 import com.winfo.vo.PyJabScriptDto;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScriptDetailsDto;
+import com.winfo.vo.TestScriptDto;
 import com.winfo.vo.UpdateScriptParamStatus;
 import com.winfo.vo.UpdateScriptStepStatus;
 
@@ -145,14 +146,14 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 	}
 
-	public void executorMethodPyJab(String args, FetchConfigVO fetchConfigVO,
+	public void executorMethodPyJab(TestScriptDto testScriptDto, FetchConfigVO fetchConfigVO,
 			Entry<Integer, List<ScriptDetailsDto>> metaData, boolean run, CustomerProjectDto customerDetails) {
 		List<ScriptDetailsDto> fetchMetadataListsVO = metaData.getValue();
-		switchActions(args, fetchMetadataListsVO, fetchConfigVO, run, customerDetails);
+		switchActions(testScriptDto, fetchMetadataListsVO, fetchConfigVO, run, customerDetails);
 
 	}
 
-	public void switchActions(String param, List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+	public void switchActions(TestScriptDto testScriptDto, List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			boolean run, CustomerProjectDto customerDetails) {
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -226,7 +227,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 								+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
 								+ screenShotFolderPath);
 				this.kafkaTemp.send(testScriptRunTopicName,
-						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
+						new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial,testScriptDto.getExecutedBy()));
 				
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 			} catch (Exception e) {
@@ -247,7 +248,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						Constants.ERR_MSG_FOR_SCRIPT_RUN);
 			}
 			dataBaseEntry.updateStatusOfScript(testSetLineId, Constants.TEST_SET_LINE_ID_STATUS.FAIL.getLabel());
-			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testSetId);
+			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 		}
 
 	}
@@ -567,7 +568,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false);
+						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy());
 				if (fetchConfigVO.getStatus1().equals(TestScriptExecServiceEnum.FAIL.getValue())) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
@@ -620,7 +621,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if (scriptStatus != null) {
 				dataBaseEntry.updateStatusOfScript(args.getTestSetLineId(), scriptStatus);
 			}
-			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(args.getTestSetId());
+			TestScriptDto testScriptDto = new TestScriptDto();
+			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 			if (e instanceof WatsEBSException) {
 				throw e;
 			}
@@ -762,7 +764,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
 
-	public void runExcelSteps(String param, List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
+	public void runExcelSteps(TestScriptDto testScriptDto, List<ScriptDetailsDto> fetchMetadataListVO, FetchConfigVO fetchConfigVO,
 			boolean run, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial) {
 
 		String log4jConfPath = "log4j.properties";
@@ -818,7 +820,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						+ testSetId + " - " + testSetLineId + " - " + scriptPathForPyJabScript + " - "
 						+ screenShotFolderPath);
 		this.kafkaTemp.send(excelTestRunTopicName,
-				new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial));
+				new MessageQueueDto(testSetId, testSetLineId, scriptPathForPyJabScript, auditTrial,testScriptDto.getExecutedBy()));
 		dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.SQ, null);
 
 	}
