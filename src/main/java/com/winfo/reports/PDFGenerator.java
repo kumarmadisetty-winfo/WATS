@@ -226,7 +226,7 @@ public class PDFGenerator {
 		cell3.setBorderWidth(0);
 		cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell3);
-		PdfPCell cell4 = new PdfPCell(new Paragraph("Email : " + email, FontFactory.getFont("Arial", 10)));
+		PdfPCell cell4 = new PdfPCell(new Paragraph("Email : " + email, customFont));
 		cell4.setBorderWidth(0);
 		cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell4);
