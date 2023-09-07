@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -182,6 +183,7 @@ public abstract class AbstractSeleniumKeywords {
 	private static final String LINE_NUMBER = "Line Number : ";
 	private static final String SCREENSHOT = "Screenshot";
 	private static final String ELAPSED_TIME = "Elapsed Time";
+	private static final String ERROR_MESSAGE = "Error Message";
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
@@ -476,20 +478,34 @@ public abstract class AbstractSeleniumKeywords {
 			        } else if (!fileName.endsWith(PNG_EXTENSION) && new File(fullFileName + JPG_EXTENSION).exists()) {
 			            return fileName + JPG_EXTENSION;
 			        }
-			        return fileName;
+			        return null;
 			    })
-			    .collect(Collectors.toList());
+				.filter(Objects::nonNull)
+        		.collect(Collectors.toList());
 
-			File newFile = new File(folder + fileNames);
-			if (newFile.exists()) {
-				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
 
-				if (sequenceNumberStatusMap.get(seqNum.toString()).equals(status)) {
-					filesMap.putIfAbsent(seqNum, new ArrayList<>());
-					filesMap.get(seqNum).add(newFile);
-					targetPdfList.add(newFile.getName());
+				for (String fileName : fileNames) {
+					File newFile = new File(folder + fileName);
+					if (newFile.exists()) {
+						Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
+						if (sequenceNumberStatusMap.get(seqNum.toString()).equals(status)) {
+							filesMap.putIfAbsent(seqNum, new ArrayList<>());
+							filesMap.get(seqNum).add(newFile);
+							targetPdfList.add(newFile.getName());
+						}
+					}
 				}
-			}
+
+			// File newFile = new File(folder + fileNames);
+			// if (newFile.exists()) {
+			// 	Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
+
+			// 	if (sequenceNumberStatusMap.get(seqNum.toString()).equals(status)) {
+			// 		filesMap.putIfAbsent(seqNum, new ArrayList<>());
+			// 		filesMap.get(seqNum).add(newFile);
+			// 		targetPdfList.add(newFile.getName());
+			// 	}
+			// }
 		
 
 		return targetPdfList;
@@ -1236,6 +1252,10 @@ public abstract class AbstractSeleniumKeywords {
 				String description = sm.getScenarioDescription();
 				String expectedResult = EXPECTED_RESULT;
 				String result = sm.getExpectedResult();
+				String errorMessage = ERROR_MESSAGE;
+				// String errorMsgs = fetchMetadataListVO.get(0).getLineErrorMsg();
+				String errorMsgs = "Succesfully added error message";
+
 				
 				if (!sno.equalsIgnoreCase(sno1)) {
 					document.setPageSize(pageSize);
@@ -1253,7 +1273,7 @@ public abstract class AbstractSeleniumKeywords {
 					String[] strArr;
 
 					if (sm.getScenarioDescription() != null && sm.getExpectedResult() != null) {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result};
+					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result, errorMessage, errorMsgs};
 					} else if (sm.getScenarioDescription() != null) {
 					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description};
 					} else if (sm.getExpectedResult() != null) {
@@ -1320,7 +1340,7 @@ public abstract class AbstractSeleniumKeywords {
 				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
 					String message = "Failed at Line Number:" + "" + reason;
 					String error = metaDataVO.getLineErrorMsg();
-					String errorMessage = "Failed Message:" + "" + error;
+					errorMessage = "Failed Message:" + "" + error;
 					Anchor target1 = new Anchor(status);
 					target1.setName(String.valueOf(status + j));
 					j++;
