@@ -78,7 +78,7 @@ public class GroupedStackedBarChart {
 	private static CategoryDataset createDataset(Map<String, Map<String, Integer>> testRuns) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for(Map.Entry<String, Map<String, Integer>> entry : testRuns.entrySet()) {
-			dataset.addValue(entry.getValue().get("pass"), "Passes", entry.getKey());
+			dataset.addValue(entry.getValue().get("pass"), "Passed", entry.getKey());
 			dataset.addValue(entry.getValue().get("fail"), "Failed", entry.getKey());
 		}
 		return dataset;
