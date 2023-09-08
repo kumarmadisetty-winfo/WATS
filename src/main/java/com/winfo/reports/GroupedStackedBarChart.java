@@ -84,7 +84,7 @@ public class GroupedStackedBarChart {
 			dataset.addValue(entry.getValue().get("fail"), "Failed", entry.getKey());
 		}
 		for(Entry<String, Integer> data : mapOfnewSciptsStatusCount.entrySet()) {
-			dataset.addValue(data.getValue(), "New", data.getKey());
+			dataset.addValue(data.getValue(), "Yet To Complete", data.getKey());
 		}
 		return dataset;
 	}

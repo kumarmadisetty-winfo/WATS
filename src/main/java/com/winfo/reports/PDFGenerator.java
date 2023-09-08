@@ -109,7 +109,7 @@ public class PDFGenerator {
 		startingDetails(document, scheduler.getJobName(), projectName, configurationName, scheduler.getEmail(),
 				String.valueOf(startAndendTime.get(0)[0]), String.valueOf(startAndendTime.get(0)[1]));
 		Font titleFont = FontFactory.getFont("Open Sans", BaseFont.IDENTITY_H, 12, Font.BOLD, BaseColor.BLACK);
-		String[] headers = { "TestSetId", "Test Run Name","Yet To Start", "Pass", "Fail", "Pass %", "Fail %", "Start Date", "End Date",
+		String[] headers = { "Test Run Id", "Test Run Name","Yet To Complete", "Pass", "Fail", "Pass %", "Fail %", "Start Date", "End Date",
 				"Total Duration" };
 
 		PdfPTable table = createTable(10);
@@ -131,9 +131,9 @@ public class PDFGenerator {
 			fail = fail + passAndFailCount.get("fail");
 			Font cellFont = FontFactory.getFont("Arial", 12);
 //			table.setWidths(new float[] { 0.50f, 1.80f, 0.45f, 0.45f, 0.60f, 0.60f, 1.00f, 1.00f, 1.10f });
-			table.setWidths(new float[] { 0.70f, 1.60f,0.45f, 0.45f, 0.45f, 0.60f, 0.60f, 0.90f, 0.90f, 1.10f });
+			table.setWidths(new float[] { 0.50f, 1.50f,0.65f, 0.45f, 0.45f, 0.60f, 0.60f, 0.90f, 0.90f, 1.10f });
 			table.setWidthPercentage(100);
-			table.addCell(createCell(new Paragraph(String.valueOf(testSetId)), Element.ALIGN_RIGHT, cellFont));
+			table.addCell(createCell(new Paragraph(String.valueOf(i+1)), Element.ALIGN_RIGHT, cellFont));
 			table.addCell(createCell(new Paragraph(noOfRuns.get(i)), Element.ALIGN_LEFT, cellFont));
 			table.addCell(createCell(new Paragraph(String.valueOf(newStatusScriptsCount)), Element.ALIGN_RIGHT, cellFont));
 			table.addCell(createCell(new Paragraph(String.valueOf(passAndFailCount.get("pass"))), Element.ALIGN_RIGHT,
@@ -157,9 +157,9 @@ public class PDFGenerator {
 			} else {
 				table.addCell(createCell(new Paragraph(String.valueOf("0")), Element.ALIGN_RIGHT, cellFont));
 			}
-//			testRuns.put(String.valueOf(i + 1), passAndFailCount);
-			testRuns.put(String.valueOf(testSetId), passAndFailCount);
-			mapOfnewSciptsStatusCount.put(String.valueOf(testSetId),newStatusScriptsCount);
+			testRuns.put(String.valueOf(i + 1), passAndFailCount);
+//			testRuns.put(String.valueOf(testSetId), passAndFailCount);
+			mapOfnewSciptsStatusCount.put(String.valueOf(i + 1),newStatusScriptsCount);
 		}
 		IntStream.range(0, 4).forEach(i-> {
 			try {
