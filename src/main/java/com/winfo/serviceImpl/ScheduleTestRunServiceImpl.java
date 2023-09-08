@@ -1,6 +1,7 @@
 
 package com.winfo.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -101,9 +102,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			logger.info(String.format("Schedule job name:"+scheduler.getJobName()+"Schedule job id:"+scheduler.getJobId()));
 			Optional<List<UserSchedulerJob>> listOfSubJob = userSchedulerJobRepository.findByJobId(scheduler.getJobId());
-			if (scheduleJobVO.getTestRuns().size() > listOfSubJob.get().size()) {
-				List<String> listOfSubJobFromDB = listOfSubJob.get().parallelStream().filter(Objects::nonNull).map(UserSchedulerJob::getComments)
-						.collect(Collectors.toList());
+			if ((scheduleJobVO.getTestRuns().size()>0 && !listOfSubJob.isPresent()) || (scheduleJobVO.getTestRuns().size() > listOfSubJob.get().size())) {
+				List<String> listOfSubJobFromDB = listOfSubJob.isPresent()?listOfSubJob.get().parallelStream().filter(Objects::nonNull).map(UserSchedulerJob::getComments)
+						.collect(Collectors.toList()):new ArrayList<>();
 				logger.info(String.format("list of schedule TestRuns from DB :"+
 						listOfSubJobFromDB.stream().collect(Collectors.joining(","))));
 				List<String> listOfSubJobFromVO = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
@@ -116,36 +117,38 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						.filter(subJob -> newAddedSubJobNames.contains(subJob.getTemplateTestRun()))
 						.collect(Collectors.toList());
 				if (newAddedSubJobs.size() > 0) {
-					AtomicInteger count = new AtomicInteger(listOfSubJob.get().size());
+					AtomicInteger count = new AtomicInteger(listOfSubJob.isPresent()?listOfSubJob.get().size():0);
 					createSchedule(scheduleJobVO, newAddedSubJobs, count,scheduler);
 				}
 			}
-		 	scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
-		 	listOfSubJob.get().parallelStream().forEach(subScheduleJob->{
-					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
-						ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
-						scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
-						scheduleSubJobVO.setJobId(subScheduleJob.getJobId());
-						scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
-						scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
-						scheduleSubJobVO.setEmail(testRunVO.getNotification());
-						scheduleSubJobVO.setTestRunName(subScheduleJob.getComments());
-						scheduleSubJobVO.setTestSetId(testSetRepository.findByTestRunName(subScheduleJob.getComments()).getTestRunId());
-						scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
-						scheduleSubJobVO.setType(testRunVO.getType());
-						try {
-							WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
-							Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
-									.bodyToMono(String.class);
-							result.block();
-						} catch (Exception e) {
-							logger.error(e.getMessage());
-							throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-									"Error occurred from APEX web service of edit scheduled job", e);
+			if(listOfSubJob.isPresent()) {
+				scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
+					listOfSubJob.get().parallelStream().forEach(subScheduleJob->{
+						if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
+							ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
+							scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
+							scheduleSubJobVO.setJobId(subScheduleJob.getJobId());
+							scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
+							scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
+							scheduleSubJobVO.setEmail(testRunVO.getNotification());
+							scheduleSubJobVO.setTestRunName(subScheduleJob.getComments());
+							scheduleSubJobVO.setTestSetId(testSetRepository.findByTestRunName(subScheduleJob.getComments()).getTestRunId());
+							scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
+							scheduleSubJobVO.setType(testRunVO.getType());
+							try {
+								WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
+								Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
+										.bodyToMono(String.class);
+								result.block();
+							} catch (Exception e) {
+								logger.error(e.getMessage());
+								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+										"Error occurred from APEX web service of edit scheduled job", e);
+							}
 						}
-					}
+					});
 				});
-			});
+			}
 		 	scheduler.setStatus(Constants.YET_TO_START);
 		 	scheduler.setUpdatedBy(scheduleJobVO.getSchedulerEmail());
 		 	scheduler.setEmail(scheduleJobVO.getSchedulerEmail());
