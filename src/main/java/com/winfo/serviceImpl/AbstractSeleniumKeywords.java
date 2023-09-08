@@ -484,31 +484,17 @@ public abstract class AbstractSeleniumKeywords {
 				.filter(Objects::nonNull)
         		.collect(Collectors.toList());
 
-
-				for (String fileName : fileNames) {
-					File newFile = new File(folder + fileName);
-					if (newFile.exists()) {
-						Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
-						if (sequenceNumberStatusMap.get(seqNum.toString()).equals(status)) {
-							filesMap.putIfAbsent(seqNum, new ArrayList<>());
-							filesMap.get(seqNum).add(newFile);
-							targetPdfList.add(newFile.getName());
-						}
-					}
+		for (String fileName : fileNames) {
+			File newFile = new File(folder + fileName);
+			if (newFile.exists()) {
+				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
+				if (sequenceNumberStatusMap.get(seqNum.toString()).equals(status)) {
+					filesMap.putIfAbsent(seqNum, new ArrayList<>());
+					filesMap.get(seqNum).add(newFile);
+					targetPdfList.add(newFile.getName());
 				}
-
-			// File newFile = new File(folder + fileNames);
-			// if (newFile.exists()) {
-			// 	Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
-
-			// 	if (sequenceNumberStatusMap.get(seqNum.toString()).equals(status)) {
-			// 		filesMap.putIfAbsent(seqNum, new ArrayList<>());
-			// 		filesMap.get(seqNum).add(newFile);
-			// 		targetPdfList.add(newFile.getName());
-			// 	}
-			// }
-		
-
+			}
+		}
 		return targetPdfList;
 	
 }
@@ -1280,7 +1266,6 @@ public abstract class AbstractSeleniumKeywords {
 					if (errorMessagesBySeqNum.containsKey(sno)){
 						errorMsgs = errorMessagesBySeqNum.get(sno);
 						logger.info(sno +" "  + errorMsgs);
-						System.out.println(sno +" "  + errorMsgs);
 					}
 
 					if (sm.getScenarioDescription() != null && sm.getExpectedResult() != null) {
