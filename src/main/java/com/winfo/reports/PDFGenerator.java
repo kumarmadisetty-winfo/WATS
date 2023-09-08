@@ -39,6 +39,7 @@ import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.ConfigurationRepository;
 import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.SchedulerRepository;
+import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.utils.Constants;
@@ -47,22 +48,18 @@ import com.winfo.vo.ResponseDto;
 
 @Service
 public class PDFGenerator {
-
-
+	
 	private static SchedulerRepository schedulerRepository;
-
 
 	private static ProjectRepository projectRepository;
 
-
 	private static ConfigurationRepository configurationRepository;
-
 
 	private static UserSchedulerJobRepository userSchedulerJobRepository;
 
-
 	private static TestSetRepository testSetRepository;
-
+	
+	private static TestSetLinesRepository testSetLinesRepository;
 
 	private static DataBaseEntryDao dataBaseEntryDao;
 
@@ -70,13 +67,14 @@ public class PDFGenerator {
 
 	public PDFGenerator(SchedulerRepository schedulerRepository, ProjectRepository projectRepository,
 			ConfigurationRepository configurationRepository, UserSchedulerJobRepository userSchedulerJobRepository,
-			TestSetRepository testSetRepository, DataBaseEntryDao dataBaseEntryDao) {
+			TestSetRepository testSetRepository, DataBaseEntryDao dataBaseEntryDao,TestSetLinesRepository testSetLinesRepository) {
 		this.schedulerRepository = schedulerRepository;
 		this.projectRepository = projectRepository;
 		this.configurationRepository = configurationRepository;
 		this.userSchedulerJobRepository = userSchedulerJobRepository;
 		this.testSetRepository = testSetRepository;
 		this.dataBaseEntryDao = dataBaseEntryDao;
+		this.testSetLinesRepository=testSetLinesRepository;
 
 	}
 
@@ -88,7 +86,6 @@ public class PDFGenerator {
 		String projectName = projectRepository.getProjectNameById(scheduler.getProjectId());
 		String configurationName = configurationRepository.getConfigNameUsingId(scheduler.getConfigurationId());
 		List<Object[]> startAndendTime = userSchedulerJobRepository.getMinandMaxTime(jobId);
-
 		Document document = new Document(PageSize.A3);
 		PdfWriter writer = PdfWriter.getInstance(document,
 				new FileOutputStream(pdfpath + "//" + cutomerName + "//" + scheduler.getJobId() + ".pdf"));
@@ -112,18 +109,19 @@ public class PDFGenerator {
 		startingDetails(document, scheduler.getJobName(), projectName, configurationName, scheduler.getEmail(),
 				String.valueOf(startAndendTime.get(0)[0]), String.valueOf(startAndendTime.get(0)[1]));
 		Font titleFont = FontFactory.getFont("Open Sans", BaseFont.IDENTITY_H, 12, Font.BOLD, BaseColor.BLACK);
-		String[] headers = { "S.No", "Test Run Name", "Pass", "Fail", "Pass %", "Fail %", "Start Date", "End Date",
+		String[] headers = { "TestSetId", "Test Run Name","Yet To Start", "Pass", "Fail", "Pass %", "Fail %", "Start Date", "End Date",
 				"Total Duration" };
 
-		PdfPTable table = createTable(9);
+		PdfPTable table = createTable(10);
 		addTableHeader(table, titleFont, headers);
 		List<String> noOfRuns = userSchedulerJobRepository.getTestSetNames(jobId);
 		int pass = 0;
 		int fail = 0;
 		Map<String, Map<String, Integer>> testRuns = new HashMap<>();
-		
+		Map<String, Integer> mapOfnewSciptsStatusCount=new HashMap<>();
 		for (int i = 0; i < noOfRuns.size(); i++) {
 			int testSetId = testSetRepository.findByTestRunName(noOfRuns.get(i)).getTestRunId();
+			int newStatusScriptsCount = testSetLinesRepository.getScriptCountOfTestRun(String.valueOf(testSetId), Constants.NEW);
 			Map<String, Integer> passAndFailCount = dataBaseEntryDao.getPassAndFailCount(String.valueOf(testSetId));
 			UserSchedulerJob schedularRecords = userSchedulerJobRepository.findByCommentsAndJobId(noOfRuns.get(i), jobId);
             String startTime=schedularRecords.getStartDate();
@@ -132,11 +130,12 @@ public class PDFGenerator {
 			pass = pass + passAndFailCount.get("pass");
 			fail = fail + passAndFailCount.get("fail");
 			Font cellFont = FontFactory.getFont("Arial", 12);
-			table.setWidths(new float[] { 0.50f, 1.80f, 0.45f, 0.45f, 0.60f, 0.60f, 1.00f, 1.00f, 1.10f });
-//			table.setWidths(new float[] { 0.50f, 1.80f, 0.45f, 0.45f, 0.60f, 0.60f, 0.90f, 0.90f, 1.10f });
+//			table.setWidths(new float[] { 0.50f, 1.80f, 0.45f, 0.45f, 0.60f, 0.60f, 1.00f, 1.00f, 1.10f });
+			table.setWidths(new float[] { 0.70f, 1.60f,0.45f, 0.45f, 0.45f, 0.60f, 0.60f, 0.90f, 0.90f, 1.10f });
 			table.setWidthPercentage(100);
-			table.addCell(createCell(new Paragraph(String.valueOf(i + 1)), Element.ALIGN_RIGHT, cellFont));
+			table.addCell(createCell(new Paragraph(String.valueOf(testSetId)), Element.ALIGN_RIGHT, cellFont));
 			table.addCell(createCell(new Paragraph(noOfRuns.get(i)), Element.ALIGN_LEFT, cellFont));
+			table.addCell(createCell(new Paragraph(String.valueOf(newStatusScriptsCount)), Element.ALIGN_RIGHT, cellFont));
 			table.addCell(createCell(new Paragraph(String.valueOf(passAndFailCount.get("pass"))), Element.ALIGN_RIGHT,
 					cellFont));
 			table.addCell(createCell(new Paragraph(String.valueOf(passAndFailCount.get("fail"))), Element.ALIGN_RIGHT,
@@ -158,7 +157,9 @@ public class PDFGenerator {
 			} else {
 				table.addCell(createCell(new Paragraph(String.valueOf("0")), Element.ALIGN_RIGHT, cellFont));
 			}
-			testRuns.put(String.valueOf(i + 1), passAndFailCount);
+//			testRuns.put(String.valueOf(i + 1), passAndFailCount);
+			testRuns.put(String.valueOf(testSetId), passAndFailCount);
+			mapOfnewSciptsStatusCount.put(String.valueOf(testSetId),newStatusScriptsCount);
 		}
 		IntStream.range(0, 4).forEach(i-> {
 			try {
@@ -171,7 +172,7 @@ public class PDFGenerator {
 		RingChart ringChart = new RingChart();
 		ringChart.createPDF(writer, pass, fail);
 		GroupedStackedBarChart barChartToPDFExample2 = new GroupedStackedBarChart();
-		barChartToPDFExample2.createBar(document, testRuns);
+		barChartToPDFExample2.createBar(document, testRuns,mapOfnewSciptsStatusCount);
 		document.close();
 		logger.info("Schedule Report Created Successfully");
 		response = new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Schedule summary report regeneration has done successfully");

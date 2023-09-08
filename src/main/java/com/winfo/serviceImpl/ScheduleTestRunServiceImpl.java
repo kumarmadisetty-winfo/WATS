@@ -230,7 +230,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			logger.info("PdfPath : " + pdfPath + "," + " customerName : " + customerName);
 			if (StringUtils.isNotBlank(pdfPath) && StringUtils.isNotBlank(customerName)) {
 				response = PDFGenerator.createPDF(jobId, pdfPath, customerName);
-				if (response.getStatusCode() == 200) {
+				if (response.getStatusCode() == HttpStatus.OK.value()) {
 					logger.info("Schedule summary report regeneration has done successfully : " + jobId);
 				}
 			} else {
