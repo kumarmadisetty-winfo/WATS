@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.IntStream;
 
 import org.jfree.chart.ChartFactory;
@@ -16,6 +17,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.GroupedStackedBarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -27,14 +29,14 @@ import com.itextpdf.text.Paragraph;
 public class GroupedStackedBarChart {
 
 	
-	public void createBar(Document document, Map<String, Map<String, Integer>> testRuns) throws DocumentException, IOException {
+	public void createBar(Document document, Map<String, Map<String, Integer>> testRuns, Map<String, Integer> mapOfnewSciptsStatusCount) throws DocumentException, IOException {
 		List<Integer> countPassFail = new ArrayList<Integer>();
 		for(Map.Entry<String, Map<String, Integer>> entry : testRuns.entrySet()) {
 			int value = (entry.getValue().get("pass")+entry.getValue().get("fail"));
 			countPassFail.add(value);
 		}
 		Integer max = Collections.max(countPassFail);
-		CategoryDataset dataset = createDataset(testRuns);
+		CategoryDataset dataset = createDataset(testRuns,mapOfnewSciptsStatusCount);
 		JFreeChart chart = createChart(dataset,max);
 		
 		
@@ -75,11 +77,14 @@ public class GroupedStackedBarChart {
 
 	}
 
-	private static CategoryDataset createDataset(Map<String, Map<String, Integer>> testRuns) {
+	private static CategoryDataset createDataset(Map<String, Map<String, Integer>> testRuns, Map<String, Integer> mapOfnewSciptsStatusCount) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for(Map.Entry<String, Map<String, Integer>> entry : testRuns.entrySet()) {
 			dataset.addValue(entry.getValue().get("pass"), "Passed", entry.getKey());
 			dataset.addValue(entry.getValue().get("fail"), "Failed", entry.getKey());
+		}
+		for(Entry<String, Integer> data : mapOfnewSciptsStatusCount.entrySet()) {
+			dataset.addValue(data.getValue(), "Yet To Complete", data.getKey());
 		}
 		return dataset;
 	}
@@ -92,14 +97,17 @@ public class GroupedStackedBarChart {
 		renderer.setItemMargin(0.1);
 		renderer.setSeriesPaint(0, new Color(0, 204, 136));
 		renderer.setSeriesPaint(1, new Color(238, 85, 0));
+		renderer.setSeriesPaint(2, new Color(100,149,237));
 		renderer.setDrawBarOutline(false);
 		renderer.setMaximumBarWidth(0.05);
-		plot.setRenderer(renderer);
+		renderer.setBarPainter(new StandardBarPainter());
 		plot.setBackgroundPaint(new Color(225, 230, 235));
-		  NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-//		    yAxis.setRange(0, max);
-		    yAxis.setAutoRangeMinimumSize(max);
-		    yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+		plot.setRenderer(renderer);
+		plot.setOutlineVisible(false);
+		NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
+//		yAxis.setRange(0, max);
+		yAxis.setAutoRangeMinimumSize(max);
+		yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 		return chart;
 	}
 

@@ -14,7 +14,7 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	@Query("select tl from TestSetLine tl where tl.testRun.testRunId = :testSetId and tl.seqNum = :seqNum")
 	TestSetLine findBySeqNum(@Param("testSetId") Integer testSetId ,@Param("seqNum") Integer seqNum);
 	
-	@Query("select count(*) from TestSetLine where test_set_id=:testSetId and status=:scriptStatus")
+	@Query("select count(*) from TestSetLine where test_set_id=:testSetId and UPPER(status)=UPPER(:scriptStatus)")
 	int getScriptCountOfTestRun(String testSetId ,String scriptStatus);
 	
 	@Query("select count(*) from TestSetLine where test_set_id=:testSetId and upper(status)!='PASS' ")
