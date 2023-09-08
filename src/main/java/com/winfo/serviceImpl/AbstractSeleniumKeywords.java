@@ -76,6 +76,7 @@ import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.itextpdf.awt.PdfGraphics2D;
 import com.itextpdf.text.Anchor;
@@ -1207,6 +1208,14 @@ public abstract class AbstractSeleniumKeywords {
 		int i = 0;
 		int j = 0;
 		int increment = 0;
+		Map<String, String> errorMessagesBySeqNum = new HashMap<>();
+		for (ScriptDetailsDto metaDataVO1 : fetchMetadataListVO) {
+			String seqNum = metaDataVO1.getSeqNum();
+			String errorMessages = metaDataVO1.getLineErrorMsg();
+			if (errorMessages != null) {
+				errorMessagesBySeqNum.put(seqNum, errorMessages);
+			}
+		}
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			StringBuffer fileNameBuffer = new StringBuffer();
@@ -1253,10 +1262,6 @@ public abstract class AbstractSeleniumKeywords {
 				String expectedResult = EXPECTED_RESULT;
 				String result = sm.getExpectedResult();
 				String errorMessage = ERROR_MESSAGE;
-				// String errorMsgs = fetchMetadataListVO.get(0).getLineErrorMsg();
-				String errorMsgs = "Succesfully added error message";
-
-				
 				if (!sno.equalsIgnoreCase(sno1)) {
 					document.setPageSize(pageSize);
 					document.newPage();
@@ -1271,15 +1276,37 @@ public abstract class AbstractSeleniumKeywords {
 					table2.setWidths(new float[] { 1, 3 });
 					table2.setWidthPercentage(100f);
 					String[] strArr;
+					String errorMsgs = null;
+					if (errorMessagesBySeqNum.containsKey(sno)){
+						errorMsgs = errorMessagesBySeqNum.get(sno);
+						logger.info(sno +" "  + errorMsgs);
+						System.out.println(sno +" "  + errorMsgs);
+					}
 
 					if (sm.getScenarioDescription() != null && sm.getExpectedResult() != null) {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result, errorMessage, errorMsgs};
+						if (errorMsgs == null){
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result};
+						} else {
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result, errorMessage, errorMsgs};
+						}
 					} else if (sm.getScenarioDescription() != null) {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description};
+						if (errorMsgs == null){
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description};
+						} else {
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, errorMessage, errorMsgs};
+						}
 					} else if (sm.getExpectedResult() != null) {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, expectedResult, result};
+						if (errorMsgs == null){
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, expectedResult, result};
+						} else {
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, expectedResult, result, errorMessage, errorMsgs};
+						}
 					} else {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName};
+						if (errorMsgs == null){
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName};
+						} else {
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, errorMessage, errorMsgs};
+						}
 					}
 					
 					for (String str : strArr) {
