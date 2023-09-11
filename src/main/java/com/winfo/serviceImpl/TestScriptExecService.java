@@ -408,20 +408,29 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		PutObjectResponse response = null;
 		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
-			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+//			  return uploadObjectToStoreCommon(in, destinationFilePath,0);
+//		        }catch (WatsEBSException e) {
+//	            throw e;
+//		 }catch (Exception e) {
+//	            throw new WatsEBSException(500, "Exception Occurred while uploading content to object store", e);
+//	        }
+//	}
+		final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+				.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
 			/* Create a service client */
 			ObjectStorageClient client = new ObjectStorageClient(provider);
 
+	
 			/* Create a request and dependent object(s). */
+		
 			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-					.bucketName(ociBucketName).objectName(destinationFilePath).putObjectBody(in).build();
-
-			/* Send request to the Client */
+				.bucketName(ociBucketName).objectName(destinationFilePath).putObjectBody(in).build();
+		
+		/* Send request to the Client */
 			response = client.putObject(putObjectRequest);
-			logger.info("Uploaded to -------- " + destinationFilePath);
+		logger.info("Uploaded to -------- " + destinationFilePath);
 
 			return response.toString();
 		} catch (Exception e) {
@@ -430,44 +439,75 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
-
-		PutObjectResponse response = null;
-		try {
-			/**
-			 * Create a default authentication provider that uses the DEFAULT profile in the
-			 * configuration file. Refer to <see
-			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
-			 * public documentation</see> on how to prepare a configuration file.
-			 */
-			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			final String FILE_NAME = sourceFile;
-			File file = new File(FILE_NAME);
-			long fileSize = FileUtils.sizeOf(file);
-			InputStream is = new FileInputStream(file);
-
+//	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
+//
+////		PutObjectResponse response = null;
+////		try {
+//			/**
+//			 * Create a default authentication provider that uses the DEFAULT profile in the
+//			 * configuration file. Refer to <see
+//			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
+//			 * public documentation</see> on how to prepare a configuration file.
+//			 */
+////			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+////					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+////			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+//		 try {
+//	            final String FILE_NAME = sourceFile;
+//	            File file = new File(FILE_NAME);
+//	            long fileSize = FileUtils.sizeOf(file);
+//	            InputStream is = new FileInputStream(file);
+//
+//	            return uploadObjectToStoreCommon(is, destinationFilePath,fileSize);
+//	        } catch (WatsEBSException e) {
+//	            throw e;
+//	        } catch (Exception e) {
+//	            throw new WatsEBSException(500, "Exception occurred while uploading object to Object Storage", e);
+//	        }
+//	    }
+//			
 			/* Create a service client */
-			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
-
-				/* Create a request and dependent object(s). */
-
-				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
-						.putObjectBody(is).build();
-
-				/* Send request to the Client */
-				response = client.putObject(putObjectRequest);
-			}
-			return response.toString();
-		} catch (WatsEBSException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
-		}
-	}
-
+//			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+//
+//				/* Create a request and dependent object(s). */
+//
+//				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
+//						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
+//						.putObjectBody(is).build();
+//
+//				/* Send request to the Client */
+//				response = client.putObject(putObjectRequest);
+//			}
+//			return response.toString();
+//		} catch (WatsEBSException e) {
+//			throw e;
+//		} catch (Exception e) {
+//			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
+//		}
+//	}
+//	 public String uploadObjectToStoreCommon(InputStream inputStream, String destinationFilePath,long fileSize) {
+//       PutObjectResponse response = null;
+//       try {
+//           final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+//                   .parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+//           final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+//
+//           try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+//               PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+//                       .namespaceName(ociNamespace)
+//                       .bucketName(ociBucketName)
+//                       .objectName(destinationFilePath)
+//                       .putObjectBody(inputStream)
+//                       .contentLength(fileSize)
+//                       .build();
+//               response = client.putObject(putObjectRequest);
+//           }
+//
+//           return response.toString();
+//       } catch (Exception e) {
+//           throw new WatsEBSException(500, "Exception occurred while uploading object to Object Storage", e);
+//       }
+//   }
 	public void deleteScreenshotsFromWindows(String screenShotFolderPath, String seqNum) {
 		File folder1 = new File(screenShotFolderPath);
 		if (folder1.exists()) {
@@ -759,7 +799,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 
-	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+	//@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
