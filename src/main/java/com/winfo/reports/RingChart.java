@@ -57,22 +57,22 @@ public class RingChart {
 		Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width, height);
 		chart.draw(graphics2d, rectangle2d);
 		graphics2d.dispose();
-		cb.addTemplate(template, 590, 1010);
+		cb.addTemplate(template, 640, 1020);
 
 		Font percentFont1 = createFont("OpenSans-Light.ttf", 22, 116, 112, 100);
 		Font percentFont2 = createFont("OpenSans-Light.ttf", 10, 116, 112, 100);
 		if (pctEngaged == 100) {
 			// FOR 3 DIGITS PERCENTAGE FORMAT
-			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 705, 1065, 240, 310, 10, Element.ALIGN_RIGHT);
-			addPhrase(cb, "%", percentFont2, 715, 1068, 211, 299, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 755, 1075, 240, 310, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, "%", percentFont2, 765, 1078, 211, 299, 10, Element.ALIGN_RIGHT);
 		} else if (pctEngaged >= 10) {
 			// FOR 2 DIGITS PERCENTAGE FORMAT
-			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 700, 1065, 210, 310, 10, Element.ALIGN_RIGHT);
-			addPhrase(cb, "%", percentFont2, 710, 1068, 211, 299, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 750, 1075, 210, 310, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, "%", percentFont2, 760, 1078, 211, 299, 10, Element.ALIGN_RIGHT);
 		} else {
 			// FOR 1 DIGIT PERCENTAGE FORMAT
-			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 695, 1065, 210, 310, 10, Element.ALIGN_RIGHT);
-			addPhrase(cb, "%", percentFont2, 705, 1068, 211, 299, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 745, 1075, 210, 310, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, "%", percentFont2, 755, 1078, 211, 299, 10, Element.ALIGN_RIGHT);
 		}
 	}
 
@@ -121,7 +121,6 @@ public class RingChart {
 		rPlot.setSectionOutlinesVisible(false);
 		rPlot.setOuterSeparatorExtension(0);
 		rPlot.setInnerSeparatorExtension(0);
-
 		// Set colors of the chart
 		rPlot.setSectionPaint("Pass", new Color(0, 255, 0));
 		rPlot.setSectionPaint("Fail", new Color(255, 0, 0));
