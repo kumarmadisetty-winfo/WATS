@@ -405,7 +405,7 @@ public abstract class AbstractSeleniumKeywords {
 //		}
 //	}
 	public String uploadPDF(String sourceFile, String destinationFilePath) {
-		 return uploadObjectToStorage(sourceFile,  destinationFilePath, "", "");
+		 return uploadObjectToStorage(sourceFile,   "", "",destinationFilePath);
 	}
 	
 //		PutObjectResponse response = null;
