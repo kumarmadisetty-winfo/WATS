@@ -321,7 +321,7 @@ public abstract class AbstractSeleniumKeywords {
 //			throw e;
 		}
 	}
-	public String uploadObjectToStorage(String localFilePath, String folderName, String fileName) {
+	public String uploadObjectToStorage(String localFilePath, String folderName, String fileName,String destinationFilePath) {
 
 	    PutObjectResponse response = null;
 	    try {
@@ -330,7 +330,7 @@ public abstract class AbstractSeleniumKeywords {
 	        final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
 	        // Construct the destination file path
-	        String destinationFilePath = folderName + "/" + fileName;
+	       // String destinationFilePath = folderName + "/" + fileName;
 
 	        // Get file information
 	        final String FILE_NAME = localFilePath;
@@ -362,8 +362,8 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 	public String uploadObjectToObjectStore(String localFilePath, String folderName, String fileName) {
-		  return uploadObjectToStorage(localFilePath, folderName, fileName);
-	}
+		//  return uploadObjectToStorage(localFilePath, folderName, fileName);
+	
 		//PutObjectResponse response = null;
 		//try {
 			/**
@@ -379,10 +379,12 @@ public abstract class AbstractSeleniumKeywords {
 //			File file = new File(FILE_NAME);
 //			long fileSize = FileUtils.sizeOf(file);
 //			InputStream is = new FileInputStream(file);
-//			StringBuffer destinationFileBuffer = new StringBuffer();
-//			destinationFileBuffer.append(folderName).append(FORWARD_SLASH).append(fileName);
-//			String destinationFilePath = destinationFileBuffer.toString();
-	
+			StringBuffer destinationFileBuffer = new StringBuffer();
+			destinationFileBuffer.append(folderName).append(FORWARD_SLASH).append(fileName);
+			String destinationFilePath = destinationFileBuffer.toString();
+			
+			 return uploadObjectToStorage(localFilePath, folderName, fileName,destinationFilePath);
+	}
 			/* Create a service client */
 //			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
 //
@@ -403,7 +405,7 @@ public abstract class AbstractSeleniumKeywords {
 //		}
 //	}
 	public String uploadPDF(String sourceFile, String destinationFilePath) {
-		 return uploadObjectToStorage(sourceFile, "", destinationFilePath);
+		 return uploadObjectToStorage(sourceFile,  destinationFilePath, "", "");
 	}
 	
 //		PutObjectResponse response = null;

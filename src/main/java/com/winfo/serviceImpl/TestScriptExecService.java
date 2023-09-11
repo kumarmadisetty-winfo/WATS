@@ -393,52 +393,66 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
+
 //		try {
+
 //			String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
+
 //			logger.info("%%%%%%%%%%");
+
 //
+
 //			logger.info(path);
+
 //
+
 //			Files.write(Paths.get(path), sourceFileContent.getBytes());
+
 //		} catch (IOException e1) {
+
 //
+
 //			e1.printStackTrace();
+
 //		}
 
-		PutObjectResponse response = null;
-		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
-		try (InputStream in = new ByteArrayInputStream(bytes);) {
-//			  return uploadObjectToStoreCommon(in, destinationFilePath,0);
-//		        }catch (WatsEBSException e) {
-//	            throw e;
-//		 }catch (Exception e) {
-//	            throw new WatsEBSException(500, "Exception Occurred while uploading content to object store", e);
-//	        }
-//	}
-		final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-				.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+    	PutObjectResponse response = null;
 
-			/* Create a service client */
+		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
+
+		try (InputStream in = new ByteArrayInputStream(bytes);) {
+
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+
+            /* Create a service client */
+
 			ObjectStorageClient client = new ObjectStorageClient(provider);
 
-	
-			/* Create a request and dependent object(s). */
-		
+            /* Create a request and dependent object(s). */
+
 			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-				.bucketName(ociBucketName).objectName(destinationFilePath).putObjectBody(in).build();
-		
-		/* Send request to the Client */
+
+					.bucketName(ociBucketName).objectName(destinationFilePath).putObjectBody(in).build();
+
+             /* Send request to the Client */
+
 			response = client.putObject(putObjectRequest);
-		logger.info("Uploaded to -------- " + destinationFilePath);
 
-			return response.toString();
+			logger.info("Uploaded to -------- " + destinationFilePath);
+
+           return response.toString();
+
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception Occured while uploading generated script to object store",
-					e);
-		}
-	}
 
+			throw new WatsEBSException(500, "Exception Occured while uploading generated script to object store",
+
+					e);
+}
+		}
 //	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
 //
 ////		PutObjectResponse response = null;
