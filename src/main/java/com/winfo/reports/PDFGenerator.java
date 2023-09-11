@@ -131,7 +131,7 @@ public class PDFGenerator {
 			fail = fail + passAndFailCount.get("fail");
 			Font cellFont = FontFactory.getFont("Arial", 12);
 //			table.setWidths(new float[] { 0.50f, 1.80f, 0.45f, 0.45f, 0.60f, 0.60f, 1.00f, 1.00f, 1.10f });
-			table.setWidths(new float[] { 0.50f, 1.50f,0.65f, 0.45f, 0.45f, 0.60f, 0.60f, 0.90f, 0.90f, 1.10f });
+			table.setWidths(new float[] { 0.50f, 1.50f, 0.65f, 0.45f, 0.45f, 0.60f, 0.60f, 0.90f, 0.90f, 1.10f });
 			table.setWidthPercentage(100);
 			table.addCell(createCell(new Paragraph(String.valueOf(i+1)), Element.ALIGN_RIGHT, cellFont));
 			table.addCell(createCell(new Paragraph(noOfRuns.get(i)), Element.ALIGN_LEFT, cellFont));
@@ -213,7 +213,7 @@ public class PDFGenerator {
 		}
 		
 		PdfPTable firstLine = new PdfPTable(2);
-		firstLine.setWidthPercentage(70);
+		firstLine.setWidthPercentage(90);
 		Font customFont = FontFactory.getFont("Arial", 12);
 		PdfPCell cell1 = new PdfPCell(new Paragraph("Name : " + name, customFont));
 		cell1.setBorderWidth(0);
@@ -223,14 +223,15 @@ public class PDFGenerator {
 		cell2.setBorderWidth(0);
 		cell2.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell2);
-		PdfPCell cell3 = new PdfPCell(new Paragraph("Configuration : " + configurationName, customFont));
-		cell3.setBorderWidth(0);
-		cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
-		firstLine.addCell(cell3);
 		PdfPCell cell4 = new PdfPCell(new Paragraph("Email : " + email, customFont));
 		cell4.setBorderWidth(0);
 		cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 		firstLine.addCell(cell4);
+		PdfPCell cell3 = new PdfPCell(new Paragraph("Configuration : " + configurationName, customFont));
+		cell3.setBorderWidth(0);
+		cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+		firstLine.addCell(cell3);
+		
 		PdfPCell cell5 = new PdfPCell(new Paragraph("Start Time : " + startTime, customFont));
 		cell5.setBorderWidth(0);
 		cell5.setHorizontalAlignment(Element.ALIGN_LEFT);
