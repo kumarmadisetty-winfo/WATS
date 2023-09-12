@@ -57,7 +57,7 @@ public class DeleteScriptsServiceImpl implements DeleteScriptsService {
 				.filter(scriptMaster ->testSetLinesRepository.countByScriptId(scriptMaster.getScriptId()) == 0).collect(Collectors.toList());
 		List<ScriptMaster> listOfScriptsPresentInTestRun=listOfTotalScriptsFromLibrary.parallelStream()
 				.filter(scriptMaster->!listOfScriptsNotPresentInTestRun.contains(scriptMaster)).collect(Collectors.toList());
-		List<ScriptMaster> listOfTotalDeletedScripts=listOfScriptsNotPresentInTestRun.parallelStream().map(scriptMaster ->{
+		List<ScriptMaster> listOfTotalDeletedScripts=listOfScriptsNotPresentInTestRun.stream().map(scriptMaster ->{
 			scriptMetaDataRepository.deleteByScriptMaster(scriptMaster);
 			scriptMasterRepository.deleteByScriptId(scriptMaster.getScriptId());
 			return scriptMaster;
