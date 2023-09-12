@@ -15,6 +15,9 @@ public interface ScriptMetaDataRepository extends JpaRepository<ScriptMetaData, 
 
 	ScriptMetaData findByLineNumberAndScriptMaster(Integer lineNumber,ScriptMaster scriptMaster);
 	
+	@Modifying
+	@Transactional
+	@Query("delete from ScriptMetaData where scriptMetaDataId=:metaDataId")
 	Integer deleteByScriptMetaDataId(Integer metaDataId);
 	
 	@Modifying

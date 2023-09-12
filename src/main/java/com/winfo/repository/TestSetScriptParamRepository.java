@@ -21,6 +21,9 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	Integer updateScriptParam(String dataTypes, String uniqueMandatory, String validationType,String validationName, 
 			Integer lineNumber, String inputParameter,String action ,String testRunParamDesc, String updatedBy,Integer scriptId,Integer metadataId);
 	
+	@Modifying
+	@Transactional
+	@Query("delete from TestSetScriptParam where scriptId=:scriptId and metadataId=:metadataId")
 	Integer deleteByScriptIdAndMetadataId(Integer scriptId,Integer metadataId);
 	
 	List<TestSetScriptParam> findByScriptIdAndMetadataId(Integer scriptId,Integer metadataId);
