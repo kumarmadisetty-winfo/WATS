@@ -69,6 +69,7 @@ import com.winfo.serviceImpl.SmartBearService;
 import com.winfo.serviceImpl.TestCaseDataService;
 import com.winfo.serviceImpl.TestScriptExecService;
 import com.winfo.serviceImpl.UpdateTestSetRecords;
+import com.winfo.serviceImpl.WinTaExecutionHistoryServiceImpl;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -110,6 +111,9 @@ public class RunAutomation {
 	
 	@Autowired
 	PDFGenerator schedulePdfGenerator;
+
+	@Autowired
+	WinTaExecutionHistoryServiceImpl ExecutionHistory;
 	
 	public String c_url = null;
 
@@ -259,15 +263,14 @@ public class RunAutomation {
 			}
 			List<ScriptDetailsDto> testLinesDetails = dataBaseEntry.getScriptDetailsListVO(testScriptDto.getTestScriptNo(), null, false,
 					true);
-
 			SortedMap<Integer, List<ScriptDetailsDto>> dependentScriptMap = new TreeMap<Integer, List<ScriptDetailsDto>>();
 			SortedMap<Integer, List<ScriptDetailsDto>> metaDataMap = dataService.prepareTestcasedata(testLinesDetails,
 					dependentScriptMap);
 			Map<Integer, Status> scriptStatus = new HashMap<>();
-
 			Date date = new Date();
 			fetchConfigVO.setStarttime1(date);
 			ExecutorService executor = Executors.newFixedThreadPool(fetchConfigVO.getPARALLEL_INDEPENDENT());
+			Map<String, Integer> executorMap = new HashMap<>(); 
 			try {
 				for (Entry<Integer, List<ScriptDetailsDto>> metaData : metaDataMap.entrySet()) {
 
@@ -283,8 +286,10 @@ public class RunAutomation {
 								executor.shutdown();
 								logger.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
+								int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testLinesDetails.get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
+								executorMap.put(testLinesDetails.get(0).getTestSetLineId(),executionId);
 								executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
-										customerDetails);
+										customerDetails,executionId);
 							}
 							long i = System.currentTimeMillis() - starttimeIntermediate;
 							increment = increment + i;
@@ -325,7 +330,7 @@ public class RunAutomation {
 								} else {
 									if (run) {
 										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
-												scriptStatus, customerDetails);
+												scriptStatus, customerDetails, executorMap);
 									} else {
 										String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
 												+ "/" + customerDetails.getProjectName() + "/"
@@ -362,7 +367,7 @@ public class RunAutomation {
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
 												post.getP_status());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy());
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy(),executorMap.get(testLinesDetails.get(0).getTestSetLineId()));
 
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
@@ -555,7 +560,7 @@ public class RunAutomation {
 
 	public void executorMethod(TestScriptDto testScriptDto, FetchConfigVO fetchConfigVO, List<ScriptDetailsDto> testLinesDetails,
 			Entry<Integer, List<ScriptDetailsDto>> metaData, Map<Integer, Status> scriptStatus,
-			CustomerProjectDto customerDetails) throws Exception {
+			CustomerProjectDto customerDetails,int executionId) throws Exception {
 		List<String> failList = new ArrayList<>();
 		WebDriver driver = null;
 		List<ScriptDetailsDto> fetchMetadataListsVO = metaData.getValue();
@@ -584,7 +589,7 @@ public class RunAutomation {
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(testScriptDto, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passUrl, failUrl, detailUrl, scriptUrl);
+			switchActions(testScriptDto, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passUrl, failUrl, detailUrl, scriptUrl, executionId);
 
 		}
 		catch (WebDriverException e) {
@@ -612,7 +617,7 @@ public class RunAutomation {
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
 				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
-						customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy());
+						customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy(), executionId);
 
 				failList.add(scriptId);
 			}
@@ -631,7 +636,7 @@ public class RunAutomation {
 	int failcount = 0;
 
 	public void switchActions(TestScriptDto testScriptDto, WebDriver driver, List<ScriptDetailsDto> fetchMetadataListVO,
-			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial, String scriptId, String passurl, String failurl, String detailurl, String scripturl)
+			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails,AuditScriptExecTrail auditTrial, String scriptId, String passurl, String failurl, String detailurl, String scripturl, int executionId)
 			throws Exception {
 
 		String log4jConfPath = "log4j.properties";
@@ -1773,7 +1778,7 @@ public class RunAutomation {
 
 								dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 								dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
-										fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy());
+										fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy(), executionId);
 
 								dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 							} catch (Exception e) {
@@ -1852,7 +1857,7 @@ public class RunAutomation {
 
 						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 						dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
-								fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy());
+								fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy(), executionId);
 
 						dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 
