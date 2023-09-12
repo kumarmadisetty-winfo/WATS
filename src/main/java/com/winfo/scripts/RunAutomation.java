@@ -329,8 +329,10 @@ public class RunAutomation {
 									logger.info("Script Termination is Succeed");
 								} else {
 									if (run) {
+										int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testLinesDetails.get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
+										executorMap.put(testLinesDetails.get(0).getTestSetLineId(),executionId);
 										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
-												scriptStatus, customerDetails, executorMap);
+												scriptStatus, customerDetails, executionId);
 									} else {
 										String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
 												+ "/" + customerDetails.getProjectName() + "/"
