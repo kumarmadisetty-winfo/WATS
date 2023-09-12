@@ -392,29 +392,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
-
-//		try {
-
-//			String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-
-//			logger.info("%%%%%%%%%%");
-
-//
-
-//			logger.info(path);
-
-//
-
-//			Files.write(Paths.get(path), sourceFileContent.getBytes());
-
-//		} catch (IOException e1) {
-
-//
-
-//			e1.printStackTrace();
-
-//		}
+	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath)
+	{
 
     	PutObjectResponse response = null;
 
@@ -746,7 +725,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 
-	//@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
