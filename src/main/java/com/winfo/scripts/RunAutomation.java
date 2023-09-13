@@ -327,22 +327,41 @@ public class RunAutomation {
 										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 												scriptStatus, customerDetails);
 									} else {
-										String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
-												+ "/" + customerDetails.getProjectName() + "/"
-												+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-										String failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
-												+ "/" + customerDetails.getProjectName() + "/"
-												+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-										String detailurl = fetchConfigVO.getIMG_URL()
-												+ customerDetails.getCustomerName() + "/"
-												+ customerDetails.getProjectName() + "/"
-												+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
-										String scripturl = fetchConfigVO.getIMG_URL()
-												+ customerDetails.getCustomerName() + "/"
-												+ customerDetails.getProjectName() + "/"
-												+ customerDetails.getTestSetName() + "/"
-												+ testLinesDetails.get(0).getSeqNum() + "_"
-												+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
+										String passurl = null;
+										String failurl = null;
+										String detailurl = null;
+										String scripturl = null;
+										if (fetchConfigVO.getIMG_URL() == null) {
+											passurl = customerDetails.getCustomerName() + "/"
+													+ customerDetails.getProjectName() + "/"
+													+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
+											failurl = customerDetails.getCustomerName() + "/"
+													+ customerDetails.getProjectName() + "/"
+													+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
+											detailurl = customerDetails.getCustomerName() + "/"
+													+ customerDetails.getProjectName() + "/"
+													+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
+											scripturl = customerDetails.getCustomerName() + "/"
+													+ customerDetails.getProjectName() + "/"
+													+ customerDetails.getTestSetName() + "/"
+													+ testLinesDetails.get(0).getSeqNum() + "_"
+													+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
+										} else {
+											passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
+													+ "/" + customerDetails.getProjectName() + "/"
+													+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
+											failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
+													+ "/" + customerDetails.getProjectName() + "/"
+													+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
+											detailurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
+													+ "/" + customerDetails.getProjectName() + "/"
+													+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
+											scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
+													+ "/" + customerDetails.getProjectName() + "/"
+													+ customerDetails.getTestSetName() + "/"
+													+ testLinesDetails.get(0).getSeqNum() + "_"
+													+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
+										}
 
 										ScriptDetailsDto fd = metaData.getValue().get(0);
 										FetchScriptVO post = new FetchScriptVO();
@@ -362,7 +381,8 @@ public class RunAutomation {
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
 												post.getP_status());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy());
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(), true,
+												testScriptDto.getExecutedBy());
 
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
@@ -563,17 +583,41 @@ public class RunAutomation {
 		String testSetLineId = fetchMetadataListsVO.get(0).getTestSetLineId();
 
 		String scriptId = fetchMetadataListsVO.get(0).getScriptId();
-		String passUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-		String failUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-		String detailUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
-				+ "Detailed_Report.pdf";
-		String scriptUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
-				+ fetchMetadataListsVO.get(0).getSeqNum() + "_" + fetchMetadataListsVO.get(0).getScriptNumber()
-				+ ".pdf";
+		String passUrl = null;
+		String failUrl = null;
+		String detailUrl = null;
+		String scriptUrl = null;
+		if (fetchConfigVO.getIMG_URL() == null) {
+			passUrl = customerDetails.getCustomerName() + "/"
+					+ customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
+			failUrl = customerDetails.getCustomerName() + "/"
+					+ customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
+			detailUrl = customerDetails.getCustomerName() + "/"
+					+ customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
+			scriptUrl = customerDetails.getCustomerName() + "/"
+					+ customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/"
+					+ testLinesDetails.get(0).getSeqNum() + "_"
+					+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
+		} else {
+			passUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
+					+ "/" + customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
+			failUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
+					+ "/" + customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
+			detailUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
+					+ "/" + customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
+			scriptUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
+					+ "/" + customerDetails.getProjectName() + "/"
+					+ customerDetails.getTestSetName() + "/"
+					+ testLinesDetails.get(0).getSeqNum() + "_"
+					+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
+		}
 		logger.info(String.format("Pass Url : %s , Fail Url : %s , Detailed Url : %s , Script Url : %s " , passUrl, failUrl, detailUrl, scriptUrl));
 		boolean isDriverError = true;
 		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
