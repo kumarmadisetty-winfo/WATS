@@ -68,7 +68,7 @@ public class TestScriptExecController {
 		testScriptExecService.generateTestScriptLineIdReports(msgQueueDto);
 	}
 
-	@ResponseBody
+//	@ResponseBody
 	@GetMapping(value = "/generateScriptPdf")
 	@ApiOperation( value="Generate Script PDF",notes = "To generate Script pdf, we should pass <B>testSetId, testSetLineId and manualTrigger: true</B><br>"
 					+ "<B>ManualTrigger</B>It is by default set to true")	
