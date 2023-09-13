@@ -69,7 +69,7 @@ public class TestScriptExecController {
 	}
 
 	@ResponseBody
-	@PostMapping(value = "/generateScriptPdf")
+	@GetMapping(value = "/generateScriptPdf")
 	@ApiOperation( value="Generate Script PDF",notes = "To generate Script pdf, we should pass <B>testSetId, testSetLineId and manualTrigger: true</B><br>"
 					+ "<B>ManualTrigger</B>It is by default set to true")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Generated TestRunPdfs Succesfully")})
@@ -122,7 +122,7 @@ public class TestScriptExecController {
 	}
 
 	@ResponseBody
-	@PostMapping(value = "/generateTestRunPdfs/{testSetId}")
+	@GetMapping(value = "/generateTestRunPdfs/{testSetId}")
 	@ApiOperation( value="Generate Test Run PDF",notes = "To generate TestRun pdf(Passed, Failed and Detailed), we should pass testSetId")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Generated TestRunPdfs Succesfully")})
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {
