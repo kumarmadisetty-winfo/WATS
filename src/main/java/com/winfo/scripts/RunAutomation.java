@@ -291,9 +291,7 @@ public class RunAutomation {
 								logger.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
 								int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
-								System.out.println(executionId);
 								executorMap.put(testSetLineId,executionId);
-								System.out.println(executorMap);
 								executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
 										customerDetails,executionId);
 							}
