@@ -293,6 +293,7 @@ public class RunAutomation {
 								int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
 								System.out.println(executionId);
 								executorMap.put(testSetLineId,executionId);
+								System.out.println(executorMap);
 								executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
 										customerDetails,executionId);
 							}
@@ -325,7 +326,6 @@ public class RunAutomation {
 									metaData.getValue().get(0).getDependencyScriptNumber());
 							logger.info("Dependant Script run status " + metaData.getValue().get(0).getScriptId() + " "
 									+ run);
-
 							try {
 								String flag = dataBaseEntry.getTrMode(testScriptDto.getTestScriptNo(), fetchConfigVO);
 								if (flag.equalsIgnoreCase("STOPPED")) {
@@ -334,7 +334,7 @@ public class RunAutomation {
 									logger.info("Script Termination is Succeed");
 								} else {
 									if (run) {
-										int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testLinesDetails.get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
+										int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(metaData.getValue().get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
 										executorMap.put(testLinesDetails.get(0).getTestSetLineId(),executionId);
 										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 												scriptStatus, customerDetails, executionId);
