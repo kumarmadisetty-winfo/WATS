@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
@@ -27,25 +28,15 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class RingChart {
+	public static final Logger logger = Logger.getLogger(RingChart.class);
 
 	public void createPDF(PdfWriter writer, int pass, int fail) throws Exception {
-//		String destination = "ringchart.pdf";
-
-//		Document document = new Document(PageSize.A4.rotate());
 		try {
-//			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(destination));
-//			document.open();
-
-			// Create the pages
 			PdfContentByte cb = writer.getDirectContent();
 			addChart(cb, pass, fail);
 		} catch (Exception e) {
-			System.out.println("Failure to generate the PDF");
-			e.printStackTrace();
+			logger.error("Exception occured while generating the RingChart");
 		} finally {
-//			if (document != null) {
-//				document.close();
-//			}
 		}
 	}
 
@@ -55,7 +46,7 @@ public class RingChart {
 		long pctWPI = Math.round(5);
 		long pctTDF = Math.round(25);
 		long pctNE = 100 - (pctPM + pctOA + pctWPI + pctTDF);
-		long pctEngaged = (((pass*100)/(pass+fail)));
+		long pctEngaged = (((pass * 100) / (pass + fail)));
 
 		JFreeChart chart = createChart(pass, fail, pctWPI, pctTDF, pctNE);
 
@@ -66,14 +57,23 @@ public class RingChart {
 		Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width, height);
 		chart.draw(graphics2d, rectangle2d);
 		graphics2d.dispose();
-		cb.addTemplate(template, 590, 1010);
+		cb.addTemplate(template, 640, 1020);
 
-		// Add text inside chart
 		Font percentFont1 = createFont("OpenSans-Light.ttf", 22, 116, 112, 100);
 		Font percentFont2 = createFont("OpenSans-Light.ttf", 10, 116, 112, 100);
-		addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 700, 1065, 210, 310, 10, Element.ALIGN_RIGHT);
-		addPhrase(cb, "%", percentFont2, 710, 1065, 211, 299, 10, Element.ALIGN_RIGHT);
-
+		if (pctEngaged == 100) {
+			// FOR 3 DIGITS PERCENTAGE FORMAT
+			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 755, 1075, 240, 310, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, "%", percentFont2, 765, 1078, 211, 299, 10, Element.ALIGN_RIGHT);
+		} else if (pctEngaged >= 10) {
+			// FOR 2 DIGITS PERCENTAGE FORMAT
+			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 750, 1075, 210, 310, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, "%", percentFont2, 760, 1078, 211, 299, 10, Element.ALIGN_RIGHT);
+		} else {
+			// FOR 1 DIGIT PERCENTAGE FORMAT
+			addPhrase(cb, String.valueOf(pctEngaged), percentFont1, 745, 1075, 210, 310, 10, Element.ALIGN_RIGHT);
+			addPhrase(cb, "%", percentFont2, 755, 1078, 211, 299, 10, Element.ALIGN_RIGHT);
+		}
 	}
 
 	private void addPhrase(PdfContentByte cb, String strText, Font font, float llx, float lly, float urx, float ury,
@@ -121,7 +121,6 @@ public class RingChart {
 		rPlot.setSectionOutlinesVisible(false);
 		rPlot.setOuterSeparatorExtension(0);
 		rPlot.setInnerSeparatorExtension(0);
-
 		// Set colors of the chart
 		rPlot.setSectionPaint("Pass", new Color(0, 255, 0));
 		rPlot.setSectionPaint("Fail", new Color(255, 0, 0));

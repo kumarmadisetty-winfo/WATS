@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -75,6 +76,7 @@ import com.assertthat.selenium_shutterbug.core.Shutterbug;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.itextpdf.awt.PdfGraphics2D;
 import com.itextpdf.text.Anchor;
@@ -182,6 +184,7 @@ public abstract class AbstractSeleniumKeywords {
 	private static final String LINE_NUMBER = "Line Number : ";
 	private static final String SCREENSHOT = "Screenshot";
 	private static final String ELAPSED_TIME = "Elapsed Time";
+	private static final String ERROR_MESSAGE = "Error Message";
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
@@ -321,46 +324,57 @@ public abstract class AbstractSeleniumKeywords {
 //			throw e;
 		}
 	}
+	public String uploadObjectToStorage(String localFilePath, String folderName, String fileName,String destinationFilePath) {
+
+	    PutObjectResponse response = null;
+	    try {
+	        // Create a default authentication provider that uses the DEFAULT profile in the configuration file.
+	        final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+	        final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);	      
+
+	        // Get file information
+	        final String FILE_NAME = localFilePath;
+	        File file = new File(FILE_NAME);
+	        long fileSize = FileUtils.sizeOf(file);
+	        InputStream is = new FileInputStream(file);
+
+	        // Create a service client
+	        try (ObjectStorageClient client = new ObjectStorageClient(provider)) {
+
+	            // Create a request and dependent object(s)
+	            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+	                    .namespaceName(ociNamespace)
+	                    .bucketName(ociBucketName)
+	                    .objectName(destinationFilePath)
+	                    .contentLength(fileSize)
+	                    .putObjectBody(is)
+	                    .build();
+
+	            // Send request to the Client
+	            response = client.putObject(putObjectRequest);
+	        }
+	        return response.toString();
+	    } catch (WatsEBSException e) {
+	        throw e;
+	    } catch (Exception e) {
+	        throw new WatsEBSException(500, "Exception occurred while uploading the object to Object Storage.", e);
+	    }
+	}
 
 	public String uploadObjectToObjectStore(String localFilePath, String folderName, String fileName) {
-
-		PutObjectResponse response = null;
-		try {
-			/**
-			 * Create a default authentication provider that uses the DEFAULT profile in the
-			 * configuration file. Refer to <see
-			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
-			 * public documentation</see> on how to prepare a configuration file.
-			 */
-			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			final String FILE_NAME = localFilePath;
-			File file = new File(FILE_NAME);
-			long fileSize = FileUtils.sizeOf(file);
-			InputStream is = new FileInputStream(file);
+		
+		
 			StringBuffer destinationFileBuffer = new StringBuffer();
 			destinationFileBuffer.append(folderName).append(FORWARD_SLASH).append(fileName);
 			String destinationFilePath = destinationFileBuffer.toString();
-			/* Create a service client */
-			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
-
-				/* Create a request and dependent object(s). */
-
-				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
-						.putObjectBody(is).build();
-
-				/* Send request to the Client */
-				response = client.putObject(putObjectRequest);
-			}
-			return response.toString();
-		} catch (WatsEBSException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage..", e);
-		}
+			
+			 return uploadObjectToStorage(localFilePath, folderName, fileName,destinationFilePath);
 	}
+			
+	public String uploadPDF(String sourceFile, String destinationFilePath) {
+		 return uploadObjectToStorage(sourceFile,   "", "",destinationFilePath);
+	}
+	
 
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
 			String seqNum) {
@@ -476,22 +490,22 @@ public abstract class AbstractSeleniumKeywords {
 			        } else if (!fileName.endsWith(PNG_EXTENSION) && new File(fullFileName + JPG_EXTENSION).exists()) {
 			            return fileName + JPG_EXTENSION;
 			        }
-			        return fileName;
+			        return null;
 			    })
-			    .collect(Collectors.toList());
+				.filter(Objects::nonNull)
+        		.collect(Collectors.toList());
 
-			File newFile = new File(folder + fileNames);
+		for (String fileName : fileNames) {
+			File newFile = new File(folder + fileName);
 			if (newFile.exists()) {
 				Integer seqNum = Integer.valueOf(newFile.getName().substring(0, newFile.getName().indexOf('_')));
-
 				if (sequenceNumberStatusMap.get(seqNum.toString()).equals(status)) {
 					filesMap.putIfAbsent(seqNum, new ArrayList<>());
 					filesMap.get(seqNum).add(newFile);
 					targetPdfList.add(newFile.getName());
 				}
 			}
-		
-
+		}
 		return targetPdfList;
 	
 }
@@ -1191,6 +1205,14 @@ public abstract class AbstractSeleniumKeywords {
 		int i = 0;
 		int j = 0;
 		int increment = 0;
+		Map<String, String> errorMessagesBySeqNum = new HashMap<>();
+		for (ScriptDetailsDto metaDataVO1 : fetchMetadataListVO) {
+			String seqNum = metaDataVO1.getSeqNum();
+			String errorMessages = metaDataVO1.getLineErrorMsg();
+			if (errorMessages != null) {
+				errorMessagesBySeqNum.put(seqNum, errorMessages);
+			}
+		}
 		for (ScriptDetailsDto metaDataVO : fetchMetadataListVO) {
 			String checkPackage = dataBaseEntry.getPackage(customerDetails.getTestSetId());
 			StringBuffer fileNameBuffer = new StringBuffer();
@@ -1236,7 +1258,7 @@ public abstract class AbstractSeleniumKeywords {
 				String description = sm.getScenarioDescription();
 				String expectedResult = EXPECTED_RESULT;
 				String result = sm.getExpectedResult();
-				
+				String errorMessage = ERROR_MESSAGE;
 				if (!sno.equalsIgnoreCase(sno1)) {
 					document.setPageSize(pageSize);
 					document.newPage();
@@ -1251,15 +1273,36 @@ public abstract class AbstractSeleniumKeywords {
 					table2.setWidths(new float[] { 1, 3 });
 					table2.setWidthPercentage(100f);
 					String[] strArr;
+					String errorMsgs = null;
+					if (errorMessagesBySeqNum.containsKey(sno)){
+						errorMsgs = errorMessagesBySeqNum.get(sno);
+						logger.info(sno +" "  + errorMsgs);
+					}
 
 					if (sm.getScenarioDescription() != null && sm.getExpectedResult() != null) {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result};
+						if (errorMsgs == null){
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result};
+						} else {
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, expectedResult, result, errorMessage, errorMsgs};
+						}
 					} else if (sm.getScenarioDescription() != null) {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description};
+						if (errorMsgs == null){
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description};
+						} else {
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, testCaseDescription, description, errorMessage, errorMsgs};
+						}
 					} else if (sm.getExpectedResult() != null) {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName, expectedResult, result};
+						if (errorMsgs == null){
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, expectedResult, result};
+						} else {
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, expectedResult, result, errorMessage, errorMsgs};
+						}
 					} else {
-					    strArr = new String[]{sNo, scriptNumber1, snm, scriptName};
+						if (errorMsgs == null){
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName};
+						} else {
+							strArr = new String[]{sNo, scriptNumber1, snm, scriptName, errorMessage, errorMsgs};
+						}
 					}
 					
 					for (String str : strArr) {
@@ -1320,7 +1363,7 @@ public abstract class AbstractSeleniumKeywords {
 				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
 					String message = "Failed at Line Number:" + "" + reason;
 					String error = metaDataVO.getLineErrorMsg();
-					String errorMessage = "Failed Message:" + "" + error;
+					errorMessage = "Failed Message:" + "" + error;
 					Anchor target1 = new Anchor(status);
 					target1.setName(String.valueOf(status + j));
 					j++;
@@ -1622,43 +1665,7 @@ public abstract class AbstractSeleniumKeywords {
 		logger.info("Script screenshot deleted successfully!!");
 	}
 
-	public String uploadPDF(String sourceFile, String destinationFilePath) {
 
-		PutObjectResponse response = null;
-		try {
-			/**
-			 * Create a default authentication provider that uses the DEFAULT profile in the
-			 * configuration file. Refer to <see
-			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
-			 * public documentation</see> on how to prepare a configuration file.
-			 */
-			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			final String FILE_NAME = sourceFile;
-			File file = new File(FILE_NAME);
-			long fileSize = FileUtils.sizeOf(file);
-			InputStream is = new FileInputStream(file);
-
-			/* Create a service client */
-			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
-
-				/* Create a request and dependent object(s). */
-
-				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
-						.putObjectBody(is).build();
-
-				/* Send request to the Client */
-				response = client.putObject(putObjectRequest);
-			}
-			return response.toString();
-		} catch (WatsEBSException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
-		}
-	}
 
 	public void createScreenShot(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, String message,
 			CustomerProjectDto customerDetails, boolean isPassed) throws Exception {

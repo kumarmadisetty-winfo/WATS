@@ -25,6 +25,10 @@ import com.winfo.exception.WatsEBSException;
 import com.winfo.model.Scheduler;
 import com.winfo.model.TestSet;
 import com.winfo.model.UserSchedulerJob;
+import com.winfo.reports.PDFGenerator;
+import com.winfo.repository.ConfigLinesRepository;
+import com.winfo.repository.ConfigurationRepository;
+import com.winfo.repository.CustomerRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
@@ -35,8 +39,7 @@ import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScheduleJobVO;
 import com.winfo.vo.ScheduleSubJobVO;
 import com.winfo.vo.ScheduleTestRunVO;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+
 import reactor.core.publisher.Mono;
 
 @Service
@@ -58,6 +61,15 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	
 	@Autowired
 	CopyTestRunService copyTestRunService;
+	
+	@Autowired
+	ConfigurationRepository configurationRepository;
+	
+	@Autowired
+	ConfigLinesRepository configLinesRepository;
+	
+	@Autowired
+	CustomerRepository customerRepository;
 	
 	@Transactional
 	public  ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO) {
@@ -205,5 +217,33 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			}
 		});
 		return jobId;
+	}
+
+	
+	public ResponseDto generateScheduleSummaryTestRunReport(int jobId) {
+
+		ResponseDto response = null;
+		try {
+			logger.info("JobId " + jobId);
+			int configId = schedulerRepository.findByJobId(jobId).getConfigurationId();
+			String pdfPath = configLinesRepository.getPdfPathusingConfigurationIdAndkeyName(configId,
+					Constants.PDF_PATH);
+			int customerId = configurationRepository.getCustomerIdUsingconfigurationId(configId);
+			String customerName = customerRepository.findByCustomerId(customerId).getCustomerName();
+			logger.info("PdfPath : " + pdfPath + "," + " customerName : " + customerName);
+			if (StringUtils.isNotBlank(pdfPath) && StringUtils.isNotBlank(customerName)) {
+				response = PDFGenerator.createPDF(jobId, pdfPath, customerName);
+				if (response.getStatusCode() == HttpStatus.OK.value()) {
+					logger.info("Schedule summary report regeneration has done successfully : " + jobId);
+				}
+			} else {
+				logger.info("Pdf path and customerName should not be null");
+				response = new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+						"Exception occured while regenerating the schedule summary report");
+			}
+		} catch (Exception e) {
+			logger.error("Exception occured while regenerating the schedule summary report : " + jobId);
+		}
+		return response;
 	}
 }
