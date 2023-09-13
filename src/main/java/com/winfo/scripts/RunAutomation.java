@@ -276,6 +276,10 @@ public class RunAutomation {
 
 					String scriptNumber = metaData.getValue().get(0).getScriptNumber();
 
+					String testSetLineId = metaData.getValue().get(0).getTestSetLineId();
+
+					System.out.println(testSetLineId);
+
 					executor.execute(() -> {
 						logger.info("Start of Independent Script Execution of " + scriptNumber);
 						try {
@@ -286,8 +290,9 @@ public class RunAutomation {
 								executor.shutdown();
 								logger.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
-								int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testLinesDetails.get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
-								executorMap.put(testLinesDetails.get(0).getTestSetLineId(),executionId);
+								int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
+								System.out.println(executionId);
+								executorMap.put(testSetLineId,executionId);
 								executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
 										customerDetails,executionId);
 							}
