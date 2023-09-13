@@ -69,7 +69,7 @@ public class TestScriptExecController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/generateScriptPdf")
+	@PostMapping(value = "/generateScriptPdf")
 	@ApiOperation( value="Generate Script PDF",notes = "To generate Script pdf, we should pass <B>testSetId, testSetLineId and manualTrigger: true</B><br>"
 					+ "<B>ManualTrigger</B>It is by default set to true")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Generated TestRunPdfs Succesfully")})
