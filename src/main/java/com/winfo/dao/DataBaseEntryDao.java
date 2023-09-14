@@ -271,6 +271,21 @@ public class DataBaseEntryDao {
 	}
 	}
 
+	public int getNextExecutionNum() {
+		Session session = em.unwrap(Session.class);
+		String sql = "SELECT WIN__TA_EXECUTION_ID_SEQ.NEXTVAL FROM DUAL";
+		SQLQuery<?> query = session.createSQLQuery(sql);
+
+		List<?> results = query.list();
+		if (!results.isEmpty()) {
+			logger.info("Execution Id " +results.get(0));
+			BigDecimal bigDecimal = (BigDecimal) results.get(0);
+			return Integer.parseInt(bigDecimal.toString());
+		} else {
+			return 0;
+		}
+	}
+
 	public void updateFailedImages(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, CustomerProjectDto customerDetails) throws IOException {
 		String folder = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION() + customerDetails.getCustomerName()
@@ -1211,6 +1226,27 @@ public class DataBaseEntryDao {
 		}
 	}
 
+	public void insertExecHistoryTbl(String testSetLineId, Date startDate, Date endDate, String status) {
+		Format dateFormat = new SimpleDateFormat(SIMPLE_DATE);
+		String startTime = dateFormat.format(startDate);
+		String endTime = dateFormat.format(endDate);
+		try {
+			Session session = em.unwrap(Session.class);
+			int nextExecNo = getNextExecutionNum();
+			String instQry = "INSERT INTO WIN_TA_EXECUTION_HISTORY (EXECUTION_ID, TEST_SET_LINE_ID, EXECUTION_START_TIME, EXECUTION_END_TIME, CREATED_BY, STATUS) VALUES ('"
+					+ (nextExecNo) + "','" + testSetLineId + "'," + "TO_TIMESTAMP('" + startTime
+					+ "','MM/DD/YYYY HH24:MI:SS')" + "," + "TO_TIMESTAMP('" + endTime + "','MM/DD/YYYY HH24:MI:SS')"
+					+ ",'APP_USER','" + status + "')";
+			Query instQuery = session.createSQLQuery(instQry);
+			instQuery.executeUpdate();
+
+		} catch (Exception e) {
+			throw new WatsEBSException(500,
+					"Exception occured while inserting records for start date, end date and status", e);
+		}
+	}
+	
+	
 
 	public List<Object[]> getStatusAndSeqNum(String testSetId) {
 		List<Object[]> listObj = null;

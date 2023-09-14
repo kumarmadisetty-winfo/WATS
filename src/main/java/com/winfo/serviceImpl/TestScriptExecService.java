@@ -568,7 +568,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy());
+						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),1234);
 				if (fetchConfigVO.getStatus1().equals(TestScriptExecServiceEnum.FAIL.getValue())) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),

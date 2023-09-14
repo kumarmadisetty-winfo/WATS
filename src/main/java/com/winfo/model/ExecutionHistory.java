@@ -4,10 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,8 +17,6 @@ import lombok.Data;
 public class ExecutionHistory {
 	@Id
 	@Column(name = "EXECUTION_ID")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "execution_id_generator")
-	@SequenceGenerator(name = "execution_id_generator", sequenceName = "WIN__TA_EXECUTION_ID_SEQ", allocationSize = 1)
 	private int executionId;
 	
 	@Column(name="TEST_SET_LINE_ID")

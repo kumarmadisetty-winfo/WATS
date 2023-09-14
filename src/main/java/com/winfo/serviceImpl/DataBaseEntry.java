@@ -369,16 +369,17 @@ public class DataBaseEntry {
 
 	@Transactional
 	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
-			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent, String executedBy) {
+			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent, String executedBy, int executionId) {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(testRunName);
 		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
 		if (!isDependentFailBecauseOfIndependent) {
 			appContext.getBean(this.getClass()).updateSubscription();
 		}
+//		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
+//				fetchConfigVO.getEndtime(), fetchConfigVO.getStatus1());
+		executionHistory.updateExecHistoryTbl(executionId, fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy());
 
-		executionHistory.insertExecHistoryTbl(Integer.parseInt(fetchScriptVO.getP_test_set_line_id()),fetchConfigVO.getStarttime(),fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy(), fetchMetadataListVO.get(0).getExecutedBy());
-		
 		Integer responseCount = dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
 
 		BigDecimal requestCount = (BigDecimal) dao.getRequestCountFromExecStatus(fetchScriptVO.getP_test_set_id());
