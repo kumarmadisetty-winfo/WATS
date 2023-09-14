@@ -278,8 +278,6 @@ public class RunAutomation {
 
 					String testSetLineId = metaData.getValue().get(0).getTestSetLineId();
 
-					System.out.println(testSetLineId);
-
 					executor.execute(() -> {
 						logger.info("Start of Independent Script Execution of " + scriptNumber);
 						try {
@@ -333,7 +331,7 @@ public class RunAutomation {
 								} else {
 									if (run) {
 										int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(metaData.getValue().get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
-										executorMap.put(testLinesDetails.get(0).getTestSetLineId(),executionId);
+										executorMap.put(metaData.getValue().get(0).getTestSetLineId(),executionId);
 										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 												scriptStatus, customerDetails, executionId);
 									} else {
@@ -372,7 +370,7 @@ public class RunAutomation {
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
 												post.getP_status());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy(),executorMap.get(testLinesDetails.get(0).getTestSetLineId()));
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy(),executorMap.get(metaData.getValue().get(0).getTestSetLineId()));
 
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);

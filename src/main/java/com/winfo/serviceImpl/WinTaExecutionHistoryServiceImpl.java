@@ -1,6 +1,7 @@
 package com.winfo.serviceImpl;
 
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ public class WinTaExecutionHistoryServiceImpl extends WinTaExecutionHistoryServi
 
     @Autowired
     DataBaseEntryDao dataBaseEntryDao;
-    
+
+    @Autowired
     public WinTaExecutionHistoryServiceImpl(ExecutionHistoryRepository executionHistoryRepository) {
         this.executionHistoryRepository = executionHistoryRepository;
     }
@@ -55,6 +57,19 @@ public class WinTaExecutionHistoryServiceImpl extends WinTaExecutionHistoryServi
             }
         } catch (Exception e) {
             throw new WatsEBSException(500, "Exception occurred while updating records", e);
+        }
+    }
+    public int getMaxExecutionIdForTestSetLine(int testSetLineId) {
+        try {
+            Integer maxExecutionId = executionHistoryRepository.findMaxExecutionIdByTestSetLineId(testSetLineId);
+    
+            if (maxExecutionId != null) {
+                return maxExecutionId;
+            } else {
+                throw new NoSuchElementException("No maximum executionId found for testSetLineId: " + testSetLineId);
+            }
+        } catch (Exception e) {
+            throw new WatsEBSException(500, "Exception occurred while retrieving the maximum executionId", e);
         }
     }
 }

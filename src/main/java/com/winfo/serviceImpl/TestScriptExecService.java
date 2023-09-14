@@ -54,6 +54,7 @@ import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
+import com.winfo.model.ExecutionHistory;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
@@ -131,6 +132,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	DynamicRequisitionNumber dynamicnumber;
 	@Autowired
 	GenerateTestRunPDFService generateTestRunPDFService;
+	
+	@Autowired
+	WinTaExecutionHistoryServiceImpl ExecutionHistory;
 
 	@Autowired
 	private KafkaTemplate<String, MessageQueueDto> kafkaTemp;
@@ -567,8 +571,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
+				int exeId = ExecutionHistory.getMaxExecutionIdForTestSetLine(Integer.parseInt(args.getTestSetLineId()));
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),1234);
+						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),exeId);
 				if (fetchConfigVO.getStatus1().equals(TestScriptExecServiceEnum.FAIL.getValue())) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),

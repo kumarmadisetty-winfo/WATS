@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -12,10 +15,12 @@ import javax.persistence.TemporalType;
 import lombok.Data;
 
 @Entity
-@Table(name = "WIN__TA_EXECUTION_HISTORY")
+@Table(name = "WIN_TA_EXECUTION_HISTORY")
 @Data
 public class ExecutionHistory {
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "executionId_generator")
+	@SequenceGenerator(name = "executionId_generator", sequenceName = "WIN__TA_EXECUTION_ID_SEQ", allocationSize = 1)
 	@Column(name = "EXECUTION_ID")
 	private int executionId;
 	
