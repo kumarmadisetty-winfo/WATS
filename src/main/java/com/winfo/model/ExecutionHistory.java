@@ -21,7 +21,7 @@ public class ExecutionHistory {
 	@Id
 	@Column(name = "EXECUTION_ID")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "execution_id_generator")
-	@SequenceGenerator(name = "execution_id_generator", sequenceName = "WIN__TA_EXECUTION_ID_SEQ", allocationSize = 1)
+	@SequenceGenerator(name = "execution_id_generator", sequenceName = "WIN_TA_EXECUTION_ID_SEQ", allocationSize = 1)
 	private int executionId;
 	
 	@Column(name="TEST_SET_LINE_ID")
