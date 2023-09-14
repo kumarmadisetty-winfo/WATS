@@ -26,35 +26,21 @@ public class WinTaExecutionHistoryServiceImpl extends WinTaExecutionHistoryServi
     }
 
     @Override
-    public int insertExecHistoryTbl(int testSetLineId, Date startDate, String status, String createdBy) {
+    public void insertExecHistoryTbl(int testSetLineId, Date startDate, Date endDate,String status, String createdBy, String lastUpdatedBy) {
         try {
-            int nextExecNo = dataBaseEntryDao.getNextExecutionNum();
 
             ExecutionHistory history = new ExecutionHistory();
-            history.setExecutionId(nextExecNo);
             history.setTestSetLineId(testSetLineId);
             history.setExecutionStartTime(startDate);
+            history.setExecutionEndTime(endDate);
             history.setCreatedBy(createdBy);
             history.setStatus(status);
+            history.setLastUpdatedBy(lastUpdatedBy);
             executionHistoryRepository.save(history);
-            return nextExecNo;
+            int generatedExecutionId = history.getExecutionId();
+            System.out.println(generatedExecutionId);
         } catch (Exception e) {
             throw new WatsEBSException(500, "Exception occurred while inserting records", e);
-        }
-    }
-
-    @Override
-    public void updateExecHistoryTbl(int executionId,Date endDate, String status, String lastUpdatedBy) {
-        try {
-            ExecutionHistory history = executionHistoryRepository.findById((int) executionId).orElse(null);
-            if (history != null) {
-                history.setExecutionEndTime(endDate);
-                history.setStatus(status);
-                history.setLastUpdatedBy(lastUpdatedBy);
-                executionHistoryRepository.save(history);
-            }
-        } catch (Exception e) {
-            throw new WatsEBSException(500, "Exception occurred while updating records", e);
         }
     }
 }
