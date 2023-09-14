@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
 import lombok.Data;
 
 @Entity
-@Table(name = "WIN_TA_EXECUTION_HISTORY")
+@Table(name = "WIN__TA_EXECUTION_HISTORY")
 @Data
 public class ExecutionHistory {
 	@Id
