@@ -2,6 +2,7 @@ package com.winfo.model;
 
 
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -118,6 +119,14 @@ public class TestSetScriptParam {
 	@ManyToOne( fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_LINE_ID" ,nullable = false)
 	private TestSetLine testSetLine;
+	
+	@Column(name = "START_TIME")
+//	@Temporal(TemporalType.TIMESTAMP)
+    private Date startTime;
+	
+	@Column(name = "END_TIME")
+//	@Temporal(TemporalType.TIMESTAMP)
+	private Date endTime;
 
 
 	
