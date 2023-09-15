@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -97,7 +98,7 @@ public class HealthCheck {
 			dataBaseEntry.updateEnableFlagForSanity(testSetId);
 			return new ResponseDto(500, Constants.ERROR, e.getMessage());
 		}
-		return new ResponseDto(200, Constants.SUCCESS, messageUtil.getHealthCheck().getSuccess().getSanityCheckMessage());
+		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, messageUtil.getHealthCheck().getSuccess().getSanityCheckMessage());
 	}
 
 	public SanityCheckVO sanityCheckForAdminMethod() {
@@ -145,9 +146,9 @@ public class HealthCheck {
 		try {
 			dao.dbAccessibilityCheck();
 		} catch (Exception e) {
-			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getDbAccessibilityMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getHealthCheck().getError().getDbAccessibilityMessage());
 		}
-		return new ResponseDto(200, Constants.SUCCESS, null);
+		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, null);
 	}
 
 	public ResponseDto seleniumGridCheck() {
@@ -158,12 +159,12 @@ public class HealthCheck {
 			HubResponse hubResponse = mapper.readValue(result,HubResponse.class);
 			long total = hubResponse.getValue().getNodes().size();
 			if (total > 0) {
-				return new ResponseDto(200, Constants.SUCCESS, null);
+				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, null);
 			} else {
-				throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
 			}
 		} catch (Exception e) {
-			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getHealthCheck().getError().getSeleniumGridMessage());
 		}
 	}
 
@@ -181,7 +182,7 @@ public class HealthCheck {
 			File file = new File(ociConfigPath);
 			configFile = ConfigFileReader.parse(new FileInputStream(file), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, messageUtil.getObjectStore().getConfigFileIOException());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getObjectStore().getConfigFileIOException());
 		}
 		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 		try (ObjectStorage client = new ObjectStorageClient(provider);) {
@@ -207,21 +208,21 @@ public class HealthCheck {
 			if (testSetId != null) {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH)
 						&& pdfResponseList.contains(objectStorePdfPath + FORWARD_SLASH))) {
-					throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
+					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getHealthCheck().getError().getObjectStoreAccess());
 				}
 			} else {
 				if (!(screenShotResponseList.contains(objectStoreScreenShotPath + FORWARD_SLASH))) {
-					throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getObjectStoreAccess());
+					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getHealthCheck().getError().getObjectStoreAccess());
 				}
 			}
 		} catch (Exception e1) {
 			if (e1 instanceof WatsEBSException) {
 				throw e1;
 			} else {
-				throw new WatsEBSException(500, messageUtil.getObjectStore().getAccessDeniedException());
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getObjectStore().getAccessDeniedException());
 			}
 		}
-		return new ResponseDto(200, Constants.SUCCESS, null);
+		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, null);
 	}
 
 	public String getSharePointAccess(FetchConfigVO fetchConfigVO) throws WatsEBSException {
@@ -244,7 +245,7 @@ public class HealthCheck {
 					: null;
 			acessToken = linkedMap != null ? StringUtils.convertToString(linkedMap.get("access_token")) : null;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, messageUtil.getHealthCheck().getError().getSharePointAccess());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getHealthCheck().getError().getSharePointAccess());
 		}
 		return acessToken;
 	}

@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.LookUp;
@@ -29,7 +30,7 @@ public class CentralToCustomerPostDao {
 		List<String> result = getExistScriptDetailsByScriptNumberAndProductVersion(scriptnumber, productversion);
 		if (result.isEmpty()) {
 			session.merge(master);
-			response.setStatus(200);
+			response.setStatus(HttpStatus.OK.value());
 			response.setStatusMessage("SUCCESS");
 			response.setDescription("Script Copied Successfully");
 

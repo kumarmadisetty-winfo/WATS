@@ -224,14 +224,14 @@ public class RunAutomation {
 			}
 			executordependent.shutdown();
 
-			executeTestrunVo.setStatusCode(200);
+			executeTestrunVo.setStatusCode(HttpStatus.OK.value());
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
 		} catch (Exception e) {
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 			if (e instanceof WatsEBSException)
 				throw e;
-			throw new WatsEBSException(500, "Exception Occured while creating script for Test Run", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while creating script for Test Run", e);
 		}
 		return executeTestrunVo;
 	}
@@ -477,7 +477,7 @@ public class RunAutomation {
 									cloudRun(dependencyTestScriptDto);
 								} catch (MalformedURLException ex) {
 									logger.error(
-											"Exception occured while executing schedule dependent testRun execution "
+											"Exception occurred while executing schedule dependent testRun execution "
 													+ ex.getMessage());
 								}
 							}
@@ -532,7 +532,7 @@ public class RunAutomation {
 				increment = 0;
 
 				
-				executeTestrunVo.setStatusCode(200);
+				executeTestrunVo.setStatusCode(HttpStatus.OK.value());
 				executeTestrunVo.setStatusMessage("SUCCESS");
 				executeTestrunVo.setStatusDescr("SUCCESS");
 			} catch (InterruptedException e) {
@@ -639,7 +639,7 @@ public class RunAutomation {
 			}
 		}
 		catch (Exception e) {
-			logger.info("Exception occured while running script " + fetchMetadataListsVO.get(0).getScriptNumber());
+			logger.info("Exception occurred while running script " + fetchMetadataListsVO.get(0).getScriptNumber());
 			e.printStackTrace();
 			if (isDriverError) {
 				FetchScriptVO post = new FetchScriptVO();
@@ -1336,7 +1336,7 @@ public class RunAutomation {
 									fetchConfigVO.setErrormessage(message);
 									seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
 											customerDetails);
-									throw new IllegalArgumentException("Error occured");
+									throw new IllegalArgumentException("Error occurred");
 								}
 								break;
 							}
@@ -1720,7 +1720,7 @@ public class RunAutomation {
 							} catch (Exception e) {
 								seleniumFactory.getInstanceObj(instanceName).createScreenShot(
 										fetchMetadataVO, fetchConfigVO, "Unmatched", customerDetails,false);
-								throw new WatsEBSException(500,"Failed at campare Value");
+								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Failed at campare Value");
 							}
 							
 						case "apiAccessToken":

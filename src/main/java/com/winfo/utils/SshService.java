@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.jcraft.jsch.Channel;
@@ -52,9 +53,9 @@ public class SshService {
 			session.connect();
 		} catch (JSchException jse) {
 			if (jse.getMessage().equals(EX_TYPE)) {
-				throw new WatsEBSException(500, "Please verify ssh user credentials", jse);
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Please verify ssh user credentials", jse);
 			} else {
-				throw new WatsEBSException(500, "Exception occured while creating Sftp Connection", jse);
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while creating Sftp Connection", jse);
 			}
 		}
 		return session;
@@ -81,7 +82,7 @@ public class SshService {
 			closeSftp(session, sftpChannel);
 
 		} catch (SftpException | JSchException | IOException e) {
-			throw new WatsEBSException(500, "Exception occured while writing file via ssh", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while writing file via ssh", e);
 		}
 	}
 

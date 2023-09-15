@@ -130,8 +130,8 @@ public class TestScriptExecController {
 			return testScriptExecService.generateTestRunPdf(testSetId);			
 		}
 		catch(Exception e) {
-			logger.error("Exception occured while generating PDFs");
-        	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while generating PDFs"); 
+			logger.error("Exception occurred while generating PDFs");
+        	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while generating PDFs"); 
 		}
 	}
 	
