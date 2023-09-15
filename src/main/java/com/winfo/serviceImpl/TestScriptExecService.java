@@ -18,10 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -34,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -57,6 +52,7 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -140,6 +136,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	
 	@Autowired
 	SmartBearService smartBearService;
+	
+	@Autowired
+	TestSetScriptParamRepository testSetScriptParamRepository;
 
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
@@ -694,9 +693,14 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 		if (StringUtils.isBlank(args.getResult())) {
 			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
+			testSetScriptParamRepository.updateTestSetScriptParamStartTime(Integer.parseInt(args.getScriptParamId()), args.getStartTime());
+			testSetScriptParamRepository.updateTestSetScriptParamEndTime(Integer.parseInt(args.getScriptParamId()), args.getStartTime());
 		} else {
 			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
 					args.getMessage());
+			testSetScriptParamRepository.updateTestSetScriptParamStartTime(Integer.parseInt(args.getScriptParamId()), args.getStartTime());
+			testSetScriptParamRepository.updateTestSetScriptParamEndTime(Integer.parseInt(args.getScriptParamId()), args.getStartTime());
+			
 		}
 	}
 
