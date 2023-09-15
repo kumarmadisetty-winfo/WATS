@@ -121,11 +121,9 @@ public class TestSetScriptParam {
 	private TestSetLine testSetLine;
 	
 	@Column(name = "START_TIME")
-//	@Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
 	
 	@Column(name = "END_TIME")
-//	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
 
 
