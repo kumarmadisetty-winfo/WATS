@@ -111,6 +111,9 @@ public class TestSetScriptParam {
 
 	@Column(name = "VALIDATION_NAME")
 	private String validationName;
+	
+	@Column(name = "VALIDATION_STATUS")
+	private String validationStatus;
 
 	@Column(name = "SCREENSHOT")
     private byte[] screenshot;

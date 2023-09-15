@@ -135,4 +135,12 @@ public class Constants {
 	public static final String YET_TO_START="Yet To Start";
 	public static final String TYPE="Testrun";
 	public static final String PDF_PATH="PDF_PATH";
+	public static final String API_VALIDATION="API_VALIDATION";
+	public static final String REGULAR_EXPRESSION="REGULAR_EXPR";
+	public static final String API_BASE_URL="API_BASE_URL";
+	public static final String API_USERNAME="API_USERNAME";
+	public static final String API_PASSWORD="API_PASSWORD";
+	public static final String VALIDATION_SUCCESS="Validation Success";
+	public static final String VALIDATION_FAIL="Validation Failed";
+	public static final String No_VALIDATION="No Validation";
 	}

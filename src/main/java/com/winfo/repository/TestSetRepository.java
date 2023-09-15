@@ -17,6 +17,8 @@ public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 	
 	TestSet findByTestRunId(Integer testRunId);
 	
+	long countByTestRunId(Integer testRunId);
+	
 	@Modifying
 	@Transactional
 	@Query("UPDATE TestSet SET lastExecutBy =:date, lastUpdatedBy =:lastUpdatedBy, updateDate =:date, testRunMode = 'ACTIVE' WHERE testRunId =:testSetId")
