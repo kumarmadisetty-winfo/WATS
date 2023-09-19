@@ -139,6 +139,7 @@ package com.winfo.serviceImpl;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 //import com.winfo.wats.model.CodeLines;
+//import org.springframework.beans.factory.annotation.Value;
 //@Service("UDG")
 //@RefreshScope
 //public class EBSExecution implements OracleThemeInterface{
@@ -160,7 +161,13 @@ package com.winfo.serviceImpl;
 //
 //@Value("${evidenceReportLocation}")
 //private String reportLocation;
-//
+
+//@Value("${microsoft.graph.base-url}")
+//private String microsoftGraphBaseUrl;
+
+//@Value("${microsoft.graph.base-url1}")
+//private String microsoftGraphBaseUrl1;
+
 //@Autowired
 //private EvidenceReportConfiguration evidenceReportConfiguration;
 //
@@ -3337,7 +3344,7 @@ package com.winfo.serviceImpl;
 //				System.out.println(configVO.getSharepointDriveId());
 //				System.out.println(configVO.getSharepointItemId());
 //				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
-//				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
+//				ResponseEntity<Object> response = restTemplate.exchange(microsoftGraphBaseUrl
 //						+ configVO.getSharepointDriveId() + "/items/" + configVO.getSharepointItemId()
 //						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomerName() + "/"
 //						+ fetchMetadataListVO.get(0).getTestRunName() + "/" + imageFileName + ":/createUploadSession",

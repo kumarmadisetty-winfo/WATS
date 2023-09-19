@@ -151,6 +151,12 @@ public abstract class AbstractSeleniumKeywords {
 	@Autowired
 	private DataBaseEntry databaseentry;
 
+	@Value("${microsoft.graph.base-url}")
+	private String microsoftGraphBaseUrl;
+	
+	@Value("${microsoft.graph.base-url1}")
+	private String microsoftGraphBaseUrl1;
+	
 	private static final String PASSED_PDF = "Passed_Report.pdf";
 	private static final String FAILED_PDF = "Failed_Report.pdf";
 	private static final String DETAILED_PDF = "Detailed_Report.pdf";
@@ -2292,7 +2298,7 @@ public abstract class AbstractSeleniumKeywords {
 			HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
 
 			// SITE-ID
-			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange("https://graph.microsoft.com/v1.0/sites/"
+			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange(microsoftGraphBaseUrl1
 					+ fetchConfigVO.getSharePoint_URL() + ":/sites/" + fetchConfigVO.getSite_Name(), HttpMethod.GET,
 					uploadSessionRequest, Object.class);
 
@@ -2305,7 +2311,7 @@ public abstract class AbstractSeleniumKeywords {
 
 			// DRIVE-ID
 			ResponseEntity<Object> driveDetailsResponse = restTemplate.exchange(
-					"https://graph.microsoft.com/v1.0/sites/" + siteId + "/drives", HttpMethod.GET,
+					microsoftGraphBaseUrl1 + siteId + "/drives", HttpMethod.GET,
 					uploadSessionRequest, Object.class);
 
 			Map<String, Object> driveDetailsMap = driveDetailsResponse.getBody() != null
@@ -2329,12 +2335,12 @@ public abstract class AbstractSeleniumKeywords {
 				}
 			}
 
-//			System.out.println("https://graph.microsoft.com/v1.0/drives/"+driveId+"/root:/test");
+//			System.out.println(microsoftGraphBaseUrl+driveId+"/root:/test");
 
 			// SITE-ID
 			ResponseEntity<Object> itemDetailsResponse = restTemplate
 					.exchange(
-							"https://graph.microsoft.com/v1.0/drives/" + driveId + "/root:/"
+							microsoftGraphBaseUrl + driveId + "/root:/"
 									+ fetchConfigVO.getDirectory_Name(),
 							HttpMethod.GET, uploadSessionRequest, Object.class);
 
@@ -2359,12 +2365,12 @@ public abstract class AbstractSeleniumKeywords {
 				MultiValueMap<String, byte[]> bodyMap = new LinkedMultiValueMap<>();
 				bodyMap.add("user-file", data);
 				ResponseEntity<Object> response = restTemplate.exchange(
-						"https://graph.microsoft.com/v1.0/drives/" + driveId + "/items/" + itemId + ":/"
+						microsoftGraphBaseUrl + driveId + "/items/" + itemId + ":/"
 								+ customerDetails.getCustomerName() + "/" + customerDetails.getProjectName() + "/"
 								+ customerDetails.getTestSetName() + "/" + imageFileName + ":/createUploadSession",
 						HttpMethod.POST, uploadSessionRequest, Object.class);
 
-//				ResponseEntity<Object> response = restTemplate.exchange("https://graph.microsoft.com/v1.0/drives/"
+//				ResponseEntity<Object> response = restTemplate.exchange(microsoftGraphBaseUrl
 //						+ fetchConfigVO.getSharepoint_drive_id() + "/items/" + fetchConfigVO.getSharepoint_item_id()
 //						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomer_name() + "/"
 //						+ fetchMetadataListVO.get(0).getTest_run_name() + "/" + imageFileName + ":/createUploadSession",
