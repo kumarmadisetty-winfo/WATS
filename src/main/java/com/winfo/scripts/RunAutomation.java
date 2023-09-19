@@ -288,10 +288,14 @@ public class RunAutomation {
 								executor.shutdown();
 								logger.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
-								int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
-								executorMap.put(testSetLineId,executionId);
-								executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
+								try{
+									int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
+									executorMap.put(testSetLineId,executionId);
+									executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
 										customerDetails,executionId);
+								} catch (Exception e){
+									logger.error("failed during inserting updating the execution history table");
+								}
 							}
 							long i = System.currentTimeMillis() - starttimeIntermediate;
 							increment = increment + i;
@@ -330,10 +334,16 @@ public class RunAutomation {
 									logger.info("Script Termination is Succeed");
 								} else {
 									if (run) {
-										int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(metaData.getValue().get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
-										executorMap.put(metaData.getValue().get(0).getTestSetLineId(),executionId);
-										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
-												scriptStatus, customerDetails, executionId);
+										try{
+											int executionId = ExecutionHistory.insertExecHistoryTbl(Integer.parseInt(metaData.getValue().get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
+											executorMap.put(metaData.getValue().get(0).getTestSetLineId(),executionId);
+											executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
+													scriptStatus, customerDetails, executionId);
+
+										} catch (Exception e){
+											logger.error("Failed during updating the execution history");
+										}
+										
 									} else {
 										String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
 												+ "/" + customerDetails.getProjectName() + "/"

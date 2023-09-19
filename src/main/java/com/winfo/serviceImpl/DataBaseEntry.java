@@ -376,9 +376,12 @@ public class DataBaseEntry {
 		if (!isDependentFailBecauseOfIndependent) {
 			appContext.getBean(this.getClass()).updateSubscription();
 		}
-//		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
-//				fetchConfigVO.getEndtime(), fetchConfigVO.getStatus1());
-		executionHistory.updateExecHistoryTbl(executionId, fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy());
+		try {
+			executionHistory.updateExecHistoryTbl(executionId, fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy());
+		} catch (Exception e) {
+			logger.error("Failed during updating the execution history");
+		}
+		
 
 		Integer responseCount = dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
 

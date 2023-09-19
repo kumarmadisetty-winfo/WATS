@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ExecutionHistory;
 import com.winfo.repository.ExecutionHistoryRepository;
@@ -15,12 +14,9 @@ import com.winfo.service.WinTaExecutionHistoryService;
 
 @Service
 @Transactional
-public class WinTaExecutionHistoryServiceImpl extends WinTaExecutionHistoryService {
+public class WinTaExecutionHistoryServiceImpl implements WinTaExecutionHistoryService {
 
     private final ExecutionHistoryRepository executionHistoryRepository;
-
-    @Autowired
-    DataBaseEntryDao dataBaseEntryDao;
 
     @Autowired
     public WinTaExecutionHistoryServiceImpl(ExecutionHistoryRepository executionHistoryRepository) {
@@ -30,16 +26,13 @@ public class WinTaExecutionHistoryServiceImpl extends WinTaExecutionHistoryServi
     @Override
     public int insertExecHistoryTbl(int testSetLineId, Date startDate, String status, String createdBy) {
         try {
-            int nextExecNo = dataBaseEntryDao.getNextExecutionNum();
-
             ExecutionHistory history = new ExecutionHistory();
-            history.setExecutionId(nextExecNo);
             history.setTestSetLineId(testSetLineId);
             history.setExecutionStartTime(startDate);
             history.setCreatedBy(createdBy);
             history.setStatus(status);
             executionHistoryRepository.save(history);
-            return nextExecNo;
+            return history.getExecutionId();
         } catch (Exception e) {
             throw new WatsEBSException(500, "Exception occurred while inserting records", e);
         }
