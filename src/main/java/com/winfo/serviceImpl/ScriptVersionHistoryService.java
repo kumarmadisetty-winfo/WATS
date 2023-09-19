@@ -184,6 +184,8 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 
 	public void updateScript(Integer scriptId,ScriptMaster scriptMaster,ScriptMaterVO updatedScriptMasterVO) {
 		ScriptMaster updatedScriptDetails = modelMapper.map(updatedScriptMasterVO, ScriptMaster.class);
+		updatedScriptDetails.setCreatedBy(scriptMaster.getCreatedBy());
+		updatedScriptDetails.setCreationDate(scriptMaster.getCreationDate());
 		updatedScriptDetails.setUpdateDate(new Date(Calendar.getInstance().getTime().getTime()));
 		updatedScriptDetails.setScriptId(scriptId);
 		updatedScriptDetails.setScriptMetaDatalist(updatedScriptMasterVO.getScriptMetaDatalist().parallelStream().map(metaData-> {		
