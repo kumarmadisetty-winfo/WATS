@@ -743,7 +743,7 @@ public class RunAutomation {
 						excelMetadataListVO.add(fetchMetadataVO);
 					} else if (!isError) {
 						dataBaseEntry.updateInProgressScriptLineStatus(testScriptParamId, "In-Progress");
-						testSetScriptParamRepository.updateTestSetScriptParamStartTime(Integer.parseInt(testScriptParamId),new Date());
+						testSetScriptParamRepository.updateTestSetScriptParamStartTime(new Date(),Integer.parseInt(testScriptParamId));
 						switch (actionName) {
 
 						case "Login into Application":
@@ -1712,7 +1712,7 @@ public class RunAutomation {
 						}
 						fetchConfigVO.setStatus1("Pass");
 						logger.info("Successfully Executed the" + "" + actionName);
-						testSetScriptParamRepository.updateTestSetScriptParamEndTime(Integer.parseInt(testScriptParamId), new Date());
+						testSetScriptParamRepository.updateTestSetScriptParamEndTime(new Date(),Integer.parseInt(testScriptParamId));
 						try {
 							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
 									testScriptParamId, "Pass");
@@ -1851,7 +1851,7 @@ public class RunAutomation {
 						failcount = failcount + 1;
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
-						testSetScriptParamRepository.updateTestSetScriptParamEndTime(Integer.parseInt(testScriptParamId), new Date());
+						testSetScriptParamRepository.updateTestSetScriptParamEndTime(new Date(),Integer.parseInt(testScriptParamId));
 //						dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
 
 						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());

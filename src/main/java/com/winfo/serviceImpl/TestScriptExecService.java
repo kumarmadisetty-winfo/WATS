@@ -677,10 +677,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
 		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.getLabel() : SCRIPT_PARAM_STATUS.FAIL.getLabel();
 		if (StringUtils.isBlank(args.getResult())) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage(),null,null);
 		} else {
 			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
-					args.getMessage());
+					args.getMessage(),null,null);
 		}
 	}
 
@@ -692,16 +692,13 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
 		}
 		if (StringUtils.isBlank(args.getResult())) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
-			testSetScriptParamRepository.updateTestSetScriptParamStartTime(Integer.parseInt(args.getScriptParamId()), args.getStartTime());
-			testSetScriptParamRepository.updateTestSetScriptParamEndTime(Integer.parseInt(args.getScriptParamId()), args.getStartTime());
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage(),args.getStartTime(),args.getEndTime());
 		} else {
 			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
-					args.getMessage());
-			testSetScriptParamRepository.updateTestSetScriptParamStartTime(Integer.parseInt(args.getScriptParamId()), args.getStartTime());
-			testSetScriptParamRepository.updateTestSetScriptParamEndTime(Integer.parseInt(args.getScriptParamId()), args.getStartTime());
+					args.getMessage(),args.getStartTime(),args.getEndTime());
 			
 		}
+		
 	}
 
 	public String getCopiedValue(String copyPath) {
