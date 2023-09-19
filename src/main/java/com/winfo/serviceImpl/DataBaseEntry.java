@@ -498,12 +498,12 @@ public class DataBaseEntry {
 	}
 
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String message,Date startTime,Date endTime) throws ClassNotFoundException, SQLException {
+			String test_script_param_id, String status, String message) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}
 
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String value, String message,Date startTime,Date endTime)
+			String test_script_param_id, String status, String value, String message)
 			throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}

@@ -37,11 +37,18 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	@Modifying
 	@Transactional
 	@Query("UPDATE TestSetScriptParam  SET startTime=:startTime  WHERE testRunScriptParamId=:testRunScriptParamId")
-	void updateTestSetScriptParamStartTime(Date startTime,int testRunScriptParamId);
+	int updateTestSetScriptParamStartTime(Date startTime,int testRunScriptParamId);
 	
 	@Modifying
 	@Transactional
 	@Query("UPDATE TestSetScriptParam  SET endTime=:endTime  WHERE testRunScriptParamId=:testRunScriptParamId")
 	int updateTestSetScriptParamEndTime(Date endTime,int testRunScriptParamId);
+	
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE TestSetScriptParam  SET startTime=:startTime,endTime=:endTime WHERE testRunScriptParamId=:testRunScriptParamId")
+	int updateTestSetScriptParamStartAndEndTime(Date startTime,Date endTime,int testRunScriptParamId);
+	
 
 }

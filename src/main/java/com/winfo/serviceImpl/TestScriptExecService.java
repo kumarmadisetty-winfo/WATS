@@ -677,10 +677,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	public void updateScriptParamStatus(UpdateScriptParamStatus args) throws ClassNotFoundException, SQLException {
 		String status = args.isSuccess() ? SCRIPT_PARAM_STATUS.PASS.getLabel() : SCRIPT_PARAM_STATUS.FAIL.getLabel();
 		if (StringUtils.isBlank(args.getResult())) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage(),null,null);
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
 		} else {
 			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
-					args.getMessage(),null,null);
+					args.getMessage());
 		}
 	}
 
@@ -692,10 +692,12 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
 		}
 		if (StringUtils.isBlank(args.getResult())) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage(),args.getStartTime(),args.getEndTime());
+			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
+			testSetScriptParamRepository.updateTestSetScriptParamStartAndEndTime(args.getStartTime(),args.getEndTime(),Integer.parseInt(args.getScriptParamId()));
 		} else {
 			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
-					args.getMessage(),args.getStartTime(),args.getEndTime());
+					args.getMessage());
+			testSetScriptParamRepository.updateTestSetScriptParamStartAndEndTime(args.getStartTime(),args.getEndTime(),Integer.parseInt(args.getScriptParamId()));
 			
 		}
 		
