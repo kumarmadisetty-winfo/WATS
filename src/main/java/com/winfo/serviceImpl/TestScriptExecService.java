@@ -684,23 +684,24 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public void updateScriptStepStatus(UpdateScriptStepStatus args) throws ClassNotFoundException, SQLException {
+	public void updateScriptStepStatus(UpdateScriptStepStatus scriptParamDetails)
+			throws ClassNotFoundException, SQLException {
 		String status = SCRIPT_PARAM_STATUS.FAIL.getLabel();
-		if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
+		if (scriptParamDetails.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
 			status = SCRIPT_PARAM_STATUS.PASS.getLabel();
-		} else if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
+		} else if (scriptParamDetails.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
 			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
 		}
-		if (StringUtils.isBlank(args.getResult())) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
-			testSetScriptParamRepository.updateTestSetScriptParamStartAndEndTime(args.getStartTime(),args.getEndTime(),Integer.parseInt(args.getScriptParamId()));
+		if (StringUtils.isBlank(scriptParamDetails.getResult())) {
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(),
+					scriptParamDetails.getMessage(), null, Integer.parseInt(scriptParamDetails.getScriptParamId()));
 		} else {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
-					args.getMessage());
-			testSetScriptParamRepository.updateTestSetScriptParamStartAndEndTime(args.getStartTime(),args.getEndTime(),Integer.parseInt(args.getScriptParamId()));
-			
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(), null,
+					scriptParamDetails.getResult(), Integer.parseInt(scriptParamDetails.getScriptParamId()));
+
 		}
-		
 	}
 
 	public String getCopiedValue(String copyPath) {
