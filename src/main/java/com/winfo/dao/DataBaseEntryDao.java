@@ -1007,18 +1007,6 @@ public class DataBaseEntryDao {
 		}
 	}
 
-	public void updateFailedScriptLineStatus(String testScriptParamId, String errorMessage, Date endTime) {
-
-		String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message,END_TIME=:endTime where TEST_SCRIPT_PARAM_ID='"
-				+ testScriptParamId + "'";
-		Session session = em.unwrap(Session.class);
-		Query query = session.createSQLQuery(sql);
-		query.setParameter("error_message", errorMessage);
-		query.setParameter("endTime",endTime);
-		query.executeUpdate();
-
-	}
-
 	public void updateInProgressScriptLineStatus(String testScriptParamId, String status) {
 		try {
 			TestSetScriptParam scriptParam = em.find(TestSetScriptParam.class, Integer.parseInt(testScriptParamId));

@@ -1712,7 +1712,7 @@ public class RunAutomation {
 						}
 						fetchConfigVO.setStatus1("Pass");
 						logger.info("Successfully Executed the" + "" + actionName);
-						testSetScriptParamRepository.updateTestSetScriptParamEndTime(Constants.PASS,new Date(),Integer.parseInt(testScriptParamId));
+						testSetScriptParamRepository.updateTestSetScriptParamEndTime(Constants.PASS,new Date(),null,Integer.parseInt(testScriptParamId));
 						try {
 							
 							Optional<String> testSetlineWarningMsgOptional = Optional.ofNullable(fetchMetadataVO)

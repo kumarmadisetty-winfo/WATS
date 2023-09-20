@@ -6,13 +6,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.winfo.repository.TestSetScriptParamRepository;
+import com.winfo.utils.Constants;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 public class ErrorMessagesHandler {
+	
 	@Autowired
-	private DataBaseEntry dataBaseEntry;
+	private TestSetScriptParamRepository testSetScriptParamRepository;
 
 	public void getError(String actionName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String message, String param1, String param2, String password) {
@@ -150,8 +153,7 @@ public class ErrorMessagesHandler {
 				errorMessage = errorMessage + "=> please contact with WinfoTest support team.";
 			}
 			fetchMetadataVO.setLineErrorMsg(errorMessage);
-			dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, testScriptParamId, "Fail",
-					errorMessage,new Date());
+			testSetScriptParamRepository.updateTestSetScriptParamEndTime(Constants.FAIL,new Date(),errorMessage,Integer.parseInt(testScriptParamId));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
