@@ -752,6 +752,8 @@ public class DataBaseEntryDao {
 				+ "          , wttsl.ISSUE_KEY\r\n"
 				+ " ,mam.UNIQUE_MANDATORY\r\n"
 				+", wtp.ORACLE_RELEASE_YEAR\r\n"
+				+", wttsl.EXECUTION_START_TIME\r\n"
+				+", wttsl.EXECUTION_END_TIME\r\n"
 				+ "      from\r\n" + "      execute_status ex_st,\r\n"
 				+ "      win_ta_test_set        wtts,\r\n" + "    win_ta_script_master ma,\r\n"
 				+ "    win_ta_script_metadata mam,\r\n"
@@ -841,6 +843,12 @@ public class DataBaseEntryDao {
 				
 				scriptDetailsDto.setOracleReleaseYear(
 						NULL_STRING.equals(String.valueOf(obj[23])) ? null : String.valueOf(obj[23]));
+				
+				scriptDetailsDto.setExecutionStartTime(
+						NULL_STRING.equals(String.valueOf(obj[24])) ? null : String.valueOf(obj[24]));
+				
+				scriptDetailsDto.setExecutionEndTime(
+						NULL_STRING.equals(String.valueOf(obj[25])) ? null : String.valueOf(obj[25]));
 				
 				listOfTestRunExecutionVo.add(scriptDetailsDto);
 			}

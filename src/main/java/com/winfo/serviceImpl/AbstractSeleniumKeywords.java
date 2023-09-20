@@ -1263,8 +1263,8 @@ public abstract class AbstractSeleniumKeywords {
 				String endTimeKey = END_TIME;
 				String executionTimeKey = EXECUTION_TIME;
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
-				String startTimeValue = dateFormat.format(fetchConfigVO.getStarttime());
-				String endTimeValue = dateFormat.format(fetchConfigVO.getEndtime());
+				String startTimeValue = dateFormat.format(metaDataVO.getExecutionStartTime());
+				String endTimeValue = dateFormat.format(metaDataVO.getExecutionEndTime());
 				long timeDifference = DateUtils.findTimeDifference(startTimeValue.toString(), endTimeValue.toString());
 				String executionTimeValue = DateUtils.convertMiliSecToDayFormat(timeDifference);
 				if (!sno.equalsIgnoreCase(sno1)) {
