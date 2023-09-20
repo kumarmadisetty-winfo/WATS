@@ -1259,6 +1259,15 @@ public abstract class AbstractSeleniumKeywords {
 				String expectedResult = EXPECTED_RESULT;
 				String result = sm.getExpectedResult();
 				String errorMessage = ERROR_MESSAGE;
+				String startTimeKey = START_TIME;
+				String endTimeKey = END_TIME;
+				String executionTimeKey = EXECUTION_TIME;
+				TestSetLine testSetLine = databaseentry.getTestSetLineRecordsByTestSetLineId(metaDataVO.getTestSetLineId());
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
+				String startTimeValue = dateFormat.format(testSetLine.getExecutionStartTime());
+				String endTimeValue = dateFormat.format(testSetLine.getExecutionEndTime());
+				long timeDifference = DateUtils.findTimeDifference(startTimeValue.toString(), endTimeValue.toString());
+				String executionTimeValue = DateUtils.convertMiliSecToDayFormat(timeDifference);
 				if (!sno.equalsIgnoreCase(sno1)) {
 					document.setPageSize(pageSize);
 					document.newPage();
@@ -1305,7 +1314,16 @@ public abstract class AbstractSeleniumKeywords {
 						}
 					}
 					
-					for (String str : strArr) {
+					String[] extendedArray = new String[strArr.length+6];
+					extendedArray[extendedArray.length - 6] = startTimeKey;
+					extendedArray[extendedArray.length - 5] = startTimeValue;
+					extendedArray[extendedArray.length - 4] = endTimeKey;
+					extendedArray[extendedArray.length - 3] = endTimeValue;
+					extendedArray[extendedArray.length - 2] = executionTimeKey;
+					extendedArray[extendedArray.length - 1] = executionTimeValue;
+					System.arraycopy(strArr, 0, extendedArray, 0, strArr.length);
+					
+					for (String str : extendedArray) {
 						insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
 					}
 
