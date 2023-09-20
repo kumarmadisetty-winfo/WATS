@@ -289,7 +289,7 @@ public class RunAutomation {
 								logger.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
 								try{
-									int executionId = executionHistory.insertExecHistoryTbl(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
+									int executionId = executionHistory.insertExecHistoryTbl(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), testScriptDto.getExecutedBy());
 									executorMap.put(testSetLineId,executionId);
 									executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
 										customerDetails,executionId);
@@ -335,7 +335,7 @@ public class RunAutomation {
 								} else {
 									if (run) {
 										try{
-											int executionId = executionHistory.insertExecHistoryTbl(Integer.parseInt(metaData.getValue().get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), fetchConfigVO.getStatus1(), testScriptDto.getExecutedBy());
+											int executionId = executionHistory.insertExecHistoryTbl(Integer.parseInt(metaData.getValue().get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), testScriptDto.getExecutedBy());
 											executorMap.put(metaData.getValue().get(0).getTestSetLineId(),executionId);
 											executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 													scriptStatus, customerDetails, executionId);

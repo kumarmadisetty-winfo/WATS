@@ -1224,29 +1224,7 @@ public class DataBaseEntryDao {
 		} catch (Exception e) {
 			throw new WatsEBSException(500, "Exception occured while updating the Paths for test run pdfs", e);
 		}
-	}
-
-	public void insertExecHistoryTbl(String testSetLineId, Date startDate, Date endDate, String status) {
-		Format dateFormat = new SimpleDateFormat(SIMPLE_DATE);
-		String startTime = dateFormat.format(startDate);
-		String endTime = dateFormat.format(endDate);
-		try {
-			Session session = em.unwrap(Session.class);
-			int nextExecNo = getNextExecutionNum();
-			String instQry = "INSERT INTO WIN_TA_EXECUTION_HISTORY (EXECUTION_ID, TEST_SET_LINE_ID, EXECUTION_START_TIME, EXECUTION_END_TIME, CREATED_BY, STATUS) VALUES ('"
-					+ (nextExecNo) + "','" + testSetLineId + "'," + "TO_TIMESTAMP('" + startTime
-					+ "','MM/DD/YYYY HH24:MI:SS')" + "," + "TO_TIMESTAMP('" + endTime + "','MM/DD/YYYY HH24:MI:SS')"
-					+ ",'APP_USER','" + status + "')";
-			Query instQuery = session.createSQLQuery(instQry);
-			instQuery.executeUpdate();
-
-		} catch (Exception e) {
-			throw new WatsEBSException(500,
-					"Exception occured while inserting records for start date, end date and status", e);
-		}
-	}
-	
-	
+	}	
 
 	public List<Object[]> getStatusAndSeqNum(String testSetId) {
 		List<Object[]> listObj = null;

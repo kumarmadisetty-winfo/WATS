@@ -25,13 +25,12 @@ public class WinTaExecutionHistoryServiceImpl implements WinTaExecutionHistorySe
     }
 
     @Override
-    public int insertExecHistoryTbl(int testSetLineId, Date startDate, String status, String createdBy) {
+    public int insertExecHistoryTbl(int testSetLineId, Date startDate, String createdBy) {
         try {
             ExecutionHistory history = new ExecutionHistory();
             history.setTestSetLineId(testSetLineId);
             history.setExecutionStartTime(startDate);
             history.setCreatedBy(createdBy);
-            history.setStatus(status);
             executionHistoryRepository.save(history);
             return history.getExecutionId();
         } catch (Exception e) {
