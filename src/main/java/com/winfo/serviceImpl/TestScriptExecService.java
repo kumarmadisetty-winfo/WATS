@@ -134,7 +134,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	GenerateTestRunPDFService generateTestRunPDFService;
 	
 	@Autowired
-	WinTaExecutionHistoryServiceImpl ExecutionHistory;
+	WinTaExecutionHistoryServiceImpl executionHistory;
 
 	@Autowired
 	private KafkaTemplate<String, MessageQueueDto> kafkaTemp;
@@ -572,7 +572,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
 				try{
-					int exeId = ExecutionHistory.getMaxExecutionIdForTestSetLine(Integer.parseInt(args.getTestSetLineId()));
+					int exeId = executionHistory.getMaxExecutionIdForTestSetLine(Integer.parseInt(args.getTestSetLineId()));
 					dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
 							testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),exeId);
 
