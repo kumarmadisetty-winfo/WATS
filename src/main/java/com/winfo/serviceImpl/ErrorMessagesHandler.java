@@ -1,5 +1,7 @@
 package com.winfo.serviceImpl;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -149,7 +151,7 @@ public class ErrorMessagesHandler {
 			}
 			fetchMetadataVO.setLineErrorMsg(errorMessage);
 			dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, testScriptParamId, "Fail",
-					errorMessage);
+					errorMessage,new Date());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

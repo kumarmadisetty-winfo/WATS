@@ -1712,10 +1712,9 @@ public class RunAutomation {
 						}
 						fetchConfigVO.setStatus1("Pass");
 						logger.info("Successfully Executed the" + "" + actionName);
-						testSetScriptParamRepository.updateTestSetScriptParamEndTime(new Date(),Integer.parseInt(testScriptParamId));
+						testSetScriptParamRepository.updateTestSetScriptParamEndTime(Constants.PASS,new Date(),Integer.parseInt(testScriptParamId));
 						try {
-							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
-									testScriptParamId, "Pass");
+							
 							Optional<String> testSetlineWarningMsgOptional = Optional.ofNullable(fetchMetadataVO)
 									.map(ScriptDetailsDto::getLineErrorMsg)
 									.filter(testSetlineWarningMsg -> !testSetlineWarningMsg.isEmpty());
@@ -1851,7 +1850,6 @@ public class RunAutomation {
 						failcount = failcount + 1;
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
-						testSetScriptParamRepository.updateTestSetScriptParamEndTime(new Date(),Integer.parseInt(testScriptParamId));
 //						dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
 
 						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());

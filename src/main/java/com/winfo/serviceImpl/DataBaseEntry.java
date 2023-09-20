@@ -117,9 +117,9 @@ public class DataBaseEntry {
 	}
 
 	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String error_message)
+			String test_script_param_id, String status, String error_message, Date endTime)
 			throws ClassNotFoundException, SQLException {
-		dao.updateFailedScriptLineStatus(test_script_param_id, error_message);
+		dao.updateFailedScriptLineStatus(test_script_param_id, error_message,endTime);
 	}
 
 	public void updateInProgressScriptLineStatus(String test_script_param_id, String status)
