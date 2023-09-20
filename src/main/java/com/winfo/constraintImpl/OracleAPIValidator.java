@@ -22,6 +22,8 @@ import reactor.core.publisher.Mono;
 public class OracleAPIValidator implements ConstraintValidator<OracleAPIValidation, Integer> {
 
 	public static final Logger logger = Logger.getLogger(OracleAPIValidator.class);
+	
+	OracleAPIValidation oracleAPIValidation;
 
 	@Autowired
 	TestSetRepository testSetRepository;
@@ -34,6 +36,7 @@ public class OracleAPIValidator implements ConstraintValidator<OracleAPIValidati
 
 	@Override
 	public void initialize(OracleAPIValidation constraintAnnotation) {
+		this.oracleAPIValidation =constraintAnnotation;
 	}
 
 	@Override

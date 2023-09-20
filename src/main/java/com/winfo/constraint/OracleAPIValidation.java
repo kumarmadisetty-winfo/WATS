@@ -8,7 +8,7 @@ import com.winfo.constraintImpl.OracleAPIValidator;
 import java.lang.annotation.*;
 
 @Constraint(validatedBy = OracleAPIValidator.class)
-@Target({ElementType.PARAMETER, ElementType.METHOD})
+@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE,ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface OracleAPIValidation {
