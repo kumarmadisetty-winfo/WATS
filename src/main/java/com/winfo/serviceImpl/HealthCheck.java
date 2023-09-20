@@ -96,7 +96,7 @@ public class HealthCheck {
 		} catch (Exception e) {
 			dataBaseEntry.updateTestSetLineStatusForSanity(testSetId);
 			dataBaseEntry.updateEnableFlagForSanity(testSetId);
-			return new ResponseDto(500, Constants.ERROR, e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
 		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, messageUtil.getHealthCheck().getSuccess().getSanityCheckMessage());
 	}

@@ -32,7 +32,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -58,6 +57,7 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.scripts.RunAutomation;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -142,6 +142,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	@Autowired
 	SmartBearService smartBearService;
 
+	@Autowired
+	RunAutomation runAutomation;
+	
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
 
@@ -428,7 +431,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 		} catch (Exception e) {
 
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while uploading generated script to object store",
+			throw new WatsEBSException(500, "Exception Occured while uploading generated script to object store",
 
 					e);
 }
@@ -463,7 +466,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			scriptStatus = dataBaseEntry.getScriptStatus(args.getTestSetLineId());
 			TestSetLine testSetLine = dataBaseEntry.getTestSetLinesRecord(args.getTestSetId(), args.getTestSetLineId());
 			if (args.isManualTrigger() && testSetLine.getExecutionStartTime() == null) {
-				return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+				return new ResponseDto(500, Constants.ERROR,
 						"Script didn't ran atleast once. So Pdf can't be generated");
 			}
 			FetchConfigVO fetchConfigVO = fetchConfigVO(args.getTestSetId());
@@ -479,49 +482,23 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 			String screenShotFolderPath = (fetchConfigVO.getWINDOWS_SCREENSHOT_LOCATION()
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
+
 			String scriptId = testLinesDetails.get(0).getScriptId();
-			String passurl = null;
-			String failurl = null;
-			String detailurl = null;
-			String scripturl = null;
-			if (fetchConfigVO.getIMG_URL() == null) {
-				passurl = customerDetails.getCustomerName() + "/"
-						+ customerDetails.getProjectName() + "/"
-						+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-				failurl = customerDetails.getCustomerName() + "/"
-						+ customerDetails.getProjectName() + "/"
-						+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-				detailurl = customerDetails.getCustomerName() + "/"
-						+ customerDetails.getProjectName() + "/"
-						+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
-				scripturl = customerDetails.getCustomerName() + "/"
-						+ customerDetails.getProjectName() + "/"
-						+ customerDetails.getTestSetName() + "/"
-						+ testLinesDetails.get(0).getSeqNum() + "_"
-						+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
-			} else {
-				passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
-						+ "/" + customerDetails.getProjectName() + "/"
-						+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-				failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
-						+ "/" + customerDetails.getProjectName() + "/"
-						+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-				detailurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
-						+ "/" + customerDetails.getProjectName() + "/"
-						+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
-				scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
-						+ "/" + customerDetails.getProjectName() + "/"
-						+ customerDetails.getTestSetName() + "/"
-						+ testLinesDetails.get(0).getSeqNum() + "_"
-						+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
-			}
+			Map<String, String> urls = runAutomation.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
+
+			//Map<String, String> mapOfUrl=runAutomation.generateUrls( fetchConfigVO,  customerDetails, testLinesDetails);
+			//String passUrl = urls.get("PassUrl");
+			//String failUrl = urls.get("FailUrl");
+			//String detailUrl = urls.get("DetailUrl");
+			//String scriptUrl = urls.get("ScriptUrl");
+			
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
 					customerDetails.getTestSetName(), testLinesDetails.get(0).getSeqNum() + "_");
 
-			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
-					failurl, detailurl, scripturl);
+			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), urls.get("PassUrl"),
+					urls.get("FailUrl"), urls.get("DetailUrl"),  urls.get("ScriptUrl"));
 			Date enddate = null;
 			boolean updateStatus = limitScriptExecutionService.updateStatusCheck(fetchConfigVO,
 					customerDetails.getTestSetId(), testLinesDetails.get(0).getScriptId(),
@@ -549,9 +526,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						args.getTestSetId());
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
 						+ failedScriptRunCount + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
-				 scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+				
+			String scriptUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
 							+ customerDetails.getTestSetName() + "/" + pdfName;
-				post.setP_test_set_line_path(scripturl);
+				post.setP_test_set_line_path(scriptUrl);
 				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 			}
 //			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
@@ -618,9 +596,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if (e instanceof WatsEBSException) {
 				throw e;
 			}
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while generating the pdf", e);
+			throw new WatsEBSException(500, "Exception occured while generating the pdf", e);
 		}
-		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, null);
+		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
 
 
@@ -738,20 +716,20 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				fetchConfigVO.setStarttime(startDate);
 				fetchConfigVO.setEndtime(endDate);
 				generateTestRunPDFService.testRunPdfGeneration(testSetId, fetchConfigVO);
-				response = new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "The process of generating the PDF has started, please check back after some time.");
+				response = new ResponseDto(200, Constants.SUCCESS, "The process of generating the PDF has started, please check back after some time.");
 			} catch (Exception e) {
 				dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
-				response = new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
+				response = new ResponseDto(500, Constants.ERROR, e.getMessage());
 			}
 		} else {
 			dataBaseEntry.updateStatusOfPdfGeneration(testSetId,Constants.PASSED);
-			response = new ResponseDto(HttpStatus.OK.value(), Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
+			response = new ResponseDto(200, Constants.WARNING, "Cannot generate PDF. Scripts are In-Progress or In-Queue");
 		}
 		return response;
 	}
 
 
-	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+	//@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
@@ -834,7 +812,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				break;
 			}
 		}
-		response.setStatusCode(HttpStatus.OK.value());
+		response.setStatusCode(200);
 		response.setStatusDescr("Updated Successfully");
 		response.setStatusMessage(Constants.SUCCESS);
 		return response;
