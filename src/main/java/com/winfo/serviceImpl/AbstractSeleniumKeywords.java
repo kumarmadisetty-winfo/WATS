@@ -1262,9 +1262,10 @@ public abstract class AbstractSeleniumKeywords {
 				String startTimeKey = START_TIME;
 				String endTimeKey = END_TIME;
 				String executionTimeKey = EXECUTION_TIME;
+				TestSetLine testSetLine = databaseentry.getTestSetLineRecordsByTestSetLineId(metaDataVO.getTestSetLineId());
 				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
-				String startTimeValue = dateFormat.format(metaDataVO.getExecutionStartTime());
-				String endTimeValue = dateFormat.format(metaDataVO.getExecutionEndTime());
+				String startTimeValue = dateFormat.format(testSetLine.getExecutionStartTime());
+				String endTimeValue = dateFormat.format(testSetLine.getExecutionEndTime());
 				long timeDifference = DateUtils.findTimeDifference(startTimeValue.toString(), endTimeValue.toString());
 				String executionTimeValue = DateUtils.convertMiliSecToDayFormat(timeDifference);
 				if (!sno.equalsIgnoreCase(sno1)) {

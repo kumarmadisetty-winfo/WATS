@@ -39,6 +39,4 @@ public class ScriptDetailsDto {
 	private String targetApplicationName;
 	private String oracleReleaseYear;
 	private String uniqueMandatory;
-	private String executionStartTime;
-	private String executionEndTime;
 }
