@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,14 +35,14 @@ public class WinTaExecutionHistoryServiceImpl implements WinTaExecutionHistorySe
             executionHistoryRepository.save(history);
             return history.getExecutionId();
         } catch (Exception e) {
-            throw new WatsEBSException(500, "Exception occurred while inserting records", e);
+            throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while inserting records", e);
         }
     }
 
     @Override
     public void updateExecHistoryTbl(int executionId,Date endDate, String status, String lastUpdatedBy) {
         try {
-            ExecutionHistory history = executionHistoryRepository.findById((int) executionId).orElse(null);
+            ExecutionHistory history = executionHistoryRepository.findById(executionId).orElse(null);
             if (history != null) {
                 history.setExecutionEndTime(endDate);
                 history.setStatus(status);
@@ -49,7 +50,7 @@ public class WinTaExecutionHistoryServiceImpl implements WinTaExecutionHistorySe
                 executionHistoryRepository.save(history);
             }
         } catch (Exception e) {
-            throw new WatsEBSException(500, "Exception occurred while updating records", e);
+            throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while updating records", e);
         }
     }
     public int getMaxExecutionIdForTestSetLine(int testSetLineId) {
@@ -62,7 +63,7 @@ public class WinTaExecutionHistoryServiceImpl implements WinTaExecutionHistorySe
                 throw new NoSuchElementException("No maximum executionId found for testSetLineId: " + testSetLineId);
             }
         } catch (Exception e) {
-            throw new WatsEBSException(500, "Exception occurred while retrieving the maximum executionId", e);
+            throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while retrieving the maximum executionId", e);
         }
     }
 }
