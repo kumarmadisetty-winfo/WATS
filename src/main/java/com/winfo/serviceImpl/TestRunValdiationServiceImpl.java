@@ -19,10 +19,12 @@ import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.TestSetScriptParamRepository;
+import com.winfo.repository.ConfigurationUsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.model.LookUpCode;
 import com.winfo.model.TestSet;
+import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.service.TestRunValidationService;
 import com.winfo.utils.Constants;
@@ -50,7 +52,9 @@ public class TestRunValdiationServiceImpl implements TestRunValidationService {
 	@Autowired
 	LookUpCodeRepository lookUpCodeRepository;
 
-	@SuppressWarnings("unchecked")
+	@Autowired
+	ConfigurationUsersRepository configurationUsersRepository;
+
 	@Override
 	public ResponseDto validateTestRun(Integer testSetId) throws Exception {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
@@ -63,89 +67,28 @@ public class TestRunValdiationServiceImpl implements TestRunValidationService {
 					testSet.getConfigurationId());
 			testSet.getTestRunScriptDatalist().parallelStream().forEach(testSetLine -> {
 				testSetLine.setValidationStatus(Constants.VALIDATION_SUCCESS);
-				List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.getTestRunScriptParam().parallelStream()
-						.filter(testSetScriptParam -> !"NA".equalsIgnoreCase(testSetScriptParam.getValidationType())
-								&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType())).collect(Collectors.toList());
+				List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.getTestRunScriptParam()
+						.parallelStream()
+						.filter(testSetScriptParam -> (!Constants.NA
+								.equalsIgnoreCase(testSetScriptParam.getValidationType())
+								&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
+								|| Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()))
+						.collect(Collectors.toList());
 				if (validationAddedScriptSteps.size() > 0) {
-					validationAddedScriptSteps.parallelStream().forEach(testSetLineParam -> {
-						if (Constants.API_VALIDATION.equalsIgnoreCase(testSetLineParam.getValidationType())
-								&& !"NA".equalsIgnoreCase(testSetLineParam.getValidationName())) {
-							try {
-								LookUpCode lookUpCode = lookUpCodeRepository.findByLookUpNameAndLookUpCode(
-										testSetLineParam.getValidationType(), testSetLineParam.getValidationName());
-								WebClient webClient = WebClient.builder().baseUrl(basePath)
-										.defaultHeader("Authorization", basicAuthHeader(username, password)).build();
-								String result = webClient.get()
-										.uri(lookUpCode.getTargetCode() + testSetLineParam.getInputValue()).retrieve()
-										.onStatus(httpStatus -> httpStatus.is4xxClientError() || httpStatus.is5xxServerError(),clientResponse -> {
-											if(clientResponse.statusCode().value()==401) {
-												logger.error("Unauthoriazed : " + clientResponse.statusCode());
-											}
-											else if (clientResponse.statusCode().is4xxClientError()) {
-												logger.error("Client side error: " + clientResponse.statusCode());
-											} else {
-												logger.error("Server side error: " + clientResponse.statusCode());
-											}
-											return Mono.empty();
-										})
-										.bodyToMono(String.class).block();
-								if (result != null) {
-									ObjectMapper objectMapper = new ObjectMapper();
-									Map<String, Object> jsonMap = null;
-									try {
-										jsonMap = objectMapper.readValue(result, Map.class);
-									} catch (JsonProcessingException e) {
-										logger.error("Error occured while parsing external JSON: "+ e.getMessage());
-									}
-									Object itemsObject = jsonMap.get("items");
-									if (itemsObject instanceof List) {
-										List<Map<String, Object>> itemsList = (List<Map<String, Object>>) itemsObject;
-										if (!itemsList.isEmpty() && itemsList.get(0).containsValue(testSetLineParam.getInputValue().toUpperCase())) {
-											logger.info("Given Input Data is valid");
-											testSetLineParam.setValidationStatus(Constants.VALIDATION_SUCCESS);
-										} else {
-											logger.error("Given Input Data is not valid");
-											testSetLineParam.setValidationStatus(Constants.VALIDATION_FAIL);
-											testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
-										}
-									}
-								} else {
-									logger.error("Error occurred or no response received from the external API");
-									testSetLineParam.setValidationStatus(Constants.VALIDATION_FAIL);
-									testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
-								}
-							} catch (Exception e) {
-								logger.error("Internal server error. Please contact to the administrator");
-								testSetLineParam.setValidationStatus(Constants.VALIDATION_FAIL);
-								testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
-							}
-						}
-						else if(Constants.REGULAR_EXPRESSION.equalsIgnoreCase(testSetLineParam.getValidationType())
-								&& !"NA".equalsIgnoreCase(testSetLineParam.getValidationName())) {
-							LookUpCode lookUpCode = lookUpCodeRepository.findByMeaningAndLookUpName(
-									testSetLineParam.getValidationName(),testSetLineParam.getValidationType());
-							if(isValidDate(testSetLineParam.getInputValue(),lookUpCode.getMeaning())) {
-								logger.info("Given Input Data is valid");
-								testSetLineParam.setValidationStatus(Constants.VALIDATION_SUCCESS);
-							}
-							else {
-								logger.error("Given Input Data is not valid");
-								testSetLineParam.setValidationStatus(Constants.VALIDATION_FAIL);
-								testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
-							}
-						}
-					});
+					validateScript(testSet, testSetLine, validationAddedScriptSteps, basePath, username, password);
 				} else {
 					logger.info("No Validation added to the script");
 					testSetLine.setValidationStatus(Constants.No_VALIDATION);
 				}
-				testSetLinesRepository.save(testSetLine);
+				testSetLinesRepository.updateValidationStatus(testSetLine.getTestRunScriptId(),testSetLine.getValidationStatus());
 			});
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, testSet.getTestRunName()+" is validated successfully");
-			
-		}catch (Exception e) {
-			logger.error("Internal server error. Please contact to the administrator");
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, testSet.getTestRunName()+ "No changes found in ");
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
+					testSet.getTestRunName() + " is validated successfully");
+
+		} catch (Exception e) {
+			logger.error("Internal server error. Please contact to the administrator: "+e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					testSet.getTestRunName() + "is not validated successfully");
 		}
 	}
 
@@ -155,16 +98,112 @@ public class TestRunValdiationServiceImpl implements TestRunValidationService {
 		String base64Credentials = java.util.Base64.getEncoder().encodeToString(credentialsBytes);
 		return "Basic " + base64Credentials;
 	}
-	
-	 private boolean isValidDate(String date, String dateFormat) {
-	        DateFormat dateFormatChecker = new SimpleDateFormat(dateFormat);
-	        dateFormatChecker.setLenient(false);
-	        try {
-	        	dateFormatChecker.parse(date);
-	            return true;
-	        } catch (ParseException e) {
-	        	logger.error("Given date is not valid for expected format");
-	            return false;
-	        }
-	    }
+
+	private boolean isValidDate(String date, String dateFormat) {
+		DateFormat dateFormatChecker = new SimpleDateFormat(dateFormat);
+		dateFormatChecker.setLenient(false);
+		try {
+			dateFormatChecker.parse(date);
+			return true;
+		} catch (ParseException e) {
+			logger.error("Given date is not valid for expected format: "+e.getMessage());
+			return false;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void validateScript(TestSet testSet, TestSetLine testSetLine,
+			List<TestSetScriptParam> validationAddedScriptSteps, String basePath, String username, String password) {
+		validationAddedScriptSteps.parallelStream().forEach(testSetScriptParam -> {
+			testSetScriptParam.setValidationStatus(Constants.VALIDATION_SUCCESS);
+			testSetScriptParam.setValidationErrorMessage(null);
+			if (Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
+					&& "".equals(testSetScriptParam.getInputValue())) {
+				testSetScriptParam.setValidationErrorMessage("Input Value is mandetory for this step");
+				testSetScriptParam.setValidationStatus(Constants.VALIDATION_FAIL);
+				testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
+			} else if (Constants.API_VALIDATION.equalsIgnoreCase(testSetScriptParam.getValidationType())
+					&& !Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationName())) {
+				try {
+					LookUpCode lookUpCode = lookUpCodeRepository.findByLookUpNameAndLookUpCode(
+							testSetScriptParam.getValidationType(), testSetScriptParam.getValidationName());
+					if ("Get UserId".equalsIgnoreCase(testSetScriptParam.getValidationName())) {
+						long userCount = configurationUsersRepository
+								.countByUserName(testSetScriptParam.getInputValue());
+						if (userCount == 0) {
+							testSetScriptParam.setValidationStatus(Constants.VALIDATION_FAIL);
+							testSetScriptParam.setValidationErrorMessage(
+									testSetScriptParam.getInputParameter() + " is not added in the configuration");
+							testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
+							return;
+						}
+					}
+					WebClient webClient = WebClient.builder().baseUrl(basePath)
+							.defaultHeader("Authorization", basicAuthHeader(username, password)).build();
+					String result = webClient.get().uri(lookUpCode.getTargetCode() + testSetScriptParam.getInputValue())
+							.retrieve()
+							.onStatus(httpStatus -> httpStatus.is4xxClientError() || httpStatus.is5xxServerError(),
+									clientResponse -> {
+										if (clientResponse.statusCode().value() == 503) {
+											testSetScriptParam.setValidationErrorMessage(
+													"Not able to Validate. Oracle service is unavailable at this moment");
+											logger.warn(
+													"Not able to Validate. Oracle service is unavailable at this moment");
+										} else if (clientResponse.statusCode().is4xxClientError()) {
+											testSetScriptParam.setValidationErrorMessage(
+													"Server error: " + clientResponse.statusCode());
+											logger.warn("Oracle server error: " + clientResponse.statusCode());
+										} else {
+											testSetScriptParam.setValidationErrorMessage(
+													"Oracle server error: " + clientResponse.statusCode());
+											logger.warn("Server side error: " + clientResponse.statusCode());
+										}
+										return Mono.empty();
+									})
+							.bodyToMono(String.class).block();
+					if (result != null) {
+						ObjectMapper objectMapper = new ObjectMapper();
+						Map<String, Object> jsonMap = null;
+						try {
+							jsonMap = objectMapper.readValue(result, Map.class);
+						} catch (JsonProcessingException e) {
+							logger.error("Error occured while parsing external JSON: " + e.getMessage());
+						}
+						Object itemsObject = jsonMap.get("items");
+						if (itemsObject instanceof List) {
+							List<Map<String, Object>> itemsList = (List<Map<String, Object>>) itemsObject;
+							if (itemsList.isEmpty() || !itemsList.get(0)
+									.containsValue(testSetScriptParam.getInputValue().toUpperCase())) {
+								logger.warn("Given Input Data is not valid");
+								testSetScriptParam.setValidationErrorMessage("Given Input Data is not valid");
+								testSetScriptParam.setValidationStatus(Constants.VALIDATION_FAIL);
+								testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
+							}
+						}
+					} else {
+						logger.warn("Error occurred or no response received from the external API");
+						testSetScriptParam.setValidationErrorMessage("Error occurred or no response received from the external API");
+						testSetScriptParam.setValidationStatus(Constants.VALIDATION_FAIL);
+						testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
+					}
+				} catch (Exception e) {
+					logger.error("Internal server error. Please contact to the administrator: "+e.getMessage());
+					testSetScriptParam.setValidationErrorMessage("Internal server error. Please contact to the administrator");
+					testSetScriptParam.setValidationStatus(Constants.VALIDATION_FAIL);
+					testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
+				}
+			} else if (Constants.REGULAR_EXPRESSION.equalsIgnoreCase(testSetScriptParam.getValidationType())
+					&& !Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationName())) {
+				LookUpCode lookUpCode = lookUpCodeRepository.findByMeaningAndLookUpName(
+						testSetScriptParam.getValidationName(), testSetScriptParam.getValidationType());
+				if (!isValidDate(testSetScriptParam.getInputValue(), lookUpCode.getMeaning())) {
+					logger.warn("Given Input Data is not valid");
+					testSetScriptParam.setValidationErrorMessage("Given Input Data is not valid");
+					testSetScriptParam.setValidationStatus(Constants.VALIDATION_FAIL);
+					testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
+				}
+			}
+			testSetScriptParamRepository.updateValidationStatusAndValidationErrorMessage(testSetScriptParam.getTestRunScriptParamId(),testSetScriptParam.getValidationStatus(),testSetScriptParam.getValidationErrorMessage());
+		});
+	}
 }

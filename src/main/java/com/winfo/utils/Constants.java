@@ -143,4 +143,6 @@ public class Constants {
 	public static final String VALIDATION_SUCCESS="Validation Success";
 	public static final String VALIDATION_FAIL="Validation Failed";
 	public static final String No_VALIDATION="No Validation";
+	public static final String MANDETORY="Mandatory";
+	public static final String NA="NA";
 	}

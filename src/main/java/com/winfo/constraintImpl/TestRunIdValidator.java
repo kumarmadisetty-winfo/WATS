@@ -15,9 +15,12 @@ public class TestRunIdValidator implements ConstraintValidator<TestRunIdValidati
 	@Autowired
 	TestSetRepository testSetRepository;
 	
-    @Override
-    public void initialize(TestRunIdValidation constraintAnnotation) {
-    }
+	TestRunIdValidation testRunIdValidation;
+
+	@Override
+	public void initialize(TestRunIdValidation constraintAnnotation) {
+	    this.testRunIdValidation =constraintAnnotation;
+	}
 
     @Override
     public boolean isValid(Integer testSetId, ConstraintValidatorContext context) {

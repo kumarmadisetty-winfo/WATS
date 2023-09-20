@@ -34,5 +34,10 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	@Transactional
 	@Query("UPDATE TestSetScriptParam s SET s.lineExecutionStatus = 'New', s.lineErrorMessage = NULL WHERE s.testSetLine.testRunScriptId IN (SELECT l.testRunScriptId FROM TestSetLine l WHERE l.testRun.testRunId = :testSetId AND l.enabled = 'Y' AND UPPER(l.status) != 'PASS')")
 	int updateLineExecutiStatusAndLineErrorMsg(int testSetId);
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE TestSetScriptParam SET validationStatus =:validationStatus , validationErrorMessage =:validationErrorMessage WHERE testRunScriptParamId=:testRunScriptParamId")
+	int updateValidationStatusAndValidationErrorMessage(int testRunScriptParamId, String validationStatus,String validationErrorMessage);
 
 }

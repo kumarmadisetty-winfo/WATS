@@ -8,7 +8,9 @@ import com.winfo.constraint.TestRunIdValidation;
 import com.winfo.vo.ResponseDto;
 
 @Service
+@Validated
 public interface TestRunValidationService {
 	
-	public  ResponseDto validateTestRun(@Validated @TestRunIdValidation @OracleAPIValidation Integer testSetId) throws Exception;
+	public  ResponseDto validateTestRun(@TestRunIdValidation @OracleAPIValidation Integer testSetId) throws Exception;
+	
 }

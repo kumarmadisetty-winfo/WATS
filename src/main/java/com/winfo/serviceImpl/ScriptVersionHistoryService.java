@@ -97,7 +97,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, updatedScriptMasterVO.getScriptNumber()+" is updated successfully");
 		} catch (Exception e) {
 			logger.error(updatedScriptMasterVO.getScriptNumber()+"has failed "+e.getMessage());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,updatedScriptMasterVO.getScriptNumber()+"has failed "+ e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,updatedScriptMasterVO.getScriptNumber()+" has failed "+ e.getMessage());
 		}
 	}
 	
