@@ -26,8 +26,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -55,6 +53,7 @@ import com.winfo.reports.PDFGenerator;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
+import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.service.SFInterface;
 import com.winfo.service.WoodInterface;
@@ -150,6 +149,9 @@ public class RunAutomation {
 	SFInterface sfInterface;
 	@Autowired
 	UpdateTestSetRecords updateTestSetService;
+	
+	@Autowired
+	TestSetScriptParamRepository testSetScriptParamRepository;
 	
 	
 
@@ -746,6 +748,7 @@ public class RunAutomation {
 						excelMetadataListVO.add(fetchMetadataVO);
 					} else if (!isError) {
 						dataBaseEntry.updateInProgressScriptLineStatus(testScriptParamId, "In-Progress");
+						testSetScriptParamRepository.updateTestSetScriptParamStartTime(new Date(),Integer.parseInt(testScriptParamId));
 						switch (actionName) {
 
 						case "Login into Application":
@@ -1714,9 +1717,9 @@ public class RunAutomation {
 						}
 						fetchConfigVO.setStatus1("Pass");
 						logger.info("Successfully Executed the" + "" + actionName);
+						testSetScriptParamRepository.updateTestSetScriptParamEndTime(Constants.PASS,new Date(),null,Integer.parseInt(testScriptParamId));
 						try {
-							dataBaseEntry.updatePassedScriptLineStatus(fetchMetadataVO, fetchConfigVO,
-									testScriptParamId, "Pass");
+							
 							Optional<String> testSetlineWarningMsgOptional = Optional.ofNullable(fetchMetadataVO)
 									.map(ScriptDetailsDto::getLineErrorMsg)
 									.filter(testSetlineWarningMsg -> !testSetlineWarningMsg.isEmpty());
@@ -1852,7 +1855,6 @@ public class RunAutomation {
 						failcount = failcount + 1;
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
-
 //						dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
 
 						dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());

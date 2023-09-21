@@ -30,6 +30,10 @@ public class GraphQLService {
 	private String clientSecret;
 	@Value("${jira.xray.projectKey}")
 	private String projectKey;
+	@Value("${jira.xray.authentication.url}")
+	private String authenticationUrl;
+	@Value("${jira.xray.request.url}")
+	private String requestUrl;
 
 	public String createTestRunInJiraXrayCloud(CustomerProjectDto customerDetails) throws Exception {
 
@@ -90,7 +94,7 @@ public class GraphQLService {
 		graphQLRequestBody.setVariables(variables);
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "");
-		String response = webClient.post().uri("http://xray.cloud.xpand-it.com/api/v1/graphql")
+		String response = webClient.post().uri(requestUrl)
 				.headers(headersHttp -> headersHttp.addAll(headers)).syncBody(graphQLRequestBody).retrieve()
 				.bodyToMono(String.class).block();
 		System.out.println(response);
@@ -138,7 +142,7 @@ public class GraphQLService {
 		graphQLRequestBody.setVariables(variables);
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "");
-		String response = webClient.post().uri("http://xray.cloud.xpand-it.com/api/v1/graphql")
+		String response = webClient.post().uri(requestUrl)
 				.headers(headersHttp -> headersHttp.addAll(headers)).syncBody(graphQLRequestBody).retrieve()
 				.bodyToMono(String.class).block();
 		System.out.println(response);
@@ -151,8 +155,9 @@ public class GraphQLService {
 		ObjectMapper mapper = new ObjectMapper();
 		WebClient webClient = WebClient.builder().build();
 		System.out.println(mapper.writeValueAsString(clientCredMap));
-		return webClient.post().uri("http://xray.cloud.xpand-it.com/api/v1/authenticate").contentType(MediaType.APPLICATION_JSON)
-				.syncBody(mapper.writeValueAsString(clientCredMap)).retrieve().bodyToMono(String.class).block();
+		return webClient.post().uri(authenticationUrl)
+				.contentType(MediaType.APPLICATION_JSON).syncBody(mapper.writeValueAsString(clientCredMap)).retrieve()
+				.bodyToMono(String.class).block();
 	}
 
 	public JSONObject executeCommand(String query, String variable) throws Exception {
@@ -161,7 +166,7 @@ public class GraphQLService {
 		String accessToken = accessToken();
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + accessToken.replace("\"", ""));
-		String response = webClient.post().uri("http://xray.cloud.xpand-it.com/api/v1/graphql")
+		String response = webClient.post().uri(requestUrl)
 				.headers(headersHttp -> headersHttp.addAll(headers)).syncBody(graphQLRequestBody).retrieve()
 				.bodyToMono(String.class).block();
 		System.out.println(response);

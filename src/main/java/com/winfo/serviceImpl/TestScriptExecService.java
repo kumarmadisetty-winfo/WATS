@@ -18,10 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -34,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -58,6 +53,7 @@ import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.scripts.RunAutomation;
+import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -141,6 +137,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	
 	@Autowired
 	SmartBearService smartBearService;
+	
+	@Autowired
+	TestSetScriptParamRepository testSetScriptParamRepository;
 
 	@Autowired
 	RunAutomation runAutomation;
@@ -655,18 +654,23 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public void updateScriptStepStatus(UpdateScriptStepStatus args) throws ClassNotFoundException, SQLException {
+	public void updateScriptStepStatus(UpdateScriptStepStatus scriptParamDetails)
+			throws ClassNotFoundException, SQLException {
 		String status = SCRIPT_PARAM_STATUS.FAIL.getLabel();
-		if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
+		if (scriptParamDetails.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
 			status = SCRIPT_PARAM_STATUS.PASS.getLabel();
-		} else if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
+		} else if (scriptParamDetails.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
 			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
 		}
-		if (StringUtils.isBlank(args.getResult())) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
+		if (StringUtils.isBlank(scriptParamDetails.getResult())) {
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(),
+					scriptParamDetails.getMessage(), null, Integer.parseInt(scriptParamDetails.getScriptParamId()));
 		} else {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
-					args.getMessage());
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(), null,
+					scriptParamDetails.getResult(), Integer.parseInt(scriptParamDetails.getScriptParamId()));
+
 		}
 	}
 
