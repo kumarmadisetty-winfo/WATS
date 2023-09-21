@@ -52,6 +52,7 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.scripts.RunAutomation;
 import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
@@ -142,7 +143,6 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
-
 	}
 
 	public void executorMethodPyJab(TestScriptDto testScriptDto, FetchConfigVO fetchConfigVO,
@@ -479,22 +479,21 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 
 			String scriptId = testLinesDetails.get(0).getScriptId();
-			String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()+"/"+ customerDetails.getProjectName()  + "/"
-					+ customerDetails.getTestSetName() + "/Passed_Report.pdf";
-			String failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() +"/"
-					+ customerDetails.getTestSetName() + "/Failed_Report.pdf" ;
-			String detailurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()+ "/"+ customerDetails.getProjectName()  + "/"
-					+ customerDetails.getTestSetName() +"/Detailed_Report.pdf";
-			String scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
-					+ customerDetails.getTestSetName() + "/" + testLinesDetails.get(0).getSeqNum() + "_"
-					+ testLinesDetails.get(0).getScriptNumber() + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
+			Map<String, String> urls = FileUtil.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
+
+			//Map<String, String> mapOfUrl=runAutomation.generateUrls( fetchConfigVO,  customerDetails, testLinesDetails);
+			//String passUrl = urls.get("PassUrl");
+			//String failUrl = urls.get("FailUrl");
+			//String detailUrl = urls.get("DetailUrl");
+			//String scriptUrl = urls.get("ScriptUrl");
+			
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
 					customerDetails.getTestSetName(), testLinesDetails.get(0).getSeqNum() + "_");
 
-			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
-					failurl, detailurl, scripturl);
+			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), urls.get("PassUrl"),
+					urls.get("FailUrl"), urls.get("DetailUrl"),  urls.get("ScriptUrl"));
 			Date enddate = null;
 			boolean updateStatus = limitScriptExecutionService.updateStatusCheck(fetchConfigVO,
 					customerDetails.getTestSetId(), testLinesDetails.get(0).getScriptId(),
@@ -522,9 +521,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						args.getTestSetId());
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
 						+ failedScriptRunCount + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
-				 scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+				
+			String scriptUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
 							+ customerDetails.getTestSetName() + "/" + pdfName;
-				post.setP_test_set_line_path(scripturl);
+				post.setP_test_set_line_path(scriptUrl);
 				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 			}
 //			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
@@ -729,7 +729,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 
-	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+	//@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}

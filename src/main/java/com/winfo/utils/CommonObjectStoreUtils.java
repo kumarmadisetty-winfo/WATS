@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -74,10 +75,16 @@ public class CommonObjectStoreUtils {
 						MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 		    }catch (IOException e) {
 		    	log.error("Exception occurred while returning file from service");
-				throw new WatsEBSException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
+
 			} catch (Exception e) {
 				log.error("Exception occurred while downloading "+fileName+" from Object Store");
-		    	throw new WatsEBSException(500,MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getDownloadFailed(),fileName), e);
+		    
+
+				throw new WatsEBSException(HttpStatus.FORBIDDEN.value(), messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
+			} catch (Exception e) {
+				log.error("Exception occurred while downloading "+fileName+" from Object Store");
+		    	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getDownloadFailed(),fileName), e);
+
 		    }
 	}
 	
@@ -103,9 +110,13 @@ public class CommonObjectStoreUtils {
 					MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 	    }catch (IOException e) {
 	    	log.error("Exception occurred while fetching file from service");
-			throw new WatsEBSException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
+
 		}  catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occurred while reading pdf in Object Storage", e);
+		
+			throw new WatsEBSException(HttpStatus.FORBIDDEN.value(), messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
+		}  catch (Exception e) {
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while reading pdf in Object Storage", e);
+
 		}
 	}
 }

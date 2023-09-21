@@ -122,7 +122,7 @@ public class TestScriptExecController {
 	}
 
 	@ResponseBody
-	@GetMapping(value = "/generateTestRunPdfs/{testSetId}")
+	@PostMapping(value = "/generateTestRunPdfs/{testSetId}")
 	@ApiOperation( value="Generate Test Run PDF",notes = "To generate TestRun pdf(Passed, Failed and Detailed), we should pass testSetId")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Generated TestRunPdfs Succesfully")})
 	public ResponseDto generateTestRunPdfs(@PathVariable String testSetId) {

@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.controller.JobController;
@@ -161,7 +162,9 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 			}
 		} catch (Exception e) {
 			logger.error("Failed to get Failed Script run count " + e.getMessage());
-			throw new WatsEBSException(500,
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while selecting the run count for Script level pdf", e);
 		}
 		return id;
@@ -177,7 +180,9 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 
 		} catch (Exception e) {
 			logger.error("Failed to update Failed Script run count " + e.getMessage());
-			throw new WatsEBSException(500,
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while updating the fail run count for script level pdf", e);
 		}
 	}

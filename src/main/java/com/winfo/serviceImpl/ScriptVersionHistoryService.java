@@ -112,7 +112,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			logger.info("Successfully saved details in file...!!");
 		} catch (IOException e) {
 			logger.error("Failed to save details in the file " +e.getMessage());
-			throw new WatsEBSException(500, "Not able to save the file!", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to save the file!", e);
 		}
 		uploadObjectToObjectStore(localPath + FORWARD_SLASH + encodedName, objectStorePath, encodedName);
 	
@@ -154,7 +154,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			return map;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSException(500, "Not able to get the history list!", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to get the history list!", e);
 		}
 	}
 
@@ -178,7 +178,7 @@ public class ScriptVersionHistoryService extends AbstractSeleniumKeywords {
 			return scriptMaterVO;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSException(500, "Not able to get the history!", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to get the history!", e);
 		}
 	}
 

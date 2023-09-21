@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.winfo.dao.LimitScriptExecutionDao;
@@ -202,7 +203,9 @@ public class LimitScriptExecutionService {
 			logger.info("data added successfully");
 		} catch (Exception e) {
 			logger.error("testrun data not added " + e);
-			throw new WatsEBSException(500, "Exception occurred while inserting test run pdf records", e);
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while inserting test run pdf records", e);
+
 		}
 	}
 	
@@ -232,7 +235,9 @@ public class LimitScriptExecutionService {
 				return true;
 			}
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occurred while checking update status of Script Run", e);
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while checking update status of Script Run", e);
+
 		}
 		return false;
 	}

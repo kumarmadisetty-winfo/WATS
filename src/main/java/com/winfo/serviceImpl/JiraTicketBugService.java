@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Service;
@@ -309,12 +310,12 @@ public class JiraTicketBugService {
 		String finalIssuekey=String.join("','", issueKeyList);
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		if (count > 0) {
-			response.setStatus(200);
+			response.setStatus(HttpStatus.OK.value());
 			response.setStatusMessage("SUCCESS");
 			response.setDescription("Issue Created Successfully for script number " + scriptNumber.toString() + "," + "Jira Ticket Number " + "[" + finalIssuekey + "]");
 			bean.add(response);
 		} else {
-			response.setStatus(400);
+			response.setStatus(HttpStatus.BAD_REQUEST.value());
 			response.setStatusMessage("ERROR");
 			response.setDescription("Issue already exists for script number " + scriptNumber.toString());
 			bean.add(response);
@@ -322,7 +323,7 @@ public class JiraTicketBugService {
 		}
 		} catch (Exception e) {
 			DomGenericResponseBean response = new DomGenericResponseBean();
-			response.setStatus(400);
+			response.setStatus(HttpStatus.BAD_REQUEST.value());
 			response.setStatusMessage("ERROR");
 			response.setDescription(messageUtil.getJiraTicketBugService().getError().getNotAbleToCreateIssue());
 			bean.add(response);
