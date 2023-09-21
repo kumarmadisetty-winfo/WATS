@@ -4,6 +4,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 import com.winfo.constraintImpl.TestRunIdValidator;
+import com.winfo.utils.Constants;
 
 import java.lang.annotation.*;
 
@@ -12,7 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface TestRunIdValidation {
-	public abstract String message() default "Invalid Test Set Id";
+	public abstract String message() default Constants.INVALID_TEST_SET_ID;
 
     Class<?>[] groups() default {};
 

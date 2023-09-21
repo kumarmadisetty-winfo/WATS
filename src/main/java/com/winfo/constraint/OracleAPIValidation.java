@@ -4,6 +4,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 import com.winfo.constraintImpl.OracleAPIValidator;
+import com.winfo.utils.Constants;
 
 import java.lang.annotation.*;
 
@@ -12,7 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface OracleAPIValidation {
-	public abstract String message() default "Invalid credentails in the configuration";
+	public abstract String message() default Constants.INVALID_CREDENTIALS_CONFIG;
 
     Class<?>[] groups() default {};
 

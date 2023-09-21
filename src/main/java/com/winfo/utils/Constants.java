@@ -145,4 +145,16 @@ public class Constants {
 	public static final String No_VALIDATION="No Validation";
 	public static final String MANDETORY="Mandatory";
 	public static final String NA="NA";
+	public static final String GET_USER_ID="Get UserId";
+	public static final String INVALID_TEST_SET_ID="Invalid Test Run";
+	public static final String INVALID_CREDENTIALS_CONFIG="Invalid credentails in the configuration";
+	public static final String INVALID_CREDENTIALS_CONFIG_MESSAGE="Not able to Validate. Please check the credentials in the configuration";
+	public static final String INVALID_CREDENTIALS_AND_API_BASE_URL_CONFIG_MESSAGE="Not able to Validate. Please check the API_BASE_URL and the credentials in the configuration";
+	public static final String INVALID_API_BASE_URL_CONFIG_MESSAGE="Not able to Validate. Please check the API_BASE_URL in the configuration";
+	public static final String ORACLE_SERVICE_UNAVAILABLE="Not able to Validate. Oracle service is unavailable at this moment";
+	public static final String INVALID_INPUT_DATA="Given Input Data is not valid";
+	public static final String NO_RESPOSNE_EXTERNAL_API="No response received from the external API";
+	public static final String INTERNAL_SERVER_ERROR="Internal server error. Please contact to the administrator";
+	public static final String ORACLE_CLIENT_ERROR="Oracle client side error: ";
+	public static final String ORACLE_SERVER_ERROR="Oracle server side error: ";
 	}

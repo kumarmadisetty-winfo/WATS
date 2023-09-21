@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.winfo.constraint.TestRunIdValidation;
 import com.winfo.repository.TestSetRepository;
+import com.winfo.utils.Constants;
 
 @Component
 public class TestRunIdValidator implements ConstraintValidator<TestRunIdValidation, Integer> {
@@ -26,7 +27,7 @@ public class TestRunIdValidator implements ConstraintValidator<TestRunIdValidati
     public boolean isValid(Integer testSetId, ConstraintValidatorContext context) {
         if (testSetId == null) {
         	context.disableDefaultConstraintViolation();
-        	context.buildConstraintViolationWithTemplate( "Invalid Test Run").addConstraintViolation();
+        	context.buildConstraintViolationWithTemplate( Constants.INVALID_TEST_SET_ID).addConstraintViolation();
             return false;
         }
         else {
@@ -35,7 +36,7 @@ public class TestRunIdValidator implements ConstraintValidator<TestRunIdValidati
         		return true;
         	}else {
         		context.disableDefaultConstraintViolation();
-            	context.buildConstraintViolationWithTemplate( "Invalid Test Run").addConstraintViolation();
+            	context.buildConstraintViolationWithTemplate( Constants.INVALID_TEST_SET_ID).addConstraintViolation();
                 return false;
         	}
         }        
