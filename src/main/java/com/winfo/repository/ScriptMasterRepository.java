@@ -3,8 +3,10 @@ package com.winfo.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.model.ScriptMaster;
 
@@ -25,6 +27,11 @@ public interface ScriptMasterRepository extends JpaRepository<ScriptMaster, Inte
 	@Query("from ScriptMaster where scriptId in :listOfScriptIds" )
 	List<ScriptMaster> findByScriptIds(List<Integer> listOfScriptIds);
 		
+	@Modifying
+	@Transactional
+	@Query("delete from ScriptMaster where scriptId=:scriptId")
 	Integer deleteByScriptId(Integer scriptId);
+	
+	long countByScriptId(Integer scriptId);
   
 }

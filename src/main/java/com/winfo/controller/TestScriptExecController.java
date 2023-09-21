@@ -100,9 +100,9 @@ public class TestScriptExecController {
 	@ApiOperation( value="Update ScriptStep Status",notes = "To update ScriptStep status, we should pass <B>ScriptParamId, Status</B><br>"
 			+ "<B>Status:</B> Status is to update the status of the script")	
 	@ApiResponses( value = { @ApiResponse( code=200,message="Updated ScriptStep Status")})
-	public void updateScriptStepStatus(@Valid @RequestBody UpdateScriptStepStatus args)
+	public void updateScriptStepStatus(@Valid @RequestBody UpdateScriptStepStatus scriptParamDetails)
 			throws ClassNotFoundException, SQLException {
-		testScriptExecService.updateScriptStepStatus(args);
+		testScriptExecService.updateScriptStepStatus(scriptParamDetails);
 	}
 
 	@ResponseBody
@@ -130,8 +130,8 @@ public class TestScriptExecController {
 			return testScriptExecService.generateTestRunPdf(testSetId);			
 		}
 		catch(Exception e) {
-			logger.error("Exception occured while generating PDFs");
-        	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while generating PDFs"); 
+			logger.error("Exception occurred while generating PDFs");
+        	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while generating PDFs"); 
 		}
 	}
 	

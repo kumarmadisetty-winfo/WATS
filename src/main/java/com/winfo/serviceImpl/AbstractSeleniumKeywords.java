@@ -324,46 +324,57 @@ public abstract class AbstractSeleniumKeywords {
 //			throw e;
 		}
 	}
+	public String uploadObjectToStorage(String localFilePath, String folderName, String fileName,String destinationFilePath) {
+
+	    PutObjectResponse response = null;
+	    try {
+	        // Create a default authentication provider that uses the DEFAULT profile in the configuration file.
+	        final ConfigFileReader.ConfigFile configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+	        final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);	      
+
+	        // Get file information
+	        final String FILE_NAME = localFilePath;
+	        File file = new File(FILE_NAME);
+	        long fileSize = FileUtils.sizeOf(file);
+	        InputStream is = new FileInputStream(file);
+
+	        // Create a service client
+	        try (ObjectStorageClient client = new ObjectStorageClient(provider)) {
+
+	            // Create a request and dependent object(s)
+	            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+	                    .namespaceName(ociNamespace)
+	                    .bucketName(ociBucketName)
+	                    .objectName(destinationFilePath)
+	                    .contentLength(fileSize)
+	                    .putObjectBody(is)
+	                    .build();
+
+	            // Send request to the Client
+	            response = client.putObject(putObjectRequest);
+	        }
+	        return response.toString();
+	    } catch (WatsEBSException e) {
+	        throw e;
+	    } catch (Exception e) {
+	        throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while uploading the object to Object Storage.", e);
+	    }
+	}
 
 	public String uploadObjectToObjectStore(String localFilePath, String folderName, String fileName) {
-
-		PutObjectResponse response = null;
-		try {
-			/**
-			 * Create a default authentication provider that uses the DEFAULT profile in the
-			 * configuration file. Refer to <see
-			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
-			 * public documentation</see> on how to prepare a configuration file.
-			 */
-			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			final String FILE_NAME = localFilePath;
-			File file = new File(FILE_NAME);
-			long fileSize = FileUtils.sizeOf(file);
-			InputStream is = new FileInputStream(file);
+		
+		
 			StringBuffer destinationFileBuffer = new StringBuffer();
 			destinationFileBuffer.append(folderName).append(FORWARD_SLASH).append(fileName);
 			String destinationFilePath = destinationFileBuffer.toString();
-			/* Create a service client */
-			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
-
-				/* Create a request and dependent object(s). */
-
-				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
-						.putObjectBody(is).build();
-
-				/* Send request to the Client */
-				response = client.putObject(putObjectRequest);
-			}
-			return response.toString();
-		} catch (WatsEBSException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage..", e);
-		}
+			
+			 return uploadObjectToStorage(localFilePath, folderName, fileName,destinationFilePath);
 	}
+			
+	public String uploadPDF(String sourceFile, String destinationFilePath) {
+		 return uploadObjectToStorage(sourceFile,   "", "",destinationFilePath);
+	}
+	
 
 	public void downloadScreenshotsFromObjectStore(String screenshotPath, String customerName, String testSetName,
 			String seqNum) {
@@ -372,7 +383,9 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, "Exception occured while connecting to oci/config path", e);
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while connecting to oci/config path", e);
+
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -418,16 +431,20 @@ public abstract class AbstractSeleniumKeywords {
 						}
 					} catch (IOException e1) {
 						e1.printStackTrace();
-						throw new WatsEBSException(500,
-								"Exception occured while read or write screenshot from Object Storage", e1);
+
+						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
+								"Exception occurred while read or write screenshot from Object Storage", e1);
 					}
 				}
 			}
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500,
-					"Exception occured while downloading screenshots from object path location.", e);
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
+					"Exception occurred while downloading screenshots from object path location.", e);
 		}
 
 	}
@@ -1248,6 +1265,15 @@ public abstract class AbstractSeleniumKeywords {
 				String expectedResult = EXPECTED_RESULT;
 				String result = sm.getExpectedResult();
 				String errorMessage = ERROR_MESSAGE;
+				String startTimeKey = START_TIME;
+				String endTimeKey = END_TIME;
+				String executionTimeKey = EXECUTION_TIME;
+				TestSetLine testSetLine = databaseentry.getTestSetLineRecordsByTestSetLineId(metaDataVO.getTestSetLineId());
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
+				String startTimeValue = dateFormat.format(testSetLine.getExecutionStartTime());
+				String endTimeValue = dateFormat.format(testSetLine.getExecutionEndTime());
+				long timeDifference = DateUtils.findTimeDifference(startTimeValue.toString(), endTimeValue.toString());
+				String executionTimeValue = DateUtils.convertMiliSecToDayFormat(timeDifference);
 				if (!sno.equalsIgnoreCase(sno1)) {
 					document.setPageSize(pageSize);
 					document.newPage();
@@ -1294,7 +1320,16 @@ public abstract class AbstractSeleniumKeywords {
 						}
 					}
 					
-					for (String str : strArr) {
+					String[] extendedArray = new String[strArr.length+6];
+					extendedArray[extendedArray.length - 6] = startTimeKey;
+					extendedArray[extendedArray.length - 5] = startTimeValue;
+					extendedArray[extendedArray.length - 4] = endTimeKey;
+					extendedArray[extendedArray.length - 3] = endTimeValue;
+					extendedArray[extendedArray.length - 2] = executionTimeKey;
+					extendedArray[extendedArray.length - 1] = executionTimeValue;
+					System.arraycopy(strArr, 0, extendedArray, 0, strArr.length);
+					
+					for (String str : extendedArray) {
 						insertCell(table2, str, Element.ALIGN_LEFT, 1, font23);
 					}
 
@@ -1608,7 +1643,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, "Not able to read object store config");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to read object store config");
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -1654,43 +1689,7 @@ public abstract class AbstractSeleniumKeywords {
 		logger.info("Script screenshot deleted successfully!!");
 	}
 
-	public String uploadPDF(String sourceFile, String destinationFilePath) {
 
-		PutObjectResponse response = null;
-		try {
-			/**
-			 * Create a default authentication provider that uses the DEFAULT profile in the
-			 * configuration file. Refer to <see
-			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
-			 * public documentation</see> on how to prepare a configuration file.
-			 */
-			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			final String FILE_NAME = sourceFile;
-			File file = new File(FILE_NAME);
-			long fileSize = FileUtils.sizeOf(file);
-			InputStream is = new FileInputStream(file);
-
-			/* Create a service client */
-			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
-
-				/* Create a request and dependent object(s). */
-
-				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
-						.putObjectBody(is).build();
-
-				/* Send request to the Client */
-				response = client.putObject(putObjectRequest);
-			}
-			return response.toString();
-		} catch (WatsEBSException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
-		}
-	}
 
 	public void createScreenShot(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, String message,
 			CustomerProjectDto customerDetails, boolean isPassed) throws Exception {
@@ -1794,7 +1793,9 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while uploading pdf in Object Storage", e);
+
 		}
 
 	}
@@ -2206,7 +2207,9 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, "Exception occured while connecting to oci/config path", e);
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while connecting to oci/config path", e);
+
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -2224,10 +2227,12 @@ public abstract class AbstractSeleniumKeywords {
 				return objNames;
 			} catch (Exception e1) {
 
-				throw new WatsEBSException(500, "Not able to connect with object store");
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to connect with object store");
 			}
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while getting files from object path location.",
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while getting files from object path location.",
+
 					e);
 		}
 
@@ -2265,7 +2270,9 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while creating folder in Object Storage..", e);
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while creating folder in Object Storage..", e);
+
 		}
 	}
 

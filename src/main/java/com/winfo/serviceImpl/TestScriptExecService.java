@@ -18,10 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -34,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -58,6 +53,8 @@ import com.winfo.model.ExecutionHistory;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.scripts.RunAutomation;
+import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -144,10 +141,12 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	
 	@Autowired
 	SmartBearService smartBearService;
+	
+	@Autowired
+	TestSetScriptParamRepository testSetScriptParamRepository;
 
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
-
 	}
 
 	public void executorMethodPyJab(TestScriptDto testScriptDto, FetchConfigVO fetchConfigVO,
@@ -396,82 +395,48 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath) {
-//		try {
-//			String path = "C:\\wats\\java-generated-scripts\\" + destinationFilePath.split(FORWARD_SLASH)[3];
-//			logger.info("%%%%%%%%%%");
-//
-//			logger.info(path);
-//
-//			Files.write(Paths.get(path), sourceFileContent.getBytes());
-//		} catch (IOException e1) {
-//
-//			e1.printStackTrace();
-//		}
+	public String uploadObjectToObjectStoreWithInputContent(String sourceFileContent, String destinationFilePath)
+	{
 
-		PutObjectResponse response = null;
+    	PutObjectResponse response = null;
+
 		byte[] bytes = sourceFileContent.getBytes(StandardCharsets.UTF_8);
+
 		try (InputStream in = new ByteArrayInputStream(bytes);) {
+
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+
 					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
 
-			/* Create a service client */
+            /* Create a service client */
+
 			ObjectStorageClient client = new ObjectStorageClient(provider);
 
-			/* Create a request and dependent object(s). */
+            /* Create a request and dependent object(s). */
+
 			PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
+
 					.bucketName(ociBucketName).objectName(destinationFilePath).putObjectBody(in).build();
 
-			/* Send request to the Client */
+             /* Send request to the Client */
+
 			response = client.putObject(putObjectRequest);
+
 			logger.info("Uploaded to -------- " + destinationFilePath);
 
-			return response.toString();
+           return response.toString();
+
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception Occured while uploading generated script to object store",
+
+			throw new WatsEBSException(500, "Exception occurred while uploading generated script to object store",
+
 					e);
+}
 		}
-	}
-
-	public String uploadObjectToObjectStore(String sourceFile, String destinationFilePath) {
-
-		PutObjectResponse response = null;
-		try {
-			/**
-			 * Create a default authentication provider that uses the DEFAULT profile in the
-			 * configuration file. Refer to <see
-			 * href="https://docs.cloud.oracle.com/en-us/iaas/Content/API/Concepts/sdkconfig.htm#SDK_and_CLI_Configuration_File>the
-			 * public documentation</see> on how to prepare a configuration file.
-			 */
-			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			final String FILE_NAME = sourceFile;
-			File file = new File(FILE_NAME);
-			long fileSize = FileUtils.sizeOf(file);
-			InputStream is = new FileInputStream(file);
-
-			/* Create a service client */
-			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
-
-				/* Create a request and dependent object(s). */
-
-				PutObjectRequest putObjectRequest = PutObjectRequest.builder().namespaceName(ociNamespace)
-						.bucketName(ociBucketName).objectName(destinationFilePath).contentLength(fileSize)
-						.putObjectBody(is).build();
-
-				/* Send request to the Client */
-				response = client.putObject(putObjectRequest);
-			}
-			return response.toString();
-		} catch (WatsEBSException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
-		}
-	}
-
+	
+	
 	public void deleteScreenshotsFromWindows(String screenShotFolderPath, String seqNum) {
 		File folder1 = new File(screenShotFolderPath);
 		if (folder1.exists()) {
@@ -518,22 +483,21 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 
 			String scriptId = testLinesDetails.get(0).getScriptId();
-			String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()+"/"+ customerDetails.getProjectName()  + "/"
-					+ customerDetails.getTestSetName() + "/Passed_Report.pdf";
-			String failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() +"/"
-					+ customerDetails.getTestSetName() + "/Failed_Report.pdf" ;
-			String detailurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()+ "/"+ customerDetails.getProjectName()  + "/"
-					+ customerDetails.getTestSetName() +"/Detailed_Report.pdf";
-			String scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
-					+ customerDetails.getTestSetName() + "/" + testLinesDetails.get(0).getSeqNum() + "_"
-					+ testLinesDetails.get(0).getScriptNumber() + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
+			Map<String, String> urls = FileUtil.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
+
+			//Map<String, String> mapOfUrl=runAutomation.generateUrls( fetchConfigVO,  customerDetails, testLinesDetails);
+			//String passUrl = urls.get("PassUrl");
+			//String failUrl = urls.get("FailUrl");
+			//String detailUrl = urls.get("DetailUrl");
+			//String scriptUrl = urls.get("ScriptUrl");
+			
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
 					customerDetails.getTestSetName(), testLinesDetails.get(0).getSeqNum() + "_");
 
-			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
-					failurl, detailurl, scripturl);
+			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), urls.get("PassUrl"),
+					urls.get("FailUrl"), urls.get("DetailUrl"),  urls.get("ScriptUrl"));
 			Date enddate = null;
 			boolean updateStatus = limitScriptExecutionService.updateStatusCheck(fetchConfigVO,
 					customerDetails.getTestSetId(), testLinesDetails.get(0).getScriptId(),
@@ -561,9 +525,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						args.getTestSetId());
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
 						+ failedScriptRunCount + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
-				 scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+				
+			String scriptUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
 							+ customerDetails.getTestSetName() + "/" + pdfName;
-				post.setP_test_set_line_path(scripturl);
+				post.setP_test_set_line_path(scriptUrl);
 				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 			}
 //			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
@@ -636,7 +601,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if (e instanceof WatsEBSException) {
 				throw e;
 			}
-			throw new WatsEBSException(500, "Exception occured while generating the pdf", e);
+			throw new WatsEBSException(500, "Exception occurred while generating the pdf", e);
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
@@ -695,18 +660,23 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public void updateScriptStepStatus(UpdateScriptStepStatus args) throws ClassNotFoundException, SQLException {
+	public void updateScriptStepStatus(UpdateScriptStepStatus scriptParamDetails)
+			throws ClassNotFoundException, SQLException {
 		String status = SCRIPT_PARAM_STATUS.FAIL.getLabel();
-		if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
+		if (scriptParamDetails.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
 			status = SCRIPT_PARAM_STATUS.PASS.getLabel();
-		} else if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
+		} else if (scriptParamDetails.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
 			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
 		}
-		if (StringUtils.isBlank(args.getResult())) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
+		if (StringUtils.isBlank(scriptParamDetails.getResult())) {
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(),
+					scriptParamDetails.getMessage(), null, Integer.parseInt(scriptParamDetails.getScriptParamId()));
 		} else {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
-					args.getMessage());
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(), null,
+					scriptParamDetails.getResult(), Integer.parseInt(scriptParamDetails.getScriptParamId()));
+
 		}
 	}
 
@@ -769,7 +739,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 
-	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+	//@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}

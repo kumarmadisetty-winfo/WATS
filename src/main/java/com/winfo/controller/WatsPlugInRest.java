@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,7 +88,7 @@ public class WatsPlugInRest {
 			}
 			return service.getWatsScriptAssistantFile(plugInVO);
 		} else {
-			throw new WatsEBSException(500, "Customer can not be null or empty");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Customer can not be null or empty");
 		}
 
 	}

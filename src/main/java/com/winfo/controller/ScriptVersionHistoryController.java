@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,7 +59,7 @@ public class ScriptVersionHistoryController {
 		if (!(Objects.isNull(versionHistoryDto.getVersionNumber()) || versionHistoryDto.getVersionNumber().isEmpty())) {
 			return versionHistoryService.getVersionHistory(versionHistoryDto);
 		} else {
-			throw new WatsEBSException(500, "Version can not be null!", null);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Version can not be null!", null);
 		}
 	}
 }

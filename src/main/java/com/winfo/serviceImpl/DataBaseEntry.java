@@ -119,12 +119,6 @@ public class DataBaseEntry {
 		dao.updatePassedScriptLineStatus(test_script_param_id, status);
 	}
 
-	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String error_message)
-			throws ClassNotFoundException, SQLException {
-		dao.updateFailedScriptLineStatus(test_script_param_id, error_message);
-	}
-
 	public void updateInProgressScriptLineStatus(String test_script_param_id, String status)
 			throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptLineStatus(test_script_param_id, status);
@@ -259,7 +253,7 @@ public class DataBaseEntry {
 		} catch (Exception e) {
 			// no need of throwing exception, just print
 			logger.error(
-					"Exception occured while loggin audit trial for test set line id - {} with correlation id - {}",
+					"Exception occurred while loggin audit trial for test set line id - {} with correlation id - {}",
 					auditTrial.getTestSetLineId(), auditTrial.getCorrelationId());
 			e.printStackTrace();
 		}
@@ -459,7 +453,7 @@ public class DataBaseEntry {
 			}
 			logger.info("Successfully sent testrun notification email");
 		} catch (Exception e) {
-			logger.error("Exception occured while sending testrun notification email " + e.getMessage());
+			logger.error("Exception occurred while sending testrun notification email " + e.getMessage());
 		}
 	}
 	
