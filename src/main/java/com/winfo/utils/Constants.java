@@ -147,6 +147,8 @@ public class Constants {
 	public static final String NA="NA";
 	public static final String GET_USER_ID="Get UserId";
 	public static final String INVALID_TEST_SET_ID="Invalid Test Run";
+	public static final String INVALID_TEST_SET_LINE_ID="Invalid Script";
+	public static final String INVALID_JOB_ID="Invalid Schedule";
 	public static final String INVALID_CREDENTIALS_CONFIG="Invalid credentails in the configuration";
 	public static final String INVALID_CREDENTIALS_CONFIG_MESSAGE="Not able to Validate. Please check the credentials in the configuration";
 	public static final String INVALID_CREDENTIALS_AND_API_BASE_URL_CONFIG_MESSAGE="Not able to Validate. Please check the API_BASE_URL and the credentials in the configuration";

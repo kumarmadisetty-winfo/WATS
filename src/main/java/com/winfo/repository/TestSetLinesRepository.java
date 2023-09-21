@@ -22,6 +22,8 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	
 	long countByScriptId(Integer scriptId);
 	
+	long countByTestRunScriptId(Integer testSetLineId);
+	
 	List<TestSetLine> findByScriptId(Integer scriptId);
 	
 	@Modifying

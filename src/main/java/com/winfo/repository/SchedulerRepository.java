@@ -14,6 +14,8 @@ public interface SchedulerRepository extends JpaRepository<Scheduler, Integer>{
 	Scheduler findByJobName(String jobName);
 	Scheduler findByJobId(int jobId);
 	
+	long countByJobId(int jobId);
+	
 	@Modifying
 	@Transactional
 	@Query("update Scheduler set status=:status where jobId=:jobId")

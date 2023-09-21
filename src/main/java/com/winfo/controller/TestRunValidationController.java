@@ -24,11 +24,28 @@ public class TestRunValidationController {
 	private TestRunValidationService testRunValisationService;
 
 	@ResponseBody
-	@PutMapping(value = "/validateTestRun/{testSetId}")
+	@PutMapping(value = "/validateTestRun/{testSetId}/{validateAll}")
 	@ApiOperation( value="Validate Test Run ",notes = "Test Run Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Test Run validated successfully")})
-	public ResponseDto validateTestRun(@PathVariable Integer testSetId) throws Exception {
-		return testRunValisationService.validateTestRun(testSetId);
+	public ResponseDto validateTestRun(@PathVariable Integer testSetId, @PathVariable boolean validateAll) throws Exception {
+		return testRunValisationService.validateTestRun(testSetId,validateAll);
 	}
+	
+	@ResponseBody
+	@PutMapping(value = "/validateSchedule/{jobId}")
+	@ApiOperation( value="Validate Schedule",notes = "Schedule Id need to pass for validating a Test Run")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Schedule validated successfully")})
+	public ResponseDto validateSchedule(@PathVariable Integer jobId) throws Exception {
+		return testRunValisationService.validateSchedule(jobId);
+	}
+	
+	@ResponseBody
+	@PutMapping(value = "/validateSript/{testSetLineId}")
+	@ApiOperation( value="Validate Script",notes = "Test Set Line Id need to pass for validating a Test Run")
+	@ApiResponses( value = { @ApiResponse( code=200,message="Script validated successfully")})
+	public ResponseDto validateSript(@PathVariable Integer testSetLineId) throws Exception {
+		return testRunValisationService.validateSchedule(testSetLineId);
+	}
+
 
 }
