@@ -35,9 +35,9 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
-import com.winfo.model.User;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.CustomerRepository;
+import com.winfo.repository.ExecutionHistoryRepository;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.ScriptMasterRepository;
@@ -89,7 +89,7 @@ public class DataBaseEntry {
 	ApplicationContext appContext;
 	
 	@Autowired
-	WinTaExecutionHistoryServiceImpl executionHistory;
+	ExecutionHistoryRepository executionHistoryRepository;
 	
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
@@ -377,7 +377,7 @@ public class DataBaseEntry {
 			appContext.getBean(this.getClass()).updateSubscription();
 		}
 		try {
-			executionHistory.updateExecHistoryTbl(executionId, fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy());
+			executionHistoryRepository.updateExecutionHistory(fetchMetadataListVO.get(0).getLineErrorMsg(), fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy(), executionId);
 		} catch (Exception e) {
 			logger.error("Failed during updating the execution history");
 		}

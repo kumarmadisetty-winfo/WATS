@@ -26,8 +26,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -52,6 +50,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetExecutionStatus;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.reports.PDFGenerator;
+import com.winfo.repository.ExecutionHistoryRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
@@ -154,6 +153,8 @@ public class RunAutomation {
 	SFInterface sfInterface;
 	@Autowired
 	UpdateTestSetRecords updateTestSetService;
+	@Autowired
+	ExecutionHistoryRepository executionHistoryRepository;
 	
 	
 
@@ -379,8 +380,6 @@ public class RunAutomation {
 
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
 												post.getP_status());
-										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy(),executorMap.get(metaData.getValue().get(0).getTestSetLineId()));
 
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
@@ -389,6 +388,8 @@ public class RunAutomation {
 
 										errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,
 												fd.getTestScriptParamId(), null, null, null, null);
+										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy(),executorMap.get(metaData.getValue().get(0).getTestSetLineId()));
 
 									}
 								}
@@ -601,7 +602,9 @@ public class RunAutomation {
 			boolean actionContainsExcel = dataBaseEntry.doesActionContainsExcel(fetchMetadataListsVO.get(0).getScriptId());
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
+			
 			isDriverError = false;
+			
 			switchActions(testScriptDto, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passUrl, failUrl, detailUrl, scriptUrl, executionId);
 
 		}
@@ -610,6 +613,7 @@ public class RunAutomation {
 			{
 					String enableStatus=dataBaseEntry.getEnabledStatusByTestSetLineID(testSetLineId);	
 					dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId,enableStatus);
+					executionHistoryRepository.updateExecutionHistory("Failed to initiate the driver", new Date(), Constants.FAIL, testScriptDto.getExecutedBy(),executionId);
 			}
 		}
 		catch (Exception e) {

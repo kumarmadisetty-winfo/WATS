@@ -44,4 +44,7 @@ public class ExecutionHistory {
 	@Column(name = "STATUS")
 	private String status;
 	
+	@Column(name = "LINE_ERROR_MESSAGE")
+	private String lineErrorMessage;
+	
 }

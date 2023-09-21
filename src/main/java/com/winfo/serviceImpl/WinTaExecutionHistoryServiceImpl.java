@@ -37,21 +37,6 @@ public class WinTaExecutionHistoryServiceImpl implements WinTaExecutionHistorySe
             throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while inserting records", e);
         }
     }
-
-    @Override
-    public void updateExecHistoryTbl(int executionId,Date endDate, String status, String lastUpdatedBy) {
-        try {
-            ExecutionHistory history = executionHistoryRepository.findById(executionId).orElse(null);
-            if (history != null) {
-                history.setExecutionEndTime(endDate);
-                history.setStatus(status);
-                history.setLastUpdatedBy(lastUpdatedBy);
-                executionHistoryRepository.save(history);
-            }
-        } catch (Exception e) {
-            throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while updating records", e);
-        }
-    }
     public int getMaxExecutionIdForTestSetLine(int testSetLineId) {
         try {
             Integer maxExecutionId = executionHistoryRepository.findMaxExecutionIdByTestSetLineId(testSetLineId);
