@@ -510,7 +510,7 @@ public class CopyTestRunService {
 			if (existingProductVersion == null || newProductVersion == null) {
 				invalidTestRunName = existingProductVersion == null ? testSetObj.getTestRunName()
 						: existLineObj.getTestRun().getTestRunName();
-				return new ResponseDto(500, Constants.ERROR,
+				return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
 						MessageUtil.getMessage(messageUtil.getCopyTestRunService().getError().getInvalidProductVersion(), invalidTestRunName));
 			} else if (!existingProductVersion.equalsIgnoreCase(newProductVersion)) {
 				Integer scriptIdFromMaster = copyTestrunDao.getScriptIdFromMaster(existLineObj.getScriptNumber(),
@@ -633,17 +633,17 @@ public class CopyTestRunService {
 			copyTestrunDao.updatelinesRecord(testSetLineObj);
 		}
 		if(listOfTestSetLinesObj.isEmpty()) {
-			return new ResponseDto(500, Constants.ERROR,
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
 					MessageUtil.getMessage(messageUtil.getCopyTestRunService().getError().getInvalidScript()));
 			
 		}
 		
 		if (listOfScriptNumberWrongProductVersion.isEmpty()) {
-			return new ResponseDto(200, Constants.SUCCESS,
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
 					messageUtil.getCopyTestRunService().getSuccess().getScriptAdded());
 		} else {
 			String msg = listOfScriptNumberWrongProductVersion.toString().replace("[", "").replace("]", "");
-			return new ResponseDto(500, Constants.ERROR, MessageUtil
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, MessageUtil
 					.getMessage(messageUtil.getCopyTestRunService().getError().getProductVersionMissing(), existingProductVersion, msg));
 		}
 

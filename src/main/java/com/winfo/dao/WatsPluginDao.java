@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.exception.WatsEBSException;
@@ -265,7 +266,7 @@ public class WatsPluginDao {
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		Session session = entityManager.unwrap(Session.class);
 		session.save(master);
-		response.setStatus(200);
+		response.setStatus(HttpStatus.OK.value());
 		response.setStatusMessage("NewScriptNumber:" + scriptnumber);
 		return response;
 	}
@@ -286,7 +287,7 @@ public class WatsPluginDao {
 			return query.getSingleResult().toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new WatsEBSException(500, "Directory path is not present", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Directory path is not present", e);
 		}
 	}
 }

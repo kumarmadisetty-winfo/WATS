@@ -226,14 +226,14 @@ public class RunAutomation {
 			}
 			executordependent.shutdown();
 
-			executeTestrunVo.setStatusCode(200);
+			executeTestrunVo.setStatusCode(HttpStatus.OK.value());
 			executeTestrunVo.setStatusMessage("SUCCESS");
 			executeTestrunVo.setStatusDescr("SUCCESS");
 		} catch (Exception e) {
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 			if (e instanceof WatsEBSException)
 				throw e;
-			throw new WatsEBSException(500, "Exception Occured while creating script for Test Run", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while creating script for Test Run", e);
 		}
 		return executeTestrunVo;
 	}
@@ -329,22 +329,7 @@ public class RunAutomation {
 										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 												scriptStatus, customerDetails);
 									} else {
-										String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
-												+ "/" + customerDetails.getProjectName() + "/"
-												+ customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-										String failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()
-												+ "/" + customerDetails.getProjectName() + "/"
-												+ customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-										String detailurl = fetchConfigVO.getIMG_URL()
-												+ customerDetails.getCustomerName() + "/"
-												+ customerDetails.getProjectName() + "/"
-												+ customerDetails.getTestSetName() + "/" + "Detailed_Report.pdf";
-										String scripturl = fetchConfigVO.getIMG_URL()
-												+ customerDetails.getCustomerName() + "/"
-												+ customerDetails.getProjectName() + "/"
-												+ customerDetails.getTestSetName() + "/"
-												+ testLinesDetails.get(0).getSeqNum() + "_"
-												+ testLinesDetails.get(0).getScriptNumber() + ".pdf";
+										Map<String, String> urls = FileUtil.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
 
 										ScriptDetailsDto fd = metaData.getValue().get(0);
 										FetchScriptVO post = new FetchScriptVO();
@@ -352,10 +337,10 @@ public class RunAutomation {
 										post.setP_status("Fail");
 										post.setP_script_id(fd.getScriptId());
 										post.setP_test_set_line_id(fd.getTestSetLineId());
-										post.setP_pass_path(passurl);
-										post.setP_fail_path(failurl);
-										post.setP_exception_path(detailurl);
-										post.setP_test_set_line_path(scripturl);
+										post.setP_pass_path(urls.get("PassUrl"));
+										post.setP_fail_path( urls.get("FailUrl"));
+										post.setP_exception_path(urls.get("DetailUrl"));
+										post.setP_test_set_line_path(urls.get("ScriptUrl"));
 										failcount = failcount + 1;
 										logger.info("Checking fail count : " + failcount);
 
@@ -364,7 +349,8 @@ public class RunAutomation {
 										dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(),
 												post.getP_status());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy());
+												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(), true,
+												testScriptDto.getExecutedBy());
 
 										// dataBaseEntry.updateEndTime(fetchConfigVO,fd.getTest_set_line_id(),fd.getTest_set_id(),
 										// enddate);
@@ -459,7 +445,7 @@ public class RunAutomation {
 									cloudRun(dependencyTestScriptDto);
 								} catch (MalformedURLException ex) {
 									logger.error(
-											"Exception occured while executing schedule dependent testRun execution "
+											"Exception occurred while executing schedule dependent testRun execution "
 													+ ex.getMessage());
 								}
 							}
@@ -514,7 +500,7 @@ public class RunAutomation {
 				increment = 0;
 
 				
-				executeTestrunVo.setStatusCode(200);
+				executeTestrunVo.setStatusCode(HttpStatus.OK.value());
 				executeTestrunVo.setStatusMessage("SUCCESS");
 				executeTestrunVo.setStatusDescr("SUCCESS");
 			} catch (InterruptedException e) {
@@ -565,18 +551,11 @@ public class RunAutomation {
 		String testSetLineId = fetchMetadataListsVO.get(0).getTestSetLineId();
 
 		String scriptId = fetchMetadataListsVO.get(0).getScriptId();
-		String passUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Passed_Report.pdf";
-		String failUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/" + "Failed_Report.pdf";
-		String detailUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
-				+ "Detailed_Report.pdf";
-		String scriptUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/"
-				+ customerDetails.getProjectName() + "/" + customerDetails.getTestSetName() + "/"
-				+ fetchMetadataListsVO.get(0).getSeqNum() + "_" + fetchMetadataListsVO.get(0).getScriptNumber()
-				+ ".pdf";
-		logger.info(String.format("Pass Url : %s , Fail Url : %s , Detailed Url : %s , Script Url : %s " , passUrl, failUrl, detailUrl, scriptUrl));
+		
+		Map<String, String> urls = FileUtil.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
+
+		logger.info(String.format("Pass Url : %s , Fail Url : %s , Detailed Url : %s , Script Url : %s " , urls.get("PassUrl"), urls.get("FailUrl"), urls.get("DetailUrl"), urls.get("ScriptUrl")));
+		
 		boolean isDriverError = true;
 		AuditScriptExecTrail auditTrial = dataBaseEntry.insertScriptExecAuditRecord(AuditScriptExecTrail.builder()
 				.testSetLineId(Integer.valueOf(testSetLineId)).triggeredBy(fetchMetadataListsVO.get(0).getExecutedBy())
@@ -586,7 +565,7 @@ public class RunAutomation {
 			String operatingSystem = actionContainsExcel ? "windows" : null;
 			driver = driverConfiguration.getWebDriver(fetchConfigVO, operatingSystem);
 			isDriverError = false;
-			switchActions(testScriptDto, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, passUrl, failUrl, detailUrl, scriptUrl);
+			switchActions(testScriptDto, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,auditTrial, scriptId, urls.get("PassUrl"),  urls.get("FailUrl"), urls.get("DetailUrl"), urls.get("ScriptUrl"));
 
 		}
 		catch (WebDriverException e) {
@@ -597,7 +576,7 @@ public class RunAutomation {
 			}
 		}
 		catch (Exception e) {
-			logger.info("Exception occured while running script " + fetchMetadataListsVO.get(0).getScriptNumber());
+			logger.info("Exception occurred while running script " + fetchMetadataListsVO.get(0).getScriptNumber());
 			e.printStackTrace();
 			if (isDriverError) {
 				FetchScriptVO post = new FetchScriptVO();
@@ -605,10 +584,10 @@ public class RunAutomation {
 				post.setP_status("Fail");
 				post.setP_script_id(scriptId);
 				post.setP_test_set_line_id(testSetLineId);
-				post.setP_pass_path(passUrl);
-				post.setP_fail_path(failUrl);
-				post.setP_exception_path(detailUrl);
-				post.setP_test_set_line_path(scriptUrl);
+				post.setP_pass_path(urls.get("PassUrl"));
+				post.setP_fail_path( urls.get("FailUrl"));
+				post.setP_exception_path(urls.get("DetailUrl"));
+				post.setP_test_set_line_path(urls.get("ScriptUrl"));
 
 //				dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
@@ -1295,7 +1274,7 @@ public class RunAutomation {
 									fetchConfigVO.setErrormessage(message);
 									seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
 											customerDetails);
-									throw new IllegalArgumentException("Error occured");
+									throw new IllegalArgumentException("Error occurred");
 								}
 								break;
 							}
@@ -1679,7 +1658,7 @@ public class RunAutomation {
 							} catch (Exception e) {
 								seleniumFactory.getInstanceObj(instanceName).createScreenShot(
 										fetchMetadataVO, fetchConfigVO, "Unmatched", customerDetails,false);
-								throw new WatsEBSException(500,"Failed at campare Value");
+								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Failed at campare Value");
 							}
 							
 						case "apiAccessToken":

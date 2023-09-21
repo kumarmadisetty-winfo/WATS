@@ -184,7 +184,7 @@ public class TestCaseDataService {
 
 			return MetaList.getItems();
 		} catch (Exception e) {
-			logger.error("Error occured while fetching the meta data");
+			logger.error("Error occurred while fetching the meta data");
 			return null;
 		}
 

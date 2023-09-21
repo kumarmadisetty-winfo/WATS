@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -78,14 +79,14 @@ public class GetApiValidationMigrationService {
 
 			if(!lookUpCodeId.isEmpty())
 			{
-			return new ResponseDto(409, Constants.CONFLICT,existsLookUpCodeId);
+			return new ResponseDto(HttpStatus.CONFLICT.value(), Constants.CONFLICT,existsLookUpCodeId);
 			}
 			
 		}catch(Exception e) {
 			logger.error("Failed during ApI validation migration " + e.getMessage());
-			return new ResponseDto(500, Constants.ERROR, "Migration Failed.");
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, "Migration Failed.");
 		}
 		logger.info("Successfully Migrated APi validation");
-		return new ResponseDto(200, Constants.SUCCESS, "Migration Completed.");
+		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Migration Completed.");
 	}
 }

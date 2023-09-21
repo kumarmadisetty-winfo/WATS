@@ -59,13 +59,13 @@ public class WebClientService {
 						.onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
 								clientResponse -> Mono.error(new NotFoundException("Endpoint not found")))
 						.onStatus(httpStatus -> HttpStatus.UNAUTHORIZED.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSException(401, "Authentication Error")))
+								clientResponse -> Mono.error(new WatsEBSException(HttpStatus.UNAUTHORIZED.value(), "Authentication Error")))
 						.onStatus(httpStatus -> HttpStatus.INTERNAL_SERVER_ERROR.equals(httpStatus),
 								clientResponse -> Mono.error(new InternalServerErrorException("Internal server error")))
 						.onStatus(httpStatus -> HttpStatus.BAD_REQUEST.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSException(400,"Bad Request")))
+								clientResponse -> Mono.error(new WatsEBSException(HttpStatus.BAD_REQUEST.value(),"Bad Request")))
 						.onStatus(httpStatus -> HttpStatus.SERVICE_UNAVAILABLE.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSException(503,"Service Unavailable")))
+								clientResponse -> Mono.error(new WatsEBSException(HttpStatus.SERVICE_UNAVAILABLE.value(),"Service Unavailable")))
 						.bodyToMono(String.class);
 			} else {
 				bodyToMono = webClient.method(httpMethod).uri(apiValidationData.getUrl())
@@ -74,13 +74,13 @@ public class WebClientService {
 						.onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
 								clientResponse -> Mono.error(new NotFoundException("Endpoint not found")))
 						.onStatus(httpStatus -> HttpStatus.UNAUTHORIZED.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSException(401, "Authentication Error")))
+								clientResponse -> Mono.error(new WatsEBSException(HttpStatus.UNAUTHORIZED.value(), "Authentication Error")))
 						.onStatus(httpStatus -> HttpStatus.INTERNAL_SERVER_ERROR.equals(httpStatus),
 								clientResponse -> Mono.error(new InternalServerErrorException("Internal server error")))
 						.onStatus(httpStatus -> HttpStatus.BAD_REQUEST.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSException(400,"Bad Request")))
+								clientResponse -> Mono.error(new WatsEBSException(HttpStatus.BAD_REQUEST.value(),"Bad Request")))
 						.onStatus(httpStatus -> HttpStatus.SERVICE_UNAVAILABLE.equals(httpStatus),
-								clientResponse -> Mono.error(new WatsEBSException(503,"Service Unavailable")))
+								clientResponse -> Mono.error(new WatsEBSException(HttpStatus.SERVICE_UNAVAILABLE.value(),"Service Unavailable")))
 						.bodyToMono(String.class);
 			}
 

@@ -413,7 +413,7 @@ public class TestRunMigrationGetService {
 		}
 		if(count>=1)
 		{
-			domGenericResponseBean.setStatus(200);
+			domGenericResponseBean.setStatus(HttpStatus.OK.value());
 			domGenericResponseBean.setStatusMessage("SUCCESS");
 			domGenericResponseBean.setDescription(description);
 			listOfResponseBean.add(domGenericResponseBean);

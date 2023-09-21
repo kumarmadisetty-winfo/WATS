@@ -250,7 +250,7 @@ public class DataBaseEntry {
 		} catch (Exception e) {
 			// no need of throwing exception, just print
 			logger.error(
-					"Exception occured while loggin audit trial for test set line id - {} with correlation id - {}",
+					"Exception occurred while loggin audit trial for test set line id - {} with correlation id - {}",
 					auditTrial.getTestSetLineId(), auditTrial.getCorrelationId());
 			e.printStackTrace();
 		}
@@ -446,7 +446,7 @@ public class DataBaseEntry {
 			}
 			logger.info("Successfully sent testrun notification email");
 		} catch (Exception e) {
-			logger.error("Exception occured while sending testrun notification email " + e.getMessage());
+			logger.error("Exception occurred while sending testrun notification email " + e.getMessage());
 		}
 	}
 	
