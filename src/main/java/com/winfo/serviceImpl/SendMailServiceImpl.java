@@ -71,9 +71,9 @@ public class SendMailServiceImpl {
 			}
 
 		} catch (IOException | MessagingException e) {
-			logger.error("Exception occured while downloading attachments");
+			logger.error("Exception Occurred while downloading attachments");
 			ExceptionUtils.getStackTrace(e);
-			throw new WatsEBSException(500, "Exception occured while downloading attachments", e);
+			throw new WatsEBSException(500, "Exception Occurred while downloading attachments", e);
 		}
 		return downloadedAttachments;
 	}
@@ -94,9 +94,9 @@ public class SendMailServiceImpl {
 
 			}
 		} catch (MessagingException ex) {
-			logger.error("Exception occured while reading mail from mail box");
+			logger.error("Exception Occurred while reading mail from mail box");
 			ExceptionUtils.getStackTrace(ex);
-			throw new WatsEBSException(500, "Exception occured while reading mail from mail box", ex);
+			throw new WatsEBSException(500, "Exception Occurred while reading mail from mail box", ex);
 		}
 		return attachments;
 	}
@@ -109,9 +109,9 @@ public class SendMailServiceImpl {
 			store.connect(userName, password);
 			return store;
 		} catch (MessagingException ex) {
-			logger.error("Exception occured while connecting to Mail Host");
+			logger.error("Exception Occurred while connecting to Mail Host");
 			ExceptionUtils.getStackTrace(ex);
-			throw new WatsEBSException(500, "Exception occured while connecting to Mail Host", ex);
+			throw new WatsEBSException(500, "Exception Occurred while connecting to Mail Host", ex);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class SendMailServiceImpl {
 			session.setDebug(true);
 		} catch (Exception e) {
 			throw new WatsEBSException(500,
-					"Exception occured while email authentication. User credentials were incorrect", e);
+					"Exception Occurred while email authentication. User credentials were incorrect", e);
 		}
 		return session;
 	}
@@ -204,7 +204,7 @@ public class SendMailServiceImpl {
 
 		} catch (MessagingException e) {
 			e.printStackTrace();
-			throw new WatsEBSException(500, "Exception occured while sending mail for script run.", e);
+			throw new WatsEBSException(500, "Exception Occurred while sending mail for script run.", e);
 		}
 	}
 	
@@ -244,7 +244,7 @@ public class SendMailServiceImpl {
 
 		} catch (MessagingException e) {
 			e.printStackTrace();
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while sending mail for Scheduler Job ", e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception Occurred while sending mail for Scheduler Job ", e);
 		}
 	}
 	
@@ -284,8 +284,8 @@ public class SendMailServiceImpl {
 			Transport.send(message);
 
 		} catch (MessagingException e) {
-			logger.error("Exception occured while sending initiation mail " +e.getMessage());
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while sending initiation mail ", e);
+			logger.error("Exception Occurred while sending initiation mail " +e.getMessage());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception Occurred while sending initiation mail ", e);
 		}
 	}
 

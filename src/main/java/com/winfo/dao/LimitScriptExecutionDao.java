@@ -162,7 +162,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 		} catch (Exception e) {
 			logger.error("Failed to get Failed Script run count " + e.getMessage());
 			throw new WatsEBSException(500,
-					"Exception occured while selecting the run count for Script level pdf", e);
+					"Exception Occurred while selecting the run count for Script level pdf", e);
 		}
 		return id;
 	}
@@ -178,7 +178,7 @@ public static final Logger logger = Logger.getLogger(LimitScriptExecutionDao.cla
 		} catch (Exception e) {
 			logger.error("Failed to update Failed Script run count " + e.getMessage());
 			throw new WatsEBSException(500,
-					"Exception occured while updating the fail run count for script level pdf", e);
+					"Exception Occurred while updating the fail run count for script level pdf", e);
 		}
 	}
 

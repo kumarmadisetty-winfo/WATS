@@ -54,7 +54,7 @@ public class SshService {
 			if (jse.getMessage().equals(EX_TYPE)) {
 				throw new WatsEBSException(500, "Please verify ssh user credentials", jse);
 			} else {
-				throw new WatsEBSException(500, "Exception occured while creating Sftp Connection", jse);
+				throw new WatsEBSException(500, "Exception Occurred while creating Sftp Connection", jse);
 			}
 		}
 		return session;
@@ -81,7 +81,7 @@ public class SshService {
 			closeSftp(session, sftpChannel);
 
 		} catch (SftpException | JSchException | IOException e) {
-			throw new WatsEBSException(500, "Exception occured while writing file via ssh", e);
+			throw new WatsEBSException(500, "Exception Occurred while writing file via ssh", e);
 		}
 	}
 

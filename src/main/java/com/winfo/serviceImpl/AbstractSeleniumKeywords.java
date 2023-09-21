@@ -383,7 +383,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, "Exception occured while connecting to oci/config path", e);
+			throw new WatsEBSException(500, "Exception Occurred while connecting to oci/config path", e);
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -430,7 +430,7 @@ public abstract class AbstractSeleniumKeywords {
 					} catch (IOException e1) {
 						e1.printStackTrace();
 						throw new WatsEBSException(500,
-								"Exception occured while read or write screenshot from Object Storage", e1);
+								"Exception Occurred while read or write screenshot from Object Storage", e1);
 					}
 				}
 			}
@@ -438,7 +438,7 @@ public abstract class AbstractSeleniumKeywords {
 			throw e;
 		} catch (Exception e) {
 			throw new WatsEBSException(500,
-					"Exception occured while downloading screenshots from object path location.", e);
+					"Exception Occurred while downloading screenshots from object path location.", e);
 		}
 
 	}
@@ -1787,7 +1787,7 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while uploading pdf in Object Storage", e);
+			throw new WatsEBSException(500, "Exception Occurred while uploading pdf in Object Storage", e);
 		}
 
 	}
@@ -2199,7 +2199,7 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, "Exception occured while connecting to oci/config path", e);
+			throw new WatsEBSException(500, "Exception Occurred while connecting to oci/config path", e);
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -2220,7 +2220,7 @@ public abstract class AbstractSeleniumKeywords {
 				throw new WatsEBSException(500, "Not able to connect with object store");
 			}
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while getting files from object path location.",
+			throw new WatsEBSException(500, "Exception Occurred while getting files from object path location.",
 					e);
 		}
 
@@ -2258,7 +2258,7 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while creating folder in Object Storage..", e);
+			throw new WatsEBSException(500, "Exception Occurred while creating folder in Object Storage..", e);
 		}
 	}
 

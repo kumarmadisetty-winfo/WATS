@@ -233,7 +233,7 @@ public class RunAutomation {
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 			if (e instanceof WatsEBSException)
 				throw e;
-			throw new WatsEBSException(500, "Exception Occured while creating script for Test Run", e);
+			throw new WatsEBSException(500, "Exception Occurred while creating script for Test Run", e);
 		}
 		return executeTestrunVo;
 	}
@@ -459,7 +459,7 @@ public class RunAutomation {
 									cloudRun(dependencyTestScriptDto);
 								} catch (MalformedURLException ex) {
 									logger.error(
-											"Exception occured while executing schedule dependent testRun execution "
+											"Exception Occurred while executing schedule dependent testRun execution "
 													+ ex.getMessage());
 								}
 							}
@@ -597,7 +597,7 @@ public class RunAutomation {
 			}
 		}
 		catch (Exception e) {
-			logger.info("Exception occured while running script " + fetchMetadataListsVO.get(0).getScriptNumber());
+			logger.info("Exception Occurred while running script " + fetchMetadataListsVO.get(0).getScriptNumber());
 			e.printStackTrace();
 			if (isDriverError) {
 				FetchScriptVO post = new FetchScriptVO();
@@ -1295,7 +1295,7 @@ public class RunAutomation {
 									fetchConfigVO.setErrormessage(message);
 									seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver, fetchMetadataVO,
 											customerDetails);
-									throw new IllegalArgumentException("Error occured");
+									throw new IllegalArgumentException("Error Occurred");
 								}
 								break;
 							}

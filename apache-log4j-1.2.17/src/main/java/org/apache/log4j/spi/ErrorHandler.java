@@ -69,7 +69,7 @@ public interface ErrorHandler extends OptionHandler {
      This method is invoked to handle the error.
 
      @param message The message assoicated with the error.
-     @param e The Exption that was thrown when the error occured.
+     @param e The Exption that was thrown when the error Occurred.
      @param errorCode The error code associated with the error. 
      @param event The logging event that the failing appender is asked
             to log.

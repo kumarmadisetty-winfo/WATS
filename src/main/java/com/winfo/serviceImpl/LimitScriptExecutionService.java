@@ -202,7 +202,7 @@ public class LimitScriptExecutionService {
 			logger.info("data added successfully");
 		} catch (Exception e) {
 			logger.error("testrun data not added " + e);
-			throw new WatsEBSException(500, "Exception occured while inserting test run pdf records", e);
+			throw new WatsEBSException(500, "Exception Occurred while inserting test run pdf records", e);
 		}
 	}
 	
@@ -232,7 +232,7 @@ public class LimitScriptExecutionService {
 				return true;
 			}
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while checking update status of Script Run", e);
+			throw new WatsEBSException(500, "Exception Occurred while checking update status of Script Run", e);
 		}
 		return false;
 	}

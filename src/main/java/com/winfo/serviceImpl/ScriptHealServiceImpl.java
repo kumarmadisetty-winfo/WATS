@@ -66,8 +66,8 @@ public class ScriptHealServiceImpl implements ScriptHealService{
 	        document.close();
 	        return listOfOldNewInputParameters;
 	  	} catch (IOException e) {
-      	logger.error("Exception occured while fetching the new Input Parameter");
-      	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occured while fetching the new Input Parameter"); 
+      	logger.error("Exception Occurred while fetching the new Input Parameter");
+      	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception Occurred while fetching the new Input Parameter"); 
       }
 	}
 }

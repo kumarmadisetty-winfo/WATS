@@ -35,7 +35,7 @@ public class RingChart {
 			PdfContentByte cb = writer.getDirectContent();
 			addChart(cb, pass, fail);
 		} catch (Exception e) {
-			logger.error("Exception occured while generating the RingChart");
+			logger.error("Exception Occurred while generating the RingChart");
 		} finally {
 		}
 	}

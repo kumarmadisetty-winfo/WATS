@@ -203,7 +203,7 @@ public class PatternParser {
 	   state = MAX_STATE;
 	}
 	else {
-	  LogLog.error("Error occured in position "+i
+	  LogLog.error("Error Occurred in position "+i
 		     +".\n Was expecting digit, instead got char \""+c+"\".");
 	  state = LITERAL_STATE;
 	}
@@ -443,7 +443,7 @@ public class PatternParser {
         converted = df.format(date);
       }
       catch (Exception ex) {
-        LogLog.error("Error occured while converting date.", ex);
+        LogLog.error("Error Occurred while converting date.", ex);
       }
       return converted;
     }
