@@ -42,8 +42,8 @@ public class ScriptHealController {
 			List<ScriptHealVo> listOfOldNewInputParameters=scriptHealServiceImpl.getNewInputParameters(targetApplication,productVersion,module);
 			return new ResponseEntity<List<ScriptHealVo>>(listOfOldNewInputParameters,HttpStatus.OK);
         } catch (IOException e) {
-        	logger.error("Exception Occurred while fetching the new Input Parameter");
-        	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception Occurred while fetching the new Input Parameter"); 
+        	logger.error("Exception occurred while fetching the new Input Parameter");
+        	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching the new Input Parameter"); 
         }
 	}
 

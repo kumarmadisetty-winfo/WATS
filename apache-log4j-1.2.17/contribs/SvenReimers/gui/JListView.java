@@ -237,7 +237,7 @@ public class JListView extends JList {
       URL url = ClassLoader.getSystemResource(path);
       img = (Image) (Toolkit.getDefaultToolkit()).getImage(url);
     } catch (Exception e) {
-      System.out.println("Exception Occurred: " + e.getMessage() + 
+      System.out.println("Exception occurred: " + e.getMessage() + 
 			 " - " + e );   
     }	
     return (img);
@@ -319,7 +319,7 @@ class AddAction implements ActionListener {
     
   public
   void actionPerformed(ActionEvent e) {
-    System.out.println("Action Occurred");
+    System.out.println("Action occurred");
     synchronized(t) {
       t.notify();
     }

@@ -179,8 +179,8 @@ public class PDFGenerator {
 		}
 		catch(Exception e)
 		{
-			logger.error("Exception Occurred while creating schedule report " +e.getMessage());
-			response = new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, "Exception Occurred while regenerating the schedule summary report");
+			logger.error("Exception occurred while creating schedule report " +e.getMessage());
+			response = new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, "Exception occurred while regenerating the schedule summary report");
 		}
 		return response;
 	}

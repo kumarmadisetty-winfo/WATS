@@ -321,7 +321,7 @@ public class WatsPluginService {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception Occurred while downloading file from Object Store", e);
+			throw new WatsEBSException(500, "Exception occurred while downloading file from Object Store", e);
 		}
 
 	}

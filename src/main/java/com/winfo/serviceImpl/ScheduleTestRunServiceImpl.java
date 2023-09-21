@@ -239,10 +239,10 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			} else {
 				logger.info("Pdf path and customerName should not be null");
 				response = new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-						"Exception Occurred while regenerating the schedule summary report");
+						"Exception occurred while regenerating the schedule summary report");
 			}
 		} catch (Exception e) {
-			logger.error("Exception Occurred while regenerating the schedule summary report : " + jobId);
+			logger.error("Exception occurred while regenerating the schedule summary report : " + jobId);
 		}
 		return response;
 	}

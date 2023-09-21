@@ -73,10 +73,10 @@ public class CommonObjectStoreUtils {
 				throw new WatsEBSException(e.getStatusCode(),
 						MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 		    }catch (IOException e) {
-		    	log.error("Exception Occurred while returning file from service");
+		    	log.error("Exception occurred while returning file from service");
 				throw new WatsEBSException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
 			} catch (Exception e) {
-				log.error("Exception Occurred while downloading "+fileName+" from Object Store");
+				log.error("Exception occurred while downloading "+fileName+" from Object Store");
 		    	throw new WatsEBSException(500,MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getDownloadFailed(),fileName), e);
 		    }
 	}
@@ -102,10 +102,10 @@ public class CommonObjectStoreUtils {
 			throw new WatsEBSException(e.getStatusCode(),
 					MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 	    }catch (IOException e) {
-	    	log.error("Exception Occurred while fetching file from service");
+	    	log.error("Exception occurred while fetching file from service");
 			throw new WatsEBSException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
 		}  catch (Exception e) {
-			throw new WatsEBSException(500, "Exception Occurred while reading pdf in Object Storage", e);
+			throw new WatsEBSException(500, "Exception occurred while reading pdf in Object Storage", e);
 		}
 	}
 }

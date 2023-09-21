@@ -41,7 +41,7 @@ public class ScheduleTestRunController {
 			return ResponseEntity.ok(responseDto);
 		} else {
 			return new ResponseEntity(
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error Occurred while scheduling a job"),
+					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error occurred while scheduling a job"),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -56,7 +56,7 @@ public class ScheduleTestRunController {
 			return ResponseEntity.ok(responseDto);
 		} else {
 			return new ResponseEntity(
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error Occurred while scheduling a job"),
+					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error occurred while scheduling a job"),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

@@ -104,7 +104,7 @@ class LogTextPanelExampleGenThread extends Thread {
       if(randEvt < 3)
         cat.fatal("{" + cnt + "} Something screwed up bad.");
       else if(randEvt < 10)
-        cat.error("{" + cnt + "} An error Occurred while trying to delete all of your files.");
+        cat.error("{" + cnt + "} An error occurred while trying to delete all of your files.");
       else if(randEvt < 25)
         cat.warn("{" + cnt + "} It seems as if your hard disk is getting full.");
       else if(randEvt < 55)

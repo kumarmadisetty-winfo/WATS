@@ -35,7 +35,7 @@ public class DeleteScriptController {
 			return ResponseEntity.ok(responseDto);
 		} else {
 			return new ResponseEntity(
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error Occurred while deleting scripts"),
+					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error occurred while deleting scripts"),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

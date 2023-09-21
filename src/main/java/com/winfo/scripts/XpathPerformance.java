@@ -1978,7 +1978,7 @@ public class XpathPerformance {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception Occurred while uploading pdf in Object Storage..", e);
+			throw new WatsEBSException(500, "Exception occurred while uploading pdf in Object Storage..", e);
 		}
 	}
 	
