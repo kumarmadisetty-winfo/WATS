@@ -141,12 +141,8 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	@Autowired
 	TestSetScriptParamRepository testSetScriptParamRepository;
 
-	@Autowired
-	RunAutomation runAutomation;
-	
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
-
 	}
 
 	public void executorMethodPyJab(TestScriptDto testScriptDto, FetchConfigVO fetchConfigVO,
@@ -483,7 +479,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 
 			String scriptId = testLinesDetails.get(0).getScriptId();
-			Map<String, String> urls = runAutomation.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
+			Map<String, String> urls = FileUtil.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
 
 			//Map<String, String> mapOfUrl=runAutomation.generateUrls( fetchConfigVO,  customerDetails, testLinesDetails);
 			//String passUrl = urls.get("PassUrl");

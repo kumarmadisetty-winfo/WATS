@@ -3,7 +3,11 @@ package com.winfo.utils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import com.winfo.vo.ScriptDetailsDto;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -95,6 +99,31 @@ public class FileUtil {
 		deleteDir(
 				fetchConfigVO.getWINDOWS_PDF_LOCATION() + customerDetails.getCustomerName()
 						+ File.separator + customerDetails.getTestSetName() + File.separator);
+	}
+	public static Map<String, String> generateUrls(FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails,
+											List<ScriptDetailsDto> testLinesDetails) {
+		Map<String, String> urls = new HashMap<>();
+
+		String baseUrl;
+
+		if (fetchConfigVO.getIMG_URL() == null) {
+			baseUrl = customerDetails.getCustomerName() + "/" +
+					customerDetails.getProjectName() + "/" +
+					customerDetails.getTestSetName() + "/";
+		} else {
+			baseUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/" +
+					customerDetails.getProjectName() + "/" +
+					customerDetails.getTestSetName() + "/";
+		}
+
+		urls.put("PassUrl", baseUrl + "Passed_Report.pdf");
+		urls.put("FailUrl", baseUrl + "Failed_Report.pdf");
+		urls.put("DetailUrl", baseUrl + "Detailed_Report.pdf");
+		urls.put("ScriptUrl", baseUrl + testLinesDetails.get(0).getSeqNum() + "_" +
+				testLinesDetails.get(0).getScriptNumber() + ".pdf");
+
+		return urls;
+
 	}
 
 }

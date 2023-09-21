@@ -329,7 +329,7 @@ public class RunAutomation {
 										executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 												scriptStatus, customerDetails);
 									} else {
-										Map<String, String> urls = generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
+										Map<String, String> urls = FileUtil.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
 
 										ScriptDetailsDto fd = metaData.getValue().get(0);
 										FetchScriptVO post = new FetchScriptVO();
@@ -552,7 +552,7 @@ public class RunAutomation {
 
 		String scriptId = fetchMetadataListsVO.get(0).getScriptId();
 		
-		Map<String, String> urls = generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
+		Map<String, String> urls = FileUtil.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
 
 		logger.info(String.format("Pass Url : %s , Fail Url : %s , Detailed Url : %s , Script Url : %s " , urls.get("PassUrl"), urls.get("FailUrl"), urls.get("DetailUrl"), urls.get("ScriptUrl")));
 		
@@ -606,32 +606,6 @@ public class RunAutomation {
 				driver=null;
 			}
 		}
-	}
-
-	public Map<String, String> generateUrls(FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails,
-			List<ScriptDetailsDto> testLinesDetails) {
-		Map<String, String> urls = new HashMap<>();
-        
-        String baseUrl;
-
-        if (fetchConfigVO.getIMG_URL() == null) {
-            baseUrl = customerDetails.getCustomerName() + "/" +
-                    customerDetails.getProjectName() + "/" +
-                    customerDetails.getTestSetName() + "/";
-        } else {
-            baseUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() + "/" +
-                    customerDetails.getProjectName() + "/" +
-                    customerDetails.getTestSetName() + "/";
-        }
-
-        urls.put("PassUrl", baseUrl + "Passed_Report.pdf");
-        urls.put("FailUrl", baseUrl + "Failed_Report.pdf");
-        urls.put("DetailUrl", baseUrl + "Detailed_Report.pdf");
-        urls.put("ScriptUrl", baseUrl + testLinesDetails.get(0).getSeqNum() + "_" +
-                testLinesDetails.get(0).getScriptNumber() + ".pdf");
-
-        return urls;
-		
 	}
 
 	int passcount = 0;
