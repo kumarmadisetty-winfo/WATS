@@ -73,7 +73,9 @@ public class SendMailServiceImpl {
 		} catch (IOException | MessagingException e) {
 			logger.error("Exception occurred while downloading attachments");
 			ExceptionUtils.getStackTrace(e);
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while downloading attachments", e);
+
 		}
 		return downloadedAttachments;
 	}
@@ -96,7 +98,9 @@ public class SendMailServiceImpl {
 		} catch (MessagingException ex) {
 			logger.error("Exception occurred while reading mail from mail box");
 			ExceptionUtils.getStackTrace(ex);
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while reading mail from mail box", ex);
+
 		}
 		return attachments;
 	}
@@ -111,7 +115,9 @@ public class SendMailServiceImpl {
 		} catch (MessagingException ex) {
 			logger.error("Exception occurred while connecting to Mail Host");
 			ExceptionUtils.getStackTrace(ex);
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while connecting to Mail Host", ex);
+
 		}
 	}
 
@@ -134,7 +140,9 @@ public class SendMailServiceImpl {
 			});
 			session.setDebug(true);
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while email authentication. User credentials were incorrect", e);
 		}
 		return session;
@@ -204,7 +212,9 @@ public class SendMailServiceImpl {
 
 		} catch (MessagingException e) {
 			e.printStackTrace();
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while sending mail for script run.", e);
+
 		}
 	}
 	

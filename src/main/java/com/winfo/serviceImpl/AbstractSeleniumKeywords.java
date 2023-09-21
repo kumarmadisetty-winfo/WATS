@@ -383,7 +383,9 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while connecting to oci/config path", e);
+
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -429,7 +431,9 @@ public abstract class AbstractSeleniumKeywords {
 						}
 					} catch (IOException e1) {
 						e1.printStackTrace();
+
 						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 								"Exception occurred while read or write screenshot from Object Storage", e1);
 					}
 				}
@@ -437,7 +441,9 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while downloading screenshots from object path location.", e);
 		}
 
@@ -1787,7 +1793,9 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while uploading pdf in Object Storage", e);
+
 		}
 
 	}
@@ -2199,7 +2207,9 @@ public abstract class AbstractSeleniumKeywords {
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while connecting to oci/config path", e);
+
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -2220,7 +2230,9 @@ public abstract class AbstractSeleniumKeywords {
 				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to connect with object store");
 			}
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while getting files from object path location.",
+
 					e);
 		}
 
@@ -2258,7 +2270,9 @@ public abstract class AbstractSeleniumKeywords {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while creating folder in Object Storage..", e);
+
 		}
 	}
 

@@ -322,7 +322,9 @@ public class WatsPluginService {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while downloading file from Object Store", e);
+
 		}
 
 	}

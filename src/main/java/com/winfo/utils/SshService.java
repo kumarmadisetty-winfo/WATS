@@ -55,7 +55,9 @@ public class SshService {
 			if (jse.getMessage().equals(EX_TYPE)) {
 				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Please verify ssh user credentials", jse);
 			} else {
+
 				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while creating Sftp Connection", jse);
+
 			}
 		}
 		return session;
@@ -82,7 +84,9 @@ public class SshService {
 			closeSftp(session, sftpChannel);
 
 		} catch (SftpException | JSchException | IOException e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while writing file via ssh", e);
+
 		}
 	}
 

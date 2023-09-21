@@ -426,7 +426,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 		} catch (Exception e) {
 
-			throw new WatsEBSException(500, "Exception Occured while uploading generated script to object store",
+			throw new WatsEBSException(500, "Exception occurred while uploading generated script to object store",
 
 					e);
 }
@@ -591,7 +591,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if (e instanceof WatsEBSException) {
 				throw e;
 			}
-			throw new WatsEBSException(500, "Exception occured while generating the pdf", e);
+			throw new WatsEBSException(500, "Exception occurred while generating the pdf", e);
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}

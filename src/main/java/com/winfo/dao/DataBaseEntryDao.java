@@ -489,7 +489,9 @@ public class DataBaseEntryDao {
 			query.select(root.get("pdfGenerationEnabled")).where(condition);
 			return em.createQuery(query).getSingleResult();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while getting status of PDF Generation for the Test Run", e);
 		}
 
@@ -544,7 +546,9 @@ public class DataBaseEntryDao {
 			query.setParameter("testSetId", testSetId);
 			return query.getResultList();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching configuration details", e);
+
 		}
 	}
 
@@ -668,7 +672,9 @@ public class DataBaseEntryDao {
 			Query query = em.createQuery(cq.select(from.get(STATUS)));
 			result = query.getResultList();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching the status for test run pdfs", e);
+
 		}
 
 		return result;
@@ -711,7 +717,9 @@ public class DataBaseEntryDao {
 			customerDetails
 					.setTestSetName(NULL_STRING.equals(String.valueOf(result[6])) ? null : String.valueOf(result[6]));
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching all steps details for test run.",
+
 					e);
 		}
 		return customerDetails;
@@ -974,7 +982,9 @@ public class DataBaseEntryDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching all steps details for test run", e);
+
 		}
 		return listOfTestRunExecutionVo;
 	}
@@ -988,7 +998,9 @@ public class DataBaseEntryDao {
 					+ message.replace("'", "''") + "' where testRunScriptParamId=" + "'" + testScriptParamId + "'");
 			query.executeUpdate();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while updating the status for testScriptId " + testScriptParamId, e);
 		}
 	}
@@ -1195,7 +1207,9 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while updating status, end date and path for script level pdf", e);
 		}
 	}
@@ -1210,7 +1224,9 @@ public class DataBaseEntryDao {
 			Query query = session.createSQLQuery(sqlQuery);
 			query.executeUpdate();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while updating the Paths for test run pdfs", e);
+
 		}
 	}
 
@@ -1229,7 +1245,9 @@ public class DataBaseEntryDao {
 			instQuery.executeUpdate();
 
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while inserting records for start date, end date and status", e);
 		}
 	}
@@ -1273,7 +1291,9 @@ public class DataBaseEntryDao {
 			return map;
 
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+
 					"Exception occurred while fetching total pass and fail count for test run script.", e);
 		}
 
@@ -1299,7 +1319,9 @@ public class DataBaseEntryDao {
 			emailParam.setReceiver(user);
 			emailParam.setCcPerson(manager);
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching email for user.", e);
+
 		}
 	}
 	
@@ -1332,7 +1354,9 @@ public class DataBaseEntryDao {
 			emailParam.setCcPerson(managerEmails.stream().filter(Objects::nonNull).collect(Collectors.joining(",")));
 			
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching email for user.", e);
+
 		}
 	}
 
@@ -1348,7 +1372,9 @@ public class DataBaseEntryDao {
 				count = getCountOfInProgressScript(testSetId);
 			}
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching the running process count.", e);
+
 		}
 		return count;
 	}
@@ -1363,7 +1389,9 @@ public class DataBaseEntryDao {
 			BigDecimal inProgressCount = (BigDecimal) session.createSQLQuery(selectQry).getSingleResult();
 			count = inProgressCount.intValue();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching the running process count.", e);
+
 		}
 		return count;
 	}
@@ -1384,7 +1412,9 @@ public class DataBaseEntryDao {
 					+ testSetId + " )";
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while updating the response count", e);
+
 		}
 		return id + 1;
 
@@ -1400,7 +1430,9 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while Updating status flag for test run script.",
+
 					e);
 		}
 	}
@@ -1465,7 +1497,9 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while Updating status for scripts.", e);
+
 		}
 	}
 
@@ -1485,7 +1519,9 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).setParameter("P_TEST_SET_ID", testSetId).executeUpdate();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while Updating status for status flag.", e);
+
 		}
 	}
 
@@ -1501,7 +1537,9 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			count = session.createSQLQuery(updateQry).setParameter("script_id", scriptId).getSingleResult();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while Checking if actions contains excel or not.",
+
 					e);
 		}
 		return Integer.parseInt(count.toString()) > 0;
@@ -1586,7 +1624,9 @@ public class DataBaseEntryDao {
 			  
 		} catch (Exception e) {
 			logger.error("Not able to fetch LookUpCode data from database");
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while fetching LookUpCode data",e);
+
 		}
 		 return query.setParameter("apiValidationId", apiValidationId).setParameter("lookUpCode", lookUpCode).getResultList();
 		}
@@ -1690,7 +1730,9 @@ public class DataBaseEntryDao {
 			Session session = em.unwrap(Session.class);
 			session.createSQLQuery(updateQry).executeUpdate();
 		} catch (Exception e) {
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while Updating status for scripts.", e);
+
 		}
 	}
 	

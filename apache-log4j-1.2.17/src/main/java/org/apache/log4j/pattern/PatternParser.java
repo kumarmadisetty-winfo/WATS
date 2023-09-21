@@ -369,7 +369,7 @@ public final class PatternParser {
           state = MAX_STATE;
         } else {
             LogLog.error(
-              "Error occured in position " + i
+              "Error occurred in position " + i
               + ".\n Was expecting digit, instead got char \"" + c + "\".");
 
           state = LITERAL_STATE;

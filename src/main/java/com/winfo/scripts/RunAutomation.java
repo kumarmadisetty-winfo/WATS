@@ -233,7 +233,9 @@ public class RunAutomation {
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 			if (e instanceof WatsEBSException)
 				throw e;
+
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while creating script for Test Run", e);
+
 		}
 		return executeTestrunVo;
 	}
