@@ -1179,7 +1179,7 @@ public abstract class AbstractSeleniumKeywords {
 		Font anchorFont = new Font(FontFamily.TIMES_ROMAN, 20, Font.UNDERLINE | Font.NORMAL, BaseColor.BLUE);
 		Font contentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.BLACK);
 		Font passContentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.GREEN);
-		Font failContentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.RED);
+		Font failContentFont = FontFactory.getFont("Arial", 20,Font.UNDERLINE | Font.NORMAL, BaseColor.RED);
 
 		PdfPTable table = createTable(5);
 		addTableHeader(table, titleFont);
@@ -1359,11 +1359,6 @@ public abstract class AbstractSeleniumKeywords {
 				Rectangle one1 = new Rectangle(1360, 1000);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
 				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
-					Anchor redirectValueOfFail = new Anchor("", font23);
-					redirectValueOfFail.setName(sno + "_" + scriptNumber1+"_Failed");
-					Paragraph redirectValueOfFailParagraph = new Paragraph();
-					redirectValueOfFailParagraph.add(redirectValueOfFail);
-					document.add(redirectValueOfFailParagraph);
 					document.setPageSize(one1);
 					document.newPage();
 				} else {
@@ -1391,6 +1386,10 @@ public abstract class AbstractSeleniumKeywords {
 
 				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
 					String message = "Failed at Line Number:" + "" + reason;
+					Anchor redirectValueOfFail = new Anchor(message, fnt12);
+					redirectValueOfFail.setName(sno + "_" + scriptNumber1+"_Failed");
+					Paragraph redirectValueOfFailParagraph = new Paragraph();
+					redirectValueOfFailParagraph.add(redirectValueOfFail);
 					String error = metaDataVO.getLineErrorMsg();
 					errorMessage = "Failed Message:" + "" + error;
 					Anchor target1 = new Anchor(status);
@@ -1398,7 +1397,7 @@ public abstract class AbstractSeleniumKeywords {
 					j++;
 					pr1.add(target1);
 					document.add(pr1);
-					document.add(new Paragraph(message, fnt12));
+					document.add(redirectValueOfFailParagraph);
 					if (error != null) {
 						document.add(new Paragraph(errorMessage, fnt12));
 					}
