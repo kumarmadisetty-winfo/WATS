@@ -131,7 +131,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	GenerateTestRunPDFService generateTestRunPDFService;
 	
 	@Autowired
-	WinTaExecutionHistoryServiceImpl executionHistory;
+	ExecutionHistoryServiceImpl executionHistory;
 
 	@Autowired
 	private KafkaTemplate<String, MessageQueueDto> kafkaTemp;

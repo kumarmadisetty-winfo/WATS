@@ -56,6 +56,7 @@ import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
+import com.winfo.service.ExecutionHistoryService;
 import com.winfo.service.SFInterface;
 import com.winfo.service.WoodInterface;
 import com.winfo.serviceImpl.DataBaseEntry;
@@ -69,7 +70,6 @@ import com.winfo.serviceImpl.SmartBearService;
 import com.winfo.serviceImpl.TestCaseDataService;
 import com.winfo.serviceImpl.TestScriptExecService;
 import com.winfo.serviceImpl.UpdateTestSetRecords;
-import com.winfo.serviceImpl.WinTaExecutionHistoryServiceImpl;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -113,7 +113,7 @@ public class RunAutomation {
 	PDFGenerator schedulePdfGenerator;
 
 	@Autowired
-	WinTaExecutionHistoryServiceImpl executionHistory;
+	ExecutionHistoryService executionHistory;
 	
 	public String c_url = null;
 
@@ -296,7 +296,7 @@ public class RunAutomation {
 								logger.info("Test run is STOPPED - Scripts will only run when Test Run status is ACTIVE");
 							} else {
 								try{
-									int executionId = executionHistory.insertExecHistoryTbl(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), testScriptDto.getExecutedBy());
+									int executionId = executionHistory.saveExecutionHistory(Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(), testScriptDto.getExecutedBy());
 									executorMap.put(testSetLineId,executionId);
 									executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData, scriptStatus,
 										customerDetails,executionId);
@@ -342,7 +342,7 @@ public class RunAutomation {
 								} else {
 									if (run) {
 										try{
-											int executionId = executionHistory.insertExecHistoryTbl(Integer.parseInt(metaData.getValue().get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), testScriptDto.getExecutedBy());
+											int executionId = executionHistory.saveExecutionHistory(Integer.parseInt(metaData.getValue().get(0).getTestSetLineId()), fetchConfigVO.getStarttime1(), testScriptDto.getExecutedBy());
 											executorMap.put(metaData.getValue().get(0).getTestSetLineId(),executionId);
 											executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 													scriptStatus, customerDetails, executionId);
@@ -378,6 +378,7 @@ public class RunAutomation {
 
 										errorMessagesHandler.getError("Dependency Fail", fd, fetchConfigVO,
 												fd.getTestScriptParamId(), null, null, null, null);
+										fetchConfigVO.setEndtime(new Date());
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
 												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(),true,testScriptDto.getExecutedBy(),executorMap.get(metaData.getValue().get(0).getTestSetLineId()));
 
@@ -593,7 +594,7 @@ public class RunAutomation {
 			{
 					String enableStatus=dataBaseEntry.getEnabledStatusByTestSetLineID(testSetLineId);	
 					dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId,enableStatus);
-					executionHistoryRepository.updateExecutionHistory("Failed to initiate the driver", new Date(), Constants.FAIL, testScriptDto.getExecutedBy(),executionId);
+					executionHistoryRepository.updateExecutionHistory(Constants.FAILED_TO_INITIATE_THE_DRIVER, new Date(), Constants.FAIL, testScriptDto.getExecutedBy(),executionId);
 			}
 		}
 		catch (Exception e) {
@@ -613,6 +614,8 @@ public class RunAutomation {
 //				dataService.updateTestCaseStatus(post, testSetId, fetchConfigVO);
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
 				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
+				fetchConfigVO.setEndtime(new Date());
+				testLinesDetails.get(0).setLineErrorMsg("Failed to run the script");
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
 						customerDetails.getTestSetName(),false,testScriptDto.getExecutedBy(), executionId);
 

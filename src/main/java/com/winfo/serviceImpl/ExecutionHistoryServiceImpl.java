@@ -11,21 +11,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ExecutionHistory;
 import com.winfo.repository.ExecutionHistoryRepository;
-import com.winfo.service.WinTaExecutionHistoryService;
+import com.winfo.service.ExecutionHistoryService;
 
 @Service
 @Transactional
-public class WinTaExecutionHistoryServiceImpl implements WinTaExecutionHistoryService {
+public class ExecutionHistoryServiceImpl implements ExecutionHistoryService {
 
     private final ExecutionHistoryRepository executionHistoryRepository;
 
     @Autowired
-    public WinTaExecutionHistoryServiceImpl(ExecutionHistoryRepository executionHistoryRepository) {
+    public ExecutionHistoryServiceImpl(ExecutionHistoryRepository executionHistoryRepository) {
         this.executionHistoryRepository = executionHistoryRepository;
     }
 
     @Override
-    public int insertExecHistoryTbl(int testSetLineId, Date startDate, String createdBy) {
+    public int saveExecutionHistory(int testSetLineId, Date startDate, String createdBy) {
         try {
             ExecutionHistory history = new ExecutionHistory();
             history.setTestSetLineId(testSetLineId);
