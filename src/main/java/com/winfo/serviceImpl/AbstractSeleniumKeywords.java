@@ -1359,6 +1359,11 @@ public abstract class AbstractSeleniumKeywords {
 				Rectangle one1 = new Rectangle(1360, 1000);
 				watsLogo.setAlignment(Image.ALIGN_RIGHT);
 				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
+					Anchor redirectValueOfFail = new Anchor("", font23);
+					redirectValueOfFail.setName(sno + "_" + scriptNumber1+"_Failed");
+					Paragraph redirectValueOfFailParagraph = new Paragraph();
+					redirectValueOfFailParagraph.add(redirectValueOfFail);
+					document.add(redirectValueOfFailParagraph);
 					document.setPageSize(one1);
 					document.newPage();
 				} else {
@@ -1503,7 +1508,13 @@ public abstract class AbstractSeleniumKeywords {
 		table.addCell(createCell(new Paragraph(createAnchor(seqNum, font, null)), Element.ALIGN_RIGHT, font));
 		table.addCell(createCell(new Paragraph(createAnchor(scriptNum, font, null)), Element.ALIGN_LEFT, font));
 		table.addCell(createCell(new Paragraph(createAnchor(scenarioName, font, null)), Element.ALIGN_LEFT, font));
-		table.addCell(createCell(new Paragraph(createAnchor(status, statusContentFont, null)), Element.ALIGN_LEFT, statusContentFont));
+		if(status.equalsIgnoreCase("Fail")) {
+			Anchor statusColumn = createAnchor(status, statusContentFont, reference+"_Failed");
+			Paragraph statusParagraph = createParagraph(statusColumn);
+			table.addCell(createCell(statusParagraph, Element.ALIGN_LEFT, statusContentFont));
+		}else {
+			table.addCell(createCell(new Paragraph(createAnchor(status, statusContentFont, null)), Element.ALIGN_LEFT, statusContentFont));
+		}
 		table.addCell(createCell(pageNumberParagraph, Element.ALIGN_RIGHT, anchorFont));
 	}
 
