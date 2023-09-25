@@ -135,4 +135,9 @@ public class Constants {
 	public static final String YET_TO_START="Yet To Start";
 	public static final String TYPE="Testrun";
 	public static final String PDF_PATH="PDF_PATH";
+	public static final String ACTION="ACTION";
+	public static final String IP_VALIDATIONS="IP_VALIDATIONS";
+	public static final String API_VALIDATION="API_VALIDATION";
+	public static final String UNIQUE_MANDATORY="UNIQUE_MANDATORY";
+	public static final String DATATYPES="DATATYPES";
 	}
