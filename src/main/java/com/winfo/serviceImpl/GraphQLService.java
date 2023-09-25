@@ -24,15 +24,15 @@ import com.winfo.vo.ScriptStepsJiraXrayCloud;
 @Service
 public class GraphQLService {
 
-	@Value("${jira.xray.clientId:''}")
+	@Value("${jira.xray.clientId}")
 	private String clientId;
-	@Value("${jira.xray.clientSecret:''}")
+	@Value("${jira.xray.clientSecret}")
 	private String clientSecret;
-	@Value("${jira.xray.projectKey:''}")
+	@Value("${jira.xray.projectKey}")
 	private String projectKey;
-	@Value("${jira.xray.authentication.url:''}")
+	@Value("${jira.xray.authentication.url}")
 	private String authenticationUrl;
-	@Value("${jira.xray.request.url:''}")
+	@Value("${jira.xray.request.url}")
 	private String requestUrl;
 
 	public String createTestRunInJiraXrayCloud(CustomerProjectDto customerDetails) throws Exception {
