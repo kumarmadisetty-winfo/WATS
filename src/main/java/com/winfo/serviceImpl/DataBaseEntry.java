@@ -47,6 +47,7 @@ import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.repository.UserRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
+import com.winfo.service.ExecutionHistoryService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
@@ -89,7 +90,7 @@ public class DataBaseEntry {
 	ApplicationContext appContext;
 	
 	@Autowired
-	ExecutionHistoryRepository executionHistoryRepository;
+	ExecutionHistoryService executionHistory;
 	
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
@@ -371,7 +372,7 @@ public class DataBaseEntry {
 			appContext.getBean(this.getClass()).updateSubscription();
 		}
 		try {
-			executionHistoryRepository.updateExecutionHistory(fetchMetadataListVO.get(0).getLineErrorMsg(), fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy(), executionId);
+			executionHistory.updateExecutionHistory(fetchMetadataListVO.get(0).getLineErrorMsg(), fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy(), executionId);
 		} catch (Exception e) {
 			logger.error("Failed during updating the execution history");
 		}
