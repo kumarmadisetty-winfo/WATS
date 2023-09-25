@@ -153,8 +153,6 @@ public class RunAutomation {
 	SFInterface sfInterface;
 	@Autowired
 	UpdateTestSetRecords updateTestSetService;
-	@Autowired
-	ExecutionHistoryRepository executionHistoryRepository;
 
 	@Autowired
 	TestSetScriptParamRepository testSetScriptParamRepository;
@@ -620,7 +618,7 @@ public class RunAutomation {
 			if (driver == null) {
 				String enableStatus = dataBaseEntry.getEnabledStatusByTestSetLineID(testSetLineId);
 				dataBaseEntry.updateEnabledStatusForTestSetLine(testSetId, enableStatus);
-				executionHistoryRepository.updateExecutionHistory(Constants.FAILED_TO_INITIATE_THE_DRIVER, new Date(),
+				executionHistory.updateExecutionHistory(Constants.FAILED_TO_INITIATE_THE_DRIVER, new Date(),
 						Constants.FAIL, testScriptDto.getExecutedBy(), executionId);
 			}
 		} catch (Exception e) {
@@ -641,7 +639,7 @@ public class RunAutomation {
 				dataBaseEntry.insertScriptExecAuditRecord(auditTrial, AUDIT_TRAIL_STAGES.DF, e.getMessage());
 				dataBaseEntry.updateTestCaseEndDate(post, fetchConfigVO.getEndtime(), post.getP_status());
 				fetchConfigVO.setEndtime(new Date());
-				testLinesDetails.get(0).setLineErrorMsg("Failed to run the script");
+				testLinesDetails.get(0).setLineErrorMsg(Constants.FAILED_TO_RUN_THE_SCRIPT);
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
 						customerDetails.getTestSetName(), false, testScriptDto.getExecutedBy(), executionId);
 

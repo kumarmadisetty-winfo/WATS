@@ -136,4 +136,5 @@ public class Constants {
 	public static final String TYPE="Testrun";
 	public static final String PDF_PATH="PDF_PATH";
 	public static final String FAILED_TO_INITIATE_THE_DRIVER="Failed to initiate the driver";
+	public static final String FAILED_TO_RUN_THE_SCRIPT="Failed to run the script";
 	}

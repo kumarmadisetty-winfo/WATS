@@ -21,14 +21,12 @@ import java.util.Map.Entry;
 import java.util.StringJoiner;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -49,12 +47,11 @@ import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.PyJabActionRepo;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
-import com.winfo.model.ExecutionHistory;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
-import com.winfo.scripts.RunAutomation;
 import com.winfo.repository.TestSetScriptParamRepository;
+import com.winfo.service.ExecutionHistoryService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -131,7 +128,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	GenerateTestRunPDFService generateTestRunPDFService;
 	
 	@Autowired
-	ExecutionHistoryServiceImpl executionHistory;
+	ExecutionHistoryService executionHistory;
 
 	@Autowired
 	private KafkaTemplate<String, MessageQueueDto> kafkaTemp;

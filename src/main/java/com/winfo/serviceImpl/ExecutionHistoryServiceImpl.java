@@ -12,6 +12,7 @@ import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ExecutionHistory;
 import com.winfo.repository.ExecutionHistoryRepository;
 import com.winfo.service.ExecutionHistoryService;
+import com.winfo.utils.Constants;
 
 @Service
 @Transactional
@@ -49,6 +50,11 @@ public class ExecutionHistoryServiceImpl implements ExecutionHistoryService {
         } catch (Exception e) {
             throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while retrieving the maximum executionId", e);
         }
+    }
+    
+    public void updateExecutionHistory(String errorMessage,Date endDate,String status,String executedBy,int executionId) {
+    	 executionHistoryRepository.updateExecutionHistory(errorMessage, endDate,
+    			 status,executedBy, executionId);
     }
 }
 
