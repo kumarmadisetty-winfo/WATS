@@ -21,14 +21,12 @@ import java.util.Map.Entry;
 import java.util.StringJoiner;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -52,8 +50,8 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
-import com.winfo.scripts.RunAutomation;
 import com.winfo.repository.TestSetScriptParamRepository;
+import com.winfo.service.ExecutionHistoryService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -128,6 +126,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	DynamicRequisitionNumber dynamicnumber;
 	@Autowired
 	GenerateTestRunPDFService generateTestRunPDFService;
+	
+	@Autowired
+	ExecutionHistoryService executionHistory;
 
 	@Autowired
 	private KafkaTemplate<String, MessageQueueDto> kafkaTemp;
@@ -532,8 +533,14 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
-				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy());
+				try{
+					int exeId = executionHistory.getMaxExecutionIdForTestSetLine(Integer.parseInt(args.getTestSetLineId()));
+					dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
+							testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),exeId);
+
+				} catch (Exception e){
+					logger.error("Failed to update the execution history");
+				}
 				if (fetchConfigVO.getStatus1().equals(TestScriptExecServiceEnum.FAIL.getValue())) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
