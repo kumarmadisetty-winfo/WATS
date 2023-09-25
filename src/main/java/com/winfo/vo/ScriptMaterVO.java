@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.winfo.serviceImpl.DataBaseEntry;
+import com.winfo.utils.Constants;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -174,11 +175,11 @@ public class ScriptMaterVO {
 		    scriptMetaDatalist.stream()
 		        .filter(metaData -> metaData.getAction() != null)
 		        .forEach(metaData -> {
-		            metaData.setAction(dataBaseEntry.getMeaningByTargetCode(metaData.getAction(), "ACTION"));
-		            metaData.setValidationType(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationType(), "IP_VALIDATIONS"));
-		            metaData.setValidationName(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationName(), "API_VALIDATION"));
-		            metaData.setDatatypes(dataBaseEntry.getMeaningByTargetCode(metaData.getDatatypes(), "DATATYPES"));
-		            metaData.setUniqueMandatory(dataBaseEntry.getMeaningByTargetCode(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
+		        	metaData.setAction(dataBaseEntry.getMeaningByTargetCodeBAndTargetApplication(metaData.getAction(), Constants.ACTION,targetApplication));
+		            metaData.setValidationType(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationType(), Constants.IP_VALIDATIONS));
+		            metaData.setValidationName(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationName(), Constants.API_VALIDATION));
+		            metaData.setDatatypes(dataBaseEntry.getMeaningByTargetCode(metaData.getDatatypes(), Constants.DATATYPES));
+		            metaData.setUniqueMandatory(dataBaseEntry.getMeaningByTargetCode(metaData.getUniqueMandatory(), Constants.UNIQUE_MANDATORY));
 		        });
 		    scriptMetaDatalist.sort(Comparator.comparing(ScriptMetaDataVO::getLineNumber));
 		}
