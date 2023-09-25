@@ -302,7 +302,6 @@ public class RunAutomation {
 									int executionId = executionHistory.saveExecutionHistory(
 											Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(),
 											testScriptDto.getExecutedBy());
-									executorMap.put(testSetLineId, executionId);
 									executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
 											scriptStatus, customerDetails, executionId);
 								} catch (Exception e) {
