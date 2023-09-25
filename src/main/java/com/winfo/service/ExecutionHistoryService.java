@@ -5,6 +5,6 @@ import java.util.Date;
 public interface ExecutionHistoryService {
     int saveExecutionHistory(int testSetLineId, Date startDate, String createdBy) throws Exception;
     int getMaxExecutionIdForTestSetLine(int testSetLineId) throws Exception;
-    public void updateExecutionHistory(String errorMessage,Date endDate,String status,String executedBy,int executionId);
+    void updateExecutionHistory(String errorMessage,Date endDate,String status,String executedBy,int executionId);
 }
 
