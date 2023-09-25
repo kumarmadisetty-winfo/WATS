@@ -174,7 +174,7 @@ public class ScriptMaterVO {
 		    scriptMetaDatalist.stream()
 		        .filter(metaData -> metaData.getAction() != null)
 		        .forEach(metaData -> {
-		            metaData.setAction(dataBaseEntry.getMeaningByTargetCode(metaData.getAction(), "ACTION"));
+		        	metaData.setAction(dataBaseEntry.getMeaningByTargetCodeBAndTargetApplication(metaData.getAction(), "ACTION",targetApplication));
 		            metaData.setValidationType(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationType(), "IP_VALIDATIONS"));
 		            metaData.setValidationName(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationName(), "API_VALIDATION"));
 		            metaData.setDatatypes(dataBaseEntry.getMeaningByTargetCode(metaData.getDatatypes(), "DATATYPES"));
