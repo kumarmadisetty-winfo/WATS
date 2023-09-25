@@ -370,7 +370,7 @@ public class RunAutomation {
 										ScriptDetailsDto fd = metaData.getValue().get(0);
 										FetchScriptVO post = new FetchScriptVO();
 										post.setP_test_set_id(customerDetails.getTestSetId());
-										post.setP_status("Fail");
+										post.setP_status(Constants.FAIL);
 										post.setP_script_id(fd.getScriptId());
 										post.setP_test_set_line_id(fd.getTestSetLineId());
 										post.setP_pass_path(urls.get("PassUrl"));
@@ -627,7 +627,7 @@ public class RunAutomation {
 			if (isDriverError) {
 				FetchScriptVO post = new FetchScriptVO();
 				post.setP_test_set_id(testSetId);
-				post.setP_status("Fail");
+				post.setP_status(Constants.FAIL);
 				post.setP_script_id(scriptId);
 				post.setP_test_set_line_id(testSetLineId);
 				post.setP_pass_path(urls.get("PassUrl"));
@@ -1744,7 +1744,7 @@ public class RunAutomation {
 							break;
 
 						}
-						fetchConfigVO.setStatus1("Pass");
+						fetchConfigVO.setStatus1(Constants.PASS);
 						logger.info("Successfully Executed the" + "" + actionName);
 						testSetScriptParamRepository.updateTestSetScriptParamEndTime(Constants.PASS, new Date(), null,
 								Integer.parseInt(testScriptParamId));
@@ -1764,7 +1764,7 @@ public class RunAutomation {
 											logger.error("Not able to update warning message: {}" + e.getMessage());
 										}
 									});
-							fetchMetadataVO.setStatus("Pass");
+							fetchMetadataVO.setStatus(Constants.PASS);
 						} catch (Exception e) {
 							logger.error(e.getMessage());
 						}
@@ -1778,7 +1778,7 @@ public class RunAutomation {
 						}
 						FetchScriptVO post = new FetchScriptVO();
 						post.setP_test_set_id(testSetId);
-						post.setP_status("Pass");
+						post.setP_status(Constants.PASS);
 						post.setP_script_id(scriptId);
 						post.setP_test_set_line_id(testSetLineId);
 						post.setP_pass_path(passurl);
@@ -1793,7 +1793,7 @@ public class RunAutomation {
 
 						Date enddate = new Date();
 						fetchConfigVO.setEndtime(enddate);
-						fetchConfigVO.setStatus1("Pass");
+						fetchConfigVO.setStatus1(Constants.PASS);
 						try {
 							// dataService.updateTestCaseStatus(post, param, fetchConfigVO);
 							if ("Y".equalsIgnoreCase(fetchMetadataVO.getDependency())) {
@@ -1803,7 +1803,7 @@ public class RunAutomation {
 										int awaitCounter = s.getInExecutionCount();
 										s.setInExecutionCount(--awaitCounter);
 										if (awaitCounter <= 0) {
-											s.setStatusMsg("Pass");
+											s.setStatusMsg(Constants.PASS);
 										}
 									}
 								}
@@ -1823,7 +1823,7 @@ public class RunAutomation {
 								scriptId1, scriptNumber, "pass", startdate, enddate, customerDetails);
 						limitScriptExecutionService.updateFaileScriptscount(testSetLineId, testSetId);
 						downloadScreenShot(fetchConfigVO, fetchMetadataVO, customerDetails, false);
-						fetchMetadataVO.setStatus("Pass");
+						fetchMetadataVO.setStatus(Constants.PASS);
 						seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).createPdf(
 								fetchMetadataListVO, fetchConfigVO, seqNum + "_" + scriptNumber + ".pdf",
 								customerDetails);
@@ -1864,7 +1864,7 @@ public class RunAutomation {
 					e.printStackTrace();
 					if (scriptStatus.containsKey(Integer.parseInt(fetchMetadataVO.getScriptId()))) {
 						Status s = scriptStatus.get(Integer.parseInt(fetchMetadataVO.getScriptId()));
-						s.setStatusMsg("Fail");
+						s.setStatusMsg(Constants.FAIL);
 					}
 					logger.error("Failed to Execute the " + "" + actionName);
 					logger.error(e.getMessage());
@@ -1882,7 +1882,7 @@ public class RunAutomation {
 					}
 					FetchScriptVO post = new FetchScriptVO();
 					post.setP_test_set_id(testSetId);
-					post.setP_status("Fail");
+					post.setP_status(Constants.FAIL);
 					post.setP_script_id(scriptId);
 					post.setP_test_set_line_id(testSetLineId);
 					post.setP_pass_path(passurl);
@@ -1902,12 +1902,12 @@ public class RunAutomation {
 					dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 
 					limitScriptExecutionService.insertTestRunScriptData(fetchConfigVO, fetchMetadataListVO, scriptId1,
-							scriptNumber, "Fail", startdate, enddate, customerDetails);
+							scriptNumber, Constants.FAIL, startdate, enddate, customerDetails);
 
 					int failedScriptRunCount = limitScriptExecutionService.getFailedScriptRunCount(testSetLineId,
 							testSetId);
 
-					fetchConfigVO.setStatus1("Fail");
+					fetchConfigVO.setStatus1(Constants.FAIL);
 					downloadScreenShot(fetchConfigVO, fetchMetadataVO, customerDetails, false);
 					seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME()).createPdf(
 							fetchMetadataListVO, fetchConfigVO,
