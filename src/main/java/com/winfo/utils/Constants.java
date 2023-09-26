@@ -166,4 +166,5 @@ public class Constants {
 	public static final String FAILED_TO_INITIATE_THE_DRIVER="Failed to initiate the driver";
 	public static final String FAILED_TO_RUN_THE_SCRIPT="Failed to run the script";
 	public static final String INPUT_VALUE_MANDATORY="Input Value is mandatory for this step";
+	public static final String LOOKUPCODE_NOT_FOUND="LookUpCode not found of ValidationName";
 	}

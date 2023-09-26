@@ -223,12 +223,17 @@ public class ValdiationServiceImpl implements ValidationService {
 		try {
 			LookUpCode lookUpCode = lookUpCodeRepository.findByLookUpNameAndLookUpCode(
 					testSetScriptParam.getValidationType(), testSetScriptParam.getValidationName());
+			if(lookUpCode==null) {
+				logger.error(Constants.LOOKUPCODE_NOT_FOUND+" - "+testSetScriptParam.getValidationName()+" - " + testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
+				updateLineAndParamValidationStatus(testSetLine, testSetScriptParam, Constants.LOOKUPCODE_NOT_FOUND+" - "+testSetScriptParam.getValidationName());
+				return;
+			}
 			if ("Get UserId".equalsIgnoreCase(testSetScriptParam.getValidationName())) {
 				long userCount = configurationUsersRepository.countByUserName(testSetScriptParam.getInputValue());
 				if (userCount == 0) {
-					logger.warn(testSetScriptParam.getInputParameter() + " is not added in the configuration - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
+					logger.warn(testSetScriptParam.getInputValue() + " is not added in the configuration - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 					updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
-							testSetScriptParam.getInputParameter() + " is not added in the configuration");
+							testSetScriptParam.getInputValue() + " is not added in the configuration");
 					return;
 				}
 			}
