@@ -207,7 +207,7 @@ public class ValdiationServiceImpl implements ValidationService {
 					testSetScriptParam.getTestRunScriptParamId(), testSetScriptParam.getValidationStatus(),
 					testSetScriptParam.getValidationErrorMessage());
 			return Constants.VALIDATION_FAIL.equalsIgnoreCase(testSetScriptParam.getValidationStatus());
-		}).map(testSetScriptParam->new ScriptValidationResponseVO(testSetScriptParam.getTestRunScriptParamId(),testSetScriptParam.getLineErrorMessage()))
+		}).map(testSetScriptParam->new ScriptValidationResponseVO(testSetScriptParam.getTestRunScriptParamId(),testSetScriptParam.getValidationErrorMessage()))
 				.collect(Collectors.toList());
 	}
 
