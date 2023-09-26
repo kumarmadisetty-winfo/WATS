@@ -11,6 +11,7 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.winfo.exception.WatsEBSException;
 import com.winfo.model.LookUpCode;
 import com.winfo.model.TestSet;
 import com.winfo.repository.ConfigLinesRepository;
@@ -68,10 +69,9 @@ public class StringUtils {
 	public static boolean oracleAPIAuthorization(ConstraintValidatorContext context,TestSet testSet,ConfigLinesRepository configLinesRepository,LookUpCodeRepository lookUpCodeRepository) {
 
 		try {
-			List<String> apiDetails = StringUtils.getAPIValidationCredentials(configLinesRepository,testSet.getConfigurationId());
+			List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
 			LookUpCode lookUpCode = lookUpCodeRepository.findByLookUpNameAndLookUpCode(Constants.API_VALIDATION,
 					Constants.GET_USER_ID);
-			try {
 				WebClient webClient = WebClient.builder().baseUrl(apiDetails.get(0))
 						.defaultHeader("Authorization", StringUtils.basicAuthHeader(apiDetails.get(1), apiDetails.get(2))).build();
 				String result = webClient.get().uri(lookUpCode.getTargetCode()).retrieve()
@@ -81,6 +81,7 @@ public class StringUtils {
 										context.disableDefaultConstraintViolation();
 										context.buildConstraintViolationWithTemplate(Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE)
 												.addConstraintViolation();
+										throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.INVALID_API_BASE_URL_CONFIG_MESSAGE);
 									}
 									return Mono.empty();
 								})
@@ -88,13 +89,12 @@ public class StringUtils {
 				if (result != null) {
 					return true;
 				}
-			} catch (Exception e) {
-				context.disableDefaultConstraintViolation();
-				context.buildConstraintViolationWithTemplate(
-						Constants.INVALID_API_BASE_URL_CONFIG_MESSAGE)
-						.addConstraintViolation();
-				return false;
-			}
+			return false;
+		} catch (WatsEBSException e) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(
+					Constants.INVALID_API_BASE_URL_CONFIG_MESSAGE)
+					.addConstraintViolation();
 			return false;
 		} catch (Exception e) {
 			context.disableDefaultConstraintViolation();
@@ -104,13 +104,5 @@ public class StringUtils {
 			return false;
 		}
 	
-	}
-	
-	public static List<String> getAPIValidationCredentials(ConfigLinesRepository configLinesRepository,Integer configId) {
-		List<String> apiDetails = new ArrayList<>();
-		apiDetails.add(configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_BASE_URL, configId));
-		apiDetails.add(configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_USERNAME, configId));
-		apiDetails.add(configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_PASSWORD, configId));
-		return apiDetails;
 	}
 }

@@ -2,6 +2,7 @@ package com.winfo.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,7 +28,7 @@ public class ValidationController {
 	@PutMapping(value = "/validateTestRun/{testSetId}/{validateAll}")
 	@ApiOperation( value="Validate Test Run ",notes = "Test Run Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Test Run validated successfully")})
-	public ResponseDto validateTestRun(@PathVariable Integer testSetId, @PathVariable boolean validateAll) throws Exception {
+	public ResponseEntity<ResponseDto> validateTestRun(@PathVariable Integer testSetId, @PathVariable boolean validateAll) throws Exception {
 		return testRunValisationService.validateTestRun(testSetId,validateAll);
 	}
 	
@@ -35,7 +36,7 @@ public class ValidationController {
 	@PutMapping(value = "/validateSchedule/{jobId}")
 	@ApiOperation( value="Validate Schedule",notes = "Schedule Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Schedule validated successfully")})
-	public ResponseDto validateSchedule(@PathVariable Integer jobId) throws Exception {
+	public ResponseEntity<ResponseDto> validateSchedule(@PathVariable Integer jobId) throws Exception {
 		return testRunValisationService.validateSchedule(jobId);
 	}
 	
@@ -43,7 +44,7 @@ public class ValidationController {
 	@PutMapping(value = "/validateSript/{testSetId}/{testSetLineId}")
 	@ApiOperation( value="Validate Script",notes = "Test Set Line Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script validated successfully")})
-	public ResponseDto validateSript(@PathVariable Integer testSetId,@PathVariable Integer testSetLineId) throws Exception {
+	public ResponseEntity<ResponseDto> validateSript(@PathVariable Integer testSetId,@PathVariable Integer testSetLineId) throws Exception {
 		return testRunValisationService.validateTestRunScript(testSetId,testSetLineId);
 	}
 

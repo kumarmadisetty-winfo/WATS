@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -34,6 +35,7 @@ import com.winfo.service.ValidationService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ResponseDto;
+import com.winfo.vo.ScriptValidationResponseVO;
 
 import reactor.core.publisher.Mono;
 
@@ -68,7 +70,7 @@ public class ValdiationServiceImpl implements ValidationService {
 
 	@Override
 	@Transactional
-	public ResponseDto validateSchedule(Integer jobId) throws Exception {
+	public ResponseEntity<ResponseDto> validateSchedule(Integer jobId) throws Exception {
 		Scheduler scheduler = schedulerRepository.findByJobId(jobId);
 		try {
 			Optional<List<UserSchedulerJob>> listOfTestRuns = userSchedulerJobRepository.findByJobId(jobId);
@@ -78,28 +80,33 @@ public class ValdiationServiceImpl implements ValidationService {
 					try {
 						validateTestRun(testSet.getTestRunId(), true);
 					} catch (Exception e) {
-						logger.error(Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
 						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-								Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+								Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage());
 					}
 				});
 			}
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
-					scheduler.getJobName() + " is " + Constants.VALIDATED_SUCCESSFULLY);
+			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
+					scheduler.getJobName() + " is " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.OK);
 
-		} catch (Exception e) {
-			logger.error(Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					scheduler.getJobName() + " is not " + Constants.VALIDATED_SUCCESSFULLY);
+		} catch (WatsEBSException e) {
+			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+scheduler.getJobName()+" - "+scheduler.getJobId());
+			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					scheduler.getJobName() + " is not " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (Exception e) {
+			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+scheduler.getJobName()+" - "+scheduler.getJobId());
+			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					scheduler.getJobName() + " is not " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@Override
 	@Transactional
-	public ResponseDto validateTestRun(Integer testSetId, boolean validateAll) throws Exception {
+	public ResponseEntity<ResponseDto> validateTestRun(Integer testSetId, boolean validateAll) throws Exception {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		try {
-			List<String> apiDetails = StringUtils.getAPIValidationCredentials(configLinesRepository,testSet.getConfigurationId());
+			List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
 			testSet.getTestRunScriptDatalist().stream().filter(Objects::nonNull).filter(testSetLine -> {
 				if (validateAll)
 					return true;
@@ -111,7 +118,8 @@ public class ValdiationServiceImpl implements ValidationService {
 						.stream().filter(Objects::nonNull).filter(testSetScriptParam -> {
 							return (!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
 									&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
-									|| Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory());
+									|| Constants.MANDATORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()) 
+									|| Constants.BOTH.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory());
 						}).collect(Collectors.toList());
 				if (validationAddedScriptSteps.size() > 0) {
 					validateScript(testSetLine, validationAddedScriptSteps, apiDetails.get(0), apiDetails.get(1),
@@ -123,64 +131,71 @@ public class ValdiationServiceImpl implements ValidationService {
 				testSetLinesRepository.updateValidationStatus(testSetLine.getTestRunScriptId(),
 						testSetLine.getValidationStatus());
 			});
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
-					testSet.getTestRunName() + " is " + Constants.VALIDATED_SUCCESSFULLY);
+			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
+					testSet.getTestRunName() + " is " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.OK);
 
 		} catch (Exception e) {
-			logger.error("Internal server error. Please contact to the administrator: " + e.getMessage());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					testSet.getTestRunName() + " is not " + Constants.VALIDATED_SUCCESSFULLY);
+			logger.error("Internal server error. Please contact to the administrator: " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
+			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					testSet.getTestRunName() + " is not " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@Override
 	@Transactional
-	public ResponseDto validateTestRunScript(Integer testSetId, Integer testSetLineId) throws Exception {
+	public ResponseEntity<ResponseDto> validateTestRunScript(Integer testSetId, Integer testSetLineId) throws Exception {
+		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		try {
-			TestSet testSet = testSetRepository.findByTestRunId(testSetId);
-			List<TestSetLine> testSetLines = testSet.getTestRunScriptDatalist().parallelStream().filter(Objects::nonNull)
-					.filter(testSetLine -> testSetLine.getTestRunScriptId().equals(testSetLineId))
-					.collect(Collectors.toList());
-			testSetLines.get(0).setValidationStatus(Constants.VALIDATION_SUCCESS);
-			List<String> apiDetails = StringUtils.getAPIValidationCredentials(configLinesRepository,testSet.getConfigurationId());
-			List<Integer> validationFailedScriptParam = new ArrayList<>();
-			List<TestSetScriptParam> validationAddedScriptSteps = testSetLines.get(0).getTestRunScriptParam()
-					.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
-						return ((!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
-								&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
-								|| Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()));
-					}).collect(Collectors.toList());
-			if (validationAddedScriptSteps.size() > 0) {
-				validationFailedScriptParam = validateScript(testSetLines.get(0), validationAddedScriptSteps,
-						apiDetails.get(0), apiDetails.get(1), apiDetails.get(2));
-			} else {
-				logger.info(Constants.NO_VALIDATION_MESSAGE);
-				testSetLines.get(0).setValidationStatus(Constants.No_VALIDATION);
+			Optional<TestSetLine> testSetLine = testSet.getTestRunScriptDatalist().parallelStream().filter(Objects::nonNull)
+					.filter(testSetLineObject -> testSetLineObject.getTestRunScriptId().equals(testSetLineId))
+					.findFirst();
+			if(testSetLine.isPresent()) {
+				testSetLine.get().setValidationStatus(Constants.VALIDATION_SUCCESS);
+				List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
+				List<ScriptValidationResponseVO> validationFailedScriptParam = new ArrayList<>();
+				List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.get().getTestRunScriptParam()
+						.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
+							return ((!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
+									&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
+									|| Constants.MANDATORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
+									|| Constants.BOTH.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()));
+						}).collect(Collectors.toList());
+				if (validationAddedScriptSteps.size() > 0) {
+					validationFailedScriptParam = validateScript(testSetLine.get(), validationAddedScriptSteps,
+							apiDetails.get(0), apiDetails.get(1), apiDetails.get(2));
+				} else {
+					logger.info(Constants.NO_VALIDATION_MESSAGE+" - "+testSetLine.get().getTestRunScriptId()+" - "+testSetLine.get().getScriptNumber());
+					testSetLine.get().setValidationStatus(Constants.No_VALIDATION);
+				}
+				testSetLinesRepository.updateValidationStatus(testSetLine.get().getTestRunScriptId(),
+						testSetLine.get().getValidationStatus());
+				if (validationFailedScriptParam.size() > 0) {
+					return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+							Constants.VALIDATION_FAIL,validationFailedScriptParam),HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+				return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, Constants.VALIDATED_SUCCESSFULLY),HttpStatus.OK);
+			}else {
+				return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+						Constants.VALIDATION_FAIL + " - invalid TestSetLineId - "+testSetLineId),HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			testSetLinesRepository.updateValidationStatus(testSetLines.get(0).getTestRunScriptId(),
-					testSetLines.get(0).getValidationStatus());
-			if (validationFailedScriptParam.size() > 0) {
-				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
-						Constants.VALIDATION_FAIL + " :" + validationFailedScriptParam.toString());
-			}
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, Constants.VALIDATED_SUCCESSFULLY);
 
 		} catch (Exception e) {
-			logger.error(Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
+			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	private List<Integer> validateScript(TestSetLine testSetLine, List<TestSetScriptParam> validationAddedScriptSteps,
+	private List<ScriptValidationResponseVO> validateScript(TestSetLine testSetLine, List<TestSetScriptParam> validationAddedScriptSteps,
 			String basePath, String username, String password) {
 		return validationAddedScriptSteps.stream().filter(Objects::nonNull).filter(testSetScriptParam -> {
 			testSetScriptParam.setValidationStatus(Constants.VALIDATION_SUCCESS);
 			testSetScriptParam.setValidationErrorMessage(null);
-			if (Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
+			if ((Constants.MANDATORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
+					|| Constants.BOTH.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()))
 					&& "".equals(testSetScriptParam.getInputValue())) {
 				updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
-						"Input Value is mandetory for this step");
+						Constants.INPUT_VALUE_MANDATORY);
 			} else if (Constants.API_VALIDATION.equalsIgnoreCase(testSetScriptParam.getValidationType())
 					&& !Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationName())) {
 				apiValidation(testSetLine, testSetScriptParam, basePath, username, password);
@@ -192,7 +207,8 @@ public class ValdiationServiceImpl implements ValidationService {
 					testSetScriptParam.getTestRunScriptParamId(), testSetScriptParam.getValidationStatus(),
 					testSetScriptParam.getValidationErrorMessage());
 			return Constants.VALIDATION_FAIL.equalsIgnoreCase(testSetScriptParam.getValidationStatus());
-		}).map(TestSetScriptParam::getTestRunScriptParamId).collect(Collectors.toList());
+		}).map(testSetScriptParam->new ScriptValidationResponseVO(testSetScriptParam.getTestRunScriptParamId(),testSetScriptParam.getLineErrorMessage()))
+				.collect(Collectors.toList());
 	}
 
 	private void updateLineAndParamValidationStatus(TestSetLine testSetLine, TestSetScriptParam testSetScriptParam,String errorMessage) {
@@ -210,6 +226,7 @@ public class ValdiationServiceImpl implements ValidationService {
 			if ("Get UserId".equalsIgnoreCase(testSetScriptParam.getValidationName())) {
 				long userCount = configurationUsersRepository.countByUserName(testSetScriptParam.getInputValue());
 				if (userCount == 0) {
+					logger.warn(testSetScriptParam.getInputParameter() + " is not added in the configuration - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 					updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
 							testSetScriptParam.getInputParameter() + " is not added in the configuration");
 					return;
@@ -222,15 +239,15 @@ public class ValdiationServiceImpl implements ValidationService {
 							clientResponse -> {
 								if (clientResponse.statusCode().value() == HttpStatus.SERVICE_UNAVAILABLE.value()) {
 									testSetScriptParam.setValidationErrorMessage(Constants.ORACLE_SERVICE_UNAVAILABLE);
-									logger.warn(Constants.ORACLE_SERVICE_UNAVAILABLE);
+									logger.warn(Constants.ORACLE_SERVICE_UNAVAILABLE+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 								} else if (clientResponse.statusCode().is4xxClientError()) {
 									testSetScriptParam.setValidationErrorMessage(
 											Constants.ORACLE_CLIENT_ERROR + clientResponse.statusCode());
-									logger.warn(Constants.ORACLE_CLIENT_ERROR + clientResponse.statusCode());
+									logger.warn(Constants.ORACLE_CLIENT_ERROR + clientResponse.statusCode()+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 								} else {
 									testSetScriptParam.setValidationErrorMessage(
 											Constants.ORACLE_SERVER_ERROR + clientResponse.statusCode());
-									logger.warn(Constants.ORACLE_SERVER_ERROR + clientResponse.statusCode());
+									logger.warn(Constants.ORACLE_SERVER_ERROR + clientResponse.statusCode()+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 								}
 								return Mono.empty();
 							})
@@ -241,24 +258,27 @@ public class ValdiationServiceImpl implements ValidationService {
 				try {
 					jsonMap = objectMapper.readValue(result, Map.class);
 				} catch (JsonProcessingException e) {
-					logger.error("Error occured while parsing external JSON: " + e.getMessage());
+					logger.error("Error occurred while parsing external JSON: " + e.getMessage()+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 				}
 				Object itemsObject = jsonMap.get("items");
 				if (itemsObject instanceof List) {
 					List<Map<String, Object>> itemsList = (List<Map<String, Object>>) itemsObject;
 					if (itemsList.isEmpty()
 							|| !itemsList.get(0).containsValue(testSetScriptParam.getInputValue().toUpperCase())) {
-						logger.warn(Constants.INVALID_INPUT_DATA);
+						logger.warn(Constants.INVALID_INPUT_DATA+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 						updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
 								Constants.INVALID_INPUT_DATA);
 					}
+				}else {
+					logger.warn(Constants.INVALID_RESPOSNE_EXTERNAL_API+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
+					updateLineAndParamValidationStatus(testSetLine, testSetScriptParam, Constants.INVALID_RESPOSNE_EXTERNAL_API);
 				}
 			} else {
-				logger.warn(Constants.NO_RESPOSNE_EXTERNAL_API);
+				logger.warn(Constants.NO_RESPOSNE_EXTERNAL_API+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 				updateLineAndParamValidationStatus(testSetLine, testSetScriptParam, Constants.NO_RESPOSNE_EXTERNAL_API);
 			}
 		} catch (Exception e) {
-			logger.error(Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 			updateLineAndParamValidationStatus(testSetLine, testSetScriptParam, Constants.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -267,7 +287,7 @@ public class ValdiationServiceImpl implements ValidationService {
 		LookUpCode lookUpCode = lookUpCodeRepository.findByMeaningAndLookUpName(testSetScriptParam.getValidationName(),
 				testSetScriptParam.getValidationType());
 		if (!StringUtils.isValidDate(testSetScriptParam.getInputValue(), lookUpCode.getMeaning())) {
-			logger.warn(Constants.INVALID_INPUT_DATA);
+			logger.warn(Constants.INVALID_INPUT_DATA+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 			updateLineAndParamValidationStatus(testSetLine, testSetScriptParam, Constants.INVALID_INPUT_DATA);
 		}
 	}

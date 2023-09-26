@@ -6,20 +6,20 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.winfo.constraint.ScheduleIdValidation;
+import com.winfo.constraint.ScheduleValidation;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.utils.Constants;
 
 @Component
-public class ScheduleIdValidator implements ConstraintValidator<ScheduleIdValidation, Integer> {
+public class ScheduleValidator implements ConstraintValidator<ScheduleValidation, Integer> {
 
 	@Autowired
 	SchedulerRepository schedulerRepository;
 	
-	ScheduleIdValidation scheduleIdValidation;
+	ScheduleValidation scheduleIdValidation;
 
 	@Override
-	public void initialize(ScheduleIdValidation constraintAnnotation) {
+	public void initialize(ScheduleValidation constraintAnnotation) {
 	    this.scheduleIdValidation =constraintAnnotation;
 	}
 
