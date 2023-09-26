@@ -16807,7 +16807,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	public void windowhandle(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(6000);
 			String mainWindow = driver.getWindowHandle();
 			Set<String> set = driver.getWindowHandles();
 			Iterator<String> itr = set.iterator();
