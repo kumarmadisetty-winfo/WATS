@@ -586,9 +586,10 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				WebElement waittext = driver.findElement(By
 						.xpath("//div[@style=\"visibility: visible;\"]//span[normalize-space(text())=\"" + param2 + "\"]"));
 				Actions actions = new Actions(driver);
+				screenshot(driver, fetchMetadataVO, customerDetails);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				// screenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Successfully menuNavigationButton is done " + scripNumber);
 				xpath = "//div[@style=\"visibility: visible;\"]//span[normalize-space(text())=\"" + param1 + "\"]";
@@ -16806,7 +16807,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	public void windowhandle(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
 			throws Exception {
 		try {
-			Thread.sleep(20000);
+			Thread.sleep(2000);
 			String mainWindow = driver.getWindowHandle();
 			Set<String> set = driver.getWindowHandles();
 			Iterator<String> itr = set.iterator();
