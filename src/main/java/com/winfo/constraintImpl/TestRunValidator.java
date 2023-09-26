@@ -6,20 +6,20 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.winfo.constraint.TestRunIdValidation;
+import com.winfo.constraint.TestRunValidation;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.utils.Constants;
 
 @Component
-public class TestRunIdValidator implements ConstraintValidator<TestRunIdValidation, Integer> {
+public class TestRunValidator implements ConstraintValidator<TestRunValidation, Integer> {
 
 	@Autowired
 	TestSetRepository testSetRepository;
 	
-	TestRunIdValidation testRunIdValidation;
+	TestRunValidation testRunIdValidation;
 
 	@Override
-	public void initialize(TestRunIdValidation constraintAnnotation) {
+	public void initialize(TestRunValidation constraintAnnotation) {
 	    this.testRunIdValidation =constraintAnnotation;
 	}
 

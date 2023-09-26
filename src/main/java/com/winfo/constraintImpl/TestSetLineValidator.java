@@ -5,20 +5,20 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.winfo.constraint.TestSetLineIdValidation;
+import com.winfo.constraint.TestSetLineValidation;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.utils.Constants;
 
 @Component
-public class TestSetLineIdValidator implements ConstraintValidator<TestSetLineIdValidation, Integer> {
+public class TestSetLineValidator implements ConstraintValidator<TestSetLineValidation, Integer> {
 
 	@Autowired
 	TestSetLinesRepository testSetLinesRepository;
 	
-	TestSetLineIdValidation testSetLineIdValidation;
+	TestSetLineValidation testSetLineIdValidation;
 
 	@Override
-	public void initialize(TestSetLineIdValidation constraintAnnotation) {
+	public void initialize(TestSetLineValidation constraintAnnotation) {
 	    this.testSetLineIdValidation =constraintAnnotation;
 	}
 

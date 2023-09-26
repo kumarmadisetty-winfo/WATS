@@ -138,27 +138,27 @@ public class ValdiationServiceImpl implements ValidationService {
 	public ResponseDto validateTestRunScript(Integer testSetId, Integer testSetLineId) throws Exception {
 		try {
 			TestSet testSet = testSetRepository.findByTestRunId(testSetId);
-			List<TestSetLine> testSetLine = testSet.getTestRunScriptDatalist().parallelStream().filter(Objects::nonNull)
-					.filter(testSetLineid -> testSetLineid.getTestRunScriptId() == testSetLineId)
+			List<TestSetLine> testSetLines = testSet.getTestRunScriptDatalist().parallelStream().filter(Objects::nonNull)
+					.filter(testSetLine -> testSetLine.getTestRunScriptId().equals(testSetLineId))
 					.collect(Collectors.toList());
-			testSetLine.get(0).setValidationStatus(Constants.VALIDATION_SUCCESS);
+			testSetLines.get(0).setValidationStatus(Constants.VALIDATION_SUCCESS);
 			List<String> apiDetails = StringUtils.getAPIValidationCredentials(configLinesRepository,testSet.getConfigurationId());
 			List<Integer> validationFailedScriptParam = new ArrayList<>();
-			List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.get(0).getTestRunScriptParam()
+			List<TestSetScriptParam> validationAddedScriptSteps = testSetLines.get(0).getTestRunScriptParam()
 					.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
 						return ((!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
 								&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
 								|| Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()));
 					}).collect(Collectors.toList());
 			if (validationAddedScriptSteps.size() > 0) {
-				validationFailedScriptParam = validateScript(testSetLine.get(0), validationAddedScriptSteps,
+				validationFailedScriptParam = validateScript(testSetLines.get(0), validationAddedScriptSteps,
 						apiDetails.get(0), apiDetails.get(1), apiDetails.get(2));
 			} else {
 				logger.info(Constants.NO_VALIDATION_MESSAGE);
-				testSetLine.get(0).setValidationStatus(Constants.No_VALIDATION);
+				testSetLines.get(0).setValidationStatus(Constants.No_VALIDATION);
 			}
-			testSetLinesRepository.updateValidationStatus(testSetLine.get(0).getTestRunScriptId(),
-					testSetLine.get(0).getValidationStatus());
+			testSetLinesRepository.updateValidationStatus(testSetLines.get(0).getTestRunScriptId(),
+					testSetLines.get(0).getValidationStatus());
 			if (validationFailedScriptParam.size() > 0) {
 				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
 						Constants.VALIDATION_FAIL + " :" + validationFailedScriptParam.toString());
