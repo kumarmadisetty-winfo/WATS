@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.winfo.repository.ConfigLinesRepository;
@@ -66,12 +67,13 @@ public class ValdiationServiceImpl implements ValidationService {
 	UserSchedulerJobRepository userSchedulerJobRepository;
 
 	@Override
+	@Transactional
 	public ResponseDto validateSchedule(Integer jobId) throws Exception {
 		Scheduler scheduler = schedulerRepository.findByJobId(jobId);
 		try {
 			Optional<List<UserSchedulerJob>> listOfTestRuns = userSchedulerJobRepository.findByJobId(jobId);
 			if (listOfTestRuns.isPresent()) {
-				listOfTestRuns.get().parallelStream().filter(Objects::nonNull).forEach((testRun) -> {
+				listOfTestRuns.get().stream().filter(Objects::nonNull).forEach((testRun) -> {
 					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
 					try {
 						validateTestRun(testSet.getTestRunId(), true);
@@ -93,11 +95,12 @@ public class ValdiationServiceImpl implements ValidationService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseDto validateTestRun(Integer testSetId, boolean validateAll) throws Exception {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		try {
 			List<String> apiDetails = StringUtils.getAPIValidationCredentials(configLinesRepository,testSet.getConfigurationId());
-			testSet.getTestRunScriptDatalist().parallelStream().filter(Objects::nonNull).filter(testSetLine -> {
+			testSet.getTestRunScriptDatalist().stream().filter(Objects::nonNull).filter(testSetLine -> {
 				if (validateAll)
 					return true;
 				else
@@ -105,7 +108,7 @@ public class ValdiationServiceImpl implements ValidationService {
 			}).forEach(testSetLine -> {
 				testSetLine.setValidationStatus(Constants.VALIDATION_SUCCESS);
 				List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.getTestRunScriptParam()
-						.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
+						.stream().filter(Objects::nonNull).filter(testSetScriptParam -> {
 							return (!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
 									&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
 									|| Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory());
@@ -131,6 +134,7 @@ public class ValdiationServiceImpl implements ValidationService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseDto validateTestRunScript(Integer testSetId, Integer testSetLineId) throws Exception {
 		try {
 			TestSet testSet = testSetRepository.findByTestRunId(testSetId);
@@ -170,7 +174,7 @@ public class ValdiationServiceImpl implements ValidationService {
 
 	private List<Integer> validateScript(TestSetLine testSetLine, List<TestSetScriptParam> validationAddedScriptSteps,
 			String basePath, String username, String password) {
-		return validationAddedScriptSteps.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
+		return validationAddedScriptSteps.stream().filter(Objects::nonNull).filter(testSetScriptParam -> {
 			testSetScriptParam.setValidationStatus(Constants.VALIDATION_SUCCESS);
 			testSetScriptParam.setValidationErrorMessage(null);
 			if (Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
