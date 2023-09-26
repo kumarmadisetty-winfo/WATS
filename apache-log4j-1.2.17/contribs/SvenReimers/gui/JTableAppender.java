@@ -223,7 +223,7 @@ class JTableAddAction implements ActionListener {
     
   public
   void actionPerformed(ActionEvent e) {
-    System.out.println("Action occured");
+    System.out.println("Action occurred");
 
     LoggingEvent event = new LoggingEvent("x", cat, Priority.DEBUG, 
 					    "Message "+j, null);

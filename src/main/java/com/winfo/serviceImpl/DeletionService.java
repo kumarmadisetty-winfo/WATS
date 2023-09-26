@@ -19,6 +19,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -95,7 +96,7 @@ public class DeletionService{
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, messageUtil.getObjectStore().getConfigFileIOException());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getObjectStore().getConfigFileIOException());
 		}
 		try {
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
@@ -114,10 +115,10 @@ public class DeletionService{
 			if (e instanceof WatsEBSException) {
 				throw e;
 			} else {
-				return new ResponseDto(500, Constants.ERROR, messageUtil.getDeletion().getError().getPdfAndScreenshotNotDeleted());
+				return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, messageUtil.getDeletion().getError().getPdfAndScreenshotNotDeleted());
 			}
 		}
-		return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfAndScreenshotDeleted());
+		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfAndScreenshotDeleted());
 	}
 
 	public ResponseDto deleteScriptFromTestRun(DeleteEvidenceReportDto deleteReportDtoObj) {
@@ -125,7 +126,7 @@ public class DeletionService{
 		try {
 			configFile = ConfigFileReader.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 		} catch (IOException e) {
-			throw new WatsEBSException(500, messageUtil.getObjectStore().getConfigFileIOException());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getObjectStore().getConfigFileIOException());
 		}
 		
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(deleteReportDtoObj.getTestSetId());
@@ -160,7 +161,7 @@ public class DeletionService{
 		} catch (Exception e) {
 			logger.error(e);
 		}
-		return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfAndScreenshotDeleted());
+		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfAndScreenshotDeleted());
 	}
 	
 	public void deleteScriptDtlsForObjStoreAndSharePoint(TestSetLine testSetLineObj, CustomerProjectDto customerDetails, AuthenticationDetailsProvider provider, FetchConfigVO fetchConfigVO, String testSetId) throws Exception {
@@ -214,13 +215,13 @@ public class DeletionService{
 				}
 			} else {
 				logger.info("Screenshot is not present");
-				return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getScreenshotNotPresent());
+				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getScreenshotNotPresent());
 			}
 
 		} catch (Exception e1) {
-			throw new WatsEBSException(500, messageUtil.getObjectStore().getAccessDeniedException());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getObjectStore().getAccessDeniedException());
 		}
-		return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getScreenshotDeleted());
+		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getScreenshotDeleted());
 	}
 
 	private ResponseDto deletePdf(TestSetLine testSetLine, CustomerProjectDto customerDetails,
@@ -262,12 +263,12 @@ public class DeletionService{
 				}
 			} else {
 				logger.info("Pdf is not present");
-				return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfNotPresent());
+				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfNotPresent());
 			}
 		} catch (Exception e1) {
-			throw new WatsEBSException(500, messageUtil.getObjectStore().getAccessDeniedException());
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), messageUtil.getObjectStore().getAccessDeniedException());
 		}
-		return new ResponseDto(200, Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfDeleted());
+		return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, messageUtil.getDeletion().getSuccess().getPdfDeleted());
 	}
 
 	public void deletePdfFromSharePoint(FetchConfigVO fetchConfigVO, String accessToken,

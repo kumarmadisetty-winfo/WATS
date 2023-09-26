@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -34,7 +35,7 @@ public class PostApiValidationMigrationService {
 	public ResponseDto webClientService(ApiValidationDto listOfLookUpCodesData, String customerUrl) throws JsonMappingException, JsonProcessingException {
 		if (customerUrl.equals("")) {
 			logger.error("Invalid URL " +customerUrl);
-			return new ResponseDto(500,"Invalid URL","Invalid URL!!");
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Invalid URL","Invalid URL!!");
 		} else {
 			WebClient webClient = WebClient.create(customerUrl + "/apiValidationMigrationReceiver");
 			Mono<String> result = webClient.post().syncBody(listOfLookUpCodesData).retrieve().bodyToMono(String.class);
@@ -65,7 +66,7 @@ public class PostApiValidationMigrationService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Failed during api validation migration " + e.getMessage());
-			return new ResponseDto(500, Constants.ERROR, "Migration Failed.");
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, "Migration Failed.");
 		}
 	}
 

@@ -1,11 +1,13 @@
 
 package com.winfo.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.model.TestSetScriptParam;
@@ -39,5 +41,19 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	@Transactional
 	@Query("UPDATE TestSetScriptParam SET validationStatus =:validationStatus , validationErrorMessage =:validationErrorMessage WHERE testRunScriptParamId=:testRunScriptParamId")
 	int updateValidationStatusAndValidationErrorMessage(int testRunScriptParamId, String validationStatus,String validationErrorMessage);
+
+	@Query("UPDATE TestSetScriptParam  SET startTime=:startTime  WHERE testRunScriptParamId=:testRunScriptParamId")
+	int updateTestSetScriptParamStartTime(Date startTime,int testRunScriptParamId);
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE TestSetScriptParam  SET lineExecutionStatus=:status,endTime=:endTime,lineErrorMessage=:errorMessage  WHERE testRunScriptParamId=:testRunScriptParamId")
+	int updateTestSetScriptParamEndTime(String status,Date endTime,String errorMessage,int testRunScriptParamId);
+	
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE TestSetScriptParam  SET lineExecutionStatus=:status,startTime=:startTime,endTime=:endTime,updateDate=:updateDate,lineErrorMessage=:errorMessage,inputValue=:copiedValue WHERE testRunScriptParamId=:testRunScriptParamId")
+	int updateTestSetScriptParamStatusAndStartAndEndTime(String status,Date startTime,Date endTime,Date updateDate,String errorMessage,String copiedValue, int testRunScriptParamId);
 
 }

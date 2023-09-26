@@ -35,9 +35,9 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
-import com.winfo.model.User;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.CustomerRepository;
+import com.winfo.repository.ExecutionHistoryRepository;
 import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.ScriptMasterRepository;
@@ -47,6 +47,7 @@ import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.repository.UserRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
+import com.winfo.service.ExecutionHistoryService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.SCRIPT_PARAM_STATUS;
@@ -88,6 +89,9 @@ public class DataBaseEntry {
 	@Autowired
 	ApplicationContext appContext;
 	
+	@Autowired
+	ExecutionHistoryService executionHistory;
+	
 	public final Logger logger = LogManager.getLogger(DataBaseEntry.class);
 	private static final String COMPLETED = "Completed";
 	@Autowired
@@ -114,12 +118,6 @@ public class DataBaseEntry {
 	public void updatePassedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String test_script_param_id, String status) throws ClassNotFoundException, SQLException {
 		dao.updatePassedScriptLineStatus(test_script_param_id, status);
-	}
-
-	public void updateFailedScriptLineStatus(ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			String test_script_param_id, String status, String error_message)
-			throws ClassNotFoundException, SQLException {
-		dao.updateFailedScriptLineStatus(test_script_param_id, error_message);
 	}
 
 	public void updateInProgressScriptLineStatus(String test_script_param_id, String status)
@@ -256,7 +254,7 @@ public class DataBaseEntry {
 		} catch (Exception e) {
 			// no need of throwing exception, just print
 			logger.error(
-					"Exception occured while loggin audit trial for test set line id - {} with correlation id - {}",
+					"Exception occurred while loggin audit trial for test set line id - {} with correlation id - {}",
 					auditTrial.getTestSetLineId(), auditTrial.getCorrelationId());
 			e.printStackTrace();
 		}
@@ -366,15 +364,19 @@ public class DataBaseEntry {
 
 	@Transactional
 	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
-			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent, String executedBy) {
+			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent, String executedBy, int executionId) {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(testRunName);
 		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
 		if (!isDependentFailBecauseOfIndependent) {
 			appContext.getBean(this.getClass()).updateSubscription();
 		}
-		dao.insertExecHistoryTbl(fetchScriptVO.getP_test_set_line_id(), fetchConfigVO.getStarttime(),
-				fetchConfigVO.getEndtime(), fetchConfigVO.getStatus1());
+		try {
+			executionHistory.updateExecutionHistory(fetchMetadataListVO.get(0).getLineErrorMsg(), fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy(), executionId);
+		} catch (Exception e) {
+			logger.error("Failed during updating the execution history");
+		}
+		
 
 		Integer responseCount = dao.updateExecStatusTable(fetchScriptVO.getP_test_set_id());
 
@@ -452,7 +454,7 @@ public class DataBaseEntry {
 			}
 			logger.info("Successfully sent testrun notification email");
 		} catch (Exception e) {
-			logger.error("Exception occured while sending testrun notification email " + e.getMessage());
+			logger.error("Exception occurred while sending testrun notification email " + e.getMessage());
 		}
 	}
 	

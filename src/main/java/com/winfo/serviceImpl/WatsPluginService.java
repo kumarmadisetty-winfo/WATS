@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -139,27 +140,27 @@ public class WatsPluginService {
 
 			if (userIdEnd != null && userIdPwdEx != null && userIdActive != null) {
 				if (password.equalsIgnoreCase(passwordEncript)) {
-					response.setStatus(200);
+					response.setStatus(HttpStatus.OK.value());
 					response.setStatusMessage("Login successfully");
 				} else {
-					response.setStatus(404);
+					response.setStatus(HttpStatus.NOT_FOUND.value());
 					response.setStatusMessage("Password is incorrect");
 				}
 			}
 			if (userIdEnd == null) {
-				response.setStatus(404);
+				response.setStatus(HttpStatus.NOT_FOUND.value());
 				response.setStatusMessage("User account expired");
 			}
 			if (userIdPwdEx == null) {
-				response.setStatus(404);
+				response.setStatus(HttpStatus.NOT_FOUND.value());
 				response.setStatusMessage("User password expired.Please concat your administrator!");
 			}
 			if (userIdActive == null) {
-				response.setStatus(404);
+				response.setStatus(HttpStatus.NOT_FOUND.value());
 				response.setStatusMessage("UserId is in-active!");
 			}
 		} else {
-			response.setStatus(404);
+			response.setStatus(HttpStatus.NOT_FOUND.value());
 			response.setStatusMessage("User name does not exists");
 		}
 		return response;
@@ -321,7 +322,9 @@ public class WatsPluginService {
 		} catch (WatsEBSException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new WatsEBSException(500, "Exception occured while downloading file from Object Store", e);
+
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while downloading file from Object Store", e);
+
 		}
 
 	}

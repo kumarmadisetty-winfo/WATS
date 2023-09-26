@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -132,10 +133,10 @@ public class JiraUserServiceManagement {
 			addUserToOrganization(mapOfBody, organizationId);
 			mapOfBody.clear();
 
-			return new ResponseDto(200, Constants.SUCCESS, "User Creation Completed!");
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "User Creation Completed!");
 		} catch (Exception e) {
 			logger.error("Failed during user creation " + e.getMessage());
-			return new ResponseDto(500, Constants.ERROR, e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
 	}
 
@@ -160,7 +161,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to get the user info " + e.getMessage());
-			throw new WatsEBSException(500, "Not able to get the user info!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to get the user info!");
 		}
 	}
 
@@ -179,7 +180,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to get all the organization details " + e.getMessage());
-			throw new WatsEBSException(500, "Not able to get all the organization details!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to get all the organization details!");
 		}
 	}
 
@@ -203,7 +204,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to create the organization " +e.getMessage());
-			throw new WatsEBSException(500, "Not able to create the organization!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to create the organization!");
 		}
 	}
 
@@ -225,7 +226,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to add the organization to the project " +e.getMessage());
-			throw new WatsEBSException(500, "Not able to add the organization to the project!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to add the organization to the project!");
 		}
 	}
 
@@ -244,7 +245,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to get all the organization present in the project " +e.getMessage());
-			throw new WatsEBSException(500, "Not able to get all the organization present in the project!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to get all the organization present in the project!");
 		}
 	}
 
@@ -268,7 +269,7 @@ public class JiraUserServiceManagement {
 			});
 		} catch (Exception e) {
 			logger.error("Failed to create new user "+e.getMessage());
-			throw new WatsEBSException(500, "Not able to create new user!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to create new user!");
 		}
 	}
 
@@ -290,7 +291,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to add the user to the organization!" +e.getMessage());
-			throw new WatsEBSException(500, "Not able to add the user to the organization!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to add the user to the organization!");
 		}
 	}
 
@@ -312,7 +313,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to remove the user from the organization " +e.getMessage());
-			throw new WatsEBSException(500, "Not able to remove the user from the organization!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to remove the user from the organization!");
 		}
 	}
 
@@ -334,7 +335,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to remove the user from the project "+e.getMessage());
-			throw new WatsEBSException(500, "Not able to remove the user from the project!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to remove the user from the project!");
 		}
 	}
 
@@ -355,7 +356,7 @@ public class JiraUserServiceManagement {
 			apiValidationResponse(apiValidationData);
 		} catch (Exception e) {
 			logger.error("Failed to remove the organization from the project " +e.getMessage());
-			throw new WatsEBSException(500, "Not able to remove the organization from the project!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to remove the organization from the project!");
 		}
 	}
 
@@ -405,7 +406,7 @@ public class JiraUserServiceManagement {
 			apiValidationData.setResponse(result);
 		} catch (Exception ex) {
 			logger.error("Failed to hit the jira url " + ex.getMessage());
-			throw new WatsEBSException(500, "Not able to hit the jira url!");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Not able to hit the jira url!");
 		}
 	}
 
@@ -451,13 +452,13 @@ public class JiraUserServiceManagement {
 				mapOfBody.put("accountIds", Arrays.asList(userId));
 				removeUserFromOrganization(mapOfBody, organizationId);
 				removeUserFromProject(mapOfBody);
-				return new ResponseDto(200, Constants.SUCCESS, "Successfully removed the user!");
+				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Successfully removed the user!");
 			} else {
 				return new ResponseDto(299, Constants.WARNING, "User does not exists!");
 			}
 		} catch (Exception e) {
 			logger.error("Failed to remove the user "+e.getMessage());
-			return new ResponseDto(500, Constants.ERROR, e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
 	}
 
@@ -487,13 +488,13 @@ public class JiraUserServiceManagement {
 				organizationId = getOrganizationIfExists.get().get("id").toString();
 				mapOfBody.put("organizationId", organizationId);
 				removeOrganization(mapOfBody);
-				return new ResponseDto(200, Constants.SUCCESS, "Successfully removed the organization!");
+				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, "Successfully removed the organization!");
 			} else {
 				return new ResponseDto(299, Constants.WARNING, "Organization does not exists!");
 			}
 		} catch (Exception e) {
 			logger.error("Successfully removed the organization " + e.getMessage());
-			return new ResponseDto(500, Constants.ERROR, e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
 
 	}

@@ -79,7 +79,7 @@ public class UpdateTestSetRecords {
 			}
 			initiationSendMail(testSetName, jobId, executedBy, testSetId);
 		} catch (Exception e) {
-			logger.error("Exception occured while updating dependency testRun detailes");
+			logger.error("Exception occurred while updating dependency testRun detailes");
 		}
 	}
 

@@ -18,23 +18,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import java.util.StringJoiner;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -57,6 +50,8 @@ import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.PyJabActions;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.TestSetScriptParamRepository;
+import com.winfo.service.ExecutionHistoryService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.Constants.AUDIT_TRAIL_STAGES;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
@@ -131,6 +126,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	DynamicRequisitionNumber dynamicnumber;
 	@Autowired
 	GenerateTestRunPDFService generateTestRunPDFService;
+	
+	@Autowired
+	ExecutionHistoryService executionHistory;
 
 	@Autowired
 	private KafkaTemplate<String, MessageQueueDto> kafkaTemp;
@@ -140,10 +138,12 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	
 	@Autowired
 	SmartBearService smartBearService;
+	
+	@Autowired
+	TestSetScriptParamRepository testSetScriptParamRepository;
 
 	public String getTestSetMode(Long testSetId) {
 		return dataBaseEntry.getTestSetMode(testSetId);
-
 	}
 
 	public void executorMethodPyJab(TestScriptDto testScriptDto, FetchConfigVO fetchConfigVO,
@@ -427,7 +427,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 		} catch (Exception e) {
 
-			throw new WatsEBSException(500, "Exception Occured while uploading generated script to object store",
+			throw new WatsEBSException(500, "Exception occurred while uploading generated script to object store",
 
 					e);
 }
@@ -480,22 +480,21 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 					+ customerDetails.getCustomerName() + File.separator + customerDetails.getTestSetName());
 
 			String scriptId = testLinesDetails.get(0).getScriptId();
-			String passurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()+"/"+ customerDetails.getProjectName()  + "/"
-					+ customerDetails.getTestSetName() + "/Passed_Report.pdf";
-			String failurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() +"/"
-					+ customerDetails.getTestSetName() + "/Failed_Report.pdf" ;
-			String detailurl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName()+ "/"+ customerDetails.getProjectName()  + "/"
-					+ customerDetails.getTestSetName() +"/Detailed_Report.pdf";
-			String scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
-					+ customerDetails.getTestSetName() + "/" + testLinesDetails.get(0).getSeqNum() + "_"
-					+ testLinesDetails.get(0).getScriptNumber() + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
+			Map<String, String> urls = FileUtil.generateUrls(fetchConfigVO, customerDetails, testLinesDetails);
+
+			//Map<String, String> mapOfUrl=runAutomation.generateUrls( fetchConfigVO,  customerDetails, testLinesDetails);
+			//String passUrl = urls.get("PassUrl");
+			//String failUrl = urls.get("FailUrl");
+			//String detailUrl = urls.get("DetailUrl");
+			//String scriptUrl = urls.get("ScriptUrl");
+			
 			fetchConfigVO.setStarttime(testSetLine.getExecutionStartTime());
 			deleteScreenshotsFromWindows(screenShotFolderPath, testLinesDetails.get(0).getSeqNum());
 			downloadScreenshotsFromObjectStore(screenShotFolderPath, customerDetails.getCustomerName(),
 					customerDetails.getTestSetName(), testLinesDetails.get(0).getSeqNum() + "_");
 
-			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), passurl,
-					failurl, detailurl, scripturl);
+			FetchScriptVO post = new FetchScriptVO(args.getTestSetId(), scriptId, args.getTestSetLineId(), urls.get("PassUrl"),
+					urls.get("FailUrl"), urls.get("DetailUrl"),  urls.get("ScriptUrl"));
 			Date enddate = null;
 			boolean updateStatus = limitScriptExecutionService.updateStatusCheck(fetchConfigVO,
 					customerDetails.getTestSetId(), testLinesDetails.get(0).getScriptId(),
@@ -523,9 +522,10 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 						args.getTestSetId());
 				pdfName = testLinesDetails.get(0).getSeqNum() + "_" + testLinesDetails.get(0).getScriptNumber() + "_RUN"
 						+ failedScriptRunCount + TestScriptExecServiceEnum.PDF_EXTENSION.getValue();
-				 scripturl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
+				
+			String scriptUrl = fetchConfigVO.getIMG_URL() + customerDetails.getCustomerName() +"/"+ customerDetails.getProjectName() + "/"
 							+ customerDetails.getTestSetName() + "/" + pdfName;
-				post.setP_test_set_line_path(scripturl);
+				post.setP_test_set_line_path(scriptUrl);
 				dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
 			}
 //			dataBaseEntry.updateTestCaseEndDate(post, enddate, fetchConfigVO.getStatus1());
@@ -533,8 +533,14 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 
 			/* Email processing Updating subscription table code */
 			if (updateStatus) {
-				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-						testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy());
+				try{
+					int exeId = executionHistory.getMaxExecutionIdForTestSetLine(Integer.parseInt(args.getTestSetLineId()));
+					dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
+							testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),exeId);
+
+				} catch (Exception e){
+					logger.error("Failed to update the execution history");
+				}
 				if (fetchConfigVO.getStatus1().equals(TestScriptExecServiceEnum.FAIL.getValue())) {
 					failedScriptRunCount = failedScriptRunCount + 1;
 					limitScriptExecutionService.updateFailScriptRunCount(failedScriptRunCount, args.getTestSetLineId(),
@@ -592,7 +598,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			if (e instanceof WatsEBSException) {
 				throw e;
 			}
-			throw new WatsEBSException(500, "Exception occured while generating the pdf", e);
+			throw new WatsEBSException(500, "Exception occurred while generating the pdf", e);
 		}
 		return new ResponseDto(200, Constants.SUCCESS, null);
 	}
@@ -651,18 +657,23 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 		}
 	}
 
-	public void updateScriptStepStatus(UpdateScriptStepStatus args) throws ClassNotFoundException, SQLException {
+	public void updateScriptStepStatus(UpdateScriptStepStatus scriptParamDetails)
+			throws ClassNotFoundException, SQLException {
 		String status = SCRIPT_PARAM_STATUS.FAIL.getLabel();
-		if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
+		if (scriptParamDetails.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.PASS.getLabel())) {
 			status = SCRIPT_PARAM_STATUS.PASS.getLabel();
-		} else if (args.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
+		} else if (scriptParamDetails.getStatus().equalsIgnoreCase(SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel())) {
 			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
 		}
-		if (StringUtils.isBlank(args.getResult())) {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getMessage());
+		if (StringUtils.isBlank(scriptParamDetails.getResult())) {
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(),
+					scriptParamDetails.getMessage(), null, Integer.parseInt(scriptParamDetails.getScriptParamId()));
 		} else {
-			dataBaseEntry.updatePassedScriptLineStatus(null, null, args.getScriptParamId(), status, args.getResult(),
-					args.getMessage());
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(), null,
+					scriptParamDetails.getResult(), Integer.parseInt(scriptParamDetails.getScriptParamId()));
+
 		}
 	}
 
@@ -725,7 +736,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 
-	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+	//@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
