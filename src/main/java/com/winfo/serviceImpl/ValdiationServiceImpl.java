@@ -1,11 +1,11 @@
 package com.winfo.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.model.UserSchedulerJob;
-import com.winfo.service.TestRunValidationService;
+import com.winfo.service.ValidationService;
 import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ResponseDto;
@@ -38,9 +38,9 @@ import com.winfo.vo.ResponseDto;
 import reactor.core.publisher.Mono;
 
 @Service
-public class TestRunValdiationServiceImpl implements TestRunValidationService {
+public class ValdiationServiceImpl implements ValidationService {
 
-	public static final Logger logger = Logger.getLogger(TestRunValdiationServiceImpl.class);
+	public static final Logger logger = Logger.getLogger(ValdiationServiceImpl.class);
 
 	@Autowired
 	TestSetRepository testSetRepository;
@@ -62,55 +62,116 @@ public class TestRunValdiationServiceImpl implements TestRunValidationService {
 
 	@Autowired
 	SchedulerRepository schedulerRepository;
-	
+
 	@Autowired
 	UserSchedulerJobRepository userSchedulerJobRepository;
 
 	@Override
-	@Transactional
+	public ResponseDto validateSchedule(Integer jobId) throws Exception {
+		Scheduler scheduler = schedulerRepository.findByJobId(jobId);
+		try {
+			Optional<List<UserSchedulerJob>> listOfTestRuns = userSchedulerJobRepository.findByJobId(jobId);
+			if (listOfTestRuns.isPresent()) {
+				listOfTestRuns.get().parallelStream().filter(Objects::nonNull).forEach((testRun) -> {
+					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
+					try {
+						validateTestRun(testSet.getTestRunId(), true);
+					} catch (Exception e) {
+						logger.error(Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+								Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+					}
+				});
+			}
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
+					scheduler.getJobName() + " is " + Constants.VALIDATED_SUCCESSFULLY);
+
+		} catch (Exception e) {
+			logger.error(Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					scheduler.getJobName() + " is not " + Constants.VALIDATED_SUCCESSFULLY);
+		}
+	}
+
+	@Override
 	public ResponseDto validateTestRun(Integer testSetId, boolean validateAll) throws Exception {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		try {
-			String basePath = configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_BASE_URL,
-					testSet.getConfigurationId());
-			String username = configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_USERNAME,
-					testSet.getConfigurationId());
-			String password = configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_PASSWORD,
-					testSet.getConfigurationId());
-			testSet.getTestRunScriptDatalist().parallelStream().forEach(testSetLine -> {
+			List<String> apiDetails = StringUtils.getAPIValidationCredentials(configLinesRepository,testSet.getConfigurationId());
+			testSet.getTestRunScriptDatalist().parallelStream().filter(Objects::nonNull).filter(testSetLine -> {
+				if (validateAll)
+					return true;
+				else
+					return "Y".equalsIgnoreCase(testSetLine.getEnabled());
+			}).forEach(testSetLine -> {
 				testSetLine.setValidationStatus(Constants.VALIDATION_SUCCESS);
 				List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.getTestRunScriptParam()
-						.parallelStream().filter(testSetScriptParam -> {
-							if(validateAll)	return (!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
+						.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
+							return (!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
 									&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
 									|| Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory());
-							else return ((!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
-									&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
-									|| Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())) && "Y".equalsIgnoreCase(testSetLine.getEnabled());
 						}).collect(Collectors.toList());
 				if (validationAddedScriptSteps.size() > 0) {
-					validateScript(testSetLine, validationAddedScriptSteps, basePath, username, password);
+					validateScript(testSetLine, validationAddedScriptSteps, apiDetails.get(0), apiDetails.get(1),
+							apiDetails.get(2));
 				} else {
-					logger.info("No Validation added to the script");
+					logger.info(Constants.NO_VALIDATION_MESSAGE);
 					testSetLine.setValidationStatus(Constants.No_VALIDATION);
 				}
 				testSetLinesRepository.updateValidationStatus(testSetLine.getTestRunScriptId(),
 						testSetLine.getValidationStatus());
 			});
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
-					testSet.getTestRunName() + " is validated successfully");
+					testSet.getTestRunName() + " is " + Constants.VALIDATED_SUCCESSFULLY);
 
 		} catch (Exception e) {
 			logger.error("Internal server error. Please contact to the administrator: " + e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					testSet.getTestRunName() + "is not validated successfully");
+					testSet.getTestRunName() + " is not " + Constants.VALIDATED_SUCCESSFULLY);
 		}
 	}
 
-	@Transactional
-	public void validateScript(TestSetLine testSetLine, List<TestSetScriptParam> validationAddedScriptSteps,
+	@Override
+	public ResponseDto validateTestRunScript(Integer testSetId, Integer testSetLineId) throws Exception {
+		try {
+			TestSet testSet = testSetRepository.findByTestRunId(testSetId);
+			List<TestSetLine> testSetLine = testSet.getTestRunScriptDatalist().parallelStream().filter(Objects::nonNull)
+					.filter(testSetLineid -> testSetLineid.getTestRunScriptId() == testSetLineId)
+					.collect(Collectors.toList());
+			testSetLine.get(0).setValidationStatus(Constants.VALIDATION_SUCCESS);
+			List<String> apiDetails = StringUtils.getAPIValidationCredentials(configLinesRepository,testSet.getConfigurationId());
+			List<Integer> validationFailedScriptParam = new ArrayList<>();
+			List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.get(0).getTestRunScriptParam()
+					.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
+						return ((!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
+								&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
+								|| Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()));
+					}).collect(Collectors.toList());
+			if (validationAddedScriptSteps.size() > 0) {
+				validationFailedScriptParam = validateScript(testSetLine.get(0), validationAddedScriptSteps,
+						apiDetails.get(0), apiDetails.get(1), apiDetails.get(2));
+			} else {
+				logger.info(Constants.NO_VALIDATION_MESSAGE);
+				testSetLine.get(0).setValidationStatus(Constants.No_VALIDATION);
+			}
+			testSetLinesRepository.updateValidationStatus(testSetLine.get(0).getTestRunScriptId(),
+					testSetLine.get(0).getValidationStatus());
+			if (validationFailedScriptParam.size() > 0) {
+				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
+						Constants.VALIDATION_FAIL + " :" + validationFailedScriptParam.toString());
+			}
+			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, Constants.VALIDATED_SUCCESSFULLY);
+
+		} catch (Exception e) {
+			logger.error(Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					Constants.INTERNAL_SERVER_ERROR + ": " + e.getMessage());
+		}
+	}
+
+	private List<Integer> validateScript(TestSetLine testSetLine, List<TestSetScriptParam> validationAddedScriptSteps,
 			String basePath, String username, String password) {
-		validationAddedScriptSteps.parallelStream().forEach(testSetScriptParam -> {
+		return validationAddedScriptSteps.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
 			testSetScriptParam.setValidationStatus(Constants.VALIDATION_SUCCESS);
 			testSetScriptParam.setValidationErrorMessage(null);
 			if (Constants.MANDETORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
@@ -127,7 +188,14 @@ public class TestRunValdiationServiceImpl implements TestRunValidationService {
 			testSetScriptParamRepository.updateValidationStatusAndValidationErrorMessage(
 					testSetScriptParam.getTestRunScriptParamId(), testSetScriptParam.getValidationStatus(),
 					testSetScriptParam.getValidationErrorMessage());
-		});
+			return Constants.VALIDATION_FAIL.equalsIgnoreCase(testSetScriptParam.getValidationStatus());
+		}).map(TestSetScriptParam::getTestRunScriptParamId).collect(Collectors.toList());
+	}
+
+	private void updateLineAndParamValidationStatus(TestSetLine testSetLine, TestSetScriptParam testSetScriptParam,String errorMessage) {
+		testSetScriptParam.setValidationErrorMessage(errorMessage);
+		testSetScriptParam.setValidationStatus(Constants.VALIDATION_FAIL);
+		if(Constants.VALIDATION_SUCCESS.equalsIgnoreCase(testSetLine.getValidationStatus()))testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -200,54 +268,4 @@ public class TestRunValdiationServiceImpl implements TestRunValidationService {
 			updateLineAndParamValidationStatus(testSetLine, testSetScriptParam, Constants.INVALID_INPUT_DATA);
 		}
 	}
-
-	private void updateLineAndParamValidationStatus(TestSetLine testSetLine, TestSetScriptParam testSetScriptParam,
-			String errorMessage) {
-		testSetScriptParam.setValidationErrorMessage(errorMessage);
-		testSetScriptParam.setValidationStatus(Constants.VALIDATION_FAIL);
-		testSetLine.setValidationStatus(Constants.VALIDATION_FAIL);
-	}
-
-	@Override
-	@Transactional
-	public ResponseDto validateSchedule(Integer jobId) throws Exception {
-		Scheduler scheduler=schedulerRepository.findByJobId(jobId);
-		try {
-			Optional<List<UserSchedulerJob>> listOfTestRuns=userSchedulerJobRepository.findByJobId(jobId);
-			if(listOfTestRuns.isPresent()) {
-				listOfTestRuns.get().parallelStream().filter(Objects::nonNull).forEach((testRun)->{
-					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
-					try {
-						validateTestRun(testSet.getTestRunId(),true);
-					} catch (Exception e) {
-						logger.error("Internal server error. Please contact to the administrator: "+e.getMessage());
-						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error. Please contact to the administrator: "+e.getMessage());
-					}
-				});
-			}
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
-					scheduler.getJobName() + " is validated successfully");
-
-		} catch (Exception e) {
-			logger.error("Internal server error. Please contact to the administrator: "+e.getMessage());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					scheduler.getJobName() + "is not validated successfully");
-		}
-	}
-
-	@Override
-	public ResponseDto validateScript(Integer scriptId) throws Exception {
-		Scheduler scheduler=schedulerRepository.findByJobId(scriptId);
-		try {
-			//write logic here
-			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
-					scheduler.getJobName() + " is validated successfully");
-			
-		} catch (Exception e) {
-			logger.error("Internal server error. Please contact to the administrator: "+e.getMessage());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					scheduler.getJobName() + "is not validated successfully");
-		}
-	}
-
 }

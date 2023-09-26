@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.winfo.service.TestRunValidationService;
+import com.winfo.service.ValidationService;
 import com.winfo.vo.ResponseDto;
 
 import io.swagger.annotations.ApiOperation;
@@ -17,11 +17,11 @@ import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin("*")
 @RestController
-public class TestRunValidationController {
-	public static final Logger logger = Logger.getLogger(TestRunValidationController.class);
+public class ValidationController {
+	public static final Logger logger = Logger.getLogger(ValidationController.class);
 
 	@Autowired
-	private TestRunValidationService testRunValisationService;
+	private ValidationService testRunValisationService;
 
 	@ResponseBody
 	@PutMapping(value = "/validateTestRun/{testSetId}/{validateAll}")
@@ -40,11 +40,11 @@ public class TestRunValidationController {
 	}
 	
 	@ResponseBody
-	@PutMapping(value = "/validateSript/{testSetLineId}")
+	@PutMapping(value = "/validateSript/{testSetId}/{testSetLineId}")
 	@ApiOperation( value="Validate Script",notes = "Test Set Line Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script validated successfully")})
-	public ResponseDto validateSript(@PathVariable Integer testSetLineId) throws Exception {
-		return testRunValisationService.validateSchedule(testSetLineId);
+	public ResponseDto validateSript(@PathVariable Integer testSetId,@PathVariable Integer testSetLineId) throws Exception {
+		return testRunValisationService.validateTestRunScript(testSetId,testSetLineId);
 	}
 
 

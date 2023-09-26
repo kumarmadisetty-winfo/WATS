@@ -3,6 +3,8 @@ package com.winfo.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.ConstraintValidatorContext;
 
@@ -66,17 +68,12 @@ public class StringUtils {
 	public static boolean oracleAPIAuthorization(ConstraintValidatorContext context,TestSet testSet,ConfigLinesRepository configLinesRepository,LookUpCodeRepository lookUpCodeRepository) {
 
 		try {
-			String basePath = configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_BASE_URL,
-					testSet.getConfigurationId());
-			String username = configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_USERNAME,
-					testSet.getConfigurationId());
-			String password = configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_PASSWORD,
-					testSet.getConfigurationId());
+			List<String> apiDetails = StringUtils.getAPIValidationCredentials(configLinesRepository,testSet.getConfigurationId());
 			LookUpCode lookUpCode = lookUpCodeRepository.findByLookUpNameAndLookUpCode(Constants.API_VALIDATION,
 					Constants.GET_USER_ID);
 			try {
-				WebClient webClient = WebClient.builder().baseUrl(basePath)
-						.defaultHeader("Authorization", StringUtils.basicAuthHeader(username, password)).build();
+				WebClient webClient = WebClient.builder().baseUrl(apiDetails.get(0))
+						.defaultHeader("Authorization", StringUtils.basicAuthHeader(apiDetails.get(1), apiDetails.get(2))).build();
 				String result = webClient.get().uri(lookUpCode.getTargetCode()).retrieve()
 						.onStatus(httpStatus -> httpStatus.is4xxClientError() || httpStatus.is5xxServerError(),
 								clientResponse -> {
@@ -107,5 +104,13 @@ public class StringUtils {
 			return false;
 		}
 	
+	}
+	
+	public static List<String> getAPIValidationCredentials(ConfigLinesRepository configLinesRepository,Integer configId) {
+		List<String> apiDetails = new ArrayList<>();
+		apiDetails.add(configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_BASE_URL, configId));
+		apiDetails.add(configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_USERNAME, configId));
+		apiDetails.add(configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.API_PASSWORD, configId));
+		return apiDetails;
 	}
 }

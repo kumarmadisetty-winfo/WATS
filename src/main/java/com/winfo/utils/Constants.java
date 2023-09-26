@@ -159,4 +159,6 @@ public class Constants {
 	public static final String INTERNAL_SERVER_ERROR="Internal server error. Please contact to the administrator";
 	public static final String ORACLE_CLIENT_ERROR="Oracle client side error: ";
 	public static final String ORACLE_SERVER_ERROR="Oracle server side error: ";
+	public static final String NO_VALIDATION_MESSAGE="No Validation added to the script";
+	public static final String VALIDATED_SUCCESSFULLY="Validated successfully";
 	}

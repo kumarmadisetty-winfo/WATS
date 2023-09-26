@@ -23,8 +23,6 @@ import reactor.core.publisher.Mono;
 @Component
 public class TestRunAPIValidator implements ConstraintValidator<TestRunAPIValidation, Integer> {
 
-	public static final Logger logger = Logger.getLogger(TestRunAPIValidator.class);
-
 	TestRunAPIValidation testRunAPIValidation;
 
 	@Autowired
