@@ -1179,7 +1179,7 @@ public abstract class AbstractSeleniumKeywords {
 		Font anchorFont = new Font(FontFamily.TIMES_ROMAN, 20, Font.UNDERLINE | Font.NORMAL, BaseColor.BLUE);
 		Font contentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.BLACK);
 		Font passContentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.GREEN);
-		Font failContentFont = FontFactory.getFont("Arial", 20, Font.NORMAL, BaseColor.RED);
+		Font failContentFont = FontFactory.getFont("Arial", 20,Font.UNDERLINE | Font.NORMAL, BaseColor.RED);
 
 		PdfPTable table = createTable(5);
 		addTableHeader(table, titleFont);
@@ -1386,6 +1386,10 @@ public abstract class AbstractSeleniumKeywords {
 
 				if (image.startsWith(sndo + "_") && image.contains(FAILED)) {
 					String message = "Failed at Line Number:" + "" + reason;
+					Anchor redirectValueOfFail = new Anchor(message, fnt12);
+					redirectValueOfFail.setName(sno + "_" + scriptNumber1+"_Failed");
+					Paragraph redirectValueOfFailParagraph = new Paragraph();
+					redirectValueOfFailParagraph.add(redirectValueOfFail);
 					String error = metaDataVO.getLineErrorMsg();
 					errorMessage = "Failed Message:" + "" + error;
 					Anchor target1 = new Anchor(status);
@@ -1393,7 +1397,7 @@ public abstract class AbstractSeleniumKeywords {
 					j++;
 					pr1.add(target1);
 					document.add(pr1);
-					document.add(new Paragraph(message, fnt12));
+					document.add(redirectValueOfFailParagraph);
 					if (error != null) {
 						document.add(new Paragraph(errorMessage, fnt12));
 					}
@@ -1503,7 +1507,13 @@ public abstract class AbstractSeleniumKeywords {
 		table.addCell(createCell(new Paragraph(createAnchor(seqNum, font, null)), Element.ALIGN_RIGHT, font));
 		table.addCell(createCell(new Paragraph(createAnchor(scriptNum, font, null)), Element.ALIGN_LEFT, font));
 		table.addCell(createCell(new Paragraph(createAnchor(scenarioName, font, null)), Element.ALIGN_LEFT, font));
-		table.addCell(createCell(new Paragraph(createAnchor(status, statusContentFont, null)), Element.ALIGN_LEFT, statusContentFont));
+		if(status.equalsIgnoreCase("Fail")) {
+			Anchor statusColumn = createAnchor(status, statusContentFont, reference+"_Failed");
+			Paragraph statusParagraph = createParagraph(statusColumn);
+			table.addCell(createCell(statusParagraph, Element.ALIGN_LEFT, statusContentFont));
+		}else {
+			table.addCell(createCell(new Paragraph(createAnchor(status, statusContentFont, null)), Element.ALIGN_LEFT, statusContentFont));
+		}
 		table.addCell(createCell(pageNumberParagraph, Element.ALIGN_RIGHT, anchorFont));
 	}
 
