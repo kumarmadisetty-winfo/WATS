@@ -96,12 +96,14 @@ public class StringUtils {
 				}
 			return false;
 		} catch (WatsEBSException e) {
+			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(
 					Constants.INVALID_API_BASE_URL_CONFIG_MESSAGE)
 					.addConstraintViolation();
 			return false;
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(
 					Constants.INVALID_CREDENTIALS_AND_API_BASE_URL_CONFIG_MESSAGE)

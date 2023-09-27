@@ -44,8 +44,7 @@ public class TestRunAPIValidator implements ConstraintValidator<TestRunAPIValida
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		if (testSet != null) {
 			return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);
-		} else {
-			return true;
 		}
+		return true;
 	}
 }

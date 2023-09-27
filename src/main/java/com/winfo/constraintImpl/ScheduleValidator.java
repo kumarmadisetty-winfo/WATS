@@ -24,21 +24,19 @@ public class ScheduleValidator implements ConstraintValidator<ScheduleValidation
 	}
 
     @Override
-    public boolean isValid(Integer jobId, ConstraintValidatorContext context) {
-        if (jobId == null) {
-        	context.disableDefaultConstraintViolation();
-        	context.buildConstraintViolationWithTemplate( Constants.INVALID_JOB_ID).addConstraintViolation();
-            return false;
-        }
-        else {
-        	long count=schedulerRepository.countByJobId(jobId);
-        	if(count==1) {
-        		return true;
-        	}else {
-        		context.disableDefaultConstraintViolation();
-            	context.buildConstraintViolationWithTemplate( Constants.INVALID_JOB_ID).addConstraintViolation();
-                return false;
-        	}
-        }        
-    }
+	public boolean isValid(Integer jobId, ConstraintValidatorContext context) {
+		if (jobId == null) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(Constants.INVALID_JOB_ID).addConstraintViolation();
+			return false;
+		}
+		long count = schedulerRepository.countByJobId(jobId);
+		if (count != 1) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(Constants.INVALID_JOB_ID).addConstraintViolation();
+			return false;
+		}
+		return true;
+
+	}
 }

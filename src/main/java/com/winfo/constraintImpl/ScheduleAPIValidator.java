@@ -49,6 +49,6 @@ public class ScheduleAPIValidator implements ConstraintValidator<ScheduleAPIVali
 					return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);
 				});
 			}
-			else return false;
+			return false;
 	}
 }

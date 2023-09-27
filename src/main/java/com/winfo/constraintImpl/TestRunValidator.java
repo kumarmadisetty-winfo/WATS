@@ -24,21 +24,18 @@ public class TestRunValidator implements ConstraintValidator<TestRunValidation, 
 	}
 
     @Override
-    public boolean isValid(Integer testSetId, ConstraintValidatorContext context) {
-        if (testSetId == null) {
-        	context.disableDefaultConstraintViolation();
-        	context.buildConstraintViolationWithTemplate( Constants.INVALID_TEST_SET_ID).addConstraintViolation();
-            return false;
-        }
-        else {
-        	long count=testSetRepository.countByTestRunId(testSetId);
-        	if(count==1) {
-        		return true;
-        	}else {
-        		context.disableDefaultConstraintViolation();
-            	context.buildConstraintViolationWithTemplate( Constants.INVALID_TEST_SET_ID).addConstraintViolation();
-                return false;
-        	}
-        }        
-    }
+	public boolean isValid(Integer testSetId, ConstraintValidatorContext context) {
+		if (testSetId == null) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(Constants.INVALID_TEST_SET_ID).addConstraintViolation();
+			return false;
+		}
+		long count = testSetRepository.countByTestRunId(testSetId);
+		if (count != 1) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(Constants.INVALID_TEST_SET_ID).addConstraintViolation();
+			return false;
+		}
+		return true;
+	}
 }
