@@ -174,6 +174,7 @@ public class ValdiationServiceImpl implements ValidationService {
 				List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
 				logger.info("API details of validation - API_BASE_PATH - "+apiDetails.get(0)+" - API_USERNAME"+apiDetails.get(1));
 				List<ScriptValidationResponseVO> validationFailedScriptParam = new ArrayList<>();
+				//Get all Validation added script steps
 				List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.get().getTestRunScriptParam()
 						.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
 							return ((!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
@@ -181,15 +182,20 @@ public class ValdiationServiceImpl implements ValidationService {
 									|| Constants.MANDATORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
 									|| Constants.BOTH.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()));
 						}).collect(Collectors.toList());
+				//If any one validation added to the script then do validation
 				if (validationAddedScriptSteps.size() > 0) {
 					validationFailedScriptParam = validateScript(testSetLine.get(), validationAddedScriptSteps,
 							apiDetails.get(0), apiDetails.get(1), apiDetails.get(2));
-				} else {
+				}
+				//If no validation added then update the status
+				else {
 					logger.info(Constants.NO_VALIDATION_MESSAGE+" - "+testSetLine.get().getTestRunScriptId()+" - "+testSetLine.get().getScriptNumber());
 					testSetLine.get().setValidationStatus(Constants.No_VALIDATION);
 				}
+				//update the script level validation status
 				testSetLinesRepository.updateValidationStatus(testSetLine.get().getTestRunScriptId(),
 						testSetLine.get().getValidationStatus());
+				//If any validation got fail then return the particular script step and the error message
 				if (validationFailedScriptParam.size() > 0) {
 					return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
 							Constants.VALIDATION_FAIL,validationFailedScriptParam),HttpStatus.INTERNAL_SERVER_ERROR);
@@ -230,6 +236,7 @@ public class ValdiationServiceImpl implements ValidationService {
 					&& !Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationName())) {
 				regularExpressionValidation(testSetLine, testSetScriptParam);
 			}
+			//update the script step level validation status
 			testSetScriptParamRepository.updateValidationStatusAndValidationErrorMessage(
 					testSetScriptParam.getTestRunScriptParamId(), testSetScriptParam.getValidationStatus(),
 					testSetScriptParam.getValidationErrorMessage());
