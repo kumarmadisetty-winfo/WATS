@@ -267,7 +267,7 @@ public class ValdiationServiceImpl implements ValidationService {
 				if (userCount == 0) {
 					logger.warn(testSetScriptParam.getInputValue() + " is not added in the configuration - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 					updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
-							testSetScriptParam.getInputParameter() + " is not added in the configuration");
+							testSetScriptParam.getInputValue() + " is not added in the configuration");
 					return;
 				}
 			}
