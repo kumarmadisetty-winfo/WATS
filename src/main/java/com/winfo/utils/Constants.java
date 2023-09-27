@@ -169,4 +169,5 @@ public class Constants {
 	public static final String FAILED_TO_RUN_THE_SCRIPT="Failed to run the script";
 	public static final String TEST_RUN_FETCH_ERROR="Error occurred while fetching Test Runs";
 	public static final String COFIG_CREDENTIALS_FETCH_ERROR="Error occurred while fetching the credentials from the configuration";
+	public static final String NO_TEST_RUN_IN_SCHEDULE="No Test Runs present in the schedule";
 	}

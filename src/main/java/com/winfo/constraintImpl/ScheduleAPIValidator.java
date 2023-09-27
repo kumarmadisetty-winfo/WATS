@@ -10,12 +10,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.winfo.constraint.ScheduleAPIValidation;
+import com.winfo.model.Scheduler;
 import com.winfo.model.TestSet;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.ConfigLinesRepository;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
+import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
 
 @Component
@@ -34,6 +37,9 @@ public class ScheduleAPIValidator implements ConstraintValidator<ScheduleAPIVali
 	
 	@Autowired
 	UserSchedulerJobRepository userSchedulerJobRepository;
+	
+	@Autowired
+	SchedulerRepository schedulerRepository;
 
 	@Override
 	public void initialize(ScheduleAPIValidation constraintAnnotation) {
@@ -42,13 +48,26 @@ public class ScheduleAPIValidator implements ConstraintValidator<ScheduleAPIVali
 
 	@Override
 	public boolean isValid(Integer jobId, ConstraintValidatorContext context) {
-			Optional<List<UserSchedulerJob>> listOfTestRuns=userSchedulerJobRepository.findByJobId(jobId);
-			if(listOfTestRuns.isPresent()) {
+		Scheduler scheduler=schedulerRepository.findByJobId(jobId);
+		if(scheduler!=null) {
+			Optional<List<UserSchedulerJob>> listOfTestRuns=userSchedulerJobRepository.findByJobId(scheduler.getJobId());
+			if(listOfTestRuns.isPresent() && listOfTestRuns.get().size()>0) {
 				return listOfTestRuns.get().parallelStream().filter(Objects::nonNull).allMatch((testRun)->{
 					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
-					return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);
+					if (testSet != null) {
+						return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);						
+					}
+					context.disableDefaultConstraintViolation();
+					context.buildConstraintViolationWithTemplate(Constants.INVALID_TEST_SET_LINE_ID)
+					.addConstraintViolation();
+					return false;
 				});
 			}
-			return false;
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(Constants.NO_TEST_RUN_IN_SCHEDULE)
+			.addConstraintViolation();
+			return false;	
+		}
+		return true;
 	}
 }
