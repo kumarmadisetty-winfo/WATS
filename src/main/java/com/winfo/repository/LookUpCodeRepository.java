@@ -22,8 +22,10 @@ public interface LookUpCodeRepository extends JpaRepository<LookUpCode, Integer>
 	String getActionMeaningScriptIdAndLineNumber(@Param("scriptId") Integer scriptId,
 			@Param("scriptMetaDataId") Integer scriptMetaDataId);
 
-	@Query("SELECT lc.meaning from LookUpCode lc where lower(lc.lookUpCode) = lower(:lookUpCode) and lower(lc.lookUpName) = lower(:lookUpName)")
+	@Query("SELECT lc.meaning from LookUpCode lc where lower(lc.lookUpCode) = lower(:lookUpCode) and lower(lc.lookUpName) = lower(:lookUpName) ")
 	String getMeaningByTargetCode(@Param("lookUpCode") String lookUpCode, @Param("lookUpName") String lookUpName);
+	
+	LookUpCode findByMeaningAndLookUpNameAndTargetApplication(String lookUpCode, String lookUpName, String targetApplication);
 	
 	LookUpCode findByMeaningAndLookUpName(String meaning,String lookUpName);
 
