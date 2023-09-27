@@ -27,6 +27,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -736,7 +737,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 	}
 
 
-	//@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
+	@KafkaListener(topics = "#{'${kafka.topic.name.update.audit.logs}'.split(',')}", groupId = "wats-group")
 	public void updateAuditLogs(MessageQueueDto event) {
 		dataBaseEntry.insertScriptExecAuditRecord(event.getAutditTrial(), event.getStage(), null);
 	}
@@ -820,7 +821,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			}
 		}
 		response.setStatusCode(200);
-		response.setStatusDescr("Updated Successfully");
+		response.setStatusDescription("Updated Successfully");
 		response.setStatusMessage(Constants.SUCCESS);
 		return response;
 	}
