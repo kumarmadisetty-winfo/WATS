@@ -24,7 +24,6 @@ public class ValidationController {
 	@Autowired
 	private ValidationService testRunValisationService;
 
-	@ResponseBody
 	@PutMapping(value = "/validateTestRun/{testSetId}/{validateAll}")
 	@ApiOperation( value="Validate Test Run ",notes = "Test Run Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Test Run validated successfully")})
@@ -32,7 +31,6 @@ public class ValidationController {
 		return testRunValisationService.validateTestRun(testSetId,validateAll);
 	}
 	
-	@ResponseBody
 	@PutMapping(value = "/validateSchedule/{jobId}")
 	@ApiOperation( value="Validate Schedule",notes = "Schedule Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Schedule validated successfully")})
@@ -40,7 +38,6 @@ public class ValidationController {
 		return testRunValisationService.validateSchedule(jobId);
 	}
 	
-	@ResponseBody
 	@PutMapping(value = "/validateScript/{testSetId}/{testSetLineId}")
 	@ApiOperation( value="Validate Script",notes = "Test Set Line Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script validated successfully")})
