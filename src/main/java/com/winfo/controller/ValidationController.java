@@ -1,5 +1,7 @@
 package com.winfo.controller;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,21 +29,21 @@ public class ValidationController {
 	@PutMapping(value = "/validateTestRun/{testSetId}/{validateAll}")
 	@ApiOperation( value="Validate Test Run ",notes = "Test Run Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Test Run validated successfully")})
-	public ResponseEntity<ResponseDto> validateTestRun(@PathVariable Integer testSetId, @PathVariable boolean validateAll) throws Exception {
+	public ResponseEntity<ResponseDto> validateTestRun(@PathVariable @NotNull Integer testSetId, @PathVariable boolean validateAll) throws Exception {
 		return testRunValisationService.validateTestRun(testSetId,validateAll);
 	}
 	
 	@PutMapping(value = "/validateSchedule/{jobId}")
 	@ApiOperation( value="Validate Schedule",notes = "Schedule Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Schedule validated successfully")})
-	public ResponseEntity<ResponseDto> validateSchedule(@PathVariable Integer jobId) throws Exception {
+	public ResponseEntity<ResponseDto> validateSchedule(@PathVariable @NotNull Integer jobId) throws Exception {
 		return testRunValisationService.validateSchedule(jobId);
 	}
 	
 	@PutMapping(value = "/validateScript/{testSetId}/{testSetLineId}")
 	@ApiOperation( value="Validate Script",notes = "Test Set Line Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script validated successfully")})
-	public ResponseEntity<ResponseDto> validateSript(@PathVariable Integer testSetId,@PathVariable Integer testSetLineId) throws Exception {
+	public ResponseEntity<ResponseDto> validateSript(@PathVariable @NotNull Integer testSetId,@PathVariable @NotNull Integer testSetLineId) throws Exception {
 		return testRunValisationService.validateTestRunScript(testSetId,testSetLineId);
 	}
 

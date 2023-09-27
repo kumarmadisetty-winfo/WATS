@@ -86,7 +86,7 @@ public class StringUtils {
 										context.disableDefaultConstraintViolation();
 										context.buildConstraintViolationWithTemplate(Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE)
 												.addConstraintViolation();
-										throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.INVALID_API_BASE_URL_CONFIG_MESSAGE);
+										throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE);
 									}
 									return Mono.empty();
 								})
