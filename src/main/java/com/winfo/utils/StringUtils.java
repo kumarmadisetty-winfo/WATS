@@ -83,10 +83,7 @@ public class StringUtils {
 						.onStatus(httpStatus -> httpStatus.is4xxClientError() || httpStatus.is5xxServerError(),
 								clientResponse -> {
 									if (clientResponse.statusCode().value() == HttpStatus.UNAUTHORIZED.value()) {
-										context.disableDefaultConstraintViolation();
-										context.buildConstraintViolationWithTemplate(Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE)
-												.addConstraintViolation();
-										throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE);
+										throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE+" of "+testSet.getTestRunName());
 									}
 									return Mono.empty();
 								})
@@ -98,15 +95,14 @@ public class StringUtils {
 		} catch (WatsEBSException e) {
 			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(
-					Constants.INVALID_API_BASE_URL_CONFIG_MESSAGE)
+			context.buildConstraintViolationWithTemplate(Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE+" of "+testSet.getTestRunName())
 					.addConstraintViolation();
 			return false;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(
-					Constants.INVALID_CREDENTIALS_AND_API_BASE_URL_CONFIG_MESSAGE)
+					Constants.INVALID_CREDENTIALS_AND_API_BASE_URL_CONFIG_MESSAGE+" of "+testSet.getTestRunName())
 					.addConstraintViolation();
 			return false;
 		}
