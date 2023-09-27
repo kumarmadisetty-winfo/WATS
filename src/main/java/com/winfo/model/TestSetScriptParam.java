@@ -112,9 +112,15 @@ public class TestSetScriptParam {
 
 	@Column(name = "VALIDATION_NAME")
 	private String validationName;
+	
+	@Column(name = "VALIDATION_STATUS")
+	private String validationStatus;
 
 	@Column(name = "SCREENSHOT")
     private byte[] screenshot;
+	
+	@Column(name = "VALIDATION_ERROR_MESSAGE")
+	private String validationErrorMessage;
 	
 	@ManyToOne( fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_LINE_ID" ,nullable = false)

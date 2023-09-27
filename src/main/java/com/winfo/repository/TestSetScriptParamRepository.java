@@ -23,6 +23,9 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	Integer updateScriptParam(String dataTypes, String uniqueMandatory, String validationType,String validationName, 
 			Integer lineNumber, String inputParameter,String action ,String testRunParamDesc, String updatedBy,Integer scriptId,Integer metadataId);
 	
+	@Modifying
+	@Transactional
+	@Query("delete from TestSetScriptParam where scriptId=:scriptId and metadataId=:metadataId")
 	Integer deleteByScriptIdAndMetadataId(Integer scriptId,Integer metadataId);
 	
 	List<TestSetScriptParam> findByScriptIdAndMetadataId(Integer scriptId,Integer metadataId);
@@ -36,6 +39,9 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	
 	@Modifying
 	@Transactional
+	@Query("UPDATE TestSetScriptParam SET validationStatus =:validationStatus , validationErrorMessage =:validationErrorMessage WHERE testRunScriptParamId=:testRunScriptParamId")
+	int updateValidationStatusAndValidationErrorMessage(int testRunScriptParamId, String validationStatus,String validationErrorMessage);
+
 	@Query("UPDATE TestSetScriptParam  SET startTime=:startTime  WHERE testRunScriptParamId=:testRunScriptParamId")
 	int updateTestSetScriptParamStartTime(Date startTime,int testRunScriptParamId);
 	
@@ -49,6 +55,5 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	@Transactional
 	@Query("UPDATE TestSetScriptParam  SET lineExecutionStatus=:status,startTime=:startTime,endTime=:endTime,updateDate=:updateDate,lineErrorMessage=:errorMessage,inputValue=:copiedValue WHERE testRunScriptParamId=:testRunScriptParamId")
 	int updateTestSetScriptParamStatusAndStartAndEndTime(String status,Date startTime,Date endTime,Date updateDate,String errorMessage,String copiedValue, int testRunScriptParamId);
-	
 
 }

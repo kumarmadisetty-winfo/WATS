@@ -233,7 +233,7 @@ public class RunAutomation {
 
 			executeTestrunVo.setStatusCode(HttpStatus.OK.value());
 			executeTestrunVo.setStatusMessage("SUCCESS");
-			executeTestrunVo.setStatusDescr("SUCCESS");
+			executeTestrunVo.setStatusDescription("SUCCESS");
 		} catch (Exception e) {
 			dataBaseEntry.updateExecStatusIfTestRunIsCompleted(testScriptDto);
 			if (e instanceof WatsEBSException)
@@ -546,7 +546,7 @@ public class RunAutomation {
 
 				executeTestrunVo.setStatusCode(HttpStatus.OK.value());
 				executeTestrunVo.setStatusMessage("SUCCESS");
-				executeTestrunVo.setStatusDescr("SUCCESS");
+				executeTestrunVo.setStatusDescription("SUCCESS");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				logger.error("Exception in dependent block of code");

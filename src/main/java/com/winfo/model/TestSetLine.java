@@ -89,6 +89,9 @@ public class TestSetLine {
 	@Column(name = "DEPENDENCY_TR")
 	private Integer dependencyTr;
 	
+	@Column(name = "VALIDATION_STATUS")
+	private String validationStatus;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
 	private TestSet testRun;

@@ -22,6 +22,10 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	
 	long countByScriptId(Integer scriptId);
 	
+	long countByTestRunScriptId(Integer testSetLineId);
+	
+	TestSetLine findByTestRunScriptId(Integer testSetLineId);
+	
 	List<TestSetLine> findByScriptId(Integer scriptId);
 	
 	@Modifying
@@ -34,4 +38,8 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	@Query("update TestSetLine set status='IN-QUEUE', executionStartTime=null, executionEndTime=null where enabled = 'Y' and upper(status)!='PASS' and testRun.testRunId=:testSetId")
 	int updateStatusStartTimeEndTimeTetSetLines(int testSetId);
 	
+	@Modifying
+	@Transactional
+	@Query("UPDATE TestSetLine SET validationStatus =:validationStatus WHERE testRunScriptId=:testRunScriptId")
+	int updateValidationStatus(int testRunScriptId, String validationStatus);
 }

@@ -226,8 +226,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		try {
 			logger.info("JobId " + jobId);
 			int configId = schedulerRepository.findByJobId(jobId).getConfigurationId();
-			String pdfPath = configLinesRepository.getPdfPathusingConfigurationIdAndkeyName(configId,
-					Constants.PDF_PATH);
+			String pdfPath = configLinesRepository.getValueFromKeyNameAndConfigurationId(Constants.PDF_PATH,configId);
 			int customerId = configurationRepository.getCustomerIdUsingconfigurationId(configId);
 			String customerName = customerRepository.findByCustomerId(customerId).getCustomerName();
 			logger.info("PdfPath : " + pdfPath + "," + " customerName : " + customerName);
