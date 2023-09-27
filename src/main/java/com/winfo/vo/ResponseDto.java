@@ -13,13 +13,13 @@ public class ResponseDto {
 
 	private int statusCode;
 	private String statusMessage;
-	private String statusDescr;
+	private String statusDescription;
 	private List<ScriptValidationResponseVO> validation;
 	
-	public ResponseDto(int statusCode,String statusMessage,String statusDescr){
+	public ResponseDto(int statusCode,String statusMessage,String statusDescription){
 		this.statusCode=statusCode;
 		this.statusMessage=statusMessage;
-		this.statusDescr=statusDescr;
+		this.statusDescription=statusDescription;
 	}
 
 }
