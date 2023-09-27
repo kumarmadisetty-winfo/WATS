@@ -167,9 +167,12 @@ public class ValdiationServiceImpl implements ValidationService {
 			Optional<TestSetLine> testSetLine = testSet.getTestRunScriptDatalist().parallelStream().filter(Objects::nonNull)
 					.filter(testSetLineObject -> testSetLineObject.getTestRunScriptId().equals(testSetLineId))
 					.findFirst();
+			//check whether Test Set Line is exist of not
 			if(testSetLine.isPresent()) {
 				testSetLine.get().setValidationStatus(Constants.VALIDATION_SUCCESS);
+				//get the API_BASE_PATH, API_USERNAME and API_PASSWORD from the test run configuration
 				List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
+				logger.info("API details of validation - API_BASE_PATH - "+apiDetails.get(0)+" - API_USERNAME"+apiDetails.get(1));
 				List<ScriptValidationResponseVO> validationFailedScriptParam = new ArrayList<>();
 				List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.get().getTestRunScriptParam()
 						.parallelStream().filter(Objects::nonNull).filter(testSetScriptParam -> {
@@ -210,15 +213,20 @@ public class ValdiationServiceImpl implements ValidationService {
 		return validationAddedScriptSteps.stream().filter(Objects::nonNull).filter(testSetScriptParam -> {
 			testSetScriptParam.setValidationStatus(Constants.VALIDATION_SUCCESS);
 			testSetScriptParam.setValidationErrorMessage(null);
+			//for checking if script step is mandatory or not
 			if ((Constants.MANDATORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
 					|| Constants.BOTH.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()))
 					&& "".equals(testSetScriptParam.getInputValue())) {
 				updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
 						Constants.INPUT_VALUE_MANDATORY);
-			} else if (Constants.API_VALIDATION.equalsIgnoreCase(testSetScriptParam.getValidationType())
+			}
+			//for Api validation and User Id validation
+			else if (Constants.API_VALIDATION.equalsIgnoreCase(testSetScriptParam.getValidationType())
 					&& !Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationName())) {
 				apiValidation(testSetLine, testSetScriptParam, basePath, username, password);
-			} else if (Constants.REGULAR_EXPRESSION.equalsIgnoreCase(testSetScriptParam.getValidationType())
+			}
+			//for Regular Expression validation
+			else if (Constants.REGULAR_EXPRESSION.equalsIgnoreCase(testSetScriptParam.getValidationType())
 					&& !Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationName())) {
 				regularExpressionValidation(testSetLine, testSetScriptParam);
 			}
