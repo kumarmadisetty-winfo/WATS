@@ -193,7 +193,7 @@ public class ScriptMaterVO {
 
 		scriptMetaDatalist.stream().filter(Objects::nonNull)
 				.forEach(metaData -> {
-					metaData.setAction(dataBaseEntry.getLookUpCodeByMeaning(metaData.getAction(), "ACTION"));
+					metaData.setAction(dataBaseEntry.getMeaningByTargetCodeBAndTargetApplication(metaData.getAction(), "ACTION",targetApplication));
 		            metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS"));
 		            metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
 		            metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES"));
