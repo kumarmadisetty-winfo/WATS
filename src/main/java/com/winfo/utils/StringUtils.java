@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.validation.ConstraintValidatorContext;
 
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -16,11 +17,14 @@ import com.winfo.model.LookUpCode;
 import com.winfo.model.TestSet;
 import com.winfo.repository.ConfigLinesRepository;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.serviceImpl.ValdiationServiceImpl;
 
 import reactor.core.publisher.Mono;
 
 public class StringUtils {
 
+	public static final Logger logger = Logger.getLogger(StringUtils.class);
+	
 	private static String projectPath = System.getProperty("user.dir");
 
 	public static String getFilePath(String fileName) {
@@ -62,6 +66,7 @@ public class StringUtils {
 			dateFormatChecker.parse(date);
 			return true;
 		} catch (ParseException e) {
+			logger.error("Error occured while parsing "+dateFormat+ " into "+date+" - "+e.getMessage());
 			return false;
 		}
 	}

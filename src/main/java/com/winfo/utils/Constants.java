@@ -163,8 +163,10 @@ public class Constants {
 	public static final String ORACLE_SERVER_ERROR="Oracle server side error: ";
 	public static final String NO_VALIDATION_MESSAGE="No Validation added to the script";
 	public static final String VALIDATED_SUCCESSFULLY="Validated successfully";
+	public static final String LOOKUPCODE_NOT_FOUND="LookUpCode not found of ValidationName";
+	public static final String INPUT_VALUE_MANDATORY="Input Value is mandatory for this step";
 	public static final String FAILED_TO_INITIATE_THE_DRIVER="Failed to initiate the driver";
 	public static final String FAILED_TO_RUN_THE_SCRIPT="Failed to run the script";
-	public static final String INPUT_VALUE_MANDATORY="Input Value is mandatory for this step";
-	public static final String LOOKUPCODE_NOT_FOUND="LookUpCode not found of ValidationName";
+	public static final String TEST_RUN_FETCH_ERROR="Error occurred while fetching Test Runs";
+	public static final String COFIG_CREDENTIALS_FETCH_ERROR="Error occurred while fetching the credentials from the configuration";
 	}

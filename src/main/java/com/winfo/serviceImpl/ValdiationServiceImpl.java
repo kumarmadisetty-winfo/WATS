@@ -77,22 +77,29 @@ public class ValdiationServiceImpl implements ValidationService {
 			if (listOfTestRuns.isPresent()) {
 				listOfTestRuns.get().stream().filter(Objects::nonNull).forEach((testRun) -> {
 					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
-					try {
-						validateTestRun(testSet.getTestRunId(), true);
-					} catch (Exception e) {
-						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
+					if(testSet!=null) {
+						try {
+							validateTestRun(testSet.getTestRunId(), true);
+						} catch (Exception e) {
+							logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
+							throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+									Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage());
+						}
+					}else {
+						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID +" - "+testRun.getComments());
 						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-								Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage());
+								Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID+" - "+testRun.getComments());
 					}
 				});
 			}
+			logger.info(scheduler.getJobName() + " is " + Constants.VALIDATED_SUCCESSFULLY);
 			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
 					scheduler.getJobName() + " is " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.OK);
 
 		} catch (WatsEBSException e) {
-			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+scheduler.getJobName()+" - "+scheduler.getJobId());
+			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+Constants.TEST_RUN_FETCH_ERROR+" - " +scheduler.getJobName()+" - "+scheduler.getJobId());
 			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					scheduler.getJobName() + " is not " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.INTERNAL_SERVER_ERROR);
+					scheduler.getJobName() + " is not " + Constants.VALIDATED_SUCCESSFULLY +" - " +Constants.TEST_RUN_FETCH_ERROR),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception e) {
 			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+scheduler.getJobName()+" - "+scheduler.getJobId());
@@ -107,35 +114,46 @@ public class ValdiationServiceImpl implements ValidationService {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		try {
 			List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
-			testSet.getTestRunScriptDatalist().stream().filter(Objects::nonNull).filter(testSetLine -> {
-				if (validateAll)
-					return true;
-				else
-					return "Y".equalsIgnoreCase(testSetLine.getEnabled());
-			}).forEach(testSetLine -> {
-				testSetLine.setValidationStatus(Constants.VALIDATION_SUCCESS);
-				List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.getTestRunScriptParam()
-						.stream().filter(Objects::nonNull).filter(testSetScriptParam -> {
-							return (!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
-									&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
-									|| Constants.MANDATORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()) 
-									|| Constants.BOTH.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory());
-						}).collect(Collectors.toList());
-				if (validationAddedScriptSteps.size() > 0) {
-					validateScript(testSetLine, validationAddedScriptSteps, apiDetails.get(0), apiDetails.get(1),
-							apiDetails.get(2));
-				} else {
-					logger.info(Constants.NO_VALIDATION_MESSAGE);
-					testSetLine.setValidationStatus(Constants.No_VALIDATION);
-				}
-				testSetLinesRepository.updateValidationStatus(testSetLine.getTestRunScriptId(),
-						testSetLine.getValidationStatus());
-			});
-			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
-					testSet.getTestRunName() + " is " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.OK);
+			if(apiDetails!=null && apiDetails.size()==3) {
+				testSet.getTestRunScriptDatalist().stream().filter(Objects::nonNull).filter(testSetLine -> {
+					if (validateAll)
+						return true;
+					else
+						return "Y".equalsIgnoreCase(testSetLine.getEnabled());
+				}).forEach(testSetLine -> {
+					testSetLine.setValidationStatus(Constants.VALIDATION_SUCCESS);
+					List<TestSetScriptParam> validationAddedScriptSteps = testSetLine.getTestRunScriptParam()
+							.stream().filter(Objects::nonNull).filter(testSetScriptParam -> {
+								return (!Constants.NA.equalsIgnoreCase(testSetScriptParam.getValidationType())
+										&& !"".equalsIgnoreCase(testSetScriptParam.getValidationType()))
+										|| Constants.MANDATORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()) 
+										|| Constants.BOTH.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory());
+							}).collect(Collectors.toList());
+					if (validationAddedScriptSteps.size() > 0) {
+						validateScript(testSetLine, validationAddedScriptSteps, apiDetails.get(0), apiDetails.get(1),
+								apiDetails.get(2));
+					} else {
+						logger.info(Constants.NO_VALIDATION_MESSAGE);
+						testSetLine.setValidationStatus(Constants.No_VALIDATION);
+					}
+					testSetLinesRepository.updateValidationStatus(testSetLine.getTestRunScriptId(),
+							testSetLine.getValidationStatus());
+				});
+				logger.info(testSet.getTestRunName() + " is " + Constants.VALIDATED_SUCCESSFULLY);
+				return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
+						testSet.getTestRunName() + " is " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.OK);	
+			}else {
+				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.COFIG_CREDENTIALS_FETCH_ERROR +" - Configuration Id - "+testSet.getConfigurationId()+" - Test Run - "+testSet.getTestRunName());
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+						Constants.INTERNAL_SERVER_ERROR + " - " + Constants.COFIG_CREDENTIALS_FETCH_ERROR+" - Test Run - "+testSet.getTestRunName());
+			}
 
+		}catch (WatsEBSException e) {
+			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+Constants.COFIG_CREDENTIALS_FETCH_ERROR+" - Configuration Id - " +testSet.getConfigurationId()+" - Test Run - "+testSet.getTestRunName());
+			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					testSet.getTestRunName() + " is not " + Constants.VALIDATED_SUCCESSFULLY +" - "+Constants.COFIG_CREDENTIALS_FETCH_ERROR+" - Configuration Id - " +testSet.getConfigurationId()+" - Test Run - "+testSet.getTestRunName()),HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
-			logger.error("Internal server error. Please contact to the administrator: " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
+			logger.error(Constants.INTERNAL_SERVER_ERROR+": " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
 			return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
 					testSet.getTestRunName() + " is not " + Constants.VALIDATED_SUCCESSFULLY),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -173,6 +191,7 @@ public class ValdiationServiceImpl implements ValidationService {
 					return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
 							Constants.VALIDATION_FAIL,validationFailedScriptParam),HttpStatus.INTERNAL_SERVER_ERROR);
 				}
+				logger.info( Constants.VALIDATED_SUCCESSFULLY+" - "+testSetLine.get().getTestRunScriptId()+" - "+testSetLine.get().getScriptNumber());
 				return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS, Constants.VALIDATED_SUCCESSFULLY),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
@@ -228,12 +247,12 @@ public class ValdiationServiceImpl implements ValidationService {
 				updateLineAndParamValidationStatus(testSetLine, testSetScriptParam, Constants.LOOKUPCODE_NOT_FOUND+" - "+testSetScriptParam.getValidationName());
 				return;
 			}
-			if ("Get UserId".equalsIgnoreCase(testSetScriptParam.getValidationName())) {
+			if (Constants.GET_USER_ID.equalsIgnoreCase(testSetScriptParam.getValidationName())) {
 				long userCount = configurationUsersRepository.countByUserName(testSetScriptParam.getInputValue());
 				if (userCount == 0) {
 					logger.warn(testSetScriptParam.getInputValue() + " is not added in the configuration - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 					updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
-							testSetScriptParam.getInputValue() + " is not added in the configuration");
+							testSetScriptParam.getInputParameter() + " is not added in the configuration");
 					return;
 				}
 			}

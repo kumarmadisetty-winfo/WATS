@@ -9,7 +9,7 @@ import com.winfo.constraint.TestRunAPIValidation;
 import com.winfo.constraint.ScheduleAPIValidation;
 import com.winfo.constraint.ScheduleValidation;
 import com.winfo.constraint.TestRunValidation;
-import com.winfo.constraint.TestSetLineValidation;
+import com.winfo.constraint.TestRunScriptValidation;
 import com.winfo.vo.ResponseDto;
 
 @Service
@@ -20,6 +20,6 @@ public interface ValidationService {
 	
 	public  ResponseEntity<ResponseDto> validateSchedule(@ScheduleValidation @ScheduleAPIValidation Integer jobId) throws Exception;
 	
-	public  ResponseEntity<ResponseDto> validateTestRunScript(@TestRunValidation @TestRunAPIValidation Integer testSetId,@TestSetLineValidation Integer testSetLineId) throws Exception;
+	public  ResponseEntity<ResponseDto> validateTestRunScript(@TestRunValidation @TestRunAPIValidation Integer testSetId,@TestRunScriptValidation Integer testSetLineId) throws Exception;
 	
 }

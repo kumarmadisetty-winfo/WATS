@@ -41,7 +41,7 @@ public class ValidationController {
 	}
 	
 	@ResponseBody
-	@PutMapping(value = "/validateSript/{testSetId}/{testSetLineId}")
+	@PutMapping(value = "/validateScript/{testSetId}/{testSetLineId}")
 	@ApiOperation( value="Validate Script",notes = "Test Set Line Id need to pass for validating a Test Run")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script validated successfully")})
 	public ResponseEntity<ResponseDto> validateSript(@PathVariable Integer testSetId,@PathVariable Integer testSetLineId) throws Exception {
