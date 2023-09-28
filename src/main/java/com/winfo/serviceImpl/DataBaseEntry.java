@@ -763,8 +763,12 @@ public class DataBaseEntry {
 	}
 	
 	public String getLookUpCodeByMeaning(String meaning, String lookUpName) {
-		return lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName)==null ? meaning 
-				:lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName).getLookUpCode();			
+		LookUpCode lookupCode= lookUpCodeJpaRepository.findByMeaningAndLookUpName(meaning,lookUpName);
+		return lookupCode==null? meaning:lookupCode.getLookUpCode();
+	}
+	public String getMeaningByTargetCodeBAndTargetApplication(String meaning, String lookUpName,String targetApplication) {
+		LookUpCode lookupCode=lookUpCodeJpaRepository.findByMeaningAndLookUpNameAndTargetApplication(meaning,lookUpName,targetApplication);
+		return lookupCode==null ? meaning:lookupCode.getLookUpCode();		
 	}
 	
 	public TestSetLine getTestSetLineBySequenceNumber(String testSetId, String seqNumber) {
