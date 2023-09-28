@@ -152,7 +152,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						return false;
 					}).collect(Collectors.toList());
 				//remove deleted test runs from original list of DB
-				listOfSubJob.get().removeAll(listOfDeletedSubJob);
+				if(listOfDeletedSubJob.size()>0) listOfSubJob.get().removeAll(listOfDeletedSubJob);
 			}
 			
 			//add test runs in a schedule
