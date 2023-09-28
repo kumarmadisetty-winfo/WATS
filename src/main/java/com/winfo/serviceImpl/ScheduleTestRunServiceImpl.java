@@ -127,7 +127,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 									ObjectMapper objectMapper = new ObjectMapper();
 									Map<String, Object> jsonMap = null;
 									jsonMap = objectMapper.readValue(result, Map.class);
-									Integer itemsObject = (Integer) jsonMap.get("status");
+									Integer itemsObject = Integer.parseInt((String) jsonMap.get("status"));
 									if (itemsObject!=HttpStatus.OK.value()) {
 										logger.error(Constants.INVALID_RESPOSNE_APEX_API+" - "+Constants.DELETE_SCHEDULE_TEST_RUN_ENDPOINT);
 										throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
