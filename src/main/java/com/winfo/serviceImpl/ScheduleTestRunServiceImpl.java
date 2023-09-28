@@ -1,9 +1,9 @@
-
 package com.winfo.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,6 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.Scheduler;
 import com.winfo.model.TestSet;
@@ -96,12 +97,65 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Transactional
 	public ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			logger.info(String.format("Schedule job name:"+scheduler.getJobName()+"Schedule job id:"+scheduler.getJobId()));
 			Optional<List<UserSchedulerJob>> listOfSubJob = userSchedulerJobRepository.findByJobId(scheduler.getJobId());
+			
+			//delete test runs from a schedule
+			if(listOfSubJob.isPresent()) {
+				//get list of all test run name from request body(JSON VO)
+				List<String> listOfAllSubJobFromVO = scheduleJobVO.getTestRuns().parallelStream().filter(Objects::nonNull)
+						.map(ScheduleTestRunVO::getTemplateTestRun).collect(Collectors.toList());
+				//get list of test run name which are present in database(Except newly added test runs) from request body(JSON VO)
+				List<String> listOfExistingSubJobInDBFromVO = listOfSubJob.get().parallelStream().filter(Objects::nonNull)
+						.filter(subScheduleJob->listOfAllSubJobFromVO.contains(subScheduleJob.getComments()))
+						.map(UserSchedulerJob::getComments).collect(Collectors.toList());
+				//delete test run from APEX RestAPI and return the list of deleted test runs
+				List<UserSchedulerJob> listOfDeletedSubJob=listOfSubJob.get().parallelStream().filter(Objects::nonNull).filter(subScheduleJob->{
+						if(!listOfExistingSubJobInDBFromVO.contains(subScheduleJob.getComments())) {
+							ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
+							scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
+							try {
+								WebClient webClient = WebClient.create(basePath +Constants.FORWARD_SLASH+Constants.WATS_SERVICE+Constants.FORWARD_SLASH+Constants.DELETE_SCHEDULE_TEST_RUN_ENDPOINT);
+								String result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
+										.bodyToMono(String.class).block();
+								if(result != null) {
+									ObjectMapper objectMapper = new ObjectMapper();
+									Map<String, Object> jsonMap = null;
+									jsonMap = objectMapper.readValue(result, Map.class);
+									Integer itemsObject = (Integer) jsonMap.get("status");
+									if (itemsObject!=HttpStatus.OK.value()) {
+										logger.error(Constants.INVALID_RESPOSNE_APEX_API+" - "+Constants.DELETE_SCHEDULE_TEST_RUN_ENDPOINT);
+										throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+												Constants.INVALID_RESPOSNE_APEX_API);
+									}
+								} else {
+									logger.error(Constants.NO_RESPOSNE_APEX_API+" - "+Constants.DELETE_SCHEDULE_TEST_RUN_ENDPOINT);
+									throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+											Constants.NO_RESPOSNE_APEX_API);
+								}
+								return true;
+							} catch (JsonProcessingException e) {
+								logger.error(Constants.JOSN_PARSING_ERROR + " - " + e.getMessage()+" - "+Constants.DELETE_SCHEDULE_TEST_RUN_ENDPOINT);
+								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+										Constants.INTERNAL_SERVER_ERROR, e);
+							} catch (Exception e) {
+								logger.error(Constants.INTERNAL_SERVER_ERROR+" - "+ e.getMessage()+" - "+Constants.DELETE_SCHEDULE_TEST_RUN_ENDPOINT);
+								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+										Constants.INTERNAL_SERVER_ERROR, e);
+							}
+						}
+						return false;
+					}).collect(Collectors.toList());
+				//remove deleted test runs from original list of DB
+				listOfSubJob.get().removeAll(listOfDeletedSubJob);
+			}
+			
+			//add test runs in a schedule
 			if ((scheduleJobVO.getTestRuns().size()>0 && !listOfSubJob.isPresent()) || (scheduleJobVO.getTestRuns().size() > listOfSubJob.get().size())) {
 				List<String> listOfSubJobFromDB = listOfSubJob.isPresent()?listOfSubJob.get().parallelStream().filter(Objects::nonNull).map(UserSchedulerJob::getComments)
 						.collect(Collectors.toList()):new ArrayList<>();
@@ -121,6 +175,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 					createSchedule(scheduleJobVO, newAddedSubJobs, count,scheduler);
 				}
 			}
+			//Edit schedule details and test run time and email notification
 			if(listOfSubJob.isPresent()) {
 				scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO->{
 					listOfSubJob.get().parallelStream().forEach(subScheduleJob->{

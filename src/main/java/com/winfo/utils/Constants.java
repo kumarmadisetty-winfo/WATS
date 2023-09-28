@@ -172,7 +172,12 @@ public class Constants {
 	public static final String NO_TEST_RUN_IN_SCHEDULE="No Test Runs present in the schedule";
 	public static final String ACTION="ACTION";
 	public static final String IP_VALIDATIONS="IP_VALIDATIONS";
-	public static final String API_VALIDATION="API_VALIDATION";
 	public static final String UNIQUE_MANDATORY="UNIQUE_MANDATORY";
 	public static final String DATATYPES="DATATYPES";
+	public static final String NO_RESPOSNE_APEX_API="No response received from the APEX API";
+	public static final String INVALID_RESPOSNE_APEX_API="Invalid response received from the APEX API";
+	public static final String DELETE_SCHEDULE_TEST_RUN_ENDPOINT="deleteScheduleTemplate";
+	public static final String FORWARD_SLASH="/";
+	public static final String WATS_SERVICE="WATSservice";
+	public static final String JOSN_PARSING_ERROR="Error occurred while parsing JSON";
 	}
