@@ -2477,6 +2477,45 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// prod
 		try {
+
+            if (param1.equalsIgnoreCase("Invoice Number") && param2.equalsIgnoreCase("Actions")) {
+
+                WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+
+                String xpath = "(//*[text()='Invoice Number'])[1]/following::*[text()='Actions']/following::img[1]";
+
+                wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+
+                WebElement waittext = driver.findElement(By.xpath(xpath));
+
+                Actions actions = new Actions(driver);
+
+                actions.moveToElement(waittext);
+
+                Thread.sleep(1000);
+
+                actions.sendKeys(org.openqa.selenium.Keys.ARROW_RIGHT);
+
+                actions.moveToElement(waittext).build().perform();
+
+                // highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+
+                screenshot(driver, fetchMetadataVO, customerDetails);
+
+                Thread.sleep(1000);
+
+                clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+
+                return;
+
+            }
+
+        } catch (Exception e) {
+
+            logger.error("Failed during click Image " + e.getMessage());
+
+        }
+		try {
 			if (param2.equalsIgnoreCase("General Journals Report")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[contains(text(),\"" + param1
@@ -6086,6 +6125,54 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		
+		try {
+
+			if (param1.equalsIgnoreCase("Create Credit Memo") || param1.equalsIgnoreCase("Adjust Amount")) {
+
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+
+				wait.until(ExpectedConditions
+
+						.presenceOfElementLocated(By.xpath(("//a[text()=\"" + param1 + "\"])[1]"))));
+
+				WebElement waittext = driver.findElement(By.xpath("//a[text()=\"" + param1 + "\"][1]"));
+
+				Actions actions = new Actions(driver);
+
+				actions.moveToElement(waittext).build().perform();
+
+				waittext.click();
+
+				screenshot(driver, fetchMetadataVO, customerDetails);
+
+				refreshPage(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+
+				Thread.sleep(5000);
+
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+
+				logger.info("Sucessfully Clicked Approve clickLink" + scripNumber);
+
+				String xpath = "//a[text()=\"" + param1 + "\"][1]";
+
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+
+				return;
+
+			}
+
+		} catch (Exception e) {
+
+			logger.error(e.getMessage());
+
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+
+			logger.error("Failed during Approve clickLink" + scripNumber);
+
+		}
 		try {
 			if (param1.equalsIgnoreCase("Output")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
