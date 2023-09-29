@@ -6128,7 +6128,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		
 		try {
 
-			if (param1.equalsIgnoreCase("Create Credit Memo")) {
+			if (param1.equalsIgnoreCase("Create Credit Memo") || param1.equalsIgnoreCase("Adjust Amount")) {
 
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 
