@@ -3,9 +3,7 @@ package com.winfo.serviceImpl;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.winfo.controller.MigrationReceiver;
 import com.winfo.dao.CopyTestRunDao;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.dao.TestRunMigrationGetDao;
@@ -39,6 +36,7 @@ import com.winfo.model.TestSetScriptParam;
 import com.winfo.repository.ConfigurationRepository;
 import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.repository.ScriptMetaDataRepository;
 import com.winfo.utils.Constants;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
@@ -75,6 +73,9 @@ public class TestRunMigrationGetService {
 
 	@Autowired
 	ConfigurationRepository configurationRepository;
+	
+	@Autowired
+	ScriptMetaDataRepository scriptMetadataRepository;
 	
 	@Transactional
 	@SuppressWarnings("unchecked")
@@ -384,6 +385,9 @@ public class TestRunMigrationGetService {
 					testSetParam.setXpathLocation(paramVo.getXpathLocation());
 					testSetParam.setXpathLocation1(paramVo.getXpathLocation1());
 //				testSetLineData.addMetadata(metadata);
+					testSetParam.setMetadataId(scriptMetadataRepository
+							.findByScriptIdAndLineNumber(testSetParam.getScriptId(), paramVo.getLineNumber())
+							.getScriptMetaDataId());
 					testSetLineData.addTestScriptParam(testSetParam);
     
 				}
