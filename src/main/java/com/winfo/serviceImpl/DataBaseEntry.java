@@ -372,7 +372,12 @@ public class DataBaseEntry {
 			appContext.getBean(this.getClass()).updateSubscription();
 		}
 		try {
-			executionHistory.updateExecutionHistory(fetchMetadataListVO.get(0).getLineErrorMsg(), fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy(), executionId);
+			String errorMessage = fetchMetadataListVO.stream()
+				    .map(value -> value.getLineErrorMsg())
+				    .filter(errorMsg -> errorMsg != null)
+				    .findFirst()
+				    .orElse(null);
+			executionHistory.updateExecutionHistory(errorMessage, fetchConfigVO.getEndtime(), fetchScriptVO.getP_status(), fetchMetadataListVO.get(0).getExecutedBy(), executionId);
 		} catch (Exception e) {
 			logger.error("Failed during updating the execution history");
 		}
