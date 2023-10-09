@@ -270,29 +270,7 @@ public class DataBaseEntryDao {
 			logger.error("Failed to update start time " + e.getMessage());
 	}
 	}
-	public void updateFailedScriptLineStatus(String testScriptParamId, String errorMessage) {
 
-		 
-
-		String sql = "Update WIN_TA_TEST_SET_SCRIPT_PARAM  SET LINE_EXECUTION_STATUS='Fail',LINE_ERROR_MESSAGE= :error_message where TEST_SCRIPT_PARAM_ID='"
-
-				+ testScriptParamId + "'";
-
-		Session session = em.unwrap(Session.class);
-
-		Query query = session.createSQLQuery(sql);
-
-		query.setParameter("error_message", errorMessage);
-
- 
-
-		query.executeUpdate();
-
- 
-
-	}
-
- 
 	public int getNextExecutionNum() {
 		Session session = em.unwrap(Session.class);
 		String sql = "SELECT WIN__TA_EXECUTION_ID_SEQ.NEXTVAL FROM DUAL";
