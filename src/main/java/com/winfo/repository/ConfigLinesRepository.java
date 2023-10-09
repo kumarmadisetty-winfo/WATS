@@ -12,7 +12,7 @@ public interface ConfigLinesRepository extends JpaRepository<ConfigLines, Intege
 	@Query("Select valueName from ConfigLines where configurationId=:configId and keyName=:keyName")
 	String getValueFromKeyNameAndConfigurationId(String keyName,int configId);
 	
-	@Query("Select valueName from ConfigLines where configurationId=:configId and keyName in :keyNames")
+	@Query("Select valueName from ConfigLines where configurationId=:configId and keyName in :keyNames order by keyName")
 	List<String> getListOfValueFromKeyNameAndConfigurationId(List<String> keyNames,int configId);
 
 }
