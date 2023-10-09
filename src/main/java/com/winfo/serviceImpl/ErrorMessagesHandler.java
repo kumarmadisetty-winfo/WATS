@@ -3,6 +3,8 @@ package com.winfo.serviceImpl;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 public class ErrorMessagesHandler {
-	
+	public final Logger logger = LogManager.getLogger(ErrorMessagesHandler.class);
 	@Autowired
 	private TestSetScriptParamRepository testSetScriptParamRepository;
 
@@ -27,19 +29,15 @@ public class ErrorMessagesHandler {
 			String errorMessage = "Failed during " + actionName + " action";
 
 			 if (actionName.equalsIgnoreCase("clickButton")) {
-				  if((param1!= null && !param1.isEmpty()) && (param2!= null && !param2.isEmpty())|| message != null) {
-						errorMessage = errorMessage + "=>  Not able to click on "+ param1+">"+param2 ;
-					 }
-					  else if ((param1!= null && !param1.isEmpty()) || message != null) {
-
-							 errorMessage = errorMessage + "=>  Not able to click on "+ param1 ;
-
-						    }
-					  else  if((param2!= null && !param2.isEmpty()) || message != null) {
-							 errorMessage = errorMessage + "=>  Not able to click on "+ param2 ; 
-						 }
+				 if (StringUtils.isNotBlank(param1) && StringUtils.isNotBlank(param2) || StringUtils.isNotBlank(message)) {
+					    errorMessage = errorMessage + "=>  Not able to click on " + param1 + ">" + param2;
+					} else if (StringUtils.isNotBlank(param1) || StringUtils.isNotBlank(message)) {
+					    errorMessage = errorMessage + "=>  Not able to click on " + param1;
+					} else if (StringUtils.isNotBlank(param2) || StringUtils.isNotBlank(message)) {
+					    errorMessage = errorMessage + "=>  Not able to click on " + param2;
+					}
 					  else {
-						  System.out.println("In else part");
+						 logger.info("In else part");
 					  }
 				
 			} else if (actionName.equalsIgnoreCase("SendKeys") || actionName.equalsIgnoreCase("textarea")
