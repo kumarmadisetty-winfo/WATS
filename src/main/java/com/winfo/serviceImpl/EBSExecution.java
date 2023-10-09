@@ -162,11 +162,11 @@ package com.winfo.serviceImpl;
 //@Value("${evidenceReportLocation}")
 //private String reportLocation;
 
-//@Value("${microsoft.graph.base-url}")
-//private String microsoftGraphBaseUrl;
+//@Value("${microsoft.graph.base-drives-url}")
+//private String microsoftGraphBaseDrivesUrl;
 
-//@Value("${microsoft.graph.base-url1}")
-//private String microsoftGraphBaseUrl1;
+//@Value("${microsoft.graph.base-sites-url}")
+//private String microsoftGraphBaseSitesUrl;
 
 //@Autowired
 //private EvidenceReportConfiguration evidenceReportConfiguration;
@@ -3344,7 +3344,7 @@ package com.winfo.serviceImpl;
 //				System.out.println(configVO.getSharepointDriveId());
 //				System.out.println(configVO.getSharepointItemId());
 //				HttpEntity<byte[]> uploadSessionRequest = new HttpEntity<>(null, uploadSessionHeader);
-//				ResponseEntity<Object> response = restTemplate.exchange(microsoftGraphBaseUrl
+//				ResponseEntity<Object> response = restTemplate.exchange(microsoftGraphBaseDrivesUrl
 //						+ configVO.getSharepointDriveId() + "/items/" + configVO.getSharepointItemId()
 //						+ ":/Screenshot/" + fetchMetadataListVO.get(0).getCustomerName() + "/"
 //						+ fetchMetadataListVO.get(0).getTestRunName() + "/" + imageFileName + ":/createUploadSession",

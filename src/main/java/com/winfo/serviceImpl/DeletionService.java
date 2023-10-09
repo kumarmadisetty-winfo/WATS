@@ -64,11 +64,11 @@ public class DeletionService{
 	@Value("${oci.config.path}")
 	private String ociConfigPath;
 
-	@Value("${microsoft.graph.base-url}")
-	private String microsoftGraphBaseUrl;
+	@Value("${microsoft.graph.base-drives-url}")
+	private String microsoftGraphBaseDrivesUrl;
 	
-	@Value("${microsoft.graph.base-url1}")
-	private String microsoftGraphBaseUrl1;
+	@Value("${microsoft.graph.base-sites-url}")
+	private String microsoftGraphBaseSitesUrl;
 
 	@Autowired
 	DataBaseEntry dataBaseEntry;
@@ -286,7 +286,7 @@ public class DeletionService{
 			HttpEntity<byte[]> deleteSessionRequest = new HttpEntity<>(null, deleteSessionHeader);
 
 			// SITE-ID
-			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange(microsoftGraphBaseUrl1
+			ResponseEntity<Object> siteDetailsResponse = restTemplate.exchange(microsoftGraphBaseSitesUrl
 					+ fetchConfigVO.getSharePoint_URL() + ":/sites/" + fetchConfigVO.getSite_Name(), HttpMethod.GET,
 					deleteSessionRequest, Object.class);
 
@@ -299,7 +299,7 @@ public class DeletionService{
 
 			// DRIVE-ID
 			ResponseEntity<Object> driveDetailsResponse = restTemplate.exchange(
-					microsoftGraphBaseUrl1 + siteId + "/drives", HttpMethod.GET,
+					microsoftGraphBaseSitesUrl + siteId + "/drives", HttpMethod.GET,
 					deleteSessionRequest, Object.class);
 
 			Map<String, Object> driveDetailsMap = driveDetailsResponse.getBody() != null
@@ -328,7 +328,7 @@ public class DeletionService{
 			// SITE-ID
 			ResponseEntity<Object> itemDetailsResponse = restTemplate
 					.exchange(
-							microsoftGraphBaseUrl + driveId + "/root:/"
+							microsoftGraphBaseDrivesUrl + driveId + "/root:/"
 									+ fetchConfigVO.getDirectory_Name() + "/" + customerDetails.getCustomerName() + "/"
 									+ customerDetails.getProjectName() + "/" + testRunName,
 							HttpMethod.GET, deleteSessionRequest, Object.class);
@@ -341,7 +341,7 @@ public class DeletionService{
 
 			// Child-Name
 			ResponseEntity<Object> listOfItemDetailsResponse = restTemplate.exchange(
-					microsoftGraphBaseUrl + driveId + "/items/" + itemId + "/children",
+					microsoftGraphBaseDrivesUrl + driveId + "/items/" + itemId + "/children",
 					HttpMethod.GET, deleteSessionRequest, Object.class);
 
 			Map<String, Object> listOfItemDetailsMap = listOfItemDetailsResponse.getBody() != null
@@ -351,7 +351,7 @@ public class DeletionService{
 			List<Map<String, Object>> listOfMaps = (List<Map<String, Object>>) listOfItemDetailsMap.get("value");
 			if (isTestRunDelete) {
 				ResponseEntity<Object> deletionOfPdf = restTemplate.exchange(
-						microsoftGraphBaseUrl + driveId + "/root:/"
+						microsoftGraphBaseDrivesUrl + driveId + "/root:/"
 								+ fetchConfigVO.getDirectory_Name() + "/" + customerDetails.getCustomerName() + "/"
 								+ customerDetails.getProjectName() + "/" + testSet.getTestRunName(),
 						HttpMethod.DELETE, deleteSessionRequest, Object.class);
@@ -361,7 +361,7 @@ public class DeletionService{
 					String pdfNameToFind = testSetLine.getSeqNum() + "_" + testSetLine.getScriptNumber();
 					if (pdfName.contains(pdfNameToFind)) {
 						ResponseEntity<Object> deletionOfPdf = restTemplate.exchange(
-								microsoftGraphBaseUrl + driveId + "/root:/"
+								microsoftGraphBaseDrivesUrl + driveId + "/root:/"
 										+ fetchConfigVO.getDirectory_Name() + "/" + customerDetails.getCustomerName()
 										+ "/" + customerDetails.getProjectName() + "/"
 										+ testSetLine.getTestRun().getTestRunName() + "/" + pdfName,
