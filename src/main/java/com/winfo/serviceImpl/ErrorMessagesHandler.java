@@ -3,6 +3,8 @@ package com.winfo.serviceImpl;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 public class ErrorMessagesHandler {
-	
+	public final Logger logger = LogManager.getLogger(ErrorMessagesHandler.class);
 	@Autowired
 	private TestSetScriptParamRepository testSetScriptParamRepository;
 
@@ -26,11 +28,17 @@ public class ErrorMessagesHandler {
 
 			String errorMessage = "Failed during " + actionName + " action";
 
-			if (actionName.equalsIgnoreCase("clickButton") && message != null) {
-				errorMessage = errorMessage + "=>  Not able to click on "+ param1+">"+param2 ;
-			}
-				else if (actionName.equalsIgnoreCase("clickButton")) {
-					errorMessage = errorMessage + "=>  Not able to click on "+ param1+">"+param2 ;
+			 if (actionName.equalsIgnoreCase("clickButton")) {
+				 if (StringUtils.isNotBlank(param1) && StringUtils.isNotBlank(param2) || StringUtils.isNotBlank(message)) {
+					    errorMessage = errorMessage + "=>  Not able to click on " + param1 + ">" + param2;
+					} else if (StringUtils.isNotBlank(param1) || StringUtils.isNotBlank(message)) {
+					    errorMessage = errorMessage + "=>  Not able to click on " + param1;
+					} else if (StringUtils.isNotBlank(param2) || StringUtils.isNotBlank(message)) {
+					    errorMessage = errorMessage + "=>  Not able to click on " + param2;
+					}
+					  else {
+						 logger.info("In else part");
+					  }
 				
 			} else if (actionName.equalsIgnoreCase("SendKeys") || actionName.equalsIgnoreCase("textarea")
 					|| actionName.equalsIgnoreCase("Table SendKeys")
