@@ -124,7 +124,6 @@ public class DataBaseEntry {
 			throws ClassNotFoundException, SQLException {
 		dao.updateInProgressScriptLineStatus(test_script_param_id, status);
 	}
-	
 	public String getErrorMessage(String sndo, String ScriptName, String testRunName, FetchConfigVO fetchConfigVO)
 			throws ClassNotFoundException, SQLException {
 		return dao.getErrorMessage(sndo, ScriptName, testRunName);
