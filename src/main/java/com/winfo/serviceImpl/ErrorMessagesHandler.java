@@ -1,21 +1,16 @@
 package com.winfo.serviceImpl;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winfo.repository.TestSetScriptParamRepository;
-import com.winfo.utils.Constants;
 import com.winfo.vo.FetchConfigVO;
 import com.winfo.vo.ScriptDetailsDto;
 
 @Service
 public class ErrorMessagesHandler {
-	
 	@Autowired
-	private TestSetScriptParamRepository testSetScriptParamRepository;
+	private DataBaseEntry dataBaseEntry;
 
 	public void getError(String actionName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String message, String param1, String param2, String password) {
@@ -26,13 +21,24 @@ public class ErrorMessagesHandler {
 
 			String errorMessage = "Failed during " + actionName + " action";
 
-			if (actionName.equalsIgnoreCase("clickButton") && message != null) {
-				errorMessage = errorMessage + "=>  Not able to click on "+ param1+">"+param2 ;
-			}
-				else if (actionName.equalsIgnoreCase("clickButton")) {
-					errorMessage = errorMessage + "=>  Not able to click on "+ param1+">"+param2 ;
-				
-			} else if (actionName.equalsIgnoreCase("SendKeys") || actionName.equalsIgnoreCase("textarea")
+				 if (actionName.equalsIgnoreCase("clickButton")) {
+				 
+					  if((param1!= null && !param1.isEmpty()) && (param2!= null && !param2.isEmpty())|| message != null) {
+						errorMessage = errorMessage + "=>  Not able to click on "+ param1+">"+param2 ;
+					 }
+					  else if ((param1!= null && !param1.isEmpty()) || message != null) {
+
+							 errorMessage = errorMessage + "=>  Not able to click on "+ param1 ;
+
+						    }
+					  else  if((param2!= null && !param2.isEmpty()) || message != null) {
+							 errorMessage = errorMessage + "=>  Not able to click on "+ param2 ; 
+						 }
+					  else {
+						  System.out.println("In else part");
+					  }	 
+		}	
+			 else if (actionName.equalsIgnoreCase("SendKeys") || actionName.equalsIgnoreCase("textarea")
 					|| actionName.equalsIgnoreCase("Table SendKeys")
 					|| actionName.equalsIgnoreCase("multiplelinestableSendKeys")) {
 				errorMessage =  errorMessage +"=>Not able to enter the value from "+ param1+">"+param2;
@@ -153,7 +159,8 @@ public class ErrorMessagesHandler {
 				errorMessage = errorMessage + "=> please contact with WinfoTest support team.";
 			}
 			fetchMetadataVO.setLineErrorMsg(errorMessage);
-			testSetScriptParamRepository.updateTestSetScriptParamEndTime(Constants.FAIL,new Date(),errorMessage,Integer.parseInt(testScriptParamId));
+			dataBaseEntry.updateFailedScriptLineStatus(fetchMetadataVO, fetchConfigVO, testScriptParamId, "Fail",
+					errorMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
