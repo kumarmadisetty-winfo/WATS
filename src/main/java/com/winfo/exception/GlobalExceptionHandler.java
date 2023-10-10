@@ -20,7 +20,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(WatsEBSException.class)
 	public ResponseEntity<Object> handleDefaultException(WatsEBSException exception) {
 		ErrorDetail errorDetails = new ErrorDetail(exception.getErrorCode(), exception.getErrorMessage());
-//		exception.printStackTrace();
 		return new ResponseEntity<>(errorDetails, HttpStatus.OK);
 	}
 
