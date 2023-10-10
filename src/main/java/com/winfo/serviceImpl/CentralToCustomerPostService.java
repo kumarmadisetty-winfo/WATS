@@ -19,7 +19,7 @@ import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.repository.CustomerRepository;
-import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.repository.LookUpRepository;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -37,7 +37,7 @@ public class CentralToCustomerPostService {
 	@Autowired
 	CustomerRepository customerRepository;
 	@Autowired
-	LookUpCodeRepository lookUpCodeRepository;
+	LookUpRepository lookUpRepository;
 
 	@Transactional
 	public List<DomGenericResponseBean> saveScriptMasterDtls(WatsMasterDataVOList mastervolist, String customerName) {
@@ -121,7 +121,6 @@ public class CentralToCustomerPostService {
 					lookUpObj.setUpdatedDate(lookUpVoObj.getUpdateDate());
 					dao.insertLookUpObj(lookUpObj);
 				}
-			int lookUpId=lookUpCodeRepository.findFirstByLookUpName(lookUpName).getLookUpId();
 				Map<String, LookUpCodeVO> mapOfLookUpCodeVO = lookUpVoObj.getMapOfData();
 
 				if (mapOfLookUpCodeVO != null) {
@@ -132,7 +131,7 @@ public class CentralToCustomerPostService {
 						if (lookUpNameKey != null
 								&& dao.doesLookUpCodeExist(lookUpName, lookUpNameKey)) {
 							LookUpCode lookUpCodeObj = new LookUpCode();
-							lookUpCodeObj.setLookUpId(lookUpId);
+							lookUpCodeObj.setLookUpId(lookUpRepository.findByLookUpName(lookUpName).getLookUpId());
 							lookUpCodeObj.setLookUpName(lookUpCodeValue.getLookUpName());
 							lookUpCodeObj.setLookUpCode(lookUpCodeValue.getLookUpCode());
 							lookUpCodeObj.setTargetCode(lookUpCodeValue.getTargetCode());
