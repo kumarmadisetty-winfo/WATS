@@ -69,7 +69,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 
 	@Autowired
 	ScriptXpathService service;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -6982,5 +6982,12 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			throws IOException, DocumentException, com.lowagie.text.DocumentException {
 		// EMPTY METHOD
 
+	}
+
+	@Override
+	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

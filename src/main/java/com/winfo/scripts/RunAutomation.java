@@ -1551,6 +1551,10 @@ public class RunAutomation {
 							seleniumFactory.getInstanceObj(instanceName).switchToParentWindow(driver, fetchMetadataVO,
 									fetchConfigVO, customerDetails);
 							break;
+						case "switchToParentWindowWithoutPdf":
+							seleniumFactory.getInstanceObj(instanceName).switchToParentWindowWithoutPdf(driver, fetchMetadataVO,
+									fetchConfigVO, customerDetails);
+							break;
 						case "DatePicker":
 							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
 								try {
