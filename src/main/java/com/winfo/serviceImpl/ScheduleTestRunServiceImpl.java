@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -96,7 +95,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				scheduler.setStatus(Constants.YET_TO_START);
 				scheduler = schedulerRepository.save(scheduler);
 			}
-			int jobId = createSchedule(scheduleJobVO, scheduleJobVO.getTestRuns(), count, scheduler);
+			int jobId = createSchedule(scheduleJobVO, scheduleJobVO.getTestRuns(), count, scheduler,false);
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
 					jobId + ":Successfully created new " + scheduleJobVO.getSchedulerName() + " job");
 		} catch (WatsEBSException e) {
@@ -120,6 +119,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			Optional<List<UserSchedulerJob>> listOfSubJob = userSchedulerJobRepository
 					.findByJobId(scheduler.getJobId());
 
+			validateScheduleTestRuns(scheduler,scheduleJobVO.getTestRuns(),false);
+			
 			// delete test runs from a schedule
 			if (listOfSubJob.isPresent()) {
 				// get list of all test run name from request body(JSON VO)
@@ -202,7 +203,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 						.collect(Collectors.toList());
 				if (newAddedSubJobs.size() > 0) {
 					AtomicInteger count = new AtomicInteger(listOfSubJob.isPresent() ? listOfSubJob.get().size() : 0);
-					createSchedule(scheduleJobVO, newAddedSubJobs, count, scheduler);
+					createSchedule(scheduleJobVO, newAddedSubJobs, count, scheduler,true);
 				}
 			}
 			// Edit schedule details and test run time and email notification
@@ -242,41 +243,23 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			schedulerRepository.save(scheduler);
 			return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
 					scheduler.getJobId() + ":Successfully updated the " + scheduler.getJobName() + " job");
-		} catch (Exception e) {
+		}catch (WatsEBSException e) {
+			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+					+ scheduleJobVO.getSchedulerName());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
+					scheduleJobVO.getSchedulerName() + " is not created successfully - " + e.getMessage());
+		}  catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
 	}
 
 	public int createSchedule(ScheduleJobVO scheduleJobVO, List<ScheduleTestRunVO> listOfTestRunInJob,
-			AtomicInteger count, Scheduler scheduler) {
+			AtomicInteger count, Scheduler scheduler, boolean isValidated) {
 		String jobName = scheduler.getJobName().replaceAll("\\s", "").toUpperCase();
 		int jobId = scheduler.getJobId();
 		logger.info(String.format("Schedule job name:" + jobName + " Schedule job id:" + jobId));
-		List<ResponseEntity<ResponseDto>> result = new ArrayList<>();
-		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
-			TestSet testSet = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
-			if (testSet != null) {
-				try {
-					result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
-				} catch (ConstraintViolationException e) {
-					logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
-							+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
-					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-							Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE + " of " + testSet.getTestRunName());
-
-				} catch (Exception e) {
-					logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
-							+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
-					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-				}
-			} else {
-				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
-						+ testRunVO.getTemplateTestRun());
-				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.INTERNAL_SERVER_ERROR
-						+ " - " + Constants.INVALID_TEST_SET_ID + " - " + testRunVO.getTemplateTestRun());
-			}
-		});
+		validateScheduleTestRuns(scheduler,listOfTestRunInJob,isValidated);
 
 		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
 			if (testRunVO.getTestRunName() != null && !"".equals(testRunVO.getTestRunName())) {
@@ -359,5 +342,41 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			logger.error("Exception occurred while regenerating the schedule summary report : " + jobId);
 		}
 		return response;
+	}
+	
+	private void validateScheduleTestRuns( Scheduler scheduler,List<ScheduleTestRunVO> listOfTestRunInJob,boolean isValidated) {
+		if(!isValidated){
+			List<ResponseEntity<ResponseDto>> result = new ArrayList<>();
+			listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
+				TestSet testSet = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+				if (testSet != null) {
+					try {
+						result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
+					} catch (ConstraintViolationException e) {
+						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+								+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
+						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+								Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE + " of " + testSet.getTestRunName());
+						
+					} catch (Exception e) {
+						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+								+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
+						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+					}
+				} else {
+					logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
+							+ testRunVO.getTemplateTestRun());
+					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.INTERNAL_SERVER_ERROR
+							+ " - " + Constants.INVALID_TEST_SET_ID + " - " + testRunVO.getTemplateTestRun());
+				}
+			});
+			result.parallelStream().forEach(responseEntity->{
+				if(Integer.parseInt(responseEntity.getStatusCode().toString())!=HttpStatus.OK.value())result.remove(responseEntity);
+			});
+			if (result.size()>0) {
+				logger.error(Constants.INTERNAL_SERVER_ERROR +" - "+scheduler.getJobName()+" - "+scheduler.getJobId());
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),scheduler.getJobName() + " is not " + Constants.VALIDATED_SUCCESSFULLY);
+			}
+		}
 	}
 }

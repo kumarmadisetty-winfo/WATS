@@ -48,14 +48,12 @@ public class ScheduleTestRunController {
 	@PutMapping("/schedule")
 	@ApiOperation( value="edit scheduled job for group of test run",notes = "")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Successfully updated the scheduled job")})
-	public  ResponseEntity editScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {
+	public  ResponseEntity<ResponseDto> editScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {
 		ResponseDto responseDto =scheduleTestRunService.editScheduledJob(scheduleJobVO); 
 		if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
 			return ResponseEntity.ok(responseDto);
 		} else {
-			return new ResponseEntity(
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error occurred while scheduling a job"),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<ResponseDto>(responseDto,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
