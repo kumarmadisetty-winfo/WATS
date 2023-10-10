@@ -6276,6 +6276,16 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				logger.error("Failed during Approve clickLink " + scripNumber);
 
 			}
+			try {
+				if (param1.equalsIgnoreCase("Attach Excel")) {
+						renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+						return;
+					}
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.error("Failed during renaming downloaded file " + scripNumber);
+				logger.error(e.getMessage());
+			}
 			// Here adding code for Scanned invoices in AP.453
 
 			try {
@@ -18763,8 +18773,6 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 				}
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
-				
-				// renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 	
 			} catch (Exception e) {
 				String scripNumber = fetchMetadataVO.getScriptNumber();
