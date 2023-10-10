@@ -30,6 +30,7 @@ public interface LookUpCodeRepository extends JpaRepository<LookUpCode, Integer>
 	LookUpCode findByMeaningAndLookUpName(String meaning,String lookUpName);
 
 	LookUpCode findByLookUpNameAndLookUpCode(String lookUpName, String customerName);
+	LookUpCode findFirstByLookUpName(String lookUpName);
 
 
 }

@@ -19,6 +19,7 @@ import com.winfo.model.LookUpCode;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.repository.CustomerRepository;
+import com.winfo.repository.LookUpCodeRepository;
 import com.winfo.vo.DomGenericResponseBean;
 import com.winfo.vo.LookUpCodeVO;
 import com.winfo.vo.LookUpVO;
@@ -35,6 +36,8 @@ public class CentralToCustomerPostService {
 	DataBaseEntryDao dataBaseEntryDao;
 	@Autowired
 	CustomerRepository customerRepository;
+	@Autowired
+	LookUpCodeRepository lookUpCodeRepository;
 
 	@Transactional
 	public List<DomGenericResponseBean> saveScriptMasterDtls(WatsMasterDataVOList mastervolist, String customerName) {
@@ -107,6 +110,7 @@ public class CentralToCustomerPostService {
 			LookUpVO lookUpVoObj = masterdata.getLookUpVO();
 			if (lookUpVoObj != null) {
 				String lookUpName = lookUpVoObj.getLookupName() == null ? "" : lookUpVoObj.getLookupName();
+				
 				if (dao.doesLookUpExist(lookUpName)) {
 					LookUp lookUpObj = new LookUp();
 					lookUpObj.setLookUpName(lookUpVoObj.getLookupName());
@@ -117,7 +121,7 @@ public class CentralToCustomerPostService {
 					lookUpObj.setUpdatedDate(lookUpVoObj.getUpdateDate());
 					dao.insertLookUpObj(lookUpObj);
 				}
-
+			int lookUpId=lookUpCodeRepository.findFirstByLookUpName(lookUpName).getLookUpId();
 				Map<String, LookUpCodeVO> mapOfLookUpCodeVO = lookUpVoObj.getMapOfData();
 
 				if (mapOfLookUpCodeVO != null) {
@@ -128,7 +132,7 @@ public class CentralToCustomerPostService {
 						if (lookUpNameKey != null
 								&& dao.doesLookUpCodeExist(lookUpName, lookUpNameKey)) {
 							LookUpCode lookUpCodeObj = new LookUpCode();
-							lookUpCodeObj.setLookUpId(lookUpCodeValue.getLookUpId());
+							lookUpCodeObj.setLookUpId(lookUpId);
 							lookUpCodeObj.setLookUpName(lookUpCodeValue.getLookUpName());
 							lookUpCodeObj.setLookUpCode(lookUpCodeValue.getLookUpCode());
 							lookUpCodeObj.setTargetCode(lookUpCodeValue.getTargetCode());
@@ -143,7 +147,6 @@ public class CentralToCustomerPostService {
 							lookUpCodeObj.setProcessCode(lookUpCodeValue.getProcessCode());
 							lookUpCodeObj.setModuleCode(lookUpCodeValue.getModuleCode());
 							lookUpCodeObj.setTargetApplication(lookUpCodeValue.getTargetApplication());
-
 							dao.insertLookUpCodeObj(lookUpCodeObj);
 						}
 
