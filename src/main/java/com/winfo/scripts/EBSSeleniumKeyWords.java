@@ -13149,4 +13149,11 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
+
+	@Override
+	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

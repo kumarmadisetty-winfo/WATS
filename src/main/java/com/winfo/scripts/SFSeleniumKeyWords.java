@@ -23077,4 +23077,10 @@ public class SFSeleniumKeyWords extends AbstractSeleniumKeywords implements Sele
 		}
 
 }
+	@Override
+	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }
