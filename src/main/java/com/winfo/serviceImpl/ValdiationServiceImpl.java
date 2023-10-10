@@ -68,7 +68,6 @@ public class ValdiationServiceImpl implements ValidationService {
 	UserSchedulerJobRepository userSchedulerJobRepository;
 
 	@Override
-//	@Transactional
 	public ResponseEntity<ResponseDto> validateSchedule(Integer jobId) throws Exception {
 		Scheduler scheduler = schedulerRepository.findByJobId(jobId);
 		try {
@@ -120,7 +119,6 @@ public class ValdiationServiceImpl implements ValidationService {
 	}
 
 	@Override
-//	@Transactional
 	public ResponseEntity<ResponseDto> validateTestRun(Integer testSetId, boolean validateAll) throws Exception {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		try {
@@ -179,7 +177,6 @@ public class ValdiationServiceImpl implements ValidationService {
 	}
 
 	@Override
-//	@Transactional
 	public ResponseEntity<ResponseDto> validateTestRunScript(Integer testSetId, Integer testSetLineId) throws Exception {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		try {
