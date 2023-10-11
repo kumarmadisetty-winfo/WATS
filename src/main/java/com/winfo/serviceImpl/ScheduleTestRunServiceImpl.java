@@ -137,9 +137,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		} catch (WatsEBSException e) {
 			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
 					+ scheduleJobVO.getSchedulerName());
-			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					scheduleJobVO.getSchedulerName() + " is not created successfully - " + e.getMessage());
+			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
 		}
@@ -262,10 +262,11 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 							+ " - " + Constants.INVALID_TEST_SET_ID + " - " + testRunVO.getTemplateTestRun());
 				}
 			});
-			result.parallelStream().forEach(responseEntity -> {
-				if (Integer.parseInt(responseEntity.getStatusCode().toString()) != HttpStatus.OK.value())
-					result.remove(responseEntity);
-			});
+			
+			Map<Boolean, List<ResponseEntity<ResponseDto>>>  partitionedMap = result.parallelStream()
+			        .collect(Collectors.partitioningBy(responseEntity -> responseEntity.getStatusCode().value() == Constants.SUCCESS_STATUS));
+			result.removeAll(partitionedMap.get(true));
+			logger.info(result.toString());
 			if (result.size() > 0) {
 				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + scheduler.getJobName() + " - "
 						+ scheduler.getJobId());
@@ -297,8 +298,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 							WebClient webClient = WebClient.create(basePath + "/WATSservice/editScheduleTestRun");
 							Mono<String> result = webClient.post().syncBody(scheduleSubJobVO).retrieve()
 									.bodyToMono(String.class);
-							logger.info("result=" + result.toString());
 							result.block();
+							logger.info("result=" + result.toString());
 						} catch (Exception e) {
 							logger.error(e.getMessage());
 							throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),

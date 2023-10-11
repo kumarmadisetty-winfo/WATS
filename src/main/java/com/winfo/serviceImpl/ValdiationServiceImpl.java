@@ -90,9 +90,10 @@ public class ValdiationServiceImpl implements ValidationService {
 								Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID+" - "+testRun.getComments());
 					}
 				});
-				result.parallelStream().forEach(responseEntity->{
-					if(Integer.parseInt(responseEntity.getStatusCode().toString())!=HttpStatus.OK.value())result.remove(responseEntity);
-				});
+				Map<Boolean, List<ResponseEntity<ResponseDto>>>  partitionedMap = result.parallelStream()
+				        .collect(Collectors.partitioningBy(responseEntity -> responseEntity.getStatusCode().value() == Constants.SUCCESS_STATUS));
+				result.removeAll(partitionedMap.get(true));
+				logger.info(result.toString());
 				if (result.size()>0) {
 					logger.error(Constants.INTERNAL_SERVER_ERROR +" - "+scheduler.getJobName()+" - "+scheduler.getJobId());
 					return new ResponseEntity<ResponseDto>(new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,

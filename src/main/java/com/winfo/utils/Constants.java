@@ -100,6 +100,7 @@ public class Constants {
 
 	public static final String CONFLICT = "CONFLICT";
 	public static final String SUCCESS = "SUCCESS";
+	public static final int SUCCESS_STATUS = 200;
 	public static final String ERROR = "ERROR";
 	public static final String WARNING = "WARNING";
 	public static final String SYS_USER_HOME_PATH = "user.home";
