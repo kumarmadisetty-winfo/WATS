@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -6276,6 +6275,16 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				logger.error("Failed during Approve clickLink " + scripNumber);
 
+			}
+			try {
+				if (param1.equalsIgnoreCase("Attach Excel")) {
+						renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+						return;
+					}
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.error("Failed during renaming downloaded file " + scripNumber);
+				logger.error(e.getMessage());
 			}
 			// Here adding code for Scanned invoices in AP.453
 
@@ -18743,5 +18752,34 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
+	}
+	@Override
+	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
+			throws Exception {
+			try {
+				Thread.sleep(8000);
+				Set<String> set = driver.getWindowHandles();
+				Iterator<String> itr = set.iterator();
+				while (itr.hasNext()) {
+					String childWindow = itr.next();
+					driver.switchTo().window(childWindow);
+				}
+				driver.close();
+				Set<String> set1 = driver.getWindowHandles();
+				Iterator<String> itr1 = set1.iterator();
+				while (itr1.hasNext()) {
+					String childWindow = itr1.next();
+					driver.switchTo().window(childWindow);
+				}
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
+	
+			} catch (Exception e) {
+				String scripNumber = fetchMetadataVO.getScriptNumber();
+				logger.error("Failed during switchToParentWindow" + scripNumber);
+				screenshotFail(driver, fetchMetadataVO, customerDetails);
+				e.printStackTrace();
+				throw e;
+			}
 	}
 }

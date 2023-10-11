@@ -63,7 +63,7 @@ import com.winfo.vo.ScriptDetailsDto;
 
 @Service("DD")
 @RefreshScope
-public class DeltaDentalSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface{
+public abstract class DeltaDentalSeleniumKeywords extends AbstractSeleniumKeywords implements SeleniumKeyWordsInterface{
 	
 		@Autowired
 		private DataBaseEntry databaseentry;

@@ -15330,4 +15330,11 @@ public class UDGSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		
 	}
 
+	@Override
+	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
