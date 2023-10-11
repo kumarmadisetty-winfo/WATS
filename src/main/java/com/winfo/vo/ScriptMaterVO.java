@@ -177,6 +177,12 @@ public class ScriptMaterVO {
 		        .forEach(metaData -> {
 		        	metaData.setAction(dataBaseEntry.getMeaningByTargetCodeBAndTargetApplication(metaData.getAction(), Constants.ACTION,targetApplication));
 		            metaData.setValidationType(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationType(), Constants.IP_VALIDATIONS));
+		            if(Constants.REGULAR_EXPRESSION.equalsIgnoreCase(metaData.getValidationType())) {
+		            	metaData.setValidationName(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationName(), Constants.REGULAR_EXPRESSION));		            	
+		            }
+		            else if(Constants.API_VALIDATION.equalsIgnoreCase(metaData.getValidationType())){
+		            	metaData.setValidationName(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationName(), Constants.API_VALIDATION));		            			            	
+		            }
 		            metaData.setValidationName(dataBaseEntry.getMeaningByTargetCode(metaData.getValidationName(), Constants.API_VALIDATION));
 		            metaData.setDatatypes(dataBaseEntry.getMeaningByTargetCode(metaData.getDatatypes(), Constants.DATATYPES));
 		            metaData.setUniqueMandatory(dataBaseEntry.getMeaningByTargetCode(metaData.getUniqueMandatory(), Constants.UNIQUE_MANDATORY));
@@ -193,11 +199,16 @@ public class ScriptMaterVO {
 
 		scriptMetaDatalist.stream().filter(Objects::nonNull)
 				.forEach(metaData -> {
-					metaData.setAction(dataBaseEntry.getMeaningByTargetCodeBAndTargetApplication(metaData.getAction(), "ACTION",targetApplication));
-		            metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), "IP_VALIDATIONS"));
-		            metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), "API_VALIDATION"));
-		            metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), "DATATYPES"));
-		            metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(), "UNIQUE_MANDATORY"));
+					metaData.setAction(dataBaseEntry.getMeaningByTargetCodeBAndTargetApplication(metaData.getAction(),  Constants.ACTION,targetApplication));
+		            metaData.setValidationType(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationType(), Constants.IP_VALIDATIONS));
+		            if(Constants.REGULAR_EXPRESSION.equalsIgnoreCase(metaData.getValidationType())) {
+		            	metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), Constants.REGULAR_EXPRESSION));		            	
+		            }
+		            else if(Constants.API_VALIDATION.equalsIgnoreCase(metaData.getValidationType())){
+		            	metaData.setValidationName(dataBaseEntry.getLookUpCodeByMeaning(metaData.getValidationName(), Constants.API_VALIDATION));		            			            	
+		            }
+		            metaData.setDatatypes(dataBaseEntry.getLookUpCodeByMeaning(metaData.getDatatypes(), Constants.DATATYPES));
+		            metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(),Constants.UNIQUE_MANDATORY));
 					//TODO- Get lookup code from meaning for validation type, datatype, unique mandatory.
 				});
 		if (role != null) {
