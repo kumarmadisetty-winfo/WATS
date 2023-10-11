@@ -16669,7 +16669,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 
 			String number = webElement.getText().toString();
-			num = number.replaceAll("[^\\-\\,\\d.]+|\\.(?!\\d)", number);
+			num = number.replaceAll("[^\\-\\,\\d.]+|\\.(?!\\d)", "");
 			logger.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
