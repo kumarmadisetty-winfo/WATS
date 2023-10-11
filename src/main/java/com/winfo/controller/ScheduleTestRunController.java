@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.winfo.exception.WatsEBSException;
 import com.winfo.service.ScheduleTestRunService;
+import com.winfo.utils.Constants;
 import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScheduleJobVO;
 
@@ -30,19 +31,16 @@ public class ScheduleTestRunController {
 	
 	public static final Logger logger = Logger.getLogger(ScheduleTestRunController.class);
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@PostMapping("/schedule")
 	@ApiOperation( value="Create new scheduled job for group of test run",notes = "")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Successfully created the scheduled job")})
-	public  ResponseEntity createScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {
+	public  ResponseEntity<ResponseDto> createScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {
 		ResponseDto responseDto =scheduleTestRunService.createNewScheduledJob(scheduleJobVO); 
 		
 		if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
 			return ResponseEntity.ok(responseDto);
 		} else {
-			return new ResponseEntity(
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error occurred while scheduling a job"),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<ResponseDto>(responseDto,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -50,14 +48,12 @@ public class ScheduleTestRunController {
 	@PutMapping("/schedule")
 	@ApiOperation( value="edit scheduled job for group of test run",notes = "")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Successfully updated the scheduled job")})
-	public  ResponseEntity editScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {
+	public  ResponseEntity<ResponseDto> editScheduledJob(@RequestBody ScheduleJobVO scheduleJobVO) throws ParseException {
 		ResponseDto responseDto =scheduleTestRunService.editScheduledJob(scheduleJobVO); 
 		if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
 			return ResponseEntity.ok(responseDto);
 		} else {
-			return new ResponseEntity(
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error occurred while scheduling a job"),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<ResponseDto>(responseDto,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

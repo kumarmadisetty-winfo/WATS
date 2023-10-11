@@ -31,5 +31,7 @@ public interface LookUpCodeRepository extends JpaRepository<LookUpCode, Integer>
 
 	LookUpCode findByLookUpNameAndLookUpCode(String lookUpName, String customerName);
 	
+	@Query("SELECT targetCode from LookUpCode where lower(lookUpCode) = lower(:lookUpCode) and lower(lookUpName) = lower(:lookUpName) ")
+	String getTargetCodeFromLookUpNameAndLookUpCode(String lookUpName, String lookUpCode);
 	
 }

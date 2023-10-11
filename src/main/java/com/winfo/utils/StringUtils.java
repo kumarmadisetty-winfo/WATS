@@ -75,11 +75,11 @@ public class StringUtils {
 
 		try {
 			List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
-			LookUpCode lookUpCode = lookUpCodeRepository.findByLookUpNameAndLookUpCode(Constants.API_VALIDATION,
+			String targetCode= lookUpCodeRepository.getTargetCodeFromLookUpNameAndLookUpCode(Constants.API_VALIDATION,
 					Constants.GET_USER_ID);
 				WebClient webClient = WebClient.builder().baseUrl(apiDetails.get(0))
-						.defaultHeader("Authorization", StringUtils.basicAuthHeader(apiDetails.get(1), apiDetails.get(2))).build();
-				String result = webClient.get().uri(lookUpCode.getTargetCode()).retrieve()
+						.defaultHeader("Authorization", StringUtils.basicAuthHeader(apiDetails.get(2), apiDetails.get(1))).build();
+				String result = webClient.get().uri(targetCode).retrieve()
 						.onStatus(httpStatus -> httpStatus.is4xxClientError() || httpStatus.is5xxServerError(),
 								clientResponse -> {
 									if (clientResponse.statusCode().value() == HttpStatus.UNAUTHORIZED.value()) {
