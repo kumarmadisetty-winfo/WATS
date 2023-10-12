@@ -18,10 +18,10 @@ public class ErrorMessagesHandler {
 	public final Logger logger = LogManager.getLogger(ErrorMessagesHandler.class);
 	@Autowired
 	private TestSetScriptParamRepository testSetScriptParamRepository;
- 
+
 	private String prepareErrorMessage(String param1, String param2,String error){
 		String errorMessage = "";
-		if (StringUtils.isNotBlank(param1) && StringUtils.isNotBlank(param2)) {
+		if (StringUtils.isNotBlank(param1) && StringUtils.isNotBlank(param2) ) {
 			errorMessage = errorMessage + error + param1 + ">" + param2;
 		} else if (StringUtils.isNotBlank(param1) ) {
 			errorMessage = errorMessage + error + param1;
@@ -33,7 +33,7 @@ public class ErrorMessagesHandler {
 		}
 		return errorMessage;
 	}
-	
+
 	public void getError(String actionName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String message, String param1, String param2, String password) {
 		try {
@@ -45,6 +45,7 @@ public class ErrorMessagesHandler {
 
 			 if (actionName.equalsIgnoreCase("clickButton")) {
 				 errorMessage =errorMessage+ prepareErrorMessage(param1,param2, "=>  Not able to click on ");
+
 				
 			} else if (actionName.equalsIgnoreCase("SendKeys") || actionName.equalsIgnoreCase("textarea")
 					|| actionName.equalsIgnoreCase("Table SendKeys")
