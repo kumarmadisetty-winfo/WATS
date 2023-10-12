@@ -178,7 +178,7 @@ public class TemplateDownloadService {
 					: null;
 
 			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns(userName, "PRODUCT_VERSION", "PROCESS",
-					"MODULE", "ROLE", "STATUS", "PRIORITY", "STANDARD","CUSTOMER_ID");
+					"MODULE", "ROLE", "STATUS", "PRIORITY", "TYPE_OF_SCRIPT","CUSTOMER_ID");
 
 			List<String> listOfTargetApplication = getCodes("","TARGET_APPLICATION");
 
