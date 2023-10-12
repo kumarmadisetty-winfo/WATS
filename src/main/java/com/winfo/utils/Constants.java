@@ -181,4 +181,15 @@ public class Constants {
 	public static final String FORWARD_SLASH="/";
 	public static final String WATS_SERVICE="WATSservice";
 	public static final String JOSN_PARSING_ERROR="Error occurred while parsing JSON";
+	public static final String TEST_RUN="testRun";
+	public static final String ERROR_MESSAGE="errorMessage";
+	public static final String SINGLE_QUOTE="'";
+	public static final String COLON=":";
+	public static final String OPEN_CURLY_BRACES="{";
+	public static final String CLOSE_CURLY_BRACES="}";
+	public static final String QUMA=",";
+	public static final String SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING=OPEN_CURLY_BRACES+SINGLE_QUOTE+TEST_RUN+SINGLE_QUOTE+COLON+SINGLE_QUOTE;
+	public static final String SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING=SINGLE_QUOTE+QUMA+SINGLE_QUOTE+ERROR_MESSAGE+SINGLE_QUOTE+COLON+SINGLE_QUOTE;
+	
+	
 	}

@@ -83,7 +83,8 @@ public class StringUtils {
 						.onStatus(httpStatus -> httpStatus.is4xxClientError() || httpStatus.is5xxServerError(),
 								clientResponse -> {
 									if (clientResponse.statusCode().value() == HttpStatus.UNAUTHORIZED.value()) {
-										throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE+" of "+testSet.getTestRunName());
+										throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING+testSet.getTestRunName()
+										+Constants.SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING+Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE+Constants.SINGLE_QUOTE+Constants.CLOSE_CURLY_BRACES);
 									}
 									return Mono.empty();
 								})
@@ -95,14 +96,16 @@ public class StringUtils {
 		} catch (WatsEBSException e) {
 			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE+" of "+testSet.getTestRunName())
+			context.buildConstraintViolationWithTemplate(Constants.SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING+testSet.getTestRunName()
+			+Constants.SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING+Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE+Constants.SINGLE_QUOTE+Constants.CLOSE_CURLY_BRACES)
 					.addConstraintViolation();
 			return false;
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(
-					Constants.INVALID_CREDENTIALS_AND_API_BASE_URL_CONFIG_MESSAGE+" of "+testSet.getTestRunName())
+					Constants.SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING+testSet.getTestRunName()
+					+Constants.SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING+Constants.INVALID_CREDENTIALS_AND_API_BASE_URL_CONFIG_MESSAGE+Constants.SINGLE_QUOTE+Constants.CLOSE_CURLY_BRACES)
 					.addConstraintViolation();
 			return false;
 		}
