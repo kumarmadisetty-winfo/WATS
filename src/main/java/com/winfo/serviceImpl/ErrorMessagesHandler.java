@@ -19,6 +19,21 @@ public class ErrorMessagesHandler {
 	@Autowired
 	private TestSetScriptParamRepository testSetScriptParamRepository;
 
+	private String prepareErrorMessage(String param1, String param2,String error){
+		String errorMessage = "";
+		if (StringUtils.isNotBlank(param1) && StringUtils.isNotBlank(param2) ) {
+			errorMessage = errorMessage + error + param1 + ">" + param2;
+		} else if (StringUtils.isNotBlank(param1) ) {
+			errorMessage = errorMessage + error + param1;
+		} else if (StringUtils.isNotBlank(param2) ) {
+			errorMessage = errorMessage + error + param2;
+		}
+		else {
+			logger.info("In else part");
+		}
+		return errorMessage;
+	}
+
 	public void getError(String actionName, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			String testScriptParamId, String message, String param1, String param2, String password) {
 		try {
@@ -29,30 +44,12 @@ public class ErrorMessagesHandler {
 			String errorMessage = "Failed during " + actionName + " action";
 
 			 if (actionName.equalsIgnoreCase("clickButton")) {
-				 if (StringUtils.isNotBlank(param1) && StringUtils.isNotBlank(param2) || StringUtils.isNotBlank(message)) {
-					    errorMessage = errorMessage + "=>  Not able to click on " + param1 + ">" + param2;
-					} else if (StringUtils.isNotBlank(param1) || StringUtils.isNotBlank(message)) {
-					    errorMessage = errorMessage + "=>  Not able to click on " + param1;
-					} else if (StringUtils.isNotBlank(param2) || StringUtils.isNotBlank(message)) {
-					    errorMessage = errorMessage + "=>  Not able to click on " + param2;
-					}
-					  else {
-						 logger.info("In else part");
-					  }
+				 errorMessage = prepareErrorMessage(param1,param2,"=>  Not able to click on ");
 				
 			} else if (actionName.equalsIgnoreCase("SendKeys") || actionName.equalsIgnoreCase("textarea")
 					|| actionName.equalsIgnoreCase("Table SendKeys")
 					|| actionName.equalsIgnoreCase("multiplelinestableSendKeys")) {
-				 if (StringUtils.isNotBlank(param1) && StringUtils.isNotBlank(param2) ) {
-					    errorMessage = errorMessage + "=>  Not able to enter the value from  " + param1 + ">" + param2;
-					} else if (StringUtils.isNotBlank(param1) ) {
-					    errorMessage = errorMessage + "=>  Not able to enter the value from  " + param1;
-					} else if (StringUtils.isNotBlank(param2) ) {
-					    errorMessage = errorMessage + "=>  Not able to enter the value from " + param2;
-					}
-					  else {
-						 logger.info("In else part");
-					  }
+
 			} else if (actionName.equalsIgnoreCase("Dropdown Values")
 					|| actionName.equalsIgnoreCase("Table Dropdown Values")
 					|| actionName.equalsIgnoreCase("selectByText")) {
