@@ -81,6 +81,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	@Transactional
 	public ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
+			validateScheduleTestRuns(scheduleJobVO.getSchedulerName(), scheduleJobVO.getTestRuns());
 			AtomicInteger count = new AtomicInteger(0);
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			if (scheduler == null) {
@@ -109,17 +110,16 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Transactional
 	public ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
+			validateScheduleTestRuns(scheduleJobVO.getSchedulerName(), scheduleJobVO.getTestRuns());
+			
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			logger.info(String
 					.format("Schedule job name:" + scheduler.getJobName() + "Schedule job id:" + scheduler.getJobId()));
 			Optional<List<UserSchedulerJob>> listOfSubJob = userSchedulerJobRepository
 					.findByJobId(scheduler.getJobId());
-
-			validateScheduleTestRuns(scheduler, scheduleJobVO.getTestRuns(), false);
 
 			deleteTestRunFromSchedule(scheduleJobVO, listOfSubJob);
 
@@ -150,7 +150,6 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		String jobName = scheduler.getJobName().replaceAll("\\s", "").toUpperCase();
 		int jobId = scheduler.getJobId();
 		logger.info(String.format("Schedule job name:" + jobName + " Schedule job id:" + jobId));
-		validateScheduleTestRuns(scheduler, listOfTestRunInJob, isValidated);
 
 		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
 			if (testRunVO.getTestRunName() != null && !"".equals(testRunVO.getTestRunName())) {
@@ -235,9 +234,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		return response;
 	}
 
-	private void validateScheduleTestRuns(Scheduler scheduler, List<ScheduleTestRunVO> listOfTestRunInJob,
-			boolean isValidated) {
-		if (!isValidated) {
+	private void validateScheduleTestRuns(String scheduleName, List<ScheduleTestRunVO> listOfTestRunInJob) {
 			List<ResponseEntity<ResponseDto>> result = new ArrayList<>();
 			listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
 				TestSet testSet = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
@@ -268,13 +265,10 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			result.removeAll(partitionedMap.get(true));
 			logger.info(result.toString());
 			if (result.size() > 0) {
-				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + scheduler.getJobName() + " - "
-						+ scheduler.getJobId());
+				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + scheduleName);
 				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-						scheduler.getJobName() + " is not " + Constants.VALIDATED_SUCCESSFULLY);
+						scheduleName + " is not " + Constants.VALIDATED_SUCCESSFULLY);
 			}
-		}
-
 	}
 
 	private void editTestRunInSchedule(ScheduleJobVO scheduleJobVO, Optional<List<UserSchedulerJob>> listOfSubJob) {

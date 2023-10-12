@@ -58,7 +58,8 @@ public class ScheduleAPIValidator implements ConstraintValidator<ScheduleAPIVali
 						return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);						
 					}
 					context.disableDefaultConstraintViolation();
-					context.buildConstraintViolationWithTemplate(Constants.INVALID_TEST_SET_LINE_ID)
+					context.buildConstraintViolationWithTemplate(Constants.SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING+testRun.getComments()
+					+Constants.SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING+Constants.INVALID_TEST_SET_LINE_ID+Constants.SINGLE_QUOTE+Constants.CLOSE_CURLY_BRACES)
 					.addConstraintViolation();
 					return false;
 				});
