@@ -160,7 +160,7 @@ public class ScriptMaterVO {
 			module = dataBaseEntry.getMeaningByTargetCode(module, "MODULE");
 		}
 		if (standardCustom != null) {
-			standardCustom = dataBaseEntry.getMeaningByTargetCode(standardCustom, "STANDARD");
+			standardCustom = dataBaseEntry.getMeaningByTargetCode(standardCustom, "TYPE_OF_SCRIPT");
 		}
 		if (testScriptStatus != null) {
 			testScriptStatus = dataBaseEntry.getMeaningByTargetCode(testScriptStatus, "STATUS");
