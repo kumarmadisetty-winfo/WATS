@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -1312,6 +1314,34 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 	public void clickMenu(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+				try {
+					if (param1.equalsIgnoreCase("Excel (*.xls)") || param1.equalsIgnoreCase("Excel (*.xlsx)")) {
+						WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+						wait.until(ExpectedConditions.presenceOfElementLocated(
+								By.xpath(("(//div[normalize-space(text())=\"" + param1 + "\"])[1]"))));
+						// wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath(("(//div[text()=\""
+						// + param1 + "\"])[1]")), param1));
+						WebElement waittext = driver
+								.findElement(By.xpath(("(//div[normalize-space(text())=\"" + param1 + "\"])[1]")));
+						Actions actions = new Actions(driver);
+						actions.moveToElement(waittext).build().perform();
+						screenshot(driver, fetchMetadataVO, customerDetails);
+						Thread.sleep(4000);
+						clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);			
+						String scripNumber = fetchMetadataVO.getScriptNumber();
+						String params = param1;
+						String xpath = "(//div[normalize-space(text())=\"param1\"])[1]";
+						String scriptID = fetchMetadataVO.getScriptId();
+						String lineNumber = fetchMetadataVO.getLineNumber();
+						service.saveXpathParams(scriptID, lineNumber, xpath);
+						logger.info("Sucessfully clicked Element in clickmenu " + scripNumber);
+						return;
+					}
+				} catch (Exception e) {
+					String scripNumber = fetchMetadataVO.getScriptNumber();
+					logger.error("Failed during ClickMenu " + scripNumber);
+					logger.error(e.getMessage());
+				}
 		try {
 			if (param1.equalsIgnoreCase("PDF")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -2513,6 +2543,49 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 	public void clickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// prod
+		try {
+			if (param1.equalsIgnoreCase("Actions") && param2.equalsIgnoreCase("Scroll")) {
+				Actions actions = new Actions(driver);
+				WebElement waittext = null;
+				int maxAttempts = 10; // Maximum number of attempts
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+		
+				for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+					try {
+						Thread.sleep(1000);
+						waittext = driver.findElement(By.xpath("//*[@title='Actions']"));
+						try{
+							actions.sendKeys(Keys.ARROW_RIGHT).perform();
+						} catch (Exception e){
+							actions.moveToElement(waittext).build().perform();
+						}
+						break; // Exit the loop if the element is found
+					} catch (NoSuchElementException e) {
+						js.executeScript("window.scrollBy(1000, 0);");
+						System.out.println("scrolled to the element");
+						Thread.sleep(1000);
+						// }
+					}
+				}
+				if (waittext != null) {
+					screenshot(driver, fetchMetadataVO, customerDetails);
+					Thread.sleep(1000);
+					clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+		
+					String xpath = "(//*[text()=\"param1\"]/following::img[@class=\"promptComboBoxButtonMoz\"])[1]";
+					String scriptID = fetchMetadataVO.getScriptId();
+					String lineNumber = fetchMetadataVO.getLineNumber();
+					service.saveXpathParams(scriptID, lineNumber, xpath);
+					return;
+				} else {
+					// Handle the case where the element is not found even after scrolling
+					logger.error("Element 'Actions' not found.");
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Failed during click Image " + e.getMessage());
+		}
+		
 		try {
 			if (param2.equalsIgnoreCase("General Journals Report")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -6275,16 +6348,6 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 				logger.error("Failed during Approve clickLink " + scripNumber);
 
-			}
-			try {
-				if (param1.equalsIgnoreCase("Attach Excel")) {
-						renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
-						return;
-					}
-			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during renaming downloaded file " + scripNumber);
-				logger.error(e.getMessage());
 			}
 			// Here adding code for Scanned invoices in AP.453
 
@@ -15293,6 +15356,24 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 
 	public void scrollUsingElement(WebDriver driver, String inputParam, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+		// try {
+		// 	Thread.sleep(2000);
+		// 	WebElement waittill = driver
+		// 			.findElement(By.xpath("//img[@title=\"" + inputParam + "\"][1]"));
+		// 	// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom=\"50%\";");
+		// 	scrollMethod(driver, fetchConfigVO, waittill, fetchMetadataVO, customerDetails);
+		// 	// ((JavascriptExecutor)driver).executeScript("document.body.style.zoom=\"100%\";");
+		// 	String scripNumber = fetchMetadataVO.getScriptNumber();
+		// 	String xpath = "//img[@title=\"inputParam\"][1]";
+		// 	String scriptID = fetchMetadataVO.getScriptId();
+		// 	String lineNumber = fetchMetadataVO.getLineNumber();
+		// 	service.saveXpathParams(scriptID, lineNumber, xpath);
+		// 	logger.info("Sucessfully Clicked scrollUsingElement " + scripNumber);
+		// 	return;
+		// } catch (Exception e) {
+		// 	String scripNumber = fetchMetadataVO.getScriptNumber();
+		// 	logger.error("Failed during  scrollUsingElement " + scripNumber);
+		// }
 		try {
 			Thread.sleep(2000);
 			WebElement waittill = driver
@@ -18752,34 +18833,5 @@ public static final Logger logger = Logger.getLogger(BennettSeleniumKeyWords.cla
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
-	}
-	@Override
-	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails)
-			throws Exception {
-			try {
-				Thread.sleep(8000);
-				Set<String> set = driver.getWindowHandles();
-				Iterator<String> itr = set.iterator();
-				while (itr.hasNext()) {
-					String childWindow = itr.next();
-					driver.switchTo().window(childWindow);
-				}
-				driver.close();
-				Set<String> set1 = driver.getWindowHandles();
-				Iterator<String> itr1 = set1.iterator();
-				while (itr1.hasNext()) {
-					String childWindow = itr1.next();
-					driver.switchTo().window(childWindow);
-				}
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
-	
-			} catch (Exception e) {
-				String scripNumber = fetchMetadataVO.getScriptNumber();
-				logger.error("Failed during switchToParentWindow" + scripNumber);
-				screenshotFail(driver, fetchMetadataVO, customerDetails);
-				e.printStackTrace();
-				throw e;
-			}
 	}
 }
