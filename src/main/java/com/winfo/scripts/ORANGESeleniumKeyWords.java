@@ -19172,4 +19172,36 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			String value, CustomerProjectDto customerDetails) throws Exception {
 		
 	}
+
+	@Override
+	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		try {
+			Thread.sleep(8000);
+			Set<String> set = driver.getWindowHandles();
+			Iterator<String> itr = set.iterator();
+			while (itr.hasNext()) {
+				String childWindow = itr.next();
+				driver.switchTo().window(childWindow);
+			}
+			driver.close();
+			Set<String> set1 = driver.getWindowHandles();
+			Iterator<String> itr1 = set1.iterator();
+			while (itr1.hasNext()) {
+				String childWindow = itr1.next();
+				driver.switchTo().window(childWindow);
+			}
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
+			
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during switchToParentWindow" + scripNumber);
+			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }
