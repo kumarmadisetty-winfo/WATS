@@ -6174,6 +6174,16 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 		}
 		try {
+			if (param1.equalsIgnoreCase("Attach Excel")) {
+					renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+					return;
+				}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during renaming downloaded file " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
 			if (param1.equalsIgnoreCase("Output")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -16669,7 +16679,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 
 			String number = webElement.getText().toString();
-			num = number.replaceAll("[^\\-\\,\\d.]+|\\.(?!\\d)", "");
+			num = number.replaceAll("[^\\-\\,\\d.]+|\\.(?!\\d)", number);
 			logger.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
@@ -16829,7 +16839,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				driver.switchTo().window(childWindow);
 			}
 			
-			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+//			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			logger.error("Failed to Handle the window");
@@ -19160,13 +19170,6 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	public void loginSFApplication(WebDriver driver, FetchConfigVO fetchConfigVO, ScriptDetailsDto fetchMetadataVO,
 			String type1, String type2, String type3, String param1, String param2, String param3, String keysToSend,
 			String value, CustomerProjectDto customerDetails) throws Exception {
-		
-	}
-
-	@Override
-	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
 		
 	}
 }
