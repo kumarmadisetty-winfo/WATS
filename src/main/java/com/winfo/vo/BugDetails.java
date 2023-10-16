@@ -3,6 +3,7 @@ package com.winfo.vo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -18,5 +19,8 @@ public class BugDetails {
 
 	@JsonProperty("script_id")
 	private List<Integer> script_id = new ArrayList<Integer>();
+	
+	@JsonProperty("jobId")
+	private Integer jobId;
 
 }

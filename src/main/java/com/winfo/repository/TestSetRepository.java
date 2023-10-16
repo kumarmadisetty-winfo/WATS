@@ -1,6 +1,7 @@
 package com.winfo.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,6 +15,8 @@ import com.winfo.model.TestSet;
 public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 
 	TestSet findByTestRunName(String testRunName);
+	
+	List<TestSet> findByTestRunNameIn(List<String> testRunNames);
 	
 	TestSet findByTestRunId(Integer testRunId);
 	

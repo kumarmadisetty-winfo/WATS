@@ -138,7 +138,7 @@ public class JiraTicketBugService {
 		List<DomGenericResponseBean> bean = new ArrayList<DomGenericResponseBean>();
 		try {
 		Integer testsetid = bugdetails.getTest_set_id();
-		int testSetLineId = bugdetails.getTestSetLineId();
+		Integer testSetLineId = bugdetails.getTestSetLineId();
 		List<Integer> scriptIds = bugdetails.getScript_id();
 		List<Integer> scriptId = new ArrayList<Integer>();
 		List<String> scriptNumber = new ArrayList<String>();
@@ -146,7 +146,7 @@ public class JiraTicketBugService {
 		String issue_key=null;
 		List<String> issueKeyList=new ArrayList<>();
 
-		List<Object> result = dao.createJiraTicket(testsetid, scriptIds, testSetLineId);
+		List<Object> result = dao.createJiraTicket(testsetid, scriptIds, testSetLineId,bugdetails.getJobId());
 		List<TestRunVO> finalresult = new ArrayList<TestRunVO>();
 		Iterator itr = result.iterator();
 		while (itr.hasNext()) {
@@ -256,7 +256,7 @@ public class JiraTicketBugService {
 				JSONObject finalJSONObject = (JSONObject) parser.parse(JSONString2);
 //				List<String> result3 = dao.getJiraIssueUrl(slist.getConfiguration_id());
 //				String jiraissueurl = result3.get(0);
-				FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(testsetid.toString());
+				FetchConfigVO fetchConfigVO = dataService.getFetchConfigVO(slist.getTestSetId().toString());
 				String jiraissueurl = fetchConfigVO.getJIRA_ISSUE_URL();
 				String jiraticketresponse = webClient(jiraissueurl, finalJSONObject);
 
