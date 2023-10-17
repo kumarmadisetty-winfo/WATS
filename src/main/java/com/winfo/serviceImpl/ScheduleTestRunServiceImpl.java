@@ -179,7 +179,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 				}
 
-				String newSubSchedularName = jobName + Constants.ADDEDNUM + count.incrementAndGet();
+				String newSubSchedularName =Constants.PREFIX_SCHEDULE_NAME + jobName + Constants.ADDEDNUM + count.incrementAndGet();
 				ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
 				scheduleSubJobVO.setEmail(testRunVO.getNotification());
 				scheduleSubJobVO.setJobId(jobId);
