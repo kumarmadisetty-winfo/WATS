@@ -788,4 +788,11 @@ public class DataBaseEntry {
 			throws ClassNotFoundException, SQLException {
 		dao.updateTestSetLinesWarningMessage(test_script_param_id, error_message);
 	}
+	public ScriptMaster getScriptByScriptNumberAndProductVersion(String scriptNumber,String productVersion) {
+		return scriptMasterRepository.findByScriptNumberAndProductVersion(scriptNumber,productVersion);
+	}
+	public ScriptMaster getScriptByScriptId(int scriptId) {
+		return scriptMasterRepository.findByScriptId(scriptId);
+	}
+}
 }
