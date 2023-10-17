@@ -795,4 +795,3 @@ public class DataBaseEntry {
 		return scriptMasterRepository.findByScriptId(scriptId);
 	}
 }
-}
