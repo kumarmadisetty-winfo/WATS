@@ -891,6 +891,8 @@ public class RunAutomation {
 								break;
 							}
 						case "Click Menu(OIC)":
+							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+									fetchMetadataVO, customerDetails);
 							seleniumFactory.getInstanceObj(instanceName).oicClickMenu(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
@@ -984,11 +986,15 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+										fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickExpandorcollapse(driver, param1,
 										param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
 							}
 						case "clickButton(OIC)":
+							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+									fetchMetadataVO, customerDetails);
 							seleniumFactory.getInstanceObj(instanceName).oicClickButton(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
@@ -1120,6 +1126,8 @@ public class RunAutomation {
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
+									seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+											fetchMetadataVO, customerDetails);
 									seleniumFactory.getInstanceObj(instanceName).clickLinkAction(driver, param1, param2,
 											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
 											customerDetails);
@@ -1141,6 +1149,8 @@ public class RunAutomation {
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
+									seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+											fetchMetadataVO, customerDetails);
 									seleniumFactory.getInstanceObj(instanceName).clickCheckbox(driver, param1,
 											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
 											customerDetails);
@@ -1162,6 +1172,8 @@ public class RunAutomation {
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
+									seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+											fetchMetadataVO, customerDetails);
 									seleniumFactory.getInstanceObj(instanceName).clickRadiobutton(driver, param1,
 											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
 											customerDetails);
@@ -1205,6 +1217,8 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+										fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2,
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
@@ -1221,6 +1235,8 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+										fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2,
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
@@ -1236,6 +1252,8 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+										fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1,
 										param2, fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
@@ -1251,7 +1269,8 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
-
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+										fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickMenu(driver, param1, param2,
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
@@ -1268,6 +1287,8 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+										fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickImage(driver, param1, param2,
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
@@ -1285,6 +1306,8 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+										fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickTableImage(driver, param1, param2,
 										fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
 										customerDetails);
@@ -1363,6 +1386,8 @@ public class RunAutomation {
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
+									seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+											fetchMetadataVO, customerDetails);
 									seleniumFactory.getInstanceObj(instanceName).clickButtonDropdown(driver, param1,
 											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
 											customerDetails);
@@ -1442,7 +1467,8 @@ public class RunAutomation {
 									throw new Exception("ScriptNotValid");
 								}
 							} catch (Exception e) {
-
+								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+										fetchMetadataVO, customerDetails);
 								seleniumFactory.getInstanceObj(instanceName).clickFilter(driver, param1, param2,
 										fetchMetadataVO, fetchConfigVO, customerDetails);
 								break;
@@ -1685,10 +1711,14 @@ public class RunAutomation {
 							break;
 
 						case "clickLink(Informatica)":
+							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+									fetchMetadataVO, customerDetails);
 							seleniumFactory.getInstanceObj(instanceName).InformaticaclickLink(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
 						case "clickImage(Informatica)":
+							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+									fetchMetadataVO, customerDetails);
 							seleniumFactory.getInstanceObj(instanceName).InformaticaClickImage(driver, param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
@@ -1739,6 +1769,8 @@ public class RunAutomation {
 									customerDetails);
 							break;
 						case "doubleClick":
+							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
+									fetchMetadataVO, customerDetails);
 							sfInterface.doubleClick(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
 									customerDetails);
 							break;
