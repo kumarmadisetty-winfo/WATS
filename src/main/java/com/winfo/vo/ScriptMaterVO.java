@@ -192,6 +192,9 @@ public class ScriptMaterVO {
 		if (customerId != null) {
 			customerId = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(customerId));
 		}
+		if (attribute1 != null) {
+			attribute1 = dataBaseEntry.getScriptByScriptId(Integer.parseInt(attribute1)).getScriptNumber();
+		}
 	}
 	
 	//WATS-2793
@@ -228,6 +231,9 @@ public class ScriptMaterVO {
 		}
 		if (productVersion != null) {
 			productVersion = dataBaseEntry.getLookUpCodeByMeaning(productVersion, "PRODUCT_VERSION");
+		}
+		if (attribute1 != null) {
+			attribute1 = dataBaseEntry.getScriptByScriptNumberAndProductVersion(attribute1, productVersion).getScriptId().toString();
 		}
 	}
 	public void changeNullToNA() {
