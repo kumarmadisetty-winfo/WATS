@@ -34,4 +34,12 @@ public interface ScriptMasterRepository extends JpaRepository<ScriptMaster, Inte
 	
 	long countByScriptId(Integer scriptId);
   
+	
+	@Query("select scriptNumber from  ScriptMaster m WHERE m.processArea=:processArea and m.module=:module ORDER BY m.scriptNumber DESC")
+	List<String>  getScriptNumberByProcessAreaAndModule(String processArea,String module);
+	
+	
+	@Query(value="SELECT ScriptMaster.NEXTVAL FROM DUAL", nativeQuery = true)
+	List<?> getMasterScriptIdSeq();
+	
 }

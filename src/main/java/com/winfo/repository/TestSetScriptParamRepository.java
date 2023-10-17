@@ -58,4 +58,8 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	@Query("UPDATE TestSetScriptParam  SET lineExecutionStatus=:status,startTime=:startTime,endTime=:endTime,updateDate=:updateDate,lineErrorMessage=:errorMessage,inputValue=:copiedValue WHERE testRunScriptParamId=:testRunScriptParamId")
 	int updateTestSetScriptParamStatusAndStartAndEndTime(String status,Date startTime,Date endTime,Date updateDate,String errorMessage,String copiedValue, int testRunScriptParamId);
 
+	
+	@Query(value="SELECT TestSetScriptParam.NEXTVAL FROM DUAL", nativeQuery = true)
+	List<?> getParamIdSeq();
+	
 }
