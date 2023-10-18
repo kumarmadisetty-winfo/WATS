@@ -35,8 +35,6 @@ public class TestRunAPIValidator implements ConstraintValidator<TestRunAPIValida
 	@Autowired
 	LookUpCodeRepository lookUpCodeRepository;
 	
-	@Autowired
-	ProjectRepository projectRepository;
 	
 	@Override
 	public void initialize(TestRunAPIValidation constraintAnnotation) {
@@ -47,7 +45,7 @@ public class TestRunAPIValidator implements ConstraintValidator<TestRunAPIValida
 	public boolean isValid(Integer testSetId, ConstraintValidatorContext context) {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		if (testSet != null) {
-			return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository,projectRepository);
+			return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);
 		}
 		return true;
 	}

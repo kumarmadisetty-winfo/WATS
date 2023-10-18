@@ -11,7 +11,9 @@ import com.winfo.model.Project;
 import javax.validation.ConstraintValidatorContext;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.winfo.exception.WatsEBSException;
@@ -24,11 +26,19 @@ import com.winfo.serviceImpl.ValdiationServiceImpl;
 
 import reactor.core.publisher.Mono;
 
+@Component
 public class StringUtils {
 
 	public static final Logger logger = Logger.getLogger(StringUtils.class);
 	
 	private static String projectPath = System.getProperty("user.dir");
+	
+	private static ProjectRepository projectRepository;
+	
+	@Autowired
+	private StringUtils(ProjectRepository projectRepository) {
+		StringUtils.projectRepository = projectRepository;
+	}
 
 	public static String getFilePath(String fileName) {
 		return projectPath + fileName;
@@ -74,7 +84,7 @@ public class StringUtils {
 		}
 	}
 	
-	public static boolean oracleAPIAuthorization(ConstraintValidatorContext context,TestSet testSet,ConfigLinesRepository configLinesRepository,LookUpCodeRepository lookUpCodeRepository,ProjectRepository projectRepository) {
+	public static boolean oracleAPIAuthorization(ConstraintValidatorContext context,TestSet testSet,ConfigLinesRepository configLinesRepository,LookUpCodeRepository lookUpCodeRepository) {
 
 		try {
 			Project project=projectRepository.findByProjectId(testSet.getProjectId());

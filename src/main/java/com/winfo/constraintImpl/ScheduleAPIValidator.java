@@ -41,9 +41,6 @@ public class ScheduleAPIValidator implements ConstraintValidator<ScheduleAPIVali
 	
 	@Autowired
 	SchedulerRepository schedulerRepository;
-	
-	@Autowired
-	ProjectRepository projectRepository;
 
 	@Override
 	public void initialize(ScheduleAPIValidation constraintAnnotation) {
@@ -59,7 +56,7 @@ public class ScheduleAPIValidator implements ConstraintValidator<ScheduleAPIVali
 				return listOfTestRuns.get().parallelStream().filter(Objects::nonNull).allMatch((testRun)->{
 					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
 					if (testSet != null) {
-						return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository,projectRepository);						
+						return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);						
 					}
 					context.disableDefaultConstraintViolation();
 					context.buildConstraintViolationWithTemplate(Constants.SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING+testRun.getComments()
