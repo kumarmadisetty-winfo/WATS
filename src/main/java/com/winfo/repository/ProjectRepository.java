@@ -17,6 +17,8 @@ public interface ProjectRepository extends JpaRepository<Project, Integer>{
 	
 	@Query("select projectName from Project where projectId = ?1")
 	public String getProjectNameById(int projectId);
+	
+	Project findByProjectId(int projectId);
 }
 
 
