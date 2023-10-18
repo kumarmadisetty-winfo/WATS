@@ -107,6 +107,9 @@ public class TestSet {
 	@Column(name = "REFERENCE_TEST_RUN")
 	private Integer referenceTestRunId;
 	
+	@Column(name = "TEMPLATE")
+	private String template;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testRun")
 	private List<TestSetLine> testRunScriptDatalist = new ArrayList<>();
 

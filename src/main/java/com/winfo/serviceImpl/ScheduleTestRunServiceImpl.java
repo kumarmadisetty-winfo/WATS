@@ -87,6 +87,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			if (scheduler == null) {
 				logger.info("Create Schedule object ::" + scheduleJobVO.toString());
 				scheduler = new Scheduler();
+				if(scheduleJobVO.isTemplate())scheduler.setTemplate(String.valueOf(scheduleJobVO.isTemplate()));
 				scheduler.setConfigurationId(scheduleJobVO.getConfigurationId());
 				scheduler.setProjectId(scheduleJobVO.getProjectId());
 				scheduler.setCreatedBy(scheduleJobVO.getSchedulerEmail());
@@ -193,6 +194,11 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
 			scheduleSubJobVO.setType(testRunVO.getType());
 			scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
+			if(scheduleJobVO.isTemplate()) {
+				testRun.setTemplate(String.valueOf(scheduleJobVO.isTemplate()));
+				testSetRepository.save(testRun);
+				scheduleSubJobVO.setType(Constants.TEMPLATE);
+			}
 			logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s", testRun.getTestRunId(),
 					testRun.getTestRunName(), scheduleJobVO.getProjectId()));
 			logger.info("WebClient URL:" + (basePath + "/WATSservice/scheduleTestRun"));
