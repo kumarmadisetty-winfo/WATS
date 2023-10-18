@@ -34,10 +34,8 @@ public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 	List<?> getTestSetIdByTestSetName(String testsetName);
 	
 	
-	@Query("select testRunName from TestSet where projectId in (select projectId from TestSet where productversion=:productVersion)")
-	List<String> getTestRunData(@Param("productVersion")String productVersion);
 	
 	
-	@Query(value="SELECT TestSet.nextval FROM DUAL", nativeQuery = true)
-	List<?> getTestSetIdSeq();
+	
+	
 }

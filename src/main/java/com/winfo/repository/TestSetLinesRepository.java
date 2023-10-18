@@ -48,8 +48,7 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	List<?> getSeqNumByTestSetId(int testSetId);
 	
 	
-	@Query(value="SELECT TestSetLine.NEXTVAL FROM DUAL", nativeQuery = true)
-	List<?> getTestSetLineIdSeq();
+	
 	
 	
 	

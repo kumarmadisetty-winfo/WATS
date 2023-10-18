@@ -172,7 +172,7 @@ public class WatsPluginService {
 	}
 
 	public List<String> getTestrunDataPVerson(String productverson) {
-		return dao.getTestrunDataPVerson(productverson);
+		return dao.getTestRunDataPVersion(productverson);
 	}
 	
 	public ResponseEntity<StreamingResponseBody> getWatsScriptAssistantFile(WatsScriptAssistantVO watsScriptAssistantVO) throws IOException {

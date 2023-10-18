@@ -112,8 +112,8 @@ public class PluginTestrunService {
 		String scriptnumber = master.getScriptNumber();
 		dao.pluginData(master, scriptnumber);
 		String testsetName = mastervo.getTestRunName();
-		int testSetId = dao.getTestsetIde(testsetName);
-		int seqNum = dao.getseqNum(testSetId);
+		int testSetId = dao.getTestSetId(testsetName);
+		int seqNum = dao.getSeqNum(testSetId);
 		int newSeqNum = seqNum + 1;
 		TestSet getTestrun = dao.getTestrunData(testSetId);
 
