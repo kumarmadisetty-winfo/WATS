@@ -32,9 +32,7 @@ public class TestRunAPIValidator implements ConstraintValidator<TestRunAPIValida
 	ConfigLinesRepository configLinesRepository;
 
 	@Autowired
-	LookUpCodeRepository lookUpCodeRepository;
-	
-	
+	LookUpCodeRepository lookUpCodeRepository;	
 	@Override
 	public void initialize(TestRunAPIValidation constraintAnnotation) {
 		this.testRunAPIValidation = constraintAnnotation;
