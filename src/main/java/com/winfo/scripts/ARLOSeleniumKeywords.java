@@ -113,7 +113,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e.getMessage());
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Navigate action " + fetchMetadataVO.getScriptNumber());
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -202,7 +202,7 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			logger.error(e.getMessage());
 			Thread.currentThread().interrupt();
 			logger.error("Failed during Navigate action " +fetchMetadataVO.getScriptNumber());
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
