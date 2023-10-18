@@ -23,6 +23,7 @@ public interface ProjectRepository extends JpaRepository<Project, Integer>{
 	@Query("select testRunName from TestSet where projectId in (select projectId from Project where productVersion=:productVersion)")
 	List<String> getTestRunData(String productVersion);
 	
+
 }
 
 

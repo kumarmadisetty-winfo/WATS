@@ -114,7 +114,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	public ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
 			validateScheduleTestRuns(scheduleJobVO.getSchedulerName(), scheduleJobVO.getTestRuns());
-			
+
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			logger.info(String
 					.format("Schedule job name:" + scheduler.getJobName() + "Schedule job id:" + scheduler.getJobId()));
@@ -178,31 +178,32 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 					logger.error(e.getMessage());
 					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 				}
+			}
 
-				String newSubSchedularName = jobName + Constants.ADDEDNUM + count.incrementAndGet();
-				ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
-				scheduleSubJobVO.setEmail(testRunVO.getNotification());
-				scheduleSubJobVO.setJobId(jobId);
-				scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
-				scheduleSubJobVO.setSubJobName(newSubSchedularName);
-				scheduleSubJobVO.setTestRunName(testRun.getTestRunName());
-				scheduleSubJobVO.setTestSetId(testRun.getTestRunId());
-				scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
-				scheduleSubJobVO.setType(testRunVO.getType());
-				scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
-				logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s", testRun.getTestRunId(),
-						testRun.getTestRunName(), scheduleJobVO.getProjectId()));
-				logger.info("WebClient URL:" + (basePath + "/WATSservice/scheduleTestRun"));
-				try {
-					WebClient webClient = WebClient.create(basePath + "/WATSservice/scheduleTestRun");
-					Mono<String> response = webClient.post().syncBody(scheduleSubJobVO).retrieve()
-							.bodyToMono(String.class);
-					response.block();
-				} catch (Exception e) {
-					logger.error(e.getMessage());
-					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-							"Error occurred from APEX web service of create scheduled job", e);
-				}
+			TestSet testRun = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+			String newSubSchedularName = Constants.PREFIX_SCHEDULE_NAME + jobName + Constants.ADDEDNUM
+					+ count.incrementAndGet();
+			ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
+			scheduleSubJobVO.setEmail(testRunVO.getNotification());
+			scheduleSubJobVO.setJobId(jobId);
+			scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
+			scheduleSubJobVO.setSubJobName(newSubSchedularName);
+			scheduleSubJobVO.setTestRunName(testRun.getTestRunName());
+			scheduleSubJobVO.setTestSetId(testRun.getTestRunId());
+			scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
+			scheduleSubJobVO.setType(testRunVO.getType());
+			scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
+			logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s", testRun.getTestRunId(),
+					testRun.getTestRunName(), scheduleJobVO.getProjectId()));
+			logger.info("WebClient URL:" + (basePath + "/WATSservice/scheduleTestRun"));
+			try {
+				WebClient webClient = WebClient.create(basePath + "/WATSservice/scheduleTestRun");
+				Mono<String> response = webClient.post().syncBody(scheduleSubJobVO).retrieve().bodyToMono(String.class);
+				response.block();
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+						"Error occurred from APEX web service of create scheduled job", e);
 			}
 		});
 		return jobId;
@@ -235,40 +236,40 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	}
 
 	private void validateScheduleTestRuns(String scheduleName, List<ScheduleTestRunVO> listOfTestRunInJob) {
-			List<ResponseEntity<ResponseDto>> result = new ArrayList<>();
-			listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
-				TestSet testSet = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
-				if (testSet != null) {
-					try {
-						result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
-					} catch (ConstraintViolationException e) {
-						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
-								+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
-						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-								Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE + " of " + testSet.getTestRunName());
+		List<ResponseEntity<ResponseDto>> result = new ArrayList<>();
+		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
+			TestSet testSet = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+			if (testSet != null) {
+				try {
+					result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
+				} catch (ConstraintViolationException e) {
+					logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+							+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
+					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+							Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE + " of " + testSet.getTestRunName());
 
-					} catch (Exception e) {
-						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
-								+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
-						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-					}
-				} else {
-					logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
-							+ testRunVO.getTemplateTestRun());
-					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.INTERNAL_SERVER_ERROR
-							+ " - " + Constants.INVALID_TEST_SET_ID + " - " + testRunVO.getTemplateTestRun());
+				} catch (Exception e) {
+					logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+							+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
+					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 				}
-			});
-			
-			Map<Boolean, List<ResponseEntity<ResponseDto>>>  partitionedMap = result.parallelStream()
-			        .collect(Collectors.partitioningBy(responseEntity -> responseEntity.getStatusCode().value() == Constants.SUCCESS_STATUS));
-			result.removeAll(partitionedMap.get(true));
-			logger.info(result.toString());
-			if (result.size() > 0) {
-				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + scheduleName);
-				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-						scheduleName + " is not " + Constants.VALIDATED_SUCCESSFULLY);
+			} else {
+				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
+						+ testRunVO.getTemplateTestRun());
+				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.INTERNAL_SERVER_ERROR
+						+ " - " + Constants.INVALID_TEST_SET_ID + " - " + testRunVO.getTemplateTestRun());
 			}
+		});
+
+		Map<Boolean, List<ResponseEntity<ResponseDto>>> partitionedMap = result.parallelStream().collect(Collectors
+				.partitioningBy(responseEntity -> responseEntity.getStatusCode().value() == Constants.SUCCESS_STATUS));
+		result.removeAll(partitionedMap.get(true));
+		logger.info(result.toString());
+		if (result.size() > 0) {
+			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + scheduleName);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+					scheduleName + " is not " + Constants.VALIDATED_SUCCESSFULLY);
+		}
 	}
 
 	private void editTestRunInSchedule(ScheduleJobVO scheduleJobVO, Optional<List<UserSchedulerJob>> listOfSubJob) {

@@ -2,24 +2,39 @@ package com.winfo.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.winfo.model.TestSet;
+import com.winfo.model.TestSetLine;
+import com.winfo.repository.TestSetRepository;
+import com.winfo.repository.UserSchedulerJobRepository;
+import com.winfo.serviceImpl.ScheduleTestRunServiceImpl;
 import com.winfo.vo.TestRunVO;
 
 @SuppressWarnings("unchecked")
 @Repository
 public class JiraTicketBugDao {
 
+	public static final Logger logger = Logger.getLogger(JiraTicketBugDao.class);
+	
 	@Autowired
 	private EntityManager entityManager;
 
-	public List<Object> createJiraTicket(Integer testsetid, List<Integer> scriptIds, int testSetLineId)
+	@Autowired
+	private UserSchedulerJobRepository userSchedulerJobRepository;
+	
+	@Autowired
+	private TestSetRepository testSetRepository;
+
+	public List<Object> createJiraTicket(Integer testsetid, List<Integer> scriptIds, Integer testSetLineId, int jobId)
 
 	{
 		Session session = entityManager.unwrap(Session.class);
@@ -34,6 +49,20 @@ public class JiraTicketBugDao {
 					"select ts.testRunId,tsl.scriptId ,tsl.seqNum,tsl.issueKey,ts.testRunName,tsl.testRunScriptId,tsl.status,ts.configurationId,tsl.scriptNumber,mas.scenarioName from TestSet ts,TestSetLine tsl,ScriptMaster mas where ts.testRunId  = tsl.testRun.testRunId and tsl.scriptId = mas.scriptId and  ts.testRunId =(:testsetId) AND tsl.testRunScriptId = (:testsetlineid)");
 			fetchsummary.setParameter("testsetId", testsetid);
 			fetchsummary.setParameter("testsetlineid", testSetLineId);
+		} else if (jobId != 0) {
+			List<String> scheduleTestRunNames=userSchedulerJobRepository.getTestSetNames(jobId);
+			logger.info("Schedule Test Runs - "+scheduleTestRunNames.toString());
+			List<TestSet> testRuns=testSetRepository.findByTestRunNameIn(scheduleTestRunNames);
+			List<Integer> testRunIds=testRuns.parallelStream().map(TestSet::getTestRunId).collect(Collectors.toList());
+			scriptIds = testRuns.parallelStream()
+				    .flatMap(testSet -> testSet.getTestRunScriptDatalist().parallelStream()
+				        .filter(testSetLine -> "Fail".equalsIgnoreCase(testSetLine.getStatus()))
+				        .map(TestSetLine::getScriptId)).distinct().collect(Collectors.toList());
+			logger.info("script Ids - "+scriptIds.toString());
+			fetchsummary = session.createQuery(
+					"select ts.testRunId,tsl.scriptId ,tsl.seqNum,tsl.issueKey,ts.testRunName,tsl.testRunScriptId,tsl.status,ts.configurationId,tsl.scriptNumber,mas.scenarioName from TestSet ts,TestSetLine tsl,ScriptMaster mas where ts.testRunId  = tsl.testRun.testRunId and tsl.scriptId = mas.scriptId and  ts.testRunId in (:testsetIds) AND tsl.scriptId in (:scriptidlist)");
+			fetchsummary.setParameter("testsetIds", testRunIds);
+			fetchsummary.setParameterList("scriptidlist", scriptIds);
 		}
 		List<Object> summaryresult = new ArrayList<>();
 		if (fetchsummary != null) {

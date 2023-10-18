@@ -57,6 +57,8 @@ import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.repository.LogDetailsRepository;
+import com.winfo.repository.TestSetLinesRepository;
+import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.CustomerProjectDto;
 import com.winfo.vo.EmailParamDto;
@@ -105,7 +107,13 @@ public class DataBaseEntryDao {
 	private static final String IN_QUEUE = "In-Queue";
 	@Autowired
 	private LogDetailsRepository logDetailsRepository;
+	
+	@Autowired
+	private TestSetLinesRepository testSetLinesRepository;
 
+	@Autowired
+	private TestSetScriptParamRepository testSetScriptParamRepository;
+	
 	public TestSet getTestSetObjByTestSetId(Integer testSetId) {
 		Session session = em.unwrap(Session.class);
 		return session.find(TestSet.class, testSetId);
@@ -1675,10 +1683,8 @@ public class DataBaseEntryDao {
 		try {
 			LogDetailsTable logDetailsTable = createLogDetailsTable(testSetLine,deletedBy);
 	        logDetailsRepository.save(logDetailsTable);
-			int data = em.createQuery("delete from TestSetLine where testRunScriptId = :testSetLineId")
-					.setParameter("testSetLineId", testSetLine.getTestRunScriptId()).executeUpdate();
-			
-			logger.info("deleted count {}" + data);
+				int deletedCount  = testSetLinesRepository.deleteByTestRunScriptId(testSetLine.getTestRunScriptId());
+			logger.info("deleted count {}" );
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1688,10 +1694,9 @@ public class DataBaseEntryDao {
 	public void deleteTestSetScriptParamRecordsByTestSetLineId(TestSetLine testSetLine) {
 		try {
 			Integer testRunScriptId = testSetLine.getTestRunScriptId();
-			int data = em
-					.createQuery("delete from TestSetScriptParam where testSetLine.testRunScriptId = :testSetLineId")
-					.setParameter("testSetLineId", testRunScriptId).executeUpdate();
-			logger.info("deleted count {}" + data);
+		int deletedCount=testSetScriptParamRepository.deleteByTestSetLineId(testRunScriptId);
+					
+			logger.info("deleted count {}" );
 
 		} catch (Exception e) {
 			e.printStackTrace();

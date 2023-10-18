@@ -130,6 +130,7 @@ public class Constants {
 	public static final String PASS="Pass";
 	public static final String FAIL="Fail";
 	public static final String ADDEDNUM="ADDEDNUM";
+	public static final String PREFIX_SCHEDULE_NAME="S";
 	public static final String INPROGRESS="IN-PROGRESS";
 	public static final String COMPLETED="COMPLETED";
 	public static final String NEW="NEW";
@@ -190,6 +191,8 @@ public class Constants {
 	public static final String QUMA=",";
 	public static final String SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING=OPEN_CURLY_BRACES+SINGLE_QUOTE+TEST_RUN+SINGLE_QUOTE+COLON+SINGLE_QUOTE;
 	public static final String SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING=SINGLE_QUOTE+QUMA+SINGLE_QUOTE+ERROR_MESSAGE+SINGLE_QUOTE+COLON+SINGLE_QUOTE;
+	public static final String ORACLE_FUSION="Oracle Fusion";
+	
 	
 	
 	}

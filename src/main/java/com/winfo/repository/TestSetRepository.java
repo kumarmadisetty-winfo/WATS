@@ -17,6 +17,8 @@ public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 
 	TestSet findByTestRunName(String testRunName);
 	
+	List<TestSet> findByTestRunNameIn(List<String> testRunNames);
+	
 	TestSet findByTestRunId(Integer testRunId);
 	
 	long countByTestRunId(Integer testRunId);
