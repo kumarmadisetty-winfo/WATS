@@ -15,7 +15,6 @@ import com.winfo.model.TestSet;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.ConfigLinesRepository;
 import com.winfo.repository.LookUpCodeRepository;
-import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
