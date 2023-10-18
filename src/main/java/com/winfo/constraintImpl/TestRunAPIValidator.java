@@ -14,6 +14,7 @@ import com.winfo.model.LookUpCode;
 import com.winfo.model.TestSet;
 import com.winfo.repository.ConfigLinesRepository;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.utils.Constants;
 import com.winfo.utils.StringUtils;
@@ -33,7 +34,10 @@ public class TestRunAPIValidator implements ConstraintValidator<TestRunAPIValida
 
 	@Autowired
 	LookUpCodeRepository lookUpCodeRepository;
-
+	
+	@Autowired
+	ProjectRepository projectRepository;
+	
 	@Override
 	public void initialize(TestRunAPIValidation constraintAnnotation) {
 		this.testRunAPIValidation = constraintAnnotation;
@@ -43,7 +47,7 @@ public class TestRunAPIValidator implements ConstraintValidator<TestRunAPIValida
 	public boolean isValid(Integer testSetId, ConstraintValidatorContext context) {
 		TestSet testSet = testSetRepository.findByTestRunId(testSetId);
 		if (testSet != null) {
-			return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);
+			return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository,projectRepository);
 		}
 		return true;
 	}

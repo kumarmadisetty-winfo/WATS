@@ -15,6 +15,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.UserSchedulerJob;
 import com.winfo.repository.ConfigLinesRepository;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.SchedulerRepository;
 import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.UserSchedulerJobRepository;
@@ -40,6 +41,9 @@ public class ScheduleAPIValidator implements ConstraintValidator<ScheduleAPIVali
 	
 	@Autowired
 	SchedulerRepository schedulerRepository;
+	
+	@Autowired
+	ProjectRepository projectRepository;
 
 	@Override
 	public void initialize(ScheduleAPIValidation constraintAnnotation) {
@@ -55,7 +59,7 @@ public class ScheduleAPIValidator implements ConstraintValidator<ScheduleAPIVali
 				return listOfTestRuns.get().parallelStream().filter(Objects::nonNull).allMatch((testRun)->{
 					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
 					if (testSet != null) {
-						return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository);						
+						return StringUtils.oracleAPIAuthorization(context,testSet,configLinesRepository,lookUpCodeRepository,projectRepository);						
 					}
 					context.disableDefaultConstraintViolation();
 					context.buildConstraintViolationWithTemplate(Constants.SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING+testRun.getComments()

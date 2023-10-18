@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.winfo.model.Project;
 import javax.validation.ConstraintValidatorContext;
 
 import org.apache.log4j.Logger;
@@ -17,6 +19,7 @@ import com.winfo.model.LookUpCode;
 import com.winfo.model.TestSet;
 import com.winfo.repository.ConfigLinesRepository;
 import com.winfo.repository.LookUpCodeRepository;
+import com.winfo.repository.ProjectRepository;
 import com.winfo.serviceImpl.ValdiationServiceImpl;
 
 import reactor.core.publisher.Mono;
@@ -71,28 +74,40 @@ public class StringUtils {
 		}
 	}
 	
-	public static boolean oracleAPIAuthorization(ConstraintValidatorContext context,TestSet testSet,ConfigLinesRepository configLinesRepository,LookUpCodeRepository lookUpCodeRepository) {
+	public static boolean oracleAPIAuthorization(ConstraintValidatorContext context,TestSet testSet,ConfigLinesRepository configLinesRepository,LookUpCodeRepository lookUpCodeRepository,ProjectRepository projectRepository) {
 
 		try {
-			List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
-			String targetCode= lookUpCodeRepository.getTargetCodeFromLookUpNameAndLookUpCode(Constants.API_VALIDATION,
-					Constants.GET_USER_ID);
-				WebClient webClient = WebClient.builder().baseUrl(apiDetails.get(0))
-						.defaultHeader("Authorization", StringUtils.basicAuthHeader(apiDetails.get(2), apiDetails.get(1))).build();
-				String result = webClient.get().uri(targetCode).retrieve()
-						.onStatus(httpStatus -> httpStatus.is4xxClientError() || httpStatus.is5xxServerError(),
-								clientResponse -> {
-									if (clientResponse.statusCode().value() == HttpStatus.UNAUTHORIZED.value()) {
-										throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING+testSet.getTestRunName()
-										+Constants.SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING+Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE+Constants.SINGLE_QUOTE+Constants.CLOSE_CURLY_BRACES);
-									}
-									return Mono.empty();
-								})
-						.bodyToMono(String.class).block();
-				if (result != null) {
-					return true;
+			Project project=projectRepository.findByProjectId(testSet.getProjectId());
+			if(Constants.ORACLE_FUSION.equalsIgnoreCase(project.getWatsPackage())) {
+				boolean isApiValidationAddedInScripts=testSet.getTestRunScriptDatalist().parallelStream().anyMatch(testSetLine->{
+					return testSetLine.getTestRunScriptParam().parallelStream().anyMatch(testSetScriptParam->{
+						return Constants.API_VALIDATION.equalsIgnoreCase(testSetScriptParam.getValidationType());
+						});
+				});
+				if(isApiValidationAddedInScripts) {
+					List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
+					String targetCode= lookUpCodeRepository.getTargetCodeFromLookUpNameAndLookUpCode(Constants.API_VALIDATION,
+							Constants.GET_USER_ID);
+					WebClient webClient = WebClient.builder().baseUrl(apiDetails.get(0))
+							.defaultHeader("Authorization", StringUtils.basicAuthHeader(apiDetails.get(2), apiDetails.get(1))).build();
+					String result = webClient.get().uri(targetCode).retrieve()
+							.onStatus(httpStatus -> httpStatus.is4xxClientError() || httpStatus.is5xxServerError(),
+									clientResponse -> {
+										if (clientResponse.statusCode().value() == HttpStatus.UNAUTHORIZED.value()) {
+											throw new WatsEBSException(HttpStatus.NOT_FOUND.value(),Constants.SCHEDULE_TEST_RUN_NAME_RESPONSE_STRING+testSet.getTestRunName()
+											+Constants.SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING+Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE+Constants.SINGLE_QUOTE+Constants.CLOSE_CURLY_BRACES);
+										}
+										return Mono.empty();
+									})
+							.bodyToMono(String.class).block();
+					if (result != null) {
+						return true;
+					} else {
+						return false;
+					}
 				}
-			return false;
+			}
+			return true;
 		} catch (WatsEBSException e) {
 			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
