@@ -218,7 +218,8 @@ public class WatsPluginDao {
 	}
 
 	public int getTestSetId(String testsetName) {
-		int results=testSetRepository.getTestSetIdByTestSetName(testsetName);
+		int results=testSetRepository.findTestRunIdByTestRunName(testsetName);
+		//logger.info("ggggggggg"+testsetName);
 		if (results!=0) {
 			logger.info("Get TestSet Id " + results);
 			return results;
