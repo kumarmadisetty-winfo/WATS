@@ -31,7 +31,7 @@ public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 
 	
 	@Query("select testRunId from TestSet where testRunName=:testsetName")
-	List<?> getTestSetIdByTestSetName(String testsetName);
+	int getTestSetIdByTestSetName(String testsetName);
 	
 	
 	

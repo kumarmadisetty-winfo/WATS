@@ -131,6 +131,7 @@ public class WatsPluginService {
 		DomGenericResponseBean response = new DomGenericResponseBean();
 		String username = loginvo.getUsername();
 		String password = loginvo.getPassword();
+		
 		String userId = dao.getUserIdValidation(username);
 		if (userId != null) {
 			String userIdEnd = dao.verifyEndDate(username);
@@ -171,8 +172,8 @@ public class WatsPluginService {
 		return dao.getTestrunData();
 	}
 
-	public List<String> getTestrunDataPVerson(String productverson) {
-		return dao.getTestRunDataPVersion(productverson);
+	public List<String> getTestRunDataProductVerson(String productverson) {
+		return dao.getTestRunDataProductVersion(productverson);
 	}
 	
 	public ResponseEntity<StreamingResponseBody> getWatsScriptAssistantFile(WatsScriptAssistantVO watsScriptAssistantVO) throws IOException {

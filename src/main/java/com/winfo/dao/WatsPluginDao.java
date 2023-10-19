@@ -34,36 +34,44 @@ public class WatsPluginDao {
 	public static final Logger logger = Logger.getLogger(WatsPluginDao.class);
 	private static final String USER_ID = "userId";
 
-	@Autowired
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
+	private final ScriptMasterRepository scriptMasterRepository;
+	private final UserRoleRepository userRoleRepository;
+	private final TestSetRepository testSetRepository;
+	private final TestSetLinesRepository testSetLinesRepository;
+	private final ProjectRepository projectRepository;
 
-	@Autowired
-	private ScriptMasterRepository scriptMasterRepository;
+	public WatsPluginDao(EntityManager entityManager, ScriptMasterRepository scriptMasterRepository,
+			UserRoleRepository userRoleRepository, TestSetRepository testSetRepository,
+			TestSetLinesRepository testSetLinesRepository, ProjectRepository projectRepository) {
+		this.entityManager = entityManager;
+		this.scriptMasterRepository = scriptMasterRepository;
+		this.userRoleRepository = userRoleRepository;
+		this.testSetRepository = testSetRepository;
+		this.testSetLinesRepository = testSetLinesRepository;
+		this.projectRepository = projectRepository;
+	}
 	
-	@Autowired
-	private UserRoleRepository userRoleRepository;
-	
-	@Autowired
-	private TestSetRepository testSetRepository;
-	
-	@Autowired
-	private TestSetLinesRepository testSetLinesRepository;
-	
-	@Autowired
-	private TestSetScriptParamRepository testSetScriptParamRepository;
-	
-	@Autowired
-	private ProjectRepository projectRepository;
-	
+
 	public List<String> getScriptNumber(String processArea, String module) {
-		List<String> results = scriptMasterRepository.getScriptNumberByProcessAreaAndModule(processArea,module);
-		if (!results.isEmpty()) {
+		 logger.info("processArea"+processArea);
+		 logger.info("module"+module);
+		// List<String> results = scriptMasterRepository.findByProcessAreaAndModuleOrderByScriptNumberDesc(processArea, module).get(0).getScriptNumber();
+		 List<String> results = scriptMasterRepository.findByProcessAreaAndModuleOrderByScriptNumberDesc(processArea, module);
+	    logger.info("results"+results);
+//	    for (String scriptNumber : results) {
+//	    	logger.info("results"+results);
+//	        logger.info("scriptNumber: " + scriptNumber);
+//	    }
+	    if (!results.isEmpty()) {
+			logger.info("Script No"+results);		
 			return results;
 		} else {
 			return new ArrayList<>();
-		}
-
+			
+		} 
 	}
+
 
 	public String getUserIdValidation(String username) {
 		String userId = username.toUpperCase();
@@ -100,7 +108,7 @@ public class WatsPluginDao {
 
 	public String verifyUserActive(String username) {
 		String userId = username.toUpperCase();
-		List<String> results =userRoleRepository.getUserActive(userId);
+		List<String> results =userRoleRepository.findUserIdByUserIdAndStatus(userId,"ACTIVE");
 		if (!results.isEmpty()) {
 			logger.info("Verify User Active " + results.get(0));
 			return results.get(0);
@@ -210,19 +218,17 @@ public class WatsPluginDao {
 	}
 
 	public int getTestSetId(String testsetName) {
-		List<?> results=testSetRepository.getTestSetIdByTestSetName(testsetName);
-		if (!results.isEmpty()) {
-			logger.info("Get TestSet Id " + results.get(0));
-
-			BigDecimal bigDecimal = (BigDecimal) results.get(0);
-			return Integer.parseInt(bigDecimal.toString());
+		int results=testSetRepository.getTestSetIdByTestSetName(testsetName);
+		if (results!=0) {
+			logger.info("Get TestSet Id " + results);
+			return results;
 		} else {
 			return 0;
 		}
 	}
 
 	public int getSeqNum(int testSetId) {
-		List<?> results=testSetLinesRepository.getSeqNumByTestSetId(testSetId);
+		List<?> results=testSetLinesRepository.getSequenceNumber(testSetId);
 		if (!results.isEmpty()) {
 			logger.info("Get sequence number " +results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
@@ -246,7 +252,7 @@ public class WatsPluginDao {
 		return response;
 	}
 
-	public List<String> getTestRunDataPVersion(String productVersion) {
+	public List<String> getTestRunDataProductVersion(String productVersion) {
 		return projectRepository.getTestRunData(productVersion);
 	}
 

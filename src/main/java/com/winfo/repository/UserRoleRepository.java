@@ -23,7 +23,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
 	List<String> getPasswordExpiry(String userId);
 	
 	
-	@Query("SELECT userId FROM UserRole where upper(userId) =:userId and upper(status) = 'ACTIVE'")
-	List<String> getUserActive(String userId);
+	//@Query("SELECT userId FROM UserRole where upper(userId) =:userId and upper(status) = 'ACTIVE'")
+	List<String> findUserIdByUserIdAndStatus(String userId, String status);
 	
 }

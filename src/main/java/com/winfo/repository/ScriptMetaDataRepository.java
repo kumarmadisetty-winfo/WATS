@@ -31,8 +31,4 @@ public interface ScriptMetaDataRepository extends JpaRepository<ScriptMetaData, 
 	
 	@Query("from ScriptMetaData s where s.scriptMaster.scriptId=:scriptId and lineNumber=:lineNumber")
 	ScriptMetaData findByScriptIdAndLineNumber(int scriptId,int lineNumber);
-
-	
-	@Query(value="SELECT ScriptMetaData.NEXTVAL FROM DUAL", nativeQuery = true)
-	List<?> getMetaDataIdSeq();
 }
