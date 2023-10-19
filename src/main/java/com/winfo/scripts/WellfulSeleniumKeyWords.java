@@ -474,7 +474,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during navigator " + scripNumber);
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -495,7 +495,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 //				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
 				Thread.sleep(4000);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 				WebElement navigate = driver
 						.findElement(By.xpath("//div[contains(@id,\"popup-container\")]//span[text()=\""+param2+"\"]/following::a[text()=\""+param3+"\"]"));
 				String scripNumber = fetchMetadataVO.getScriptNumber();
@@ -548,7 +548,7 @@ public class WellfulSeleniumKeyWords extends AbstractSeleniumKeywords implements
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during Menunavigation " + scripNumber);
 
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 			logger.info("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}

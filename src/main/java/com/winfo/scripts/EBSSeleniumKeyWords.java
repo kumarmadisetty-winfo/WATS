@@ -426,7 +426,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			takeScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully navigator is done " + scripNumber);
 			String xpath = "//a[@title='param1']";
@@ -434,7 +434,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during navigator " + scripNumber);
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 			logger.info("Not able to navitage to the Url");
 			throw e;
 		}
@@ -455,7 +455,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				Thread.sleep(3000);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Successfully MenuNavigation is done " + scripNumber);
 				String xpath = "(//*[contains(@id,'popup-container')]//*[@title='param1'])[2]";
@@ -498,7 +498,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			Thread.sleep(15000);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			takeScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully menunavigation is clicked " + scripNumber);
 			String xpath = "//*[contains(@id,'popup-container')]//a[text()='Show More']" + ">"
@@ -509,8 +509,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during Menunavigation " + scripNumber);
-
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 			logger.info("Not able to navitage to the :" + "" + param1);
 			throw e;
 		}
@@ -528,7 +527,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				Actions actions = new Actions(driver);
 				actions.moveToElement(asset).build().perform();
 				actions.moveToElement(asset).click().build().perform();
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Successfully menuNavigationButton is done " + scripNumber);
 				xpath = "//span[normalize-space(text())='Fixed Assets']/following::span[normalize-space(text())='param2']";
@@ -547,7 +546,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				Actions actions = new Actions(driver);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Successfully menuNavigationButton is done " + scripNumber);
 				xpath = "//div[@style='visibility: visible;']//span[normalize-space(text())='" + param1 + "']";
@@ -566,7 +565,7 @@ public class EBSSeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			} else {
 				logger.info("Count value exceeds the limit");
 				logger.error("Failed During Navigation");
-				screenshotFail(driver, fetchMetadataVO, customerDetails);
+				takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 				logger.info("Not able to navitage to the :" + "" + param1);
 				throw e;
 			}

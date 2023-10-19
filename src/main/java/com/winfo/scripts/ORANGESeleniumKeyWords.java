@@ -469,7 +469,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			takeScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully navigator is done " + scripNumber);
 			String xpath = "//a[@title=\"param1\"]";
@@ -477,7 +477,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during navigator " + scripNumber);
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -497,7 +497,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				Thread.sleep(3000);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Successfully MenuNavigation is done " + scripNumber);
 				String xpath = "(//*[contains(@id,\"popup-container\")]//*[@title=\"param1\"])[2]";
@@ -540,7 +540,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			Thread.sleep(15000);
 			actions.moveToElement(waittext).build().perform();
 			actions.moveToElement(waittext).click().build().perform();
-			screenshot(driver, fetchMetadataVO, customerDetails);
+			takeScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully menunavigation is clicked " + scripNumber);
 			String xpath = "//*[contains(@id,\"popup-container\")]//a[text()=\"Show More\"]" + ">"
@@ -551,8 +551,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.error("Failed during Menunavigation " + scripNumber);
-
-			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 			throw e;
 		}
 	}
@@ -569,7 +568,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				Actions actions = new Actions(driver);
 				actions.moveToElement(asset).build().perform();
 				actions.moveToElement(asset).click().build().perform();
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Successfully menuNavigationButton is done " + scripNumber);
 				xpath = "//span[normalize-space(text())=\"Fixed Assets\"]/following::span[normalize-space(text())=\"param2\"]";
@@ -586,7 +585,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				WebElement waittext = driver.findElement(By
 						.xpath("//div[@style=\"visibility: visible;\"]//span[normalize-space(text())=\"" + param2 + "\"]"));
 				Actions actions = new Actions(driver);
-				screenshot(driver, fetchMetadataVO, customerDetails);
+				takeScreenshot(driver, fetchMetadataVO, customerDetails);
 				actions.moveToElement(waittext).build().perform();
 				actions.moveToElement(waittext).click().build().perform();
 				// screenshot(driver, fetchMetadataVO, customerDetails);
@@ -608,7 +607,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			} else {
 				logger.error("Count value exceeds the limit " + count);
 				logger.error("Failed During Navigation");
-				screenshotFail(driver, fetchMetadataVO, customerDetails);
+				takeScreenshotFail(driver, fetchMetadataVO, customerDetails);
 				throw e;
 			}
 
