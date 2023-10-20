@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -31,6 +34,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.winfo.exception.WatsEBSException;
+import com.winfo.model.Scheduler;
+import com.winfo.model.UserSchedulerJob;
+import com.winfo.repository.SchedulerRepository;
+import com.winfo.repository.UserSchedulerJobRepository;
 import com.winfo.utils.DateUtils;
 import com.winfo.vo.EmailParamDto;
 
@@ -50,6 +57,12 @@ public class SendMailServiceImpl {
 
 	@Autowired
 	Environment environment;
+	
+	@Autowired
+	SchedulerRepository schedulerRepository;
+	
+	@Autowired
+	UserSchedulerJobRepository userSchedulerJobRepository;
 
 	public List<String> downloadAttachments(Message message) {
 		List<String> downloadedAttachments = new ArrayList<>();
@@ -221,17 +234,55 @@ public class SendMailServiceImpl {
 	public void schedulerSendMail(EmailParamDto emailParamDto) {
 		Session session = getSession();
 		String subject = "FYI-Execution successfully completed  for " + emailParamDto.getJobName();
-
-		String body = "<html>\r\n" + "<body>\r\n"
-				+ "        <p>Hi,<br><br>This notification is to update you that the execution of job : <b>"
-				+ emailParamDto.getJobName() + ".<br><br>"
-				+ emailParamDto.getTestSetName() + "</b>" + " these testruns " 
-				+ "has completed successfully.\r\n"
-				+ "         <br><br>Please login in Winfo Automation Test tool to review full results.<br><br>\r\n"
-				+ "       <br>Please click <a href='" + link + "'><b>here</b></a> to open login page.<br><br>\r\n"
-				+ "        Thanks,<br><b>Winfo Test Automation</b>.\r\n" + "        </p>\r\n" + "    </body>\r\n"
-				+ "</html>";
-
+		Scheduler scheduler = schedulerRepository.findByJobName(emailParamDto.getJobName());
+		Optional<List<UserSchedulerJob>> listOfTestRuns = userSchedulerJobRepository.findByJobId(scheduler.getJobId());		
+		String body = "<html><head><style>\n"
+				+"table {\n"
+				+ "border: 1px solid black;\n"
+				+ " border-collapse: collapse;\n"
+				+ " width: 100%;\n"
+				+ " }\n"
+				+ " th,td {\n"
+				+ " border: 1px solid black;\n"
+				+ " padding: 8px;\n"
+				+ " text-align: left;\n"
+				+ " }\n"
+				+ " th {\n"
+				+ " background-color: #f2f2f2;\n"
+				+ " }\n"
+				+ " th.serial-number,td.serial-number {\n"
+				+ " width: 15%;\n"
+				+ " }\n"
+				+ " td.serial-number {\n"
+				+ " text-align: right !important;\n"
+				+ " }\n"
+				+ " th {\n"
+				+ " text-align: center !important;\n"
+				+ " }\n"
+				+ " th.test-run-name, td.test-run-name {\n"
+				+ " width: 35%;\n"
+				+ " }"
+				+ "th.status{\n"
+				+ "width: 15%;\n"
+				+ "}"
+				+ "</style></head><body>\n" + "<p>Hi,<br><br>This notification is to inform you that the <b>"
+				+ scheduler.getJobName()
+				+ "</b> schedule has been successfully completed with the following Test Run(s).</p>"
+				+ "<table>\n" + "<tr>\n"
+				+ "<th class=\"serial-number\">Sequence Number</th>\n"
+				+ "<th class=\"test-run-name\">Test Run Name</th>\n"
+				+ "<th class=\"status\">Status</th>\n"
+				+ "</tr>\n";
+		String listOfTestRunsInTr = listOfTestRuns.get().parallelStream()
+				.sorted(Comparator.comparingInt(UserSchedulerJob::getSequenceNumber)).map(testRunName -> {
+			return "<tr>\n" + "<td class=\"serial-number\">" + testRunName.getSequenceNumber() + "</td>\n"
+		+ "<td class=\"test-run-name\">" + testRunName.getComments() + "</td>\n" 
+		+ "<td class=\"status\">" + testRunName.getStatus() + "</td>\n" + "</tr>\n";
+		}).collect(Collectors.joining(", "));
+		body = body + listOfTestRunsInTr + " \n"
+				+ "</table>"
+				+ "<br><br>Thanks,<br><b>WinfoTest Automation</b></p>\n"
+				+ "</body></html>";
 		try {
 
 			MimeMessage message = new MimeMessage(session);

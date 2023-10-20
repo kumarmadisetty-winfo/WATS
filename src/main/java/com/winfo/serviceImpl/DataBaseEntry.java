@@ -363,7 +363,8 @@ public class DataBaseEntry {
 
 	@Transactional
 	public void updateTestCaseStatus(FetchScriptVO fetchScriptVO, FetchConfigVO fetchConfigVO,
-			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent, String executedBy, int executionId) {
+			List<ScriptDetailsDto> fetchMetadataListVO, Date startDate, String testRunName, boolean isDependentFailBecauseOfIndependent, String executedBy, 
+			int executionId,int jobId) {
 		EmailParamDto emailParam = new EmailParamDto();
 		emailParam.setTestSetName(testRunName);
 		emailParam.setExecutedBy(fetchMetadataListVO.get(0).getExecutedBy());
@@ -391,7 +392,7 @@ public class DataBaseEntry {
 			dao.getPassAndFailCount(fetchScriptVO.getP_test_set_id(), emailParam);
 			dao.getUserAndPrjManagerName(emailParam.getExecutedBy(), fetchScriptVO.getP_test_set_id(), emailParam);
 			boolean sendMail = appContext.getBean(this.getClass())
-					.checkIfAllTestSetLinesCompleted(Long.valueOf(fetchScriptVO.getP_test_set_id()), true);
+					.checkIfAllTestSetLinesCompleted(Long.valueOf(fetchScriptVO.getP_test_set_id()), true) && jobId==0;
 			if (sendMail) {
 				sendMailServiceImpl.sendMail(emailParam);
 			}

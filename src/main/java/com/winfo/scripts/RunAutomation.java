@@ -395,7 +395,7 @@ public class RunAutomation {
 										testLinesDetails.get(0).setLineErrorMsg("Failed at Login into Application =>Dependency Fail");
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
 												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(), true,
-												testScriptDto.getExecutedBy(), executionId);
+												testScriptDto.getExecutedBy(), executionId,Integer.parseInt(testScriptDto.getJobId()));
 
 									}
 								}
@@ -640,7 +640,7 @@ public class RunAutomation {
 				fetchConfigVO.setEndtime(new Date());
 				testLinesDetails.get(0).setLineErrorMsg(Constants.FAILED_TO_RUN_THE_SCRIPT);
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
-						customerDetails.getTestSetName(), false, testScriptDto.getExecutedBy(), executionId);
+						customerDetails.getTestSetName(), false, testScriptDto.getExecutedBy(), executionId,Integer.parseInt(testScriptDto.getJobId()));
 
 				failList.add(scriptId);
 			}
@@ -1847,7 +1847,7 @@ public class RunAutomation {
 							dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 							dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 									fetchConfigVO.getStarttime(), customerDetails.getTestSetName(), false,
-									testScriptDto.getExecutedBy(), executionId);
+									testScriptDto.getExecutedBy(), executionId,Integer.parseInt(testScriptDto.getJobId()));
 
 							dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 						} catch (Exception e) {
@@ -1932,7 +1932,7 @@ public class RunAutomation {
 					dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 					dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 							fetchConfigVO.getStarttime(), customerDetails.getTestSetName(), false,
-							testScriptDto.getExecutedBy(), executionId);
+							testScriptDto.getExecutedBy(), executionId,Integer.parseInt(testScriptDto.getJobId()));
 
 					dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 
