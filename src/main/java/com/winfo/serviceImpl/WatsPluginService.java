@@ -172,7 +172,7 @@ public class WatsPluginService {
 		return dao.getTestrunData();
 	}
 
-	public List<String> getTestRunDataProductVerson(String productverson) {
+	public List<String> getTestRunDataProductVersion(String productverson) {
 		return dao.getTestRunDataProductVersion(productverson);
 	}
 	

@@ -1,6 +1,7 @@
 package com.winfo.dao;
 
 import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import com.winfo.vo.DomGenericResponseBean;
 public class WatsPluginDao {
 	public static final Logger logger = Logger.getLogger(WatsPluginDao.class);
 	private static final String USER_ID = "userId";
-
+@Autowired
 	private final EntityManager entityManager;
 	private final ScriptMasterRepository scriptMasterRepository;
 	private final UserRoleRepository userRoleRepository;

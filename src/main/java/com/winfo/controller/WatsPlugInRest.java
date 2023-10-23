@@ -58,7 +58,7 @@ public class WatsPlugInRest {
 	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
 	public List<String> getTestRunData(@PathVariable String productverson) {
 		logger.info("Product Version " + productverson);
-		return service.getTestRunDataProductVerson(productverson);
+		return service.getTestRunDataProductVersion(productverson);
 	}
 
 	@PostMapping("/testrunData")
