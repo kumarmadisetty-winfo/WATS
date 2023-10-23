@@ -2142,75 +2142,87 @@ public abstract class AbstractSeleniumKeywords {
 		throw new Exception("Validation Failed.");
 	}
 
-	public void renameDownloadedFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
+		public void renameDownloadedFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) throws InterruptedException {
-		// For getting the name of the downloaded file name
-
+		// For getting the names of the downloaded files
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		jse.executeScript("window.open()");
 		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-		String fileName = null;
+		List<String> fileNames = new ArrayList<>();
+
 		if (fetchConfigVO.getBROWSER().equalsIgnoreCase("chrome")) {
 			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
 			/* Download Window Open */
 			Thread.sleep(3000);
-			fileName = (String) jse.executeScript(
-					"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
+
+			List<Object> downloadItems = (List<Object>) jse.executeScript(
+					"return Array.from(document.querySelector('downloads-manager').shadowRoot.querySelectorAll('#downloadsList downloads-item')).map(item => item.shadowRoot.querySelector('div#content #file-link').text)");
+
+			fileNames.addAll(downloadItems.stream()
+					.filter(item -> item instanceof String)
+					.map(item -> (String) item)
+					.collect(Collectors.toList()));
+
 			driver.close();
 			driver.switchTo().window(tabs.get(0));
-			logger.info("File Name*** " + fileName);
-
 		} else if (fetchConfigVO.getBROWSER().equalsIgnoreCase("firefox")) {
 			driver.switchTo().window(tabs.get(1)).get("about:downloads");
 			/* Download Window Open */
 			Thread.sleep(3000);
-			fileName = (String) jse.executeScript(
-					"return document.querySelector('#contentAreaDownloadsView .downloadMainArea .downloadContainer description:nth-of-type(1)').value");
+
+			List<Object> downloadItems = (List<Object>) jse.executeScript(
+					"return Array.from(document.querySelector('#contentAreaDownloadsView .downloadMainArea .downloadContainer description:nth-of-type(1)').values)");
+
+			fileNames.addAll(downloadItems.stream()
+					.filter(item -> item instanceof String)
+					.map(item -> (String) item)
+					.collect(Collectors.toList()));
+
 			driver.close();
 			driver.switchTo().window(tabs.get(0));
-			logger.info("File Name*** " + fileName);
 		}
 
-		if (fileName != null) {
-			File oldFile = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
-			StringBuffer newNameBuffer = new StringBuffer();
-			newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
-					.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
-					.append(customerDetails.getTestSetName()).append("_Passed");
-			String newName = newNameBuffer.toString();
-			
-			boolean isExcel = fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".xlsx");
-			
-			
-			if (isExcel) {
-				// Convert Excel to PDF logic using Aspose.Cells
-				try {
-					// Load the Excel file using Aspose.Cells
-					Workbook excelWorkbook = new Workbook(oldFile.getAbsolutePath());
-		
-					// Create a PDF file path
-					String pdfFilePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf";
+		for (String fileName : fileNames) {
+			if (fileName != null) {
+				File oldFile = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
+				StringBuffer newNameBuffer = new StringBuffer();
+				newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
+						.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
+						.append(customerDetails.getTestSetName()).append("_Passed");
+				String newName = newNameBuffer.toString();
 
-					if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
-						new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
-			
-					// Save the Excel workbook as PDF using Aspose.Cells
-					excelWorkbook.save(pdfFilePath, SaveFormat.PDF);
-			
-					// Delete the original Excel file
-					oldFile.delete();
-			
-					logger.info("Excel to PDF conversion using Aspose.Cells successful");
-				} catch (Exception e) {
-					logger.error("Error converting Excel to PDF using Aspose.Cells: " + e.getMessage());
+				boolean isExcel = fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".xlsx");
+
+				if (isExcel) {
+					// Convert Excel to PDF logic using Aspose.Cells
+					try {
+						// Load the Excel file using Aspose.Cells
+						Workbook excelWorkbook = new Workbook(oldFile.getAbsolutePath());
+
+						// Create a PDF file path
+						String pdfFilePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf";
+
+						if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
+							new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
+
+						// Save the Excel workbook as PDF using Aspose.Cells
+						excelWorkbook.save(pdfFilePath, SaveFormat.PDF);
+
+						// Delete the original Excel file
+						oldFile.delete();
+
+						logger.info("Excel to PDF conversion using Aspose.Cells successful");
+					} catch (Exception e) {
+						logger.error("Error converting Excel to PDF using Aspose.Cells: " + e.getMessage());
+					}
 				}
-			}
 
-			if (oldFile.exists()) {
-				if (oldFile.renameTo(new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"))) {
-					logger.info("File name changed succesful");
-				} else {
-					logger.info("Rename failed");
+				if (oldFile.exists()) {
+					if (oldFile.renameTo(new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"))) {
+						logger.info("File name changed successful");
+					} else {
+						logger.info("Rename failed");
+					}
 				}
 			}
 		}
