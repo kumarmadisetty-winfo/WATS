@@ -6174,6 +6174,16 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 		}
 		try {
+			if (param1.equalsIgnoreCase("Attach Excel")) {
+					renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+					return;
+				}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during renaming downloaded file " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
 			if (param1.equalsIgnoreCase("Output")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -16669,7 +16679,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 
 			String number = webElement.getText().toString();
-			num = number.replaceAll("[^\\-\\,\\d.]+|\\.(?!\\d)", "");
+			num = number.replaceAll("[^\\-\\,\\d.]+|\\.(?!\\d)", number);
 			logger.info("Successfully Copied the Number");
 
 		} catch (Exception e) {
@@ -16829,7 +16839,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				driver.switchTo().window(childWindow);
 			}
 			
-			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+//			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			logger.error("Failed to Handle the window");
@@ -19166,7 +19176,32 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 	@Override
 	public void switchToParentWindowWithoutPdf(WebDriver driver, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
-		// TODO Auto-generated method stub
-		
+		try {
+			Thread.sleep(8000);
+			Set<String> set = driver.getWindowHandles();
+			Iterator<String> itr = set.iterator();
+			while (itr.hasNext()) {
+				String childWindow = itr.next();
+				driver.switchTo().window(childWindow);
+			}
+			driver.close();
+			Set<String> set1 = driver.getWindowHandles();
+			Iterator<String> itr1 = set1.iterator();
+			while (itr1.hasNext()) {
+				String childWindow = itr1.next();
+				driver.switchTo().window(childWindow);
+			}
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
+			
+			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during switchToParentWindow" + scripNumber);
+			screenshotFail(driver, fetchMetadataVO, customerDetails);
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }
