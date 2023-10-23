@@ -45,8 +45,6 @@ public class WatsPlugInRest {
 	public DomGenericResponseBean pluginData(@RequestBody WatsPluginMasterVO mastervo) {
 		logger.info("data"+mastervo);
 		return service.pluginData(mastervo);
-		
-
 	}
 
 	@PostMapping("/login")

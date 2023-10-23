@@ -56,13 +56,8 @@ public class WatsPluginDao {
 	public List<String> getScriptNumber(String processArea, String module) {
 		 logger.info("processArea"+processArea);
 		 logger.info("module"+module);
-		// List<String> results = scriptMasterRepository.findByProcessAreaAndModuleOrderByScriptNumberDesc(processArea, module).get(0).getScriptNumber();
 		 List<String> results = scriptMasterRepository.findByProcessAreaAndModuleOrderByScriptNumberDesc(processArea, module);
 	    logger.info("results"+results);
-//	    for (String scriptNumber : results) {
-//	    	logger.info("results"+results);
-//	        logger.info("scriptNumber: " + scriptNumber);
-//	    }
 	    if (!results.isEmpty()) {
 			logger.info("Script No"+results);		
 			return results;
@@ -108,7 +103,7 @@ public class WatsPluginDao {
 
 	public String verifyUserActive(String username) {
 		String userId = username.toUpperCase();
-		List<String> results =userRoleRepository.findUserIdByUserIdAndStatus(userId,"ACTIVE");
+		List<String> results =userRoleRepository.findByUserIdAndStatus(userId);
 		if (!results.isEmpty()) {
 			logger.info("Verify User Active " + results.get(0));
 			return results.get(0);
@@ -218,16 +213,16 @@ public class WatsPluginDao {
 	}
 
 	public int getTestSetId(String testsetName) {
-		int results=testSetRepository.findTestRunIdByTestRunName(testsetName);
-		//logger.info("ggggggggg"+testsetName);
-		if (results!=0) {
-			logger.info("Get TestSet Id " + results);
-			return results;
+		List<?> results=testSetRepository.findTestRunIdByTestRunName(testsetName);
+		if (!results.isEmpty()) {
+			logger.info("Get sequence number " +results.get(0));
+			BigDecimal bigDecimal = (BigDecimal) results.get(0);
+			return Integer.parseInt(bigDecimal.toString());
 		} else {
 			return 0;
 		}
 	}
-
+	
 	public int getSeqNum(int testSetId) {
 		List<?> results=testSetLinesRepository.getSequenceNumber(testSetId);
 		if (!results.isEmpty()) {
