@@ -31,5 +31,4 @@ public interface ScriptMetaDataRepository extends JpaRepository<ScriptMetaData, 
 	
 	@Query("from ScriptMetaData s where s.scriptMaster.scriptId=:scriptId and lineNumber=:lineNumber")
 	ScriptMetaData findByScriptIdAndLineNumber(int scriptId,int lineNumber);
-
 }

@@ -1,6 +1,7 @@
 package com.winfo.dao;
 
 import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,44 +18,60 @@ import org.springframework.stereotype.Repository;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
+import com.winfo.repository.ProjectRepository;
+import com.winfo.repository.ScriptMasterRepository;
+import com.winfo.repository.ScriptMetaDataRepository;
+import com.winfo.repository.TestSetLinesRepository;
+import com.winfo.repository.TestSetRepository;
+import com.winfo.repository.TestSetScriptParamRepository;
+import com.winfo.repository.UserRoleRepository;
 import com.winfo.vo.DomGenericResponseBean;
 
 @SuppressWarnings({ "deprecation", "unchecked" })
 @Repository
 
+
 public class WatsPluginDao {
 	public static final Logger logger = Logger.getLogger(WatsPluginDao.class);
 	private static final String USER_ID = "userId";
+@Autowired
+	private final EntityManager entityManager;
+	private final ScriptMasterRepository scriptMasterRepository;
+	private final UserRoleRepository userRoleRepository;
+	private final TestSetRepository testSetRepository;
+	private final TestSetLinesRepository testSetLinesRepository;
+	private final ProjectRepository projectRepository;
 
-	@Autowired
-	private EntityManager entityManager;
+	public WatsPluginDao(EntityManager entityManager, ScriptMasterRepository scriptMasterRepository,
+			UserRoleRepository userRoleRepository, TestSetRepository testSetRepository,
+			TestSetLinesRepository testSetLinesRepository, ProjectRepository projectRepository) {
+		this.entityManager = entityManager;
+		this.scriptMasterRepository = scriptMasterRepository;
+		this.userRoleRepository = userRoleRepository;
+		this.testSetRepository = testSetRepository;
+		this.testSetLinesRepository = testSetLinesRepository;
+		this.projectRepository = projectRepository;
+	}
+	
 
 	public List<String> getScriptNumber(String processArea, String module) {
-
-		Session session = entityManager.unwrap(Session.class);
-		String sql = " select script_number from  WIN_TA_SCRIPT_MASTER m WHERE m.process_area=:processArea and m.module=:module ORDER BY m.script_number DESC";
-		SQLQuery<String> query = session.createSQLQuery(sql);
-		query.setParameter("processArea", processArea);
-		query.setParameter("module", module);
-
-		List<String> results = query.list();
-		if (!results.isEmpty()) {
+		 logger.info("processArea"+processArea);
+		 logger.info("module"+module);
+		 List<String> results = scriptMasterRepository.findByProcessAreaAndModuleOrderByScriptNumberDesc(processArea, module);
+	    logger.info("results"+results);
+	    if (!results.isEmpty()) {
+			logger.info("Script No"+results);		
 			return results;
 		} else {
 			return new ArrayList<>();
-		}
-
+			
+		} 
 	}
+
 
 	public String getUserIdValidation(String username) {
 		String userId = username.toUpperCase();
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId";
-
-		SQLQuery<String> query = session.createSQLQuery(sql);
-		query.setParameter(USER_ID, userId);
-
-		List<String> results = query.list();
+		List<String> results=userRoleRepository.getUserId(userId);
 		if (!results.isEmpty()) {
 			logger.info("USER ID " + results.get(0));
 			return results.get(0);
@@ -65,12 +82,7 @@ public class WatsPluginDao {
 
 	public String verifyEndDate(String username) {
 		String userId = username.toUpperCase();
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and NVL(END_DATE, SYSDATE) >= SYSDATE";
-		SQLQuery<String> query = session.createSQLQuery(sql);
-		query.setParameter(USER_ID, userId);
-
-		List<String> results = query.list();
+		List<String> results=userRoleRepository.getEndDate(userId);
 		if (!results.isEmpty()) {
 			logger.info("Verify EndDate for USER " + results.get(0));
 			return results.get(0);
@@ -81,13 +93,7 @@ public class WatsPluginDao {
 
 	public String verifyPasswordExpire(String username) {
 		String userId = username.toUpperCase();
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and NVL(PASSWORD_EXPIRY, SYSDATE) >= SYSDATE";
-
-		SQLQuery<String> query = session.createSQLQuery(sql);
-		query.setParameter(USER_ID, userId);
-
-		List<String> results = query.list();
+		List<String> results =userRoleRepository.getPasswordExpiry(userId) ;
 		if (!results.isEmpty()) {
 			logger.info("Verify Password Expire for user " + results.get(0));
 			return results.get(0);
@@ -98,13 +104,7 @@ public class WatsPluginDao {
 
 	public String verifyUserActive(String username) {
 		String userId = username.toUpperCase();
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "SELECT USER_ID FROM WIN_TA_USER_ROLE where upper(USER_ID) =:userId and upper(STATUS) = 'ACTIVE'";
-
-		SQLQuery<String> query = session.createSQLQuery(sql);
-		query.setParameter(USER_ID, userId);
-
-		List<String> results = query.list();
+		List<String> results =userRoleRepository.findByUserIdAndStatus(userId);
 		if (!results.isEmpty()) {
 			logger.info("Verify User Active " + results.get(0));
 			return results.get(0);
@@ -117,10 +117,8 @@ public class WatsPluginDao {
 		String userId = username.toUpperCase();
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT TOOLKIT.DECRYPT(PASSWORD) FROM WIN_TA_USER_ROLE WHERE UPPER(USER_ID) =:userId ";
-
 		SQLQuery<String> query = session.createSQLQuery(sql);
 		query.setParameter(USER_ID, userId);
-
 		List<String> results = query.list();
 		if (!results.isEmpty()) {
 			return results.get(0);
@@ -130,11 +128,7 @@ public class WatsPluginDao {
 	}
 
 	public List<String> getTestrunData() {
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "select TEST_SET_NAME from win_ta_test_set";
-		SQLQuery<String> query = session.createSQLQuery(sql);
-
-		List<String> results = query.list();
+		List<String> results =testSetRepository.getTestRun();
 		if (!results.isEmpty()) {
 			return results;
 		} else {
@@ -146,7 +140,6 @@ public class WatsPluginDao {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT WATS_PROD.win_ta_test_set_id_seq.nextval FROM DUAL";
 		SQLQuery<?> query = session.createSQLQuery(sql);
-
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
 			logger.info("TestSet Id " + results.get(0));
@@ -161,9 +154,8 @@ public class WatsPluginDao {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT win_ta_test_set_line_seq.NEXTVAL FROM DUAL";
 		SQLQuery<?> query = session.createSQLQuery(sql);
-
 		List<?> results = query.list();
-		if (!results.isEmpty()) {
+			if (!results.isEmpty()) {
 			logger.info("TestSet Line Id " + results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			Integer id = Integer.parseInt(bigDecimal.toString());
@@ -178,7 +170,6 @@ public class WatsPluginDao {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT win_ta_param_id_seq.NEXTVAL FROM DUAL";
 		SQLQuery<?> query = session.createSQLQuery(sql);
-
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
 			logger.info("Get Param Id " + results.get(0));
@@ -193,7 +184,6 @@ public class WatsPluginDao {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT WIN_TA_SCRIPT_MASTER_SEQ.NEXTVAL FROM DUAL";
 		SQLQuery<?> query = session.createSQLQuery(sql);
-
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
 			logger.info("Get Master Script Id " + results.get(0));
@@ -209,7 +199,6 @@ public class WatsPluginDao {
 		Session session = entityManager.unwrap(Session.class);
 		String sql = "SELECT WIN_TA_SCRIPT_METADATA_SEQ.NEXTVAL FROM DUAL";
 		SQLQuery<?> query = session.createSQLQuery(sql);
-
 		List<?> results = query.list();
 		if (!results.isEmpty()) {
 			logger.info("Get MetaData Id " + results.get(0));
@@ -224,30 +213,19 @@ public class WatsPluginDao {
 		return entityManager.find(TestSet.class, testSetId);
 	}
 
-	public int getTestsetIde(String testsetName) {
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "select TEST_SET_ID from win_ta_test_set where test_set_name=:testsetName";
-		SQLQuery<?> query = session.createSQLQuery(sql);
-		query.setParameter("testsetName", testsetName);
-
-		List<?> results = query.list();
+	public int getTestSetId(String testsetName) {
+		List<?> results=testSetRepository.findTestRunIdByTestRunName(testsetName);
 		if (!results.isEmpty()) {
-			logger.info("Get TestSet Id " + results.get(0));
-
+			logger.info("Get sequence number " +results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
 			return Integer.parseInt(bigDecimal.toString());
 		} else {
 			return 0;
 		}
 	}
-
-	public int getseqNum(int testSetId) {
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "select SEQ_NUM from win_ta_test_set_lines where TEST_SET_ID=:testSetId order by SEQ_NUM desc";
-		SQLQuery<?> query = session.createSQLQuery(sql);
-		query.setParameter("testSetId", testSetId);
-
-		List<?> results = query.list();
+	
+	public int getSeqNum(int testSetId) {
+		List<?> results=testSetLinesRepository.getSequenceNumber(testSetId);
 		if (!results.isEmpty()) {
 			logger.info("Get sequence number " +results.get(0));
 			BigDecimal bigDecimal = (BigDecimal) results.get(0);
@@ -271,13 +249,8 @@ public class WatsPluginDao {
 		return response;
 	}
 
-	public List<String> getTestrunDataPVerson(String productVersion) {
-		Session session = entityManager.unwrap(Session.class);
-		String sql = "select TEST_SET_NAME from win_ta_test_set where project_id in (select PROJECT_ID from win_ta_projects where product_version=:productverson)";
-		@SuppressWarnings("rawtypes")
-		SQLQuery query = session.createSQLQuery(sql);
-		query.setParameter("productverson", productVersion);
-		return query.list();
+	public List<String> getTestRunDataProductVersion(String productVersion) {
+		return projectRepository.getTestRunData(productVersion);
 	}
 
 	public String getDirectoryPath() {

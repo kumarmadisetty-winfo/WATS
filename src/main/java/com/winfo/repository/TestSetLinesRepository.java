@@ -43,10 +43,15 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	@Query("UPDATE TestSetLine SET validationStatus =:validationStatus WHERE testRunScriptId=:testRunScriptId")
 	int updateValidationStatus(int testRunScriptId, String validationStatus);
 	
-	@Modifying
-	@Transactional
-	@Query("delete from TestSetLine where testRunScriptId = :testSetLineId")
-	 int deleteByTestRunScriptId( Integer testSetLineId);
+ 
+	
+	@Query("select seqNum from TestSetLine where testRun=:testSetId order by seqNum desc")
+	List<?> getSequenceNumber(int testSetId);
+	
+	
+	
+	
+
 	
 	
 }

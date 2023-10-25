@@ -1,6 +1,8 @@
 
 package com.winfo.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,7 +20,10 @@ public interface ProjectRepository extends JpaRepository<Project, Integer>{
 	@Query("select projectName from Project where projectId = ?1")
 	public String getProjectNameById(int projectId);
 	
-	Project findByProjectId(int projectId);
+	@Query("select testRunName from TestSet where projectId in (select projectId from Project where productVersion=:productVersion)")
+	List<String> getTestRunData(String productVersion);
+	
+
 }
 
 

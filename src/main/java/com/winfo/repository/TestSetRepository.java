@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,17 @@ public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 	@Transactional
 	@Query("UPDATE TestSet SET lastExecutBy =:date, lastUpdatedBy =:lastUpdatedBy, updateDate =:date, testRunMode = 'ACTIVE' WHERE testRunId =:testSetId")
 	int updateTestRunExecution(String lastUpdatedBy,int testSetId, Date date);
-	
 
+	@Query("select testRunName from TestSet")
+	List<String> getTestRun();
+
+	
+	@Query("select testRunId from TestSet where testRunName=:testsetName")
+	List<?> findTestRunIdByTestRunName(String testsetName);
+	
+	
+	
+	
+	
+	
 }

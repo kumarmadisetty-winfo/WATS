@@ -43,8 +43,8 @@ public class WatsPlugInRest {
 	@ApiOperation( value="Plugin Data",notes = " We should pass all the WatsPluginMasterVO fields to create the script using plugin")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Script created successfully")})
 	public DomGenericResponseBean pluginData(@RequestBody WatsPluginMasterVO mastervo) {
+		logger.info("data"+mastervo);
 		return service.pluginData(mastervo);
-
 	}
 
 	@PostMapping("/login")
@@ -53,13 +53,12 @@ public class WatsPlugInRest {
 	public DomGenericResponseBean watsLogin(@RequestBody WatsLoginVO loginvo) {
 		return service.watslogin(loginvo);
 	}
-
 	@GetMapping("/testrunNames/{productverson}")
 	@ApiOperation( value="Wats Login",notes = " We should pass productVersion to get testRun names")
 	@ApiResponses( value = { @ApiResponse( code=200,message="Success")})
-	public List<String> getTestrunData(@PathVariable String productversion) {
-		logger.info("Product Version " + productversion);
-		return service.getTestrunDataPVerson(productversion);
+	public List<String> getTestRunData(@PathVariable String productverson) {
+		logger.info("Product Version " + productverson);
+		return service.getTestRunDataProductVersion(productverson);
 	}
 
 	@PostMapping("/testrunData")
