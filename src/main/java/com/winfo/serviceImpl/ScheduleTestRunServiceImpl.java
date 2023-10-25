@@ -182,6 +182,8 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			}
 
 			TestSet testRun = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+			testRun.setCopyIncreamentFlag(testRunVO.getAutoIncrement());
+			testSetRepository.save(testRun);
 			String newSubSchedularName = Constants.PREFIX_SCHEDULE_NAME + jobName + Constants.ADDEDNUM
 					+ count.incrementAndGet();
 			ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
@@ -243,8 +245,10 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 
 	private void validateScheduleTestRuns(String scheduleName, List<ScheduleTestRunVO> listOfTestRunInJob) {
 		List<ResponseEntity<ResponseDto>> result = new ArrayList<>();
-		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
-			TestSet testSet = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+		List<String> uniqueTemplateTestRuns=listOfTestRunInJob.parallelStream().map(ScheduleTestRunVO::getTemplateTestRun)
+                .distinct().collect(Collectors.toList());
+		uniqueTemplateTestRuns.parallelStream().filter(Objects::nonNull).distinct().forEach(templateTestRun -> {
+			TestSet testSet = testSetRepository.findByTestRunName(templateTestRun);
 			if (testSet != null) {
 				try {
 					result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
@@ -261,9 +265,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				}
 			} else {
 				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
-						+ testRunVO.getTemplateTestRun());
+						+ templateTestRun);
 				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.INTERNAL_SERVER_ERROR
-						+ " - " + Constants.INVALID_TEST_SET_ID + " - " + testRunVO.getTemplateTestRun());
+						+ " - " + Constants.INVALID_TEST_SET_ID + " - " + templateTestRun);
 			}
 		});
 
@@ -284,6 +288,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 			scheduleJobVO.getTestRuns().parallelStream().forEach(testRunVO -> {
 				listOfSubJob.get().parallelStream().forEach(subScheduleJob -> {
 					if (testRunVO.getTemplateTestRun().equalsIgnoreCase(subScheduleJob.getComments())) {
+						TestSet testRun = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+						testRun.setCopyIncreamentFlag(testRunVO.getAutoIncrement());
+						testSetRepository.save(testRun);
 						ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
 						scheduleSubJobVO.setSubJobName(subScheduleJob.getJobName());
 						scheduleSubJobVO.setJobId(subScheduleJob.getJobId());
