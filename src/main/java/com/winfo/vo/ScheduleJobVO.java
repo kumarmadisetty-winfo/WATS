@@ -21,4 +21,6 @@ public class ScheduleJobVO {
 	private int jobId;
 	
 	private String status;
+	
+	private boolean template;
 }
