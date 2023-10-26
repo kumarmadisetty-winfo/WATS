@@ -35,7 +35,10 @@ public interface TestSetRepository extends JpaRepository<TestSet, Integer>{
 	@Query("select testRunId from TestSet where testRunName=:testsetName")
 	List<?> findTestRunIdByTestRunName(String testsetName);
 	
-	
+	@Modifying
+	@Transactional
+	@Query("Update TestSet set pdfGenerationEnabled=:enabled where testRunId=:testSetId")
+	int updatePdfGenerationEnabledStatus(String enabled,int testSetId);
 	
 	
 	
