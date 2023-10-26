@@ -537,7 +537,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				try{
 					int exeId = executionHistory.getMaxExecutionIdForTestSetLine(Integer.parseInt(args.getTestSetLineId()));
 					dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-							testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),exeId);
+							testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),exeId,0);
 
 				} catch (Exception e){
 					logger.error("Failed to update the execution history");

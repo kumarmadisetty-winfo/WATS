@@ -48,10 +48,8 @@ public interface TestSetLinesRepository extends JpaRepository<TestSetLine, Integ
 	@Query("select seqNum from TestSetLine where testRun=:testSetId order by seqNum desc")
 	List<?> getSequenceNumber(int testSetId);
 	
-	
-	
-	
-
-	
-	
+	@Modifying
+	@Transactional
+	@Query("delete from TestSetLine where testRunScriptId = :testSetLineId")
+	 int deleteByTestRunScriptId( Integer testSetLineId);
 }
