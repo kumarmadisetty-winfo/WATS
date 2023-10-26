@@ -43,6 +43,7 @@ import com.winfo.config.DriverConfiguration;
 import com.winfo.dao.CodeLinesRepository;
 import com.winfo.dao.DataBaseEntryDao;
 import com.winfo.dao.PyJabActionRepo;
+import com.winfo.exception.PopupException;
 import com.winfo.exception.WatsEBSException;
 import com.winfo.model.AuditScriptExecTrail;
 import com.winfo.model.Scheduler;
@@ -156,6 +157,10 @@ public class RunAutomation {
 
 	@Autowired
 	TestSetScriptParamRepository testSetScriptParamRepository;
+	@Autowired
+	DynamicXpath dynamicXpath;
+	@Autowired
+	SFDynamicXpath sfDynamicXpath;
 
 	public void report() throws IOException, DocumentException, com.itextpdf.text.DocumentException {
 
@@ -777,23 +782,50 @@ public class RunAutomation {
 								Integer.parseInt(testScriptParamId));
 						switch (actionName) {
 
-						case "Login into Application":
-							userName = fetchMetadataVO.getInputValue();
-							logger.info("Navigating to Login into Application Action");
-							if (fetchMetadataVO.getInputValue() != null || "".equals(fetchMetadataVO.getInputValue())) {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-										xpathPerformance.loginApplication(driver, fetchConfigVO, fetchMetadataVO, type1,
-												type2, type3, param1, param2, param3, fetchMetadataVO.getInputValue(),
+							case "Login into Application":
+								userName = fetchMetadataVO.getInputValue();
+								logger.info("Navigating to Login into Application Action");
+								if (fetchMetadataVO.getInputValue() != null
+										|| "".equals(fetchMetadataVO.getInputValue())) {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+											xpathPerformance.loginApplication(driver, fetchConfigVO,
+													fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+													fetchMetadataVO.getInputValue(),
+													dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(),
+															userName, fetchConfigVO),
+													customerDetails, count);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										seleniumFactory.getInstanceObj(instanceName).loginApplication(driver,
+												fetchConfigVO,
+												fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+												fetchMetadataVO.getInputValue(),
 												dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName,
 														fetchConfigVO),
-												customerDetails, count);
+												customerDetails);
+										userName = null;
 										break;
-									} else {
-										throw new Exception("ScriptNotValid");
 									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).loginApplication(driver, fetchConfigVO,
+								} else {
+									seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver,
+											fetchMetadataVO,
+											customerDetails);
+									logger.error(
+											"Failed during " + instanceName + " login because input value is null");
+									throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+											"Failed during " + instanceName + " login because input value is null");
+								}
+							case "Login into SFApplication":
+								userName = fetchMetadataVO.getInputValue();
+								logger.info("Navigating to Login into SFApplication Action");
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									seleniumFactory.getInstanceObj(instanceName).loginSFApplication(driver,
+											fetchConfigVO,
 											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
 											fetchMetadataVO.getInputValue(),
 											dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName,
@@ -801,982 +833,2543 @@ public class RunAutomation {
 											customerDetails);
 									userName = null;
 									break;
-								}
-							} else {
-								seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								logger.error("Failed during " + instanceName + " login because input value is null");
-								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-										"Failed during " + instanceName + " login because input value is null");
-							}
-						case "Login into SFApplication":
-							userName = fetchMetadataVO.getInputValue();
-							logger.info("Navigating to Login into SFApplication Action");
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName).loginSFApplication(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-										fetchMetadataVO.getInputValue(), dataBaseEntry
-												.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO),
-										customerDetails);
-								userName = null;
-								break;
-							} else {
-								break;
-							}
-						case "Login into DLApplication":
-
-							sfInterface.loginDLApplication(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-									customerDetails);
-							break;
-
-						case "Login into SSOApplication":
-							userName = fetchMetadataVO.getInputValue();
-							logger.info("Navigating to Login into Application Action");
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName).loginSSOApplication(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-										fetchMetadataVO.getInputValue(), dataBaseEntry
-												.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO),
-										customerDetails);
-								userName = null;
-								break;
-							} else {
-								break;
-							}
-						case "Login into Application(OIC)":
-							userName = fetchMetadataVO.getInputValue();
-							logger.info("Navigating to Login into (OIC)Application Action");
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName).loginOicApplication(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-										fetchMetadataVO.getInputValue(), dataBaseEntry
-												.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO),
-										customerDetails);
-								userName = null;
-								break;
-							} else {
-								break;
-							}
-
-						case "Login into Application(jobscheduler)":
-							userName = fetchMetadataVO.getInputValue();
-							logger.info("Navigating to Login into Application Action");
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName).loginOicJob(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-										fetchMetadataVO.getInputValue(), dataBaseEntry
-												.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO),
-										customerDetails);
-								userName = null;
-								break;
-							} else {
-								break;
-							}
-
-						case "Navigate":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-									String xpathlocation = null;
-									int totalXpaths = 0;
-									xpathPerformance.navigate(driver, fetchConfigVO, fetchMetadataVO, type1, type2,
-											param1, param2, count, customerDetails, xpathlocation, totalXpaths);
-									break;
 								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								logger.info("Navigating to Navigate Action");
-								seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, param1, param2, null, count, customerDetails);
-								break;
-							}
-						case "Click Menu(OIC)":
-							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-									fetchMetadataVO, customerDetails);
-							seleniumFactory.getInstanceObj(instanceName).oicClickMenu(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-						case "Navigate(OIC)":
-							logger.info("Navigating to Navigate Action");
-							seleniumFactory.getInstanceObj(instanceName).oicNavigate(driver, fetchConfigVO,
-									fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
-							break;
-
-						case "Logout(OIC)":
-							seleniumFactory.getInstanceObj(instanceName).oicLogout(driver, fetchConfigVO,
-									fetchMetadataVO, type1, type2, type3, param1, param2, param3, customerDetails);
-							break;
-
-						case "openTask":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-									String xpathlocation = null;
-									xpathPerformance.openTask(driver, fetchConfigVO, fetchMetadataVO, type1, type2,
-											param1, param2, count, customerDetails, xpathlocation);
 									break;
-								} else {
-									throw new Exception("ScriptNotValid");
 								}
-							} catch (Exception e) {
-								logger.info("Navigating to openTask Action");
-								seleniumFactory.getInstanceObj(instanceName).openTask(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+							case "Login into DLApplication":
+
+								sfInterface.loginDLApplication(driver, param1, param2, fetchMetadataVO,
+										fetchConfigVO, customerDetails);
 								break;
-							}
 
-						case "Logout":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-									String xpathlocation = null;
-									int totalXpaths = 0;
-									xpathPerformance.logout(driver, fetchConfigVO, fetchMetadataVO, type1, type2, type3,
-											param1, param2, param3, customerDetails, count, xpathlocation, totalXpaths);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).logout(driver, fetchConfigVO,
-										fetchMetadataVO, type1, type2, type3, param1, param2, param3, customerDetails);
-								break;
-							}
-
-							// XpathPerformance code for cases added
-
-						case "SendKeys":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-										xpathPerformance.sendValue(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
-										break;
-									} else {
-										throw new Exception("ScriptNotValid");
-									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+							case "Login into SSOApplication":
+								userName = fetchMetadataVO.getInputValue();
+								logger.info("Navigating to Login into Application Action");
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									seleniumFactory.getInstanceObj(instanceName).loginSSOApplication(driver,
+											fetchConfigVO,
+											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+											fetchMetadataVO.getInputValue(),
+											dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName,
+													fetchConfigVO),
 											customerDetails);
-									break;
-								}
-
-							} else {
-								break;
-							}
-
-						case "sendvalues(OIC)":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName).oicSendValue(driver, param1, param2,
-										fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-										customerDetails);
-								break;
-							} else {
-								break;
-							}
-
-						case "clickExpandorcollapse":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-									xpathPerformance.clickExpandorcollapse(driver, param1, param2, fetchMetadataVO,
-											fetchConfigVO, customerDetails, count);
+									userName = null;
 									break;
 								} else {
-									throw new Exception("ScriptNotValid");
+									break;
 								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickExpandorcollapse(driver, param1,
-										param2, fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-						case "clickButton(OIC)":
-							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-									fetchMetadataVO, customerDetails);
-							seleniumFactory.getInstanceObj(instanceName).oicClickButton(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-						case "Mouse Hover(OIC)":
-							seleniumFactory.getInstanceObj(instanceName).oicMouseHover(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-
-						case "textarea":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-										xpathPerformance.textarea(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
-										break;
-									} else {
-										throw new Exception("ScriptNotValid");
-									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+							case "Login into Application(OIC)":
+								userName = fetchMetadataVO.getInputValue();
+								logger.info("Navigating to Login into (OIC)Application Action");
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									seleniumFactory.getInstanceObj(instanceName).loginOicApplication(driver,
+											fetchConfigVO,
+											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+											fetchMetadataVO.getInputValue(),
+											dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName,
+													fetchConfigVO),
 											customerDetails);
+									userName = null;
+									break;
+								} else {
 									break;
 								}
 
-							} else {
-								break;
-							}
+							case "Login into Application(jobscheduler)":
+								userName = fetchMetadataVO.getInputValue();
+								logger.info("Navigating to Login into Application Action");
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									seleniumFactory.getInstanceObj(instanceName).loginOicJob(driver, fetchConfigVO,
+											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+											fetchMetadataVO.getInputValue(),
+											dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName,
+													fetchConfigVO),
+											customerDetails);
+									userName = null;
+									break;
+								} else {
+									break;
+								}
 
-						case "Dropdown Values":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
+							case "Navigate":
 								try {
 									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 										String xpathlocation = null;
-										xpathPerformance.dropdownValues(driver, param1, param2, param3,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
+										int totalXpaths = 0;
+										xpathPerformance.navigate(driver, fetchConfigVO,
+												fetchMetadataVO, type1, type2, param1, param2, count,
+												customerDetails, xpathlocation, totalXpaths);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+										
+									} catch (Exception selExc) {
+										logger.info("Navigating to Navigate Action");
+										seleniumFactory.getInstanceObj(instanceName).navigate(driver, fetchConfigVO,
+												fetchMetadataVO, type1, type2, param1, param2, null, count,
+												customerDetails);
+										break;
+									}
+								}
+							case "Click Menu(OIC)":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).oicClickMenu(driver, param1,
+											param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+							case "Navigate(OIC)":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									logger.info("Navigating to Navigate Action");
+									seleniumFactory.getInstanceObj(instanceName).oicNavigate(driver, fetchConfigVO,
+											fetchMetadataVO, type1, type2, param1, param2, count, customerDetails);
+									break;
+								}
+
+							case "Logout(OIC)":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).oicLogout(driver, fetchConfigVO,
+											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+											customerDetails);
+									break;
+								}
+							case "openTask":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+										String xpathlocation = null;
+										xpathPerformance.openTask(driver, fetchConfigVO,
+												fetchMetadataVO, type1, type2, param1, param2, count,
 												customerDetails, xpathlocation);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver, param1, param2,
-											param3, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
-								}
+									try {
 
-							}
-							break;
-						case "Table SendKeys":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
 
-										xpathPerformance.tableSendKeys(driver, param1, param2, param3,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										logger.info("Navigating to openTask Action");
+										seleniumFactory.getInstanceObj(instanceName).openTask(driver, fetchConfigVO,
+												fetchMetadataVO, type1, type2, param1, param2, count,
 												customerDetails);
 										break;
-									} else {
-										throw new Exception("ScriptNotValid");
 									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).tableSendKeys(driver, param1, param2,
-											param3, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
 								}
 
-							} else {
-								break;
-							}
-
-						case "multiplelinestableSendKeys":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
+							case "Logout":
 								try {
 									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-										xpathPerformance.multiplelinestableSendKeys(driver, param1, param2, param3,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
+										String xpathlocation = null;
+										int totalXpaths = 0;
+										xpathPerformance.logout(driver, fetchConfigVO, fetchMetadataVO,
+												type1, type2, type3, param1, param2, param3, customerDetails, count,
+												xpathlocation, totalXpaths);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(driver,
-											param1, param2, param3, fetchMetadataVO.getInputValue(), fetchMetadataVO,
-											fetchConfigVO, customerDetails);
-									break;
-								}
+									try {
 
-							} else {
-								break;
-							}
-						case "Table Dropdown Values":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
 
-										xpathPerformance.tableDropdownValues(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).logout(driver, fetchConfigVO,
+												fetchMetadataVO,
+												type1, type2, type3, param1, param2, param3, customerDetails);
 										break;
-									} else {
-										throw new Exception("ScriptNotValid");
 									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).tableDropdownValues(driver, param1,
-											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
 								}
-							} else {
-								break;
-							}
 
-						case "clickLinkAction":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-										xpathPerformance.clickLinkAction(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
-										break;
-									} else {
-										throw new Exception("ScriptNotValid");
+								// XpathPerformance code for cases added
+
+							case "SendKeys":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.sendValue(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).sendValue(driver, param1,
+													param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													customerDetails);
+											break;
+										}
 									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-											fetchMetadataVO, customerDetails);
-									seleniumFactory.getInstanceObj(instanceName).clickLinkAction(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
-								}
 
-							} else {
-								break;
-							}
-
-						case "clickCheckbox":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-										xpathPerformance.clickCheckbox(driver, param1, fetchMetadataVO.getInputValue(),
-												fetchMetadataVO, fetchConfigVO, count, customerDetails);
-										break;
-									} else {
-										throw new Exception("ScriptNotValid");
-									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-											fetchMetadataVO, customerDetails);
-									seleniumFactory.getInstanceObj(instanceName).clickCheckbox(driver, param1,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
-								}
-							} else {
-								break;
-							}
-
-						case "clickRadiobutton":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-										xpathPerformance.clickRadiobutton(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
-										break;
-									} else {
-										throw new Exception("ScriptNotValid");
-									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-											fetchMetadataVO, customerDetails);
-									seleniumFactory.getInstanceObj(instanceName).clickRadiobutton(driver, param1,
-											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
-								}
-
-							} else {
-								break;
-							}
-						case "selectAValue":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-										xpathPerformance.selectAValue(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
-										break;
-									} else {
-										throw new Exception("ScriptNotValid");
-									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).selectAValue(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
-								}
-
-							} else {
-								break;
-							}
-
-						case "clickTableLink":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO,
-											fetchConfigVO, count, customerDetails);
-									break;
 								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-
-						case "clickLink":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.clickLink(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-											count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-						case "clickNotificationLink":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.clickNotificationLink(driver, param1, param2, fetchMetadataVO,
-											fetchConfigVO, customerDetails, count);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver, param1,
-										param2, fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-
-						case "clickMenu":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-									xpathPerformance.clickMenu(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-											count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickMenu(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-
-						case "clickImage":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.clickImage(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-											count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickImage(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-
-						case "clickTableImage":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.clickTableImage(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-											customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickTableImage(driver, param1, param2,
-										fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-										customerDetails);
-								break;
-							}
-
-						case "clickButton":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.clickButton(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-											count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								message = seleniumFactory.getInstanceObj(instanceName).getErrorMessages(driver);
-								if (message != null && !message.startsWith("Example")
-										&& !message.startsWith("Offer Comments") && !message.startsWith("Context Value")
-										&& !message.startsWith("Select Book")
-										&& !message.startsWith("Enter a date between")
-										&& !message.startsWith("Accounting Period") && !message.startsWith("Source")
-										&& !message.startsWith("Add Collaborator Type") && !message.startsWith("Batch")
-										&& !message.startsWith("Added to Cart") && !message.startsWith("Journal")
-										&& !message.startsWith("Project Number")
-										&& !message.startsWith("Regional Information")
-										&& !message.startsWith("Distribution") && !message.startsWith("Salary Basis")
-										&& !message.startsWith("Enter a date on or after")
-										&& !message.startsWith("Legislative Data Group") && !message.startsWith("item")
-										&& !message.startsWith("Select Subinventories")
-										&& !message.startsWith("Comments") && !message.startsWith("Employee Name")
-										&& !message.startsWith("All higher-level managers can see comments")
-										&& !message.startsWith("Shift")
-										&& !message.startsWith("Copy tasks and selected attributes to the new project")
-										&& !message.startsWith("Course Title")) {
-
-									fetchConfigVO.setErrormessage(message);
-									seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(driver,
-											fetchMetadataVO, customerDetails);
-									throw new IllegalArgumentException("Error occurred");
-								}
-								break;
-							}
-
-						case "tableRowSelect":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.tableRowSelect(driver, param1, param2, fetchMetadataVO,
-											fetchConfigVO, count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).tableRowSelect(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-
-						case "clickButton Dropdown":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-										xpathPerformance.clickButtonDropdown(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
-										break;
-									} else {
-										throw new Exception("ScriptNotValid");
-									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-											fetchMetadataVO, customerDetails);
-									seleniumFactory.getInstanceObj(instanceName).clickButtonDropdown(driver, param1,
-											param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
 									break;
 								}
-							} else {
-								break;
-							}
 
-						case "mousehover":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-									xpathPerformance.mousehover(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).mousehover(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
+							case "sendvalues(OIC)":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
 
-						case "scrollUsingElement":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-									xpathPerformance.scrollUsingElement(driver, fetchMetadataVO.getInputParameter(),
-											fetchMetadataVO, fetchConfigVO, count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).scrollUsingElement(driver,
-										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
-										customerDetails);
-								break;
-							}
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
 
-						case "moveToElement":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-									xpathPerformance.moveToElement(driver, fetchMetadataVO.getInputParameter(),
-											fetchMetadataVO, fetchConfigVO, customerDetails, count);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).moveToElement(driver,
-										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO);
-								break;
-							}
-
-						case "switchToDefaultFrame":
-							seleniumFactory.getInstanceObj(instanceName).switchToDefaultFrame(driver);
-							break;
-
-						case "windowhandle":
-							seleniumFactory.getInstanceObj(instanceName).windowhandle(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "dragAnddrop":
-							seleniumFactory.getInstanceObj(instanceName).dragAnddrop(driver,
-									fetchMetadataVO.getXpathLocation(), fetchMetadataVO.getXpathLocation1(),
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-						case "clickFilter":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.clickFilter(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-											customerDetails, count);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-										fetchMetadataVO, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).clickFilter(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-
-							}
-						case "rightClickElement":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.rightClickElement(driver, param1, param2, fetchMetadataVO,
-											fetchConfigVO, count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-								logger.error("failed during");
-							}
-
-						case "switchToFrame":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.switchToFrame(driver, fetchMetadataVO.getInputParameter(),
-											fetchMetadataVO, fetchConfigVO, count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-
-								seleniumFactory.getInstanceObj(instanceName).switchToFrame(driver,
-										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
-										customerDetails);
-								break;
-							}
-
-						case "selectByText":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-										xpathPerformance.selectByText(driver, param1, param2,
-												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, count,
-												customerDetails);
-										break;
-									} else {
-										throw new Exception("ScriptNotValid");
-									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).selectByText(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
-									break;
-								}
-							} else {
-								break;
-							}
-
-						case "copy":
-							seleniumFactory.getInstanceObj(instanceName).copy(driver, fetchMetadataVO, fetchConfigVO,
-									customerDetails);
-							break;
-						case "copynumber":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									globalValueForSteps = xpathPerformance.copynumber(driver, param1, param2,
-											fetchMetadataVO, fetchConfigVO, customerDetails, count);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-
-								globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(driver,
-										param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-
-						case "copyy":
-							seleniumFactory.getInstanceObj(instanceName).copyy(driver,
-									fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO,
-									customerDetails);
-							break;
-						case "copytext":
-							seleniumFactory.getInstanceObj(instanceName).copytext(driver,
-									fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO,
-									customerDetails);
-							break;
-						case "clear":
-							try {
-								if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-									xpathPerformance.clear(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-											count, customerDetails);
-									break;
-								} else {
-									throw new Exception("ScriptNotValid");
-								}
-							} catch (Exception e) {
-
-								seleniumFactory.getInstanceObj(instanceName).clear(driver, param1, param2,
-										fetchMetadataVO, fetchConfigVO, customerDetails);
-								break;
-							}
-							// XpathPerformance code for cases ended
-						case "enter":
-							seleniumFactory.getInstanceObj(instanceName).enter(driver, fetchMetadataVO, fetchConfigVO,
-									customerDetails);
-							break;
-						case "tab":
-							seleniumFactory.getInstanceObj(instanceName).tab(driver, fetchMetadataVO, fetchConfigVO,
-									customerDetails);
-							break;
-						case "paste":
-							seleniumFactory.getInstanceObj(instanceName).paste(driver,
-									fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
-									globalValueForSteps, customerDetails);
-							break;
-						case "uploadFileAutoIT":
-							seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(driver,
-									fetchConfigVO.getUPLOAD_FILE_PATH(), param1, param2, param3, fetchMetadataVO,
-									customerDetails);
-							break;
-						case "windowclose":
-							seleniumFactory.getInstanceObj(instanceName).windowclose(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "switchDefaultContent":
-							seleniumFactory.getInstanceObj(instanceName).switchDefaultContent(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "switchParentWindow":
-							seleniumFactory.getInstanceObj(instanceName).switchParentWindow(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "switchToParentWindow":
-							seleniumFactory.getInstanceObj(instanceName).switchToParentWindow(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "switchToParentWindowWithoutPdf":
-							seleniumFactory.getInstanceObj(instanceName).switchToParentWindowWithoutPdf(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "DatePicker":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								try {
-									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-										xpathPerformance.datePicker(driver, param1, param2,
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).oicSendValue(driver, param1,
+												param2,
 												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-												customerDetails, count);
+												customerDetails);
 										break;
-									} else {
-										throw new Exception("ScriptNotValid");
 									}
-								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).datePicker(driver, param1, param2,
-											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
-											customerDetails);
+								} else {
 									break;
 								}
-							} else {
-								break;
-							}
-						case "refreshPage":
-							seleniumFactory.getInstanceObj(instanceName).refreshPage(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "navigateToBackPage":
-							seleniumFactory.getInstanceObj(instanceName).navigateToBackPage(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "openPdf":
-							seleniumFactory.getInstanceObj(instanceName).openPdf(driver,
-									fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-						case "openFile":
-							seleniumFactory.getInstanceObj(instanceName).openFile(driver, fetchMetadataVO,
-									fetchConfigVO, customerDetails);
-							break;
-						case "actionApprove":
-							seleniumFactory.getInstanceObj(instanceName).actionApprove(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-						case "multipleSendKeys":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
+
+							case "clickExpandorcollapse":
 								try {
 									if ("Yes".equalsIgnoreCase(checkValidScript)) {
-
-										xpathPerformance.multipleSendKeys(driver, param1, param2, value1, value2,
+										xpathPerformance.clickExpandorcollapse(driver, param1, param2,
 												fetchMetadataVO, fetchConfigVO, customerDetails, count);
 										break;
 									} else {
 										throw new Exception("ScriptNotValid");
 									}
 								} catch (Exception e) {
-									seleniumFactory.getInstanceObj(instanceName).multipleSendKeys(driver, param1,
-											param2, value1, value2, fetchMetadataVO, fetchConfigVO, customerDetails);
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).clickExpandorcollapse(driver,
+												param1, param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+							case "clickButton(OIC)":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).oicClickButton(driver, param1,
+											param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
 									break;
 								}
-							} else {
-								break;
-							}
+							case "Mouse Hover(OIC)":
+								try {
 
-						case "Login into Application(Informatica)":
-							userName = fetchMetadataVO.getInputValue();
-							logger.info("Navigating to Login into Application Action");
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName).loginInformaticaApplication(driver,
-										fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2, param3,
-										fetchMetadataVO.getInputValue(), dataBaseEntry
-												.getPassword(testScriptDto.getTestScriptNo(), userName, fetchConfigVO),
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).oicMouseHover(driver, param1,
+											param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+							case "textarea":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.textarea(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count, customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).textarea(driver, param1,
+													param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+
+								} else {
+									break;
+								}
+
+							case "Dropdown Values":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+											String xpathlocation = null;
+											xpathPerformance.dropdownValues(driver, param1, param2, param3,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails, xpathlocation);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).dropdownValues(driver,
+													param1,
+													param2,
+													param3, fetchMetadataVO.getInputValue(), fetchMetadataVO,
+													fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+
+								}
+								break;
+							case "Table SendKeys":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.tableSendKeys(driver, param1, param2, param3,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count, customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).tableSendKeys(driver,
+													param1,
+													param2,
+													param3, fetchMetadataVO.getInputValue(), fetchMetadataVO,
+													fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+
+								} else {
+									break;
+								}
+
+							case "multiplelinestableSendKeys":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.multiplelinestableSendKeys(driver, param1, param2,
+													param3,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).multiplelinestableSendKeys(
+													driver,
+													param1, param2, param3, fetchMetadataVO.getInputValue(),
+													fetchMetadataVO,
+													fetchConfigVO, customerDetails);
+											break;
+										}
+									}
+
+								} else {
+									break;
+								}
+							case "Table Dropdown Values":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.tableDropdownValues(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).tableDropdownValues(driver,
+													param1,
+													param2, fetchMetadataVO.getInputValue(), fetchMetadataVO,
+													fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+								} else {
+									break;
+								}
+
+							case "clickLinkAction":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+											xpathPerformance.clickLinkAction(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).clickLinkAction(driver,
+													param1,
+													param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+
+								} else {
+									break;
+								}
+
+							case "clickCheckbox":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+											xpathPerformance.clickCheckbox(driver, param1,
+													fetchMetadataVO.getInputValue(),
+													fetchMetadataVO, fetchConfigVO, count, customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).clickCheckbox(driver,
+													param1,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+								} else {
+									break;
+								}
+
+							case "clickRadiobutton":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+											xpathPerformance.clickRadiobutton(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).clickRadiobutton(driver,
+													param1,
+													param2, fetchMetadataVO.getInputValue(), fetchMetadataVO,
+													fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+
+								} else {
+									break;
+								}
+							case "selectAValue":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.selectAValue(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).selectAValue(driver,
+													param1,
+													param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													customerDetails);
+											break;
+										}
+
+									}
+
+								} else {
+									break;
+								}
+
+							case "clickTableLink":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.clickTableLink(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO,
+												count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).clickTableLink(driver, param1,
+												param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+
+							case "clickLink":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.clickLink(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO,
+												count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).clickLink(driver, param1,
+												param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+							case "clickNotificationLink":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.clickNotificationLink(driver, param1, param2,
+												fetchMetadataVO, fetchConfigVO,
+												customerDetails, count);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).clickNotificationLink(driver,
+												param1, param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+
+							case "clickMenu":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+										xpathPerformance.clickMenu(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO,
+												count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+
+										seleniumFactory.getInstanceObj(instanceName).clickMenu(driver, param1,
+												param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+
+							case "clickImage":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.clickImage(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO,
+												count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).clickImage(driver, param1,
+												param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+
+							case "clickTableImage":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.clickTableImage(driver, param1, param2,
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+												count,
+												customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).clickTableImage(driver, param1,
+												param2,
+												fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+												customerDetails);
+										break;
+									}
+								}
+
+							case "clickButton":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.clickButton(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO,
+												count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(
+												driver,
+												fetchMetadataVO, customerDetails);
+										seleniumFactory.getInstanceObj(instanceName).clickButton(driver, param1,
+												param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										message = seleniumFactory.getInstanceObj(instanceName)
+												.getErrorMessages(driver);
+										if (message != null && !message.startsWith("Example")
+												&& !message.startsWith("Offer Comments")
+												&& !message.startsWith("Context Value")
+												&& !message.startsWith("Select Book")
+												&& !message.startsWith("Enter a date between")
+												&& !message.startsWith("Accounting Period")
+												&& !message.startsWith("Source")
+												&& !message.startsWith("Add Collaborator Type")
+												&& !message.startsWith("Batch")
+												&& !message.startsWith("Added to Cart")
+												&& !message.startsWith("Journal")
+												&& !message.startsWith("Project Number")
+												&& !message.startsWith("Regional Information")
+												&& !message.startsWith("Distribution")
+												&& !message.startsWith("Salary Basis")
+												&& !message.startsWith("Enter a date on or after")
+												&& !message.startsWith("Legislative Data Group")
+												&& !message.startsWith("item")
+												&& !message.startsWith("Select Subinventories")
+												&& !message.startsWith("Comments")
+												&& !message.startsWith("Employee Name")
+												&& !message.startsWith("All higher-level managers can see comments")
+												&& !message.startsWith("Shift")
+												&& !message.startsWith(
+														"Copy tasks and selected attributes to the new project")
+												&& !message.startsWith("Course Title")) {
+
+											fetchConfigVO.setErrormessage(message);
+											seleniumFactory.getInstanceObj(instanceName).fullPageFailedScreenshot(
+													driver, fetchMetadataVO,
+													customerDetails);
+											throw new IllegalArgumentException("Error occured");
+										}
+										break;
+									}
+								}
+
+							case "tableRowSelect":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.tableRowSelect(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO, count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).tableRowSelect(driver, param1,
+												param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+
+							case "clickButton Dropdown":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.clickButtonDropdown(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).clickButtonDropdown(driver,
+													param1,
+													param2, fetchMetadataVO.getInputValue(), fetchMetadataVO,
+													fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+								} else {
+									break;
+								}
+
+							case "mousehover":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+										xpathPerformance.mousehover(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO,
+												customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).mousehover(driver, param1,
+												param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+
+							case "scrollUsingElement":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+										xpathPerformance.scrollUsingElement(driver,
+												fetchMetadataVO.getInputParameter(),
+												fetchMetadataVO, fetchConfigVO, count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).scrollUsingElement(driver,
+												fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
+												customerDetails);
+										break;
+									}
+								}
+
+							case "moveToElement":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+										xpathPerformance.moveToElement(driver,
+												fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
+												customerDetails, count);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).moveToElement(driver,
+												fetchMetadataVO.getInputParameter(), fetchMetadataVO,
+												fetchConfigVO);
+										break;
+									}
+								}
+
+							case "switchToDefaultFrame":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).switchToDefaultFrame(driver);
+									break;
+								}
+
+							case "windowhandle":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).windowhandle(driver,
+											fetchMetadataVO,
+											fetchConfigVO, customerDetails);
+									break;
+								}
+							case "dragAnddrop":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).dragAnddrop(driver,
+											fetchMetadataVO.getXpathLocation(), fetchMetadataVO.getXpathLocation1(),
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+							case "clickFilter":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.clickFilter(driver, param1, param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails, count);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+
+										seleniumFactory.getInstanceObj(instanceName).clickFilter(driver, param1,
+												param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+
+								}
+							case "rightClickElement":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.rightClickElement(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO,
+												count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									logger.error("failed during");
+								}
+
+							case "switchToFrame":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+										xpathPerformance.switchToFrame(driver, fetchMetadataVO.getInputParameter(),
+												fetchMetadataVO, fetchConfigVO, count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).switchToFrame(driver,
+												fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
+												customerDetails);
+										break;
+									}
+								}
+
+							case "selectByText":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.selectByText(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													count,
+													customerDetails);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).selectByText(driver,
+													param1,
+													param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+								} else {
+									break;
+								}
+
+							case "copy":
+								seleniumFactory.getInstanceObj(instanceName).copy(driver, fetchMetadataVO,
+										fetchConfigVO,
 										customerDetails);
-								userName = null;
-							}
-							break;
-						case "Logout(Informatica)":
-							seleniumFactory.getInstanceObj(instanceName).InformaticaLogout(driver, fetchConfigVO,
-									fetchMetadataVO, type1, type2, type3, param1, param2, param3, customerDetails);
-							break;
+								break;
+							case "copynumber":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
-						case "sendvalues(Informatica)":
-							if (fetchMetadataVO.getInputValue() != null || fetchMetadataVO.getInputValue() == "") {
-								seleniumFactory.getInstanceObj(instanceName).InformaticaSendValue(driver, param1,
-										param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+										globalValueForSteps = xpathPerformance.copynumber(driver,
+												param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails,
+												count);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+
+									globalValueForSteps = seleniumFactory.getInstanceObj(instanceName).copynumber(
+											driver,
+											param1, param2, fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+
+							case "copyy":
+								seleniumFactory.getInstanceObj(instanceName).copyy(driver,
+										fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO,
 										customerDetails);
 								break;
-							} else {
-								break;
-							}
-
-						case "selectAValue(Informatica)":
-							if (fetchMetadataVO.getInputValue() != null || "".equals(fetchMetadataVO.getInputValue())) {
-								seleniumFactory.getInstanceObj(instanceName).InformaticaSelectAValue(driver, param1,
-										param2, fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+							case "copytext":
+								seleniumFactory.getInstanceObj(instanceName).copytext(driver,
+										fetchMetadataVO.getXpathLocation(), fetchMetadataVO, fetchConfigVO,
 										customerDetails);
-							}
-							break;
-
-						case "clickLink(Informatica)":
-							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-									fetchMetadataVO, customerDetails);
-							seleniumFactory.getInstanceObj(instanceName).InformaticaclickLink(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-						case "clickImage(Informatica)":
-							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-									fetchMetadataVO, customerDetails);
-							seleniumFactory.getInstanceObj(instanceName).InformaticaClickImage(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-						case "clickButton(Informatica)":
-							seleniumFactory.getInstanceObj(instanceName).InformaticaClickButton(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO, customerDetails);
-							break;
-						case "waitTillLoad":
-							Integer valueInMS = 1000 * Integer.parseInt(fetchMetadataVO.getInputValue());
-							fetchMetadataVO.setInputValue(valueInMS.toString());
-							seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1, param2,
-									fetchMetadataVO, fetchConfigVO);
-							break;
-
-						case "compareValue":
-							try {
-								seleniumFactory.getInstanceObj(instanceName).compareValue(driver,
-										fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
-										globalValueForSteps, customerDetails);
-								seleniumFactory.getInstanceObj(instanceName).createScreenShot(fetchMetadataVO,
-										fetchConfigVO, "Matched", customerDetails, true);
 								break;
-							} catch (Exception e) {
-								seleniumFactory.getInstanceObj(instanceName).createScreenShot(fetchMetadataVO,
-										fetchConfigVO, "Unmatched", customerDetails, false);
-								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-										"Failed at campare Value");
-							}
+							case "clear":
+								try {
+									if ("Yes".equalsIgnoreCase(checkValidScript)) {
 
-						case "apiAccessToken":
-							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
-									.apiAccessToken(fetchMetadataVO, accessTokenStorage, customerDetails);
-							break;
+										xpathPerformance.clear(driver, param1, param2, fetchMetadataVO,
+												fetchConfigVO,
+												count, customerDetails);
+										break;
+									} else {
+										throw new Exception("ScriptNotValid");
+									}
+								} catch (Exception e) {
+									try {
 
-						case "apiValidationResponse":
-							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
-									.apiValidationResponse(fetchMetadataVO, accessTokenStorage, api, customerDetails,
-											fetchConfigVO);
-							break;
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
 
-						case "validation":
-							seleniumFactory.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
-									.validation(fetchMetadataVO, api);
-							break;
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
 
-						case "Enter Multiple Transactions":
-							woodInterface.enterMultipleTransaction(driver, fetchConfigVO, fetchMetadataVO,
-									customerDetails);
-							break;
-						case "doubleClick":
-							seleniumFactory.getInstanceObj(instanceName).fullPagePassedScreenshot(driver,
-									fetchMetadataVO, customerDetails);
-							sfInterface.doubleClick(driver, param1, param2, fetchMetadataVO, fetchConfigVO,
-									customerDetails);
-							break;
-						default:
-							logger.info("Action Name is not matched with " + "" + actionName);
-							break;
+										seleniumFactory.getInstanceObj(instanceName).clear(driver, param1, param2,
+												fetchMetadataVO, fetchConfigVO, customerDetails);
+										break;
+									}
+								}
+								// XpathPerformance code for cases ended
+							case "enter":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).enter(driver, fetchMetadataVO,
+											fetchConfigVO,
+											customerDetails);
+									break;
+								}
+							case "tab":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).tab(driver, fetchMetadataVO,
+											fetchConfigVO,
+											customerDetails);
+									break;
+								}
+							case "paste":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).paste(driver,
+											fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
+											globalValueForSteps, customerDetails);
+									break;
+								}
+							case "uploadFileAutoIT":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).uploadFileAutoIT(driver,
+											fetchConfigVO.getUPLOAD_FILE_PATH(), param1, param2, param3,
+											fetchMetadataVO, customerDetails);
+									break;
+								}
+							case "windowclose":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).windowclose(driver,
+											fetchMetadataVO,
+											fetchConfigVO, customerDetails);
+									break;
+								}
+							case "switchDefaultContent":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).switchDefaultContent(driver,
+											fetchMetadataVO,
+											fetchConfigVO, customerDetails);
+									break;
+								}
+							case "switchParentWindow":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).switchParentWindow(driver,
+											fetchMetadataVO,
+											fetchConfigVO, customerDetails);
+									break;
+								}
+							case "switchToParentWindow":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).switchToParentWindow(driver,
+											fetchMetadataVO,
+											fetchConfigVO, customerDetails);
+									break;
+								}
+							case "DatePicker":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.datePicker(driver, param1, param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													customerDetails, count);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).datePicker(driver, param1,
+													param2,
+													fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+								} else {
+									break;
+								}
+							case "refreshPage":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).refreshPage(driver,
+											fetchMetadataVO,
+											fetchConfigVO, customerDetails);
+									break;
+								}
+							case "navigateToBackPage":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).navigateToBackPage(driver,
+											fetchMetadataVO,
+											fetchConfigVO, customerDetails);
+									break;
+								}
+							case "openPdf":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).openPdf(driver,
+											fetchMetadataVO.getInputValue(), fetchMetadataVO, fetchConfigVO,
+											customerDetails);
+									break;
+								}
+							case "openFile":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).openFile(driver, fetchMetadataVO,
+											fetchConfigVO, customerDetails);
+									break;
+								}
+							case "actionApprove":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).actionApprove(driver, param1,
+											param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+							case "multipleSendKeys":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+										if ("Yes".equalsIgnoreCase(checkValidScript)) {
+
+											xpathPerformance.multipleSendKeys(driver, param1, param2,
+													value1, value2, fetchMetadataVO, fetchConfigVO, customerDetails,
+													count);
+											break;
+										} else {
+											throw new Exception("ScriptNotValid");
+										}
+									} catch (Exception e) {
+										try {
+
+											if (instanceName.equalsIgnoreCase("SF")) {
+												throw new WatsEBSException();
+												// logger.info("Navigating to " + actionName + " Action in
+												// dynamic Xpath");
+												// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+												// fetchMetadataVO, param,
+												// customerDetails);
+											} else {
+												logger.info("Navigating to " + actionName
+														+ " Action in dynamic Xpath");
+												dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+														customerDetails);
+												break;
+												// throw new WatsEBSException();
+											}
+
+										} catch (PopupException p) {
+											throw new PopupException(400, "error popup ocuured at" + actionName);
+										} catch (Exception selExc) {
+											seleniumFactory.getInstanceObj(instanceName).multipleSendKeys(driver,
+													param1, param2,
+													value1, value2, fetchMetadataVO, fetchConfigVO,
+													customerDetails);
+											break;
+										}
+									}
+								} else {
+									break;
+								}
+
+							case "Login into Application(Informatica)":
+								userName = fetchMetadataVO.getInputValue();
+								logger.info("Navigating to Login into Application Action");
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									seleniumFactory.getInstanceObj(instanceName).loginInformaticaApplication(driver,
+											fetchConfigVO, fetchMetadataVO, type1, type2, type3, param1, param2,
+											param3,
+											fetchMetadataVO.getInputValue(),
+											dataBaseEntry.getPassword(testScriptDto.getTestScriptNo(), userName,
+													fetchConfigVO),
+											customerDetails);
+									userName = null;
+								}
+								break;
+							case "Logout(Informatica)":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).InformaticaLogout(driver,
+											fetchConfigVO,
+											fetchMetadataVO, type1, type2, type3, param1, param2, param3,
+											customerDetails);
+									break;
+								}
+							case "sendvalues(Informatica)":
+								if (fetchMetadataVO.getInputValue() != null
+										|| fetchMetadataVO.getInputValue() == "") {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).InformaticaSendValue(driver,
+												param1,
+												param2, fetchMetadataVO.getInputValue(), fetchMetadataVO,
+												fetchConfigVO,
+												customerDetails);
+										break;
+									}
+								} else {
+									break;
+								}
+
+							case "selectAValue(Informatica)":
+								if (fetchMetadataVO.getInputValue() != null
+										|| "".equals(fetchMetadataVO.getInputValue())) {
+									try {
+
+										if (instanceName.equalsIgnoreCase("SF")) {
+											throw new WatsEBSException();
+											// logger.info("Navigating to " + actionName + " Action in
+											// dynamic Xpath");
+											// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+											// fetchMetadataVO, param,
+											// customerDetails);
+										} else {
+											logger.info("Navigating to " + actionName
+													+ " Action in dynamic Xpath");
+											dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+													customerDetails);
+											break;
+											// throw new WatsEBSException();
+										}
+
+									} catch (PopupException p) {
+										throw new PopupException(400, "error popup ocuured at" + actionName);
+									} catch (Exception selExc) {
+										seleniumFactory.getInstanceObj(instanceName).InformaticaSelectAValue(driver,
+												param1,
+												param2, fetchMetadataVO.getInputValue(), fetchMetadataVO,
+												fetchConfigVO,
+												customerDetails);
+									}
+								}
+								break;
+
+							case "clickLink(Informatica)":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).InformaticaclickLink(driver,
+											param1,
+											param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+							case "clickImage(Informatica)":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).InformaticaClickImage(driver,
+											param1,
+											param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+							case "clickButton(Informatica)":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory.getInstanceObj(instanceName).InformaticaClickButton(driver,
+											param1,
+											param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+							case "waitTillLoad":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									Integer valueInMS = 1000 * Integer.parseInt(fetchMetadataVO.getInputValue());
+									fetchMetadataVO.setInputValue(valueInMS.toString());
+									seleniumFactory.getInstanceObj(instanceName).waitTillLoad(driver, param1,
+											param2,
+											fetchMetadataVO, fetchConfigVO);
+									break;
+								}
+
+							case "compareValue":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									try {
+										seleniumFactory.getInstanceObj(instanceName).compareValue(driver,
+												fetchMetadataVO.getInputParameter(), fetchMetadataVO, fetchConfigVO,
+												globalValueForSteps, customerDetails);
+										seleniumFactory.getInstanceObj(instanceName).createScreenShot(
+												fetchMetadataVO, fetchConfigVO, "Matched", customerDetails, true);
+										break;
+									} catch (Exception e) {
+										seleniumFactory.getInstanceObj(instanceName).createScreenShot(
+												fetchMetadataVO, fetchConfigVO, "Unmatched", customerDetails,
+												false);
+										throw new WatsEBSException(500, "Failed at campare Value");
+									}
+								}
+							case "apiAccessToken":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory
+											.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
+											.apiAccessToken(fetchMetadataVO,
+													accessTokenStorage, customerDetails);
+									break;
+								}
+							case "apiValidationResponse":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory
+											.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
+											.apiValidationResponse(fetchMetadataVO,
+													accessTokenStorage, api, customerDetails, fetchConfigVO);
+									break;
+								}
+							case "validation":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									seleniumFactory
+											.getInstanceObjFromAbstractClass(fetchConfigVO.getINSTANCE_NAME())
+											.validation(fetchMetadataVO, api);
+									break;
+								}
+							case "Enter Multiple Transactions":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									woodInterface.enterMultipleTransaction(driver, fetchConfigVO,
+											fetchMetadataVO, customerDetails);
+									break;
+								}
+							case "doubleClick":
+								try {
+
+									if (instanceName.equalsIgnoreCase("SF")) {
+										throw new WatsEBSException();
+										// logger.info("Navigating to " + actionName + " Action in
+										// dynamic Xpath");
+										// sfDynamicXpath.dynamics(driver, fetchConfigVO,
+										// fetchMetadataVO, param,
+										// customerDetails);
+									} else {
+										logger.info("Navigating to " + actionName
+												+ " Action in dynamic Xpath");
+										dynamicXpath.dynamics(driver, fetchConfigVO, fetchMetadataVO,
+												customerDetails);
+										break;
+										// throw new WatsEBSException();
+									}
+
+								} catch (PopupException p) {
+									throw new PopupException(400, "error popup ocuured at" + actionName);
+								} catch (Exception selExc) {
+									sfInterface.doubleClick(driver, param1, param2,
+											fetchMetadataVO, fetchConfigVO, customerDetails);
+									break;
+								}
+							case "switchToParentWindowWithoutPdf":
+								seleniumFactory.getInstanceObj(instanceName).switchToParentWindowWithoutPdf(driver,
+										fetchMetadataVO,
+										fetchConfigVO, customerDetails);
+								break;
+							default:
+								logger.info("Action Name is not matched with " + "" + actionName);
+								break;
 
 						}
 						fetchConfigVO.setStatus1(Constants.PASS);
