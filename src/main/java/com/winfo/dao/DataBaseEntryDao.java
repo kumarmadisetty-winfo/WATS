@@ -58,6 +58,7 @@ import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
 import com.winfo.repository.LogDetailsRepository;
 import com.winfo.repository.TestSetLinesRepository;
+import com.winfo.repository.TestSetRepository;
 import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.utils.Constants.BOOLEAN_STATUS;
 import com.winfo.vo.CustomerProjectDto;
@@ -113,6 +114,9 @@ public class DataBaseEntryDao {
 
 	@Autowired
 	private TestSetScriptParamRepository testSetScriptParamRepository;
+	
+	@Autowired
+	private TestSetRepository testSetRepository;
 	
 	public TestSet getTestSetObjByTestSetId(Integer testSetId) {
 		Session session = em.unwrap(Session.class);
@@ -562,9 +566,7 @@ public class DataBaseEntryDao {
 
 	public void updatePdfGenerationEnableStatus(String testSetId, String enabled) {
 		try {
-			Query query = em.createQuery(
-					"Update TestSet set pdfGenerationEnabled='" + enabled + "' where testRunId='" + testSetId + "'");
-			query.executeUpdate();
+			testSetRepository.updatePdfGenerationEnabledStatus(enabled, Integer.parseInt(testSetId));
 		} catch (Exception e) {
 			logger.error("Error Updation PDF Generation Status " + e.getMessage());
 		}
