@@ -392,7 +392,7 @@ public class DataBaseEntry {
 			dao.getPassAndFailCount(fetchScriptVO.getP_test_set_id(), emailParam);
 			dao.getUserAndPrjManagerName(emailParam.getExecutedBy(), fetchScriptVO.getP_test_set_id(), emailParam);
 			boolean sendMail = appContext.getBean(this.getClass())
-					.checkIfAllTestSetLinesCompleted(Long.valueOf(fetchScriptVO.getP_test_set_id()), true) && (executedFrom.isPresent() || Constants.TEST_RUN.equalsIgnoreCase(executedFrom.get()));
+					.checkIfAllTestSetLinesCompleted(Long.valueOf(fetchScriptVO.getP_test_set_id()), true) && (executedFrom.isPresent() && Constants.TEST_RUN.equalsIgnoreCase(executedFrom.get()));
 			if (sendMail) {
 				sendMailServiceImpl.sendMail(emailParam);
 			}
