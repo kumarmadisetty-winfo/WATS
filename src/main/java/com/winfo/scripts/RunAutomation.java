@@ -185,7 +185,7 @@ public class RunAutomation {
 	long increment = 0;
 
 	@Async
-	public ResponseDto run(TestScriptDto testScriptDto) throws MalformedURLException {
+	public ResponseDto run(TestScriptDto testScriptDto,Optional<String> executedFrom) throws MalformedURLException {
 		logger.info("Test Run Id : " + testScriptDto.getTestScriptNo());
 
 		ResponseDto executeTestrunVo;
@@ -193,7 +193,7 @@ public class RunAutomation {
 		if (checkPackage != null && checkPackage.toLowerCase().contains(Constants.EBS)) {
 			executeTestrunVo = ebsRun(testScriptDto);
 		} else {
-			executeTestrunVo = cloudRun(testScriptDto);
+			executeTestrunVo = cloudRun(testScriptDto,executedFrom);
 		}
 		logger.info("End of Test Script Run : " + testScriptDto.getTestScriptNo());
 
@@ -251,17 +251,18 @@ public class RunAutomation {
 		return executeTestrunVo;
 	}
 
-	public ResponseDto cloudRun(TestScriptDto testScriptDto) throws MalformedURLException {
+	public ResponseDto cloudRun(TestScriptDto testScriptDto,Optional<String> executedFrom) throws MalformedURLException {
 		ResponseDto executeTestrunVo = new ResponseDto();
 		String testSetId = testScriptDto.getTestScriptNo();
 		CustomerProjectDto customerDetails = dataBaseEntry.getCustomerDetails(testSetId);
 		Integer jobId = 0;
 		if (StringUtils.isNotBlank(testScriptDto.getJobId())) {
 			jobId = Integer.parseInt(testScriptDto.getJobId());
-			schedulerRepository.updateSchedulerStatus(Constants.INPROGRESS, jobId);
 			userSchedulerJobRepository.updateScheduleTestRunStatus(customerDetails.getTestSetName(), jobId,
 					Constants.INPROGRESS);
-
+			if(executedFrom.isEmpty() || !Constants.TEST_RUN.equalsIgnoreCase(executedFrom.get())) {
+				schedulerRepository.updateSchedulerStatus(Constants.INPROGRESS, jobId);				
+			}
 		}
 		try {
 			FetchConfigVO fetchConfigVO = testScriptExecService.fetchConfigVO(testSetId);
@@ -308,7 +309,7 @@ public class RunAutomation {
 											Integer.parseInt(testSetLineId), fetchConfigVO.getStarttime1(),
 											testScriptDto.getExecutedBy());
 									executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
-											scriptStatus, customerDetails, executionId);
+											scriptStatus, customerDetails, executionId,executedFrom);
 								} catch (Exception e) {
 									logger.error("failed during inserting updating the execution history table");
 								}
@@ -361,7 +362,7 @@ public class RunAutomation {
 									if (run) {
 										try {
 											executorMethod(testScriptDto, fetchConfigVO, testLinesDetails, metaData,
-													scriptStatus, customerDetails, executionId);
+													scriptStatus, customerDetails, executionId,executedFrom);
 
 										} catch (Exception e) {
 											logger.error("Failed during updating the execution history");
@@ -400,7 +401,7 @@ public class RunAutomation {
 										testLinesDetails.get(0).setLineErrorMsg("Failed at Login into Application =>Dependency Fail");
 										dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
 												fetchConfigVO.getStarttime(), customerDetails.getTestSetName(), true,
-												testScriptDto.getExecutedBy(), executionId,Integer.parseInt(testScriptDto.getJobId()));
+												testScriptDto.getExecutedBy(), executionId,executedFrom);
 
 									}
 								}
@@ -416,7 +417,7 @@ public class RunAutomation {
 					executordependent.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
 				}
-				downloadScreenShot(fetchConfigVO, testLinesDetails.get(0), customerDetails, true);
+				if(testLinesDetails.size()>0)downloadScreenShot(fetchConfigVO, testLinesDetails.get(0), customerDetails, true);
 				List<ScriptDetailsDto> fetchMetadataListVOforEvidence = dataBaseEntry
 						.getScriptDetailsListVO(testScriptDto.getTestScriptNo(), null, true, false);
 
@@ -447,12 +448,12 @@ public class RunAutomation {
 
 				dataBaseEntry.updateStartAndEndTimeForTestSetTable(customerDetails.getTestSetId(),
 						fetchConfigVO.getStarttime(), fetchConfigVO.getEndtime());
-				if (jobId != 0) {
-					dataBaseEntry.testRunsNotificationEmail(customerDetails.getTestSetName(), testLinesDetails, jobId,
-							customerDetails.getTestSetId());
+//				if (jobId != 0) {
+//					dataBaseEntry.testRunsNotificationEmail(customerDetails.getTestSetName(), testLinesDetails, jobId,
+//							customerDetails.getTestSetId());
 					// String FORMAT = "dd-MMM-yyyy HH:mm:ss.SSS";
 
-				}
+//				}
 
 				if ("SHAREPOINT".equalsIgnoreCase(fetchConfigVO.getPDF_LOCATION())) {
 					seleniumFactory.getInstanceObj(fetchConfigVO.getINSTANCE_NAME())
@@ -469,42 +470,44 @@ public class RunAutomation {
 								customerDetails.getTestSetName(), jobId, Constants.PASS);
 						logger.info(
 								"Updated endDate and pass status of the testRun " + customerDetails.getTestSetName());
-						Optional<List<UserSchedulerJob>> dependencyTestRun = userSchedulerJobRepository
-								.findByJobIdAndDependency(jobId, Integer.parseInt(testScriptDto.getTestScriptNo()));
-						if (dependencyTestRun.isPresent()) {
-							dependencyTestRun.get().parallelStream().filter(Objects::nonNull).forEach(dependency -> {
-								if (dependency != null && StringUtils.isNotBlank(dependency.getComments())) {
-									logger.info("Started execution for DependencyTestRun " + dependency.getComments());
-									TestScriptDto dependencyTestScriptDto = new TestScriptDto();
-									int testRunId = testSetRepository.findByTestRunName(dependency.getComments())
-											.getTestRunId();
-									dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
-									dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
-									testSetLinesRepository.updateTestRunScriptEnable(testRunId);
-									TestSetExecutionStatus testSetExecutionStatus = new TestSetExecutionStatus();
+						if(executedFrom.isEmpty() || !Constants.TEST_RUN.equalsIgnoreCase(executedFrom.get())) {
+							Optional<List<UserSchedulerJob>> dependencyTestRun = userSchedulerJobRepository
+									.findByJobIdAndDependency(jobId, Integer.parseInt(testScriptDto.getTestScriptNo()));
+							if (dependencyTestRun.isPresent()) {
+								dependencyTestRun.get().parallelStream().filter(Objects::nonNull).forEach(dependency -> {
+									if (dependency != null && StringUtils.isNotBlank(dependency.getComments())) {
+										logger.info("Started execution for DependencyTestRun " + dependency.getComments());
+										TestScriptDto dependencyTestScriptDto = new TestScriptDto();
+										int testRunId = testSetRepository.findByTestRunName(dependency.getComments())
+												.getTestRunId();
+										dependencyTestScriptDto.setJobId(testScriptDto.getJobId());
+										dependencyTestScriptDto.setTestScriptNo(String.valueOf(testRunId));
+										testSetLinesRepository.updateTestRunScriptEnable(testRunId);
+										TestSetExecutionStatus testSetExecutionStatus = new TestSetExecutionStatus();
 //							    testSetExecutionStatus.setExecuteByMail(null);
-									testSetExecutionStatus.setExecutedBy(testLinesDetails.get(0).getExecutedBy());
-									testSetExecutionStatus.setTestRunId(testRunId);
-									testSetExecutionStatus.setExecutionDate(new Date());
-									testSetExecutionStatus.setRequestCount(0);
-									testSetExecutionStatus.setResponseCount(0);
-									updateTestSetService.updateDependencyTestRunDetails(testRunId,
-											testLinesDetails.get(0).getExecutedBy(), dependency.getComments(),
-											dependency.getJobId(), testSetExecutionStatus);
-									try {
-										cloudRun(dependencyTestScriptDto);
-									} catch (MalformedURLException ex) {
-										logger.error(
-												"Exception occurred while executing schedule dependent testRun execution "
-														+ ex.getMessage());
+										testSetExecutionStatus.setExecutedBy(testScriptDto.getExecutedBy());
+										testSetExecutionStatus.setTestRunId(testRunId);
+										testSetExecutionStatus.setExecutionDate(new Date());
+										testSetExecutionStatus.setRequestCount(0);
+										testSetExecutionStatus.setResponseCount(0);
+										updateTestSetService.updateDependencyTestRunDetails(testRunId,
+												testScriptDto.getExecutedBy(), dependency.getComments(),
+												dependency.getJobId(), testSetExecutionStatus);
+										try {
+											cloudRun(dependencyTestScriptDto,executedFrom);
+										} catch (MalformedURLException ex) {
+											logger.error(
+													"Exception occurred while executing schedule dependent testRun execution "
+															+ ex.getMessage());
+										}
 									}
-								}
-							});
+								});
+							}
 						}
 					} else {
 						// updating fail status for dependent testrun
 						dependencyTestRunExecute(jobId, testScriptDto.getTestScriptNo(),
-								customerDetails.getTestSetName());
+								customerDetails.getTestSetName(),executedFrom);							
 					}
 
 				}
@@ -565,33 +568,31 @@ public class RunAutomation {
 		return executeTestrunVo;
 	}
 
-	private void dependencyTestRunExecute(Integer jobId, String testSetId, String testSetName) {
+	private void dependencyTestRunExecute(Integer jobId, String testSetId, String testSetName,Optional<String> executedFrom) {
 		LocalDateTime localDate = LocalDateTime.now(ZoneId.of("GMT+05:30"));
-		Optional<List<UserSchedulerJob>> dependencyTestRun = userSchedulerJobRepository.findByJobIdAndDependency(jobId,
-				Integer.parseInt(testSetId));
-		if (dependencyTestRun.isPresent()) {
-			dependencyTestRun.get().parallelStream().forEach(dependency -> {
-				if (!dependencyTestRun.isEmpty() && StringUtils.isNotBlank(dependency.getComments())) {
-					userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate, testSetName, jobId,
-							Constants.FAIL);
-					logger.info("Updated fail status for the testRun " + testSetName);
-					String testRunId = testSetRepository.findByTestRunName(dependency.getComments()).getTestRunId()
-							.toString();
-					logger.info("Dependency TestRunName " + dependency.getComments());
-					dependencyTestRunExecute(jobId, testRunId, dependency.getComments());
-				}
-			});
-		} else {
-			userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate, testSetName, jobId,
-					Constants.FAIL);
-			logger.info("Updated fail status for the testRun " + testSetName);
+		userSchedulerJobRepository.updateEndDateAndStatusInUserSchedulerJob(localDate, testSetName, jobId,
+				Constants.FAIL);
+		logger.info("Updated fail status for the testRun " + testSetName);
+		if(executedFrom.isEmpty() || !Constants.TEST_RUN.equalsIgnoreCase(executedFrom.get())) {
+			Optional<List<UserSchedulerJob>> dependencyTestRun = userSchedulerJobRepository.findByJobIdAndDependency(jobId,
+					Integer.parseInt(testSetId));
+			if (dependencyTestRun.isPresent()) {
+				dependencyTestRun.get().parallelStream().forEach(dependency -> {
+					if (!dependencyTestRun.isEmpty() && StringUtils.isNotBlank(dependency.getComments())) {
+						String testRunId = testSetRepository.findByTestRunName(dependency.getComments()).getTestRunId()
+								.toString();
+						logger.info("Dependency TestRunName " + dependency.getComments());
+						dependencyTestRunExecute(jobId, testRunId, dependency.getComments(),executedFrom);
+					}
+				});
+			}
 		}
 
 	}
 
 	public void executorMethod(TestScriptDto testScriptDto, FetchConfigVO fetchConfigVO,
 			List<ScriptDetailsDto> testLinesDetails, Entry<Integer, List<ScriptDetailsDto>> metaData,
-			Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails, int executionId) throws Exception {
+			Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails, int executionId,Optional<String> executedFrom) throws Exception {
 		List<String> failList = new ArrayList<>();
 		WebDriver driver = null;
 		List<ScriptDetailsDto> fetchMetadataListsVO = metaData.getValue();
@@ -617,7 +618,7 @@ public class RunAutomation {
 			isDriverError = false;
 			switchActions(testScriptDto, driver, fetchMetadataListsVO, fetchConfigVO, scriptStatus, customerDetails,
 					auditTrial, scriptId, urls.get("PassUrl"), urls.get("FailUrl"), urls.get("DetailUrl"),
-					urls.get("ScriptUrl"), executionId);
+					urls.get("ScriptUrl"), executionId,executedFrom);
 		} catch (WebDriverException e) {
 			if (driver == null) {
 				String enableStatus = dataBaseEntry.getEnabledStatusByTestSetLineID(testSetLineId);
@@ -645,7 +646,7 @@ public class RunAutomation {
 				fetchConfigVO.setEndtime(new Date());
 				testLinesDetails.get(0).setLineErrorMsg(Constants.FAILED_TO_RUN_THE_SCRIPT);
 				dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails, fetchConfigVO.getStarttime(),
-						customerDetails.getTestSetName(), false, testScriptDto.getExecutedBy(), executionId,Integer.parseInt(testScriptDto.getJobId()));
+						customerDetails.getTestSetName(), false, testScriptDto.getExecutedBy(), executionId,executedFrom);
 
 				failList.add(scriptId);
 			}
@@ -666,7 +667,7 @@ public class RunAutomation {
 	public void switchActions(TestScriptDto testScriptDto, WebDriver driver, List<ScriptDetailsDto> fetchMetadataListVO,
 			FetchConfigVO fetchConfigVO, Map<Integer, Status> scriptStatus, CustomerProjectDto customerDetails,
 			AuditScriptExecTrail auditTrial, String scriptId, String passurl, String failurl, String detailurl,
-			String scripturl, int executionId) throws Exception {
+			String scripturl, int executionId,Optional<String> executedFrom) throws Exception {
 
 		String log4jConfPath = "log4j.properties";
 		PropertyConfigurator.configure(log4jConfPath);
@@ -3440,7 +3441,7 @@ public class RunAutomation {
 							dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 							dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 									fetchConfigVO.getStarttime(), customerDetails.getTestSetName(), false,
-									testScriptDto.getExecutedBy(), executionId,Integer.parseInt(testScriptDto.getJobId()));
+									testScriptDto.getExecutedBy(), executionId,executedFrom);
 
 							dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 						} catch (Exception e) {
@@ -3525,7 +3526,7 @@ public class RunAutomation {
 					dataBaseEntry.updateTestCaseEndDate(post, enddate, post.getP_status());
 					dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, fetchMetadataListVO,
 							fetchConfigVO.getStarttime(), customerDetails.getTestSetName(), false,
-							testScriptDto.getExecutedBy(), executionId,Integer.parseInt(testScriptDto.getJobId()));
+							testScriptDto.getExecutedBy(), executionId,executedFrom);
 
 					dataBaseEntry.updateEndTime(fetchConfigVO, testSetLineId, testSetId, enddate);
 

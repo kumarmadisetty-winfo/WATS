@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -537,7 +538,7 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 				try{
 					int exeId = executionHistory.getMaxExecutionIdForTestSetLine(Integer.parseInt(args.getTestSetLineId()));
 					dataBaseEntry.updateTestCaseStatus(post, fetchConfigVO, testLinesDetails,
-							testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),exeId,0);
+							testSetLine.getExecutionStartTime(), customerDetails.getTestSetName(),false,args.getExecutedBy(),exeId,Optional.of(Constants.TEST_RUN));
 
 				} catch (Exception e){
 					logger.error("Failed to update the execution history");

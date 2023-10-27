@@ -77,7 +77,7 @@ public class UpdateTestSetRecords {
 			} else {
 				dataBaseEntryDao.updateExecStatusTable(String.valueOf(testSetId));
 			}
-			initiationSendMail(testSetName, jobId, executedBy, testSetId);
+//			initiationSendMail(testSetName, jobId, executedBy, testSetId);
 		} catch (Exception e) {
 			logger.error("Exception occurred while updating dependency testRun detailes");
 		}
