@@ -1695,7 +1695,6 @@ public class DataBaseEntryDao {
 			e.printStackTrace();
 		}
 	}
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void deleteExecutionHistoryRecordsByTestSetLineId(TestSetLine testSetLine) {
 		try {
 			executionHistoryRepository.deleteExecutionHistory(testSetLine.getTestRunScriptId());

@@ -732,7 +732,9 @@ public class DataBaseEntry {
 	
 	public void deleteScriptFromTestRun(TestSetLine testSetLineObj, String deletedBy) {
 		dao.deleteTestSetScriptParamRecordsByTestSetLineId(testSetLineObj);
-		dao.deleteExecutionHistoryRecordsByTestSetLineId(testSetLineObj);
+		if(!TEST_SET_LINE_ID_STATUS.NEW.getLabel().equalsIgnoreCase(testSetLineObj.getStatus())){
+			dao.deleteExecutionHistoryRecordsByTestSetLineId(testSetLineObj);
+		}
 		dao.deleteTestSetLinesRecordsByTestSetLineId(testSetLineObj,deletedBy);
 	}
 	
