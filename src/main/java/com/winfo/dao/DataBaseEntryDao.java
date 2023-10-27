@@ -56,6 +56,7 @@ import com.winfo.model.TestSet;
 import com.winfo.model.TestSetAttribute;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.ExecutionHistoryRepository;
 import com.winfo.repository.LogDetailsRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
@@ -117,6 +118,9 @@ public class DataBaseEntryDao {
 	
 	@Autowired
 	private TestSetRepository testSetRepository;
+	
+	@Autowired
+	private ExecutionHistoryRepository executionHistoryRepository;
 	
 	public TestSet getTestSetObjByTestSetId(Integer testSetId) {
 		Session session = em.unwrap(Session.class);
@@ -1689,6 +1693,14 @@ public class DataBaseEntryDao {
 			logger.info("deleted count {}" );
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	public void deleteExecutionHistoryRecordsByTestSetLineId(TestSetLine testSetLine) {
+		try {
+			executionHistoryRepository.deleteExecutionHistory(testSetLine.getTestRunScriptId());
+			logger.info("Successfully deleted execution history of Test Set Line Id : "+ testSetLine.getTestRunScriptId());
+		} catch (Exception e) {
+			logger.error("Error occurred while deleting execution history of Test Set Line Id : "+ testSetLine.getTestRunScriptId()+" : "+e.getMessage());
 		}
 	}
 	
