@@ -20,5 +20,11 @@ public interface ExecutionHistoryRepository extends JpaRepository<ExecutionHisto
     @Query("update ExecutionHistory set lineErrorMessage=:lineErrorMessage, executionEndTime=:endDate,status=:status,lastUpdatedBy=:lastUpdatedBy where executionId=:executionId")
     int updateExecutionHistory(String lineErrorMessage,Date endDate, String status, String lastUpdatedBy,int executionId);
     
+    
+    @Modifying
+    @Transactional
+    @Query("delete from ExecutionHistory where testSetLineId=:testSetLineId")
+    int deleteExecutionHistory(int testSetLineId);
+    
 }
 
