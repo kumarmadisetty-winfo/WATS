@@ -32,6 +32,6 @@ public class DownloadController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="PDF downloaded successfully")})
 	public ResponseEntity<StreamingResponseBody>  downloadDocument(@Valid @RequestBody DocumentsVo documentsVo) throws Exception {
 
-			return downloadDocumnetsService.getPDFFromObjectStore(documentsVo);
+			return downloadDocumnetsService.retrieveDocumentsFromObjectStore(documentsVo);
 	}
 }

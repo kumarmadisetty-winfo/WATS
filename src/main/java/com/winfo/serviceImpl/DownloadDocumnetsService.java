@@ -35,7 +35,7 @@ public class DownloadDocumnetsService {
 
 	final ObjectStoreUtils objectStoreUtils;
 	
-	public ResponseEntity<StreamingResponseBody> getPDFFromObjectStore(DocumentsVo pdfVO) throws IOException {
+	public ResponseEntity<StreamingResponseBody> retrieveDocumentsFromObjectStore(DocumentsVo pdfVO) throws IOException {
 		if(pdfVO.isCommonObjectStore())
 			return objectStoreUtils.getFileFromObjectStore(pdfVO.getFilePath()+Constants.FORWARD_SLASH,pdfVO.getFileName(),MediaType.APPLICATION_PDF,
 					ociConfigNameCommonObjStore, ociBucketNameCommonObjStore, ociNamespaceCommonObjStore);
