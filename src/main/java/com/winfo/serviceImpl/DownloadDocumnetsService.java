@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import com.winfo.utils.Constants;
 import com.winfo.utils.ObjectStoreUtils;
-import com.winfo.vo.PDFVo;
+import com.winfo.vo.DocumentsVo;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
-public class DownloadPDFService {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class DownloadDocumnetsService {
 
-	public static final Logger logger = Logger.getLogger(DownloadPDFService.class);
+	public static final Logger logger = Logger.getLogger(DownloadDocumnetsService.class);
 	
 	@Value("${oci.config.name.common}")
 	private String ociConfigNameCommonObjStore;
@@ -29,10 +32,10 @@ public class DownloadPDFService {
 	private String ociBucketName;
 	@Value("${oci.namespace}")
 	private String ociNamespace;
-	@Autowired
-	ObjectStoreUtils objectStoreUtils;
+
+	final ObjectStoreUtils objectStoreUtils;
 	
-	public ResponseEntity<StreamingResponseBody> getPDFFromObjectStore(PDFVo pdfVO) throws IOException {
+	public ResponseEntity<StreamingResponseBody> getPDFFromObjectStore(DocumentsVo pdfVO) throws IOException {
 		if(pdfVO.isCommonObjectStore())
 			return objectStoreUtils.getFileFromObjectStore(pdfVO.getFilePath()+Constants.FORWARD_SLASH,pdfVO.getFileName(),MediaType.APPLICATION_PDF,
 					ociConfigNameCommonObjStore, ociBucketNameCommonObjStore, ociNamespaceCommonObjStore);

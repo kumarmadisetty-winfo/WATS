@@ -27,34 +27,42 @@ import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.winfo.config.MessageUtil;
 import com.winfo.exception.WatsEBSException;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ObjectStoreUtils { 
 
 	public final Logger log = LogManager.getLogger(ObjectStoreUtils.class);
 	
 	@Value("${oci.config.path}")
 	private String ociConfigPath;
-	@Autowired
-	MessageUtil messageUtil;
+
+	final MessageUtil messageUtil;
 	
 	public ResponseEntity<StreamingResponseBody> getFileFromObjectStore(String filePath,String fileName,MediaType mediaType,String ociConfigName,
 			String ociBucketName,String ociNamespace) throws IOException {
 
 		GetObjectResponse response = null;
-		final ConfigFileReader.ConfigFile configFile = ConfigFileReader
-				.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
-		final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-		try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
-			GetObjectRequest getObjectRequest = GetObjectRequest.builder().namespaceName(ociNamespace)
-					.bucketName(ociBucketName).objectName(filePath + fileName).build();
-			response = client.getObject(getObjectRequest);
-			InputStream fis = response.getInputStream();
-			byte[] targetArray = IOUtils.toByteArray(fis);
-			return ResponseEntity.ok().contentType(mediaType).header("Content-Disposition", "attachment; filename=\"" + fileName + "\"").header("Content-Length", "" + response.getContentLength())
-					.body(out -> {
-						out.write(targetArray);
-						out.flush();
-					});
+		try {
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+			log.info("Successfully read the config file");
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			log.info("Successfully authenticated to object store");
+			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+				GetObjectRequest getObjectRequest = GetObjectRequest.builder().namespaceName(ociNamespace)
+						.bucketName(ociBucketName).objectName(filePath + fileName).build();
+				response = client.getObject(getObjectRequest);
+				log.info(fileName+" file found successfully");
+				InputStream fis = response.getInputStream();
+				byte[] targetArray = IOUtils.toByteArray(fis);
+				return ResponseEntity.ok().contentType(mediaType).header("Content-Disposition", "attachment; filename=\"" + fileName + "\"").header("Content-Length", "" + response.getContentLength())
+						.body(out -> {
+							out.write(targetArray);
+							out.flush();
+						});
+			}
 		} catch (WatsEBSException e) {
 			log.error(e.getErrorMessage());
 			throw e;
@@ -63,6 +71,7 @@ public class ObjectStoreUtils {
 			throw new WatsEBSException(e.getStatusCode(),
 					MessageUtil.getMessage(messageUtil.getObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 		} catch (IOException e) {
+			log.error(messageUtil.getObjectStoreUtils().getError().getFailedToReturnTheFile()+" : "+e.getMessage());
 			throw new WatsEBSException(403, messageUtil.getObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
 		} catch (Exception e) {
 			log.error("Exception occurred while downloading " + fileName + " from Object Store");
@@ -76,7 +85,9 @@ public class ObjectStoreUtils {
 		try {
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
 					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+			log.info("Successfully read the config file");
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			log.info("Successfully authenticated to object store");
 			String destinationFilePath = folderName + Constants.FORWARD_SLASH + fileName;
 			/* Create a service client */
 			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {

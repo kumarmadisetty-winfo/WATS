@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class PDFVo {
+public class DocumentsVo {
 
 	@NotNull
 	private String fileName;
