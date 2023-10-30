@@ -1,7 +1,6 @@
 package com.winfo.dao;
 
 import java.math.BigDecimal;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,21 +19,19 @@ import com.winfo.model.ScriptMaster;
 import com.winfo.model.TestSet;
 import com.winfo.repository.ProjectRepository;
 import com.winfo.repository.ScriptMasterRepository;
-import com.winfo.repository.ScriptMetaDataRepository;
 import com.winfo.repository.TestSetLinesRepository;
 import com.winfo.repository.TestSetRepository;
-import com.winfo.repository.TestSetScriptParamRepository;
 import com.winfo.repository.UserRoleRepository;
 import com.winfo.vo.DomGenericResponseBean;
 
+import lombok.RequiredArgsConstructor;
+
 @SuppressWarnings({ "deprecation", "unchecked" })
 @Repository
-
-
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WatsPluginDao {
 	public static final Logger logger = Logger.getLogger(WatsPluginDao.class);
 	private static final String USER_ID = "userId";
-@Autowired
 	private final EntityManager entityManager;
 	private final ScriptMasterRepository scriptMasterRepository;
 	private final UserRoleRepository userRoleRepository;
@@ -42,17 +39,6 @@ public class WatsPluginDao {
 	private final TestSetLinesRepository testSetLinesRepository;
 	private final ProjectRepository projectRepository;
 
-	public WatsPluginDao(EntityManager entityManager, ScriptMasterRepository scriptMasterRepository,
-			UserRoleRepository userRoleRepository, TestSetRepository testSetRepository,
-			TestSetLinesRepository testSetLinesRepository, ProjectRepository projectRepository) {
-		this.entityManager = entityManager;
-		this.scriptMasterRepository = scriptMasterRepository;
-		this.userRoleRepository = userRoleRepository;
-		this.testSetRepository = testSetRepository;
-		this.testSetLinesRepository = testSetLinesRepository;
-		this.projectRepository = projectRepository;
-	}
-	
 
 	public List<String> getScriptNumber(String processArea, String module) {
 		 logger.info("processArea"+processArea);
