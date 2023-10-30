@@ -5,12 +5,14 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class WatsDocumentVo {
+public class DocumentsVo {
 
 	@NotNull
 	private String fileName;
 
 	@NotNull
-	private String watsVersion;
+	private String filePath;
+	
+	private boolean commonObjectStore;
 
 }
