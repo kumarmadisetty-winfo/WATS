@@ -2,10 +2,8 @@ package com.winfo.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -27,29 +25,20 @@ import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.winfo.config.MessageUtil;
-import com.winfo.dao.WatsPluginDao;
 import com.winfo.exception.WatsEBSException;
 
 @Service
-public class CommonObjectStoreUtils { 
+public class ObjectStoreUtils { 
 
-	public final Logger log = LogManager.getLogger(CommonObjectStoreUtils.class);
+	public final Logger log = LogManager.getLogger(ObjectStoreUtils.class);
 	
-	@Value("${oci.config.name.common}")
-	private String ociConfigName;
-	@Value("${oci.bucket.name.common}")
-	private String ociBucketName;
-	@Value("${oci.namespace.common}")
-	private String ociNamespace;
 	@Value("${oci.config.path}")
 	private String ociConfigPath;
-	public static final String FORWARD_SLASH = "/";
-	@Autowired
-	WatsPluginDao dao;
 	@Autowired
 	MessageUtil messageUtil;
 	
-	public ResponseEntity<StreamingResponseBody> getFileFromCommonObjectStore(String filePath,String fileName,MediaType mediaType) throws IOException {
+	public ResponseEntity<StreamingResponseBody> getFileFromObjectStore(String filePath,String fileName,MediaType mediaType,String ociConfigName,
+			String ociBucketName,String ociNamespace) throws IOException {
 
 		GetObjectResponse response = null;
 		final ConfigFileReader.ConfigFile configFile = ConfigFileReader
@@ -72,22 +61,23 @@ public class CommonObjectStoreUtils {
 		} catch (BmcException e) {
 			log.error(fileName + " is not exist in Object Store");
 			throw new WatsEBSException(e.getStatusCode(),
-					MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
+					MessageUtil.getMessage(messageUtil.getObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 		} catch (IOException e) {
-			throw new WatsEBSException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
+			throw new WatsEBSException(403, messageUtil.getObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
 		} catch (Exception e) {
 			log.error("Exception occurred while downloading " + fileName + " from Object Store");
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getDownloadFailed(), fileName), e);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), MessageUtil.getMessage(messageUtil.getObjectStoreUtils().getError().getDownloadFailed(), fileName), e);
 		}
 	}
 	
-	public PDDocument readFileFromCommonObjectStore(String folderName,String fileName) {
+	public PDDocument readFileFromObjectStore(String folderName,String fileName,String ociConfigName,
+			String ociBucketName,String ociNamespace) {
 		GetObjectResponse response = null;
 		try {
 			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
 					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			String destinationFilePath = folderName + FORWARD_SLASH + fileName;
+			String destinationFilePath = folderName + Constants.FORWARD_SLASH + fileName;
 			/* Create a service client */
 			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
 				/* Create a request and dependent object(s). */
@@ -100,12 +90,13 @@ public class CommonObjectStoreUtils {
 		} catch (BmcException e) {
 			log.error(fileName + " is not exist in Object Store");
 			throw new WatsEBSException(e.getStatusCode(),
-					MessageUtil.getMessage(messageUtil.getCommonObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
+					MessageUtil.getMessage(messageUtil.getObjectStoreUtils().getError().getFileNotPresent(), fileName), e);
 		} catch (IOException e) {
 			log.error("Exception occurred while fetching file from service");
-			throw new WatsEBSException(403, messageUtil.getCommonObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
+			throw new WatsEBSException(403, messageUtil.getObjectStoreUtils().getError().getFailedToReturnTheFile(), e);
 		} catch (Exception e) {
-			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while reading pdf in Object Storage", e);
+			log.error("Exception occurred while reading pdf from Object Storage");
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while reading pdf from Object Storage", e);
 
 		}
 	}

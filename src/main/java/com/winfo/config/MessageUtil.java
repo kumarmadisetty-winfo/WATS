@@ -19,7 +19,7 @@ public class MessageUtil {
 	private CopyDataCustomerService copyDataCustomerService;
 	private DeleteDataDao deleteDataDao;
 	private Deletion deletion;
-	private CommonObjectStoreUtils commonObjectStoreUtils;
+	private ObjectStoreUtils objectStoreUtils;
 	private JiraTicketBugService jiraTicketBugService;
 	
 	@Data
@@ -85,7 +85,7 @@ public class MessageUtil {
 		private Success success;
 	}
 	@Data
-	public static class CommonObjectStoreUtils{
+	public static class ObjectStoreUtils{
 		private Error error;
 		private Success success;
 	}

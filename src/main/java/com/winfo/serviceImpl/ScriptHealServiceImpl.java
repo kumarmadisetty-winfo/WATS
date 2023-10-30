@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import com.winfo.exception.WatsEBSException;
 import com.winfo.model.ScriptMaster;
 import com.winfo.repository.ScriptMasterRepository;
 import com.winfo.service.ScriptHealService;
-import com.winfo.utils.CommonObjectStoreUtils;
+import com.winfo.utils.ObjectStoreUtils;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ScriptHealVo;
 
@@ -33,13 +34,19 @@ public class ScriptHealServiceImpl implements ScriptHealService{
 	@Autowired
 	ScriptMasterRepository scriptMasterRepository;
 	@Autowired
-	CommonObjectStoreUtils commonObjectStoreUtils;
+	ObjectStoreUtils commonObjectStoreUtils;
+	@Value("${oci.config.name.common}")
+	private String ociConfigNameCommonObjStore;
+	@Value("${oci.bucket.name.common}")
+	private String ociBucketNameCommonObjStore;;
+	@Value("${oci.namespace.common}")
+	private String ociNamespaceCommonObjStore;
 	
 	public List<ScriptHealVo> getNewInputParameters(String targetApplication, String productVersion, String module) throws IOException {
 		try {
 			List<ScriptMaster> scriptMasters = scriptMasterRepository.findByTargetApplicationAndProductVersionAndModule(targetApplication,productVersion,module);
-			PDDocument document = commonObjectStoreUtils.readFileFromCommonObjectStore(Constants.SCRIPT_HEAL+"/"+
-					targetApplication,productVersion+" release notes.pdf");
+			PDDocument document = commonObjectStoreUtils.readFileFromObjectStore(Constants.SCRIPT_HEAL+"/"+
+					targetApplication,productVersion+" release notes.pdf",ociConfigNameCommonObjStore, ociBucketNameCommonObjStore, ociNamespaceCommonObjStore);
 			PDFTextStripper textStripper = new PDFTextStripper();
 			String text = textStripper.getText(document);
 			List<ScriptHealVo> listOfOldNewInputParameters=new ArrayList<ScriptHealVo>();
