@@ -134,6 +134,7 @@ public class ObjectStoreUtils {
 	                    .putObjectBody(new ByteArrayInputStream(fileBytes))
 	                    .build();
 				client.putObject(request);
+				log.info(fileName+ " successfully uploaded");
 				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
 						fileName+ " successfully uploaded");
 			}
