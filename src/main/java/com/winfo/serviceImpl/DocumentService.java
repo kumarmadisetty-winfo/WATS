@@ -17,9 +17,9 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class DocumnetService {
+public class DocumentService {
 
-	public static final Logger logger = Logger.getLogger(DocumnetService.class);
+	public static final Logger logger = Logger.getLogger(DocumentService.class);
 	
 	@Value("${oci.config.name.common}")
 	private String ociConfigNameCommonObjStore;

@@ -123,7 +123,7 @@ public class ObjectStoreUtils {
 					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
 			log.info("Successfully read the config file");
 			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
-			log.info("Successfully authenticated to object store");
+			log.info("Successfully authenticated to object store : "+configFile);
 			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
 				PutObjectRequest request = PutObjectRequest.builder()
 	                    .bucketName(ociBucketName)
@@ -133,6 +133,7 @@ public class ObjectStoreUtils {
 	                    .contentLength((long) fileBytes.length)
 	                    .putObjectBody(new ByteArrayInputStream(fileBytes))
 	                    .build();
+				log.info("ociBucketName : "+configFile+" - ociNamespace : "+ociNamespace+" - filePath/fileName : "+filePath + fileName);
 				client.putObject(request);
 				log.info(fileName+ " successfully uploaded");
 				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.winfo.serviceImpl.DocumnetService;
+import com.winfo.serviceImpl.DocumentService;
 import com.winfo.vo.DocumentsVo;
 import com.winfo.vo.ResponseDto;
 import io.swagger.annotations.ApiOperation;
@@ -21,11 +21,11 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class DocumnetController {
+public class DocumentController {
 	
-	public static final Logger logger = Logger.getLogger(DocumnetController.class);
+	public static final Logger logger = Logger.getLogger(DocumentController.class);
 
-	final DocumnetService documnetsService;
+	final DocumentService documentService;
 	
 	@PostMapping(value = "/downloadDocument" , produces= MediaType.APPLICATION_PDF_VALUE)
 	@ApiOperation( value="Download Test Run/Script/Release Note PDF",notes = "<B> FileName and FilePath </B> should be provided to download PDF <br>"
@@ -33,7 +33,7 @@ public class DocumnetController {
 	@ApiResponses( value = { @ApiResponse( code=200,message="PDF downloaded successfully")})
 	public ResponseEntity<StreamingResponseBody>  downloadDocument(@Valid @RequestBody DocumentsVo documentsVo) throws Exception {
 
-			return documnetsService.retrieveDocumentsFromObjectStore(documentsVo);
+			return documentService.retrieveDocumentsFromObjectStore(documentsVo);
 	}
 	
 	@PostMapping(value = "/uploadDocument")
@@ -44,7 +44,7 @@ public class DocumnetController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		DocumentsVo documentsVo =objectMapper.readValue(documentsVoString, DocumentsVo.class);
 		byte[] fileBytes = request.getInputStream().readAllBytes();
-		ResponseDto responseDto =documnetsService.uploadDocumentsInObjectStore(documentsVo,fileBytes);
+		ResponseDto responseDto =documentService.uploadDocumentsInObjectStore(documentsVo,fileBytes);
 		if (responseDto.getStatusCode() == HttpStatus.OK.value()) {
 			return ResponseEntity.ok(responseDto);
 		} else {
