@@ -122,7 +122,7 @@ public class TestSetScriptParam {
 	@Column(name = "VALIDATION_ERROR_MESSAGE")
 	private String validationErrorMessage;
 	
-	@ManyToOne( fetch = FetchType.LAZY)
+	@ManyToOne( fetch = FetchType.EAGER)
 	@JoinColumn(name = "TEST_SET_LINE_ID" ,nullable = false)
 	private TestSetLine testSetLine;
 	
