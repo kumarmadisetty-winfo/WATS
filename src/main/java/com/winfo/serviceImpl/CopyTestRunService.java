@@ -36,6 +36,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.TestSetRepository;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CopytestrunVo;
@@ -52,11 +53,14 @@ public class CopyTestRunService {
 	CopyTestRunDao copyTestrunDao;
 	
 	@Autowired
+	TestSetRepository testSetRepository;
+	
+	@Autowired
 	MessageUtil messageUtil;
 
 	@Transactional
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
-		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());	
+		TestSet testSetObj = testSetRepository.findByTestRunId(copyTestrunvo.getTestScriptNo());	
 		TestSet newTestSetObj = new TestSet();
 		newTestSetObj.setTestRunDesc(testSetObj.getTestRunDesc());
 		newTestSetObj.setTestRunComments(testSetObj.getTestRunComments());
@@ -218,8 +222,11 @@ public class CopyTestRunService {
 						.setDependencyTr(mapOfTestRunDependencyOldToNewId.get(oldTestSetLine.getDependencyTr()));
 			}
 		}
-
-		TestSet newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);
+		
+		TestSet newtestrun=null;
+		synchronized(newTestSetObj){
+			newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);			
+		}
 
 		Map<Integer, Integer> dependencyLinesIdAndSeqNum = new HashMap<>();
 		for (TestSetLine newTestSetLine : newTestSetObj.getTestRunScriptDatalist()) {
