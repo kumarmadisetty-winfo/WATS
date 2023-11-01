@@ -96,7 +96,7 @@ public class TestSetLine {
 	@JoinColumn(name = "TEST_SET_ID" ,nullable = false)
 	private TestSet testRun;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "testSetLine", fetch = FetchType.EAGER)
 	private List<TestSetScriptParam> testRunScriptParam = new ArrayList<>();
 	
 	
