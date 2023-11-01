@@ -89,11 +89,15 @@ public class StringUtils {
 		try {
 			Project project=projectRepository.findByProjectId(testSet.getProjectId());
 			if(Constants.ORACLE_FUSION.equalsIgnoreCase(project.getWatsPackage())) {
-				boolean isApiValidationAddedInScripts=testSet.getTestRunScriptDatalist().parallelStream().anyMatch(testSetLine->{
-					return testSetLine.getTestRunScriptParam().parallelStream().anyMatch(testSetScriptParam->{
-						return Constants.API_VALIDATION.equalsIgnoreCase(testSetScriptParam.getValidationType());
-						});
-				});
+				boolean isApiValidationAddedInScripts=testSet.getTestRunScriptDatalist().size()>0 ? 
+						testSet.getTestRunScriptDatalist().parallelStream().anyMatch(testSetLine->{
+								if(testSetLine.getTestRunScriptParam().size()>0) {
+									return testSetLine.getTestRunScriptParam().parallelStream().anyMatch(testSetScriptParam->{
+										return Constants.API_VALIDATION.equalsIgnoreCase(testSetScriptParam.getValidationType());
+									})?true:false;
+								}
+								else return false;
+						}):false;
 				if(isApiValidationAddedInScripts) {
 					List<String> apiDetails = configLinesRepository.getListOfValueFromKeyNameAndConfigurationId(List.of(Constants.API_BASE_URL,Constants.API_USERNAME,Constants.API_PASSWORD),testSet.getConfigurationId());
 					String targetCode= lookUpCodeRepository.getTargetCodeFromLookUpNameAndLookUpCode(Constants.API_VALIDATION,
@@ -126,6 +130,7 @@ public class StringUtils {
 					.addConstraintViolation();
 			return false;
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(
