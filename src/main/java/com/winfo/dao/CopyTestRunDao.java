@@ -31,7 +31,7 @@ public class CopyTestRunDao {
 	public TestSet getdata(int testScriptNo) {
 		return entityManager.find(TestSet.class, testScriptNo);
 	}
-	
+
 	public TestSet saveTestrun(TestSet testSetObj) {
 		entityManager.persist(testSetObj);
 		logger.info("Test Run Id " + testSetObj.getTestRunId());
