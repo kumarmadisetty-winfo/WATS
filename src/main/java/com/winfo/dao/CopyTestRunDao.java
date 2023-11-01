@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -13,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.winfo.model.ExecuteStatus;
 import com.winfo.model.ScriptMaster;
@@ -33,9 +31,7 @@ public class CopyTestRunDao {
 	public TestSet getdata(int testScriptNo) {
 		return entityManager.find(TestSet.class, testScriptNo);
 	}
-//	@Transactional
 	public TestSet saveTestrun(TestSet testSetObj) {
-//		entityManager.lock(testSetObj, LockModeType.PESSIMISTIC_WRITE);
 		entityManager.persist(testSetObj);
 		logger.info("Test Run Id " + testSetObj.getTestRunId());
 		return testSetObj;
