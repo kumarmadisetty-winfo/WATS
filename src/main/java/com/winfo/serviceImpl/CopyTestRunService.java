@@ -223,10 +223,7 @@ public class CopyTestRunService {
 			}
 		}
 		
-		TestSet newtestrun=null;
-		synchronized(newTestSetObj){
-			newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);			
-		}
+		TestSet	newtestrun = copyTestrunDao.saveTestrun(newTestSetObj);			
 
 		Map<Integer, Integer> dependencyLinesIdAndSeqNum = new HashMap<>();
 		for (TestSetLine newTestSetLine : newTestSetObj.getTestRunScriptDatalist()) {
