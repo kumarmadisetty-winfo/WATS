@@ -11,14 +11,15 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import com.winfo.utils.Constants;
 import com.winfo.utils.ObjectStoreUtils;
 import com.winfo.vo.DocumentsVo;
+import com.winfo.vo.ResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class DownloadDocumnetsService {
+public class DocumentService {
 
-	public static final Logger logger = Logger.getLogger(DownloadDocumnetsService.class);
+	public static final Logger logger = Logger.getLogger(DocumentService.class);
 	
 	@Value("${oci.config.name.common}")
 	private String ociConfigNameCommonObjStore;
@@ -42,6 +43,16 @@ public class DownloadDocumnetsService {
 		else
 			return objectStoreUtils.getFileFromObjectStore(pdfVO.getFilePath()+Constants.FORWARD_SLASH,pdfVO.getFileName(),MediaType.APPLICATION_PDF,
 					ociConfigName, ociBucketName, ociNamespace);
+		
+	}
+	
+	public  ResponseDto uploadDocumentsInObjectStore(DocumentsVo pdfVO, byte[] fileBytes) throws IOException {
+		if(pdfVO.isCommonObjectStore())
+			return objectStoreUtils.putFileInObjectStore(pdfVO.getFilePath()+Constants.FORWARD_SLASH,pdfVO.getFileName(),MediaType.APPLICATION_PDF,
+					ociConfigNameCommonObjStore, ociBucketNameCommonObjStore, ociNamespaceCommonObjStore,fileBytes);
+		else
+			return objectStoreUtils.putFileInObjectStore(pdfVO.getFilePath()+Constants.FORWARD_SLASH,pdfVO.getFileName(),MediaType.APPLICATION_PDF,
+					ociConfigName, ociBucketName, ociNamespace,fileBytes);
 		
 	}
 }
