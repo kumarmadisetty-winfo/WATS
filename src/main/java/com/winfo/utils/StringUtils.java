@@ -130,7 +130,6 @@ public class StringUtils {
 					.addConstraintViolation();
 			return false;
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e.getMessage());
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(
