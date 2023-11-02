@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -243,33 +244,40 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		return response;
 	}
 
-	private void validateScheduleTestRuns(String scheduleName, List<ScheduleTestRunVO> listOfTestRunInJob) {
+	private void validateScheduleTestRuns(String scheduleName, List<ScheduleTestRunVO> listOfTestRunInJob) throws Exception {
 		List<ResponseEntity<ResponseDto>> result = new ArrayList<>();
 		List<String> uniqueTemplateTestRuns=listOfTestRunInJob.parallelStream().map(ScheduleTestRunVO::getTemplateTestRun)
                 .distinct().collect(Collectors.toList());
+		AtomicReference<Exception> exceptionReference = new AtomicReference<>(null);
 		uniqueTemplateTestRuns.parallelStream().filter(Objects::nonNull).distinct().forEach(templateTestRun -> {
-			TestSet testSet = testSetRepository.findByTestRunName(templateTestRun);
-			if (testSet != null) {
-				try {
-					result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
-				} catch (ConstraintViolationException e) {
-					logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
-							+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
-					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-							Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE + " of " + testSet.getTestRunName());
-
-				} catch (Exception e) {
-					logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
-							+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
-					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-				}
-			} else {
-				logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
-						+ templateTestRun);
-				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.INTERNAL_SERVER_ERROR
-						+ " - " + Constants.INVALID_TEST_SET_ID + " - " + templateTestRun);
-			}
+		    if (exceptionReference.get() != null) {
+		        return;
+		    }
+		    TestSet testSet = testSetRepository.findByTestRunName(templateTestRun);
+		    if (testSet != null) {
+		        try {
+		            result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
+		        } catch (ConstraintViolationException e) {
+		            logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+		                    + testSet.getTestRunId() + " - " + testSet.getTestRunName());
+		            exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+		                    Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE + " of " + testSet.getTestRunName()));
+		        } catch (Exception e) {
+		            logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+		                    + testSet.getTestRunId() + " - " + testSet.getTestRunName());
+		            exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
+		        }
+		    } else {
+		        logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
+		                + templateTestRun);
+		        exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.INTERNAL_SERVER_ERROR
+		                + " - " + Constants.INVALID_TEST_SET_ID + " - " + templateTestRun));
+		    }
 		});
+		Exception exception = exceptionReference.get();
+		if (exception != null) {
+		    throw exception;
+		}
 
 		Map<Boolean, List<ResponseEntity<ResponseDto>>> partitionedMap = result.parallelStream().collect(Collectors
 				.partitioningBy(responseEntity -> responseEntity.getStatusCode().value() == Constants.SUCCESS_STATUS));
