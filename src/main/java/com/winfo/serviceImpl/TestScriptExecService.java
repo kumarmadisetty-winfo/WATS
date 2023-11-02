@@ -668,9 +668,9 @@ public class TestScriptExecService extends AbstractSeleniumKeywords {
 			status = SCRIPT_PARAM_STATUS.IN_PROGRESS.getLabel();
 		}
 		if (StringUtils.isBlank(scriptParamDetails.getResult())) {
-			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
+			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTimeWithoutCopyvalue(status,
 					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(),
-					scriptParamDetails.getMessage(), null, Integer.parseInt(scriptParamDetails.getScriptParamId()));
+					scriptParamDetails.getMessage(), Integer.parseInt(scriptParamDetails.getScriptParamId()));
 		} else {
 			testSetScriptParamRepository.updateTestSetScriptParamStatusAndStartAndEndTime(status,
 					scriptParamDetails.getStartTime(), scriptParamDetails.getEndTime(), new Date(), null,

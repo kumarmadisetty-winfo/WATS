@@ -259,8 +259,16 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 		try {
 			Thread.sleep(4000);
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//a[contains(@id,\"UIScmil\")])[1]")));
-			WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,\"UIScmil\")])[1]"));
+			WebElement waittext;
+			try{
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//a[contains(@id,\"UIScmil\")])[1]")));
+				waittext = driver.findElement(By.xpath("(//a[contains(@id,\"UIScmil\")])[1]"));
+			} catch (Exception e){
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@title=\"Administrator \"]")));
+				waittext = driver.findElement(By.xpath("//*[@title=\"Administrator \"]"));
+			}
+			// wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//a[contains(@id,\"UIScmil\")])[1]")));
+			// WebElement waittext = driver.findElement(By.xpath("(//a[contains(@id,\"UIScmil\")])[1]"));
 			Actions actions = new Actions(driver);
 			actions.moveToElement(waittext).build().perform();
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
@@ -272,7 +280,13 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 							.findElement(By.xpath("//div[contains(@id,\"popup-container\")]//a[text()=\"Sign Out\"]"));
 					signout.click();
 					Thread.sleep(4000);
-				}
+				} else if (driver.findElement(By.xpath("//a[text()='Sign Out']"))
+						.isDisplayed()){
+							WebElement signout = driver
+							.findElement(By.xpath("//a[text()='Sign Out']"));
+					signout.click();
+					Thread.sleep(4000);
+						}
 				String scripNumber = fetchMetadataVO.getScriptNumber();
 				logger.info("Successfully Logout is done " + scripNumber);
 			} catch (Exception e) {
@@ -410,7 +424,12 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type=\"" + param1 + "\"]")));
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
-				jse.executeScript("document.getElementById(\"password\").value = \"" + keysToSend + "\";");
+				try{
+					jse.executeScript("document.getElementById(\"password\").value = \"" + keysToSend + "\";");
+				} catch (Exception e){
+					jse.executeScript("document.getElementById(\"j_password\").value = \"" + keysToSend + "\";");
+				}
+				// jse.executeScript("document.getElementById(\"password\").value = \"" + keysToSend + "\";");
 				// if("password".equalsIgnoreCase(param1))
 				screenshot(driver, fetchMetadataVO, customerDetails);
 				Thread.sleep(1000);
@@ -1455,10 +1474,18 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
-			wait.until(ExpectedConditions.presenceOfElementLocated(
+			WebElement waittext;
+			try{
+				wait.until(ExpectedConditions.presenceOfElementLocated(
+					By.xpath(("//div[text()='Sign Out']//following::button[1]"))));
+				waittext = driver
+						.findElement(By.xpath(("//div[text()='Sign Out']//following::button[1]")));
+			} catch (Exception e){
+				wait.until(ExpectedConditions.presenceOfElementLocated(
 					By.xpath(("//button[normalize-space(normalize-space(text())=\"" + param1 + "\")]"))));
-			WebElement waittext = driver
-					.findElement(By.xpath(("//button[normalize-space(normalize-space(text())=\"" + param1 + "\")]")));
+				waittext = driver
+						.findElement(By.xpath(("//button[normalize-space(normalize-space(text())=\"" + param1 + "\")]")));
+			}
 			screenshot(driver, fetchMetadataVO, customerDetails);
 			clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
 			String scripNumber = fetchMetadataVO.getScriptNumber();

@@ -489,15 +489,22 @@ public class ARLOSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 	public void openPdf(WebDriver driver, String path, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
 			CustomerProjectDto customerDetails) {
 		try {
-			File path1 = getLastModified(path, fetchConfigVO);
-			driver.get("" + path1);
-			Thread.sleep(2000);
+
+			Thread.sleep(5000);
+			driver.get("chrome://downloads/");
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			String fileName = (String) js.executeScript(
+					"return document.querySelector('downloads-manager').shadowRoot.querySelector('downloads-item').shadowRoot.querySelector('div#content #file-link').textContent");
+			String filePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName;
+			String fileUrl = "file://" + filePath;
+			driver.get(fileUrl);
+			Thread.sleep(5000);
 			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			driver.navigate().back();
-			Thread.sleep(8000);
+			Thread.sleep(2000);
+			driver.navigate().back();
 		} catch (Exception e) {
-			logger.error("Failed during open pdf " + e.getMessage());
-			Thread.currentThread().interrupt();
+			logger.error("Failed during open PDF " + e.getMessage());
 		}
 	}
 
