@@ -13,6 +13,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -19016,19 +19019,11 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			ScriptDetailsDto fetchMetadataVO, CustomerProjectDto customerDetails) throws Exception {
 		// Get The File Name
 		Thread.sleep(5000);
-		JavascriptExecutor jse = (JavascriptExecutor) driver;
-		jse.executeScript("window.open()");
-		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
 		String fileName = null;
-		driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
-		// Download Window Open
-		Thread.sleep(3000);
-		fileName = (String) jse.executeScript(
-				"return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content #file-link').text");
-		String secondFileName = (String) jse.executeScript(
-				"return document.querySelector('downloads-manager').shadowRoot.querySelectorAll('#downloadsList downloads-item')[1].shadowRoot.querySelector('div#content #file-link').text");
-		driver.close();
-		driver.switchTo().window(tabs.get(0));
+		fileName = fetchMetadataVO.getTestSetLineId() + "_" + "2" + ".xls";
+		String secondFileName = fetchMetadataVO.getTestSetLineId() + "_" + "1" + ".xls";
+		logger.info("First fileName " + fileName);
+		logger.info("secondFileName " + secondFileName);
 		logger.info("File Name*** " + fileName);
 
 		try {
@@ -19144,6 +19139,18 @@ public class WOODSeleniumKeywords extends AbstractSeleniumKeywords implements Se
 			}
 
 			workbook.dispose();
+			try {
+				Files.delete(Paths.get(file.getPath()));
+				Files.delete(Paths.get(file1.getPath()));
+				logger.info("Successfully deleted the excels");
+			} catch (NoSuchFileException ex) {
+				logger.error("File not found: " + file.getPath() + " " + file1.getPath() + " " + ex.getMessage());
+			} catch (IOException e) {
+				e.printStackTrace();
+				logger.error(
+						"Failed to delete the excel " + file.getPath() + " " + file1.getPath() + " " + e.getMessage());
+
+			}
 		} catch (Exception e) {
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
 		}
