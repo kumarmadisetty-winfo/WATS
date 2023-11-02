@@ -90,8 +90,6 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 	public static final Logger logger = Logger.getLogger(VerisureSeleniumKeywords.class);
 
 	public String Main_Window = "";
-	public WebElement fromElement;
-	public WebElement toElement;
 
 	private static final DecimalFormat df = new DecimalFormat("00");
 
@@ -2635,6 +2633,28 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 	public void clickImage(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		// prod
+		try {
+			if (param1.equalsIgnoreCase("Catalog") && param2.equalsIgnoreCase("New")) {
+				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//*[text()=\""+param1+"\"])//following::img[@alt=\""+param2+"\"]"))));
+				WebElement waittext = driver.findElement(By.xpath("//*[text()=\""+param1+"\"])//following::img[@alt=\""+param2+"\"]"));
+				Actions actions = new Actions(driver);
+				actions.moveToElement(waittext).build().perform();
+				// highlightElement(driver, fetchMetadataVO, waittext, fetchConfigVO);
+				screenshot(driver, fetchMetadataVO, customerDetails);
+				Thread.sleep(1000);
+				clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO, customerDetails);
+				logger.info("Successfully clicked clickImage "+fetchMetadataVO.getScriptNumber());
+				String xpath = "(//*[contains(text(),\"param1\")]/following::img[@class=\"promptComboBoxButtonMoz\"])[1]";
+				String scriptID = fetchMetadataVO.getScriptId();
+				String lineNumber = fetchMetadataVO.getLineNumber();
+				service.saveXpathParams(scriptID, lineNumber, xpath);
+				return;
+			}
+		} catch (Exception e) {
+			logger.error("Failed during click Image " + e.getMessage());
+			fullPageFailedScreenshot(driver, fetchMetadataVO, customerDetails);
+		}
 		try {
 			if (param2.equalsIgnoreCase("General Journals Report")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
@@ -18452,16 +18472,18 @@ public class VerisureSeleniumKeywords extends AbstractSeleniumKeywords implement
 	}
 
 
-	public void dragAnddrop(WebDriver driver, String xpath, String xpath1, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+	public void dragAnddrop(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
+			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
-			WebElement dragElement = driver.findElement(By.xpath(xpath));
-			fromElement = dragElement;
-			WebElement dropElement = driver.findElement(By.xpath(xpath1));
-			toElement = dropElement;
+			WebElement fromElement = driver.findElement(By.xpath("//*[text()=\""+param1+"\"]//following::*[text()=\""+param2+"\"]"));
+			WebElement toElement = driver.findElement(By.xpath("//*[text()='Selected Columns']/ancestor::table[2]/following::div"));
+//			WebElement toElement = driver.findElement(By.xpath("//*[@id='idViewColumnsContainerDiv']"));
 			Actions action = new Actions(driver);
-			// Action dragDrop = action.dragAndDrop(fromElement, webElement).build();
-			action.dragAndDrop(fromElement, toElement).build().perform();
+			action.clickAndHold(fromElement)
+					.moveToElement(toElement)
+					.release(toElement)
+					.build().perform();
+			fullPagePassedScreenshot(driver, fetchMetadataVO, customerDetails);
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Successfully Drag and drop the values " + scripNumber);
 		} catch (Exception e) {

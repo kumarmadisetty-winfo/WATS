@@ -1171,7 +1171,6 @@ public class RunAutomation {
 											break;
 											// throw new WatsEBSException();
 										}
-
 									} catch (PopupException p) {
 										throw new PopupException(400, "error popup ocuured at" + actionName);
 									} catch (Exception selExc) {
