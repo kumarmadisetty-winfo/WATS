@@ -1171,7 +1171,6 @@ public class RunAutomation {
 											break;
 											// throw new WatsEBSException();
 										}
-
 									} catch (PopupException p) {
 										throw new PopupException(400, "error popup ocuured at" + actionName);
 									} catch (Exception selExc) {
@@ -2306,7 +2305,7 @@ public class RunAutomation {
 									throw new PopupException(400, "error popup ocuured at" + actionName);
 								} catch (Exception selExc) {
 									seleniumFactory.getInstanceObj(instanceName).dragAnddrop(driver,
-											fetchMetadataVO.getXpathLocation(), fetchMetadataVO.getXpathLocation1(),
+											param1, param2,
 											fetchMetadataVO, fetchConfigVO, customerDetails);
 									break;
 								}
