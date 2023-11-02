@@ -1428,7 +1428,7 @@ public class RunAutomation {
 							break;
 						case "dragAnddrop":
 							seleniumFactory.getInstanceObj(instanceName).dragAnddrop(driver,
-									fetchMetadataVO.getXpathLocation(), fetchMetadataVO.getXpathLocation1(),
+									param1, param2,
 									fetchMetadataVO, fetchConfigVO, customerDetails);
 							break;
 						case "clickFilter":
