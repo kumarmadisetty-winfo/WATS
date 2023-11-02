@@ -16337,6 +16337,41 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 		String value = null;
 		try {
+            if (inputParam1.equalsIgnoreCase("Attach Excel")) {
+                    renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+                    return value;
+                }
+        } catch (Exception e) {
+            String scripNumber = fetchMetadataVO.getScriptNumber();
+            logger.error("Failed during renaming downloaded file " + scripNumber);
+            logger.error(e.getMessage());
+        }
+		try {
+			if (inputParam2.equalsIgnoreCase("Payables End Balancee")) {
+				Thread.sleep(2000);
+				Actions actions = new Actions(driver);
+				actions.sendKeys(Keys.ARROW_DOWN).perform();
+                WebElement webElement = driver.findElement(
+						By.xpath("//*[text()='Payables End Balance']/following::td[position() = number(//*[contains(text(),\"" + inputParam1 + "\")]/ancestor::td[@l]/@l)]"));
+            Thread.sleep(2000);
+               actions.moveToElement(webElement).build().perform();
+				String stringToSearch = webElement.getText();
+             	String scripNumber = fetchMetadataVO.getScriptNumber();
+             	logger.info("Sucessfully Clicked copynumber" + scripNumber);
+                String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
+				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+				logger.info("Sucessfully Clicked copynumber Payables Amount (USD)" + scripNumber);
+
+				return value;
+			}
+             } 
+			catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during copynumber" + scripNumber);
+		}
+
+		try {
 
 			if (inputParam1.equalsIgnoreCase("Asset Number")) {
 				Thread.sleep(5000);
@@ -19180,33 +19215,48 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		try {
 			String testParamId = fetchMetadataVO.getTestScriptParamId();
 			String testSetId = fetchMetadataVO.getTestSetLineId();
+			
 			String inputValue = fetchMetadataVO.getInputValue();
 			inputValue = inputValue.trim();
+			//43
 			int startIdx = inputValue.lastIndexOf('(');
+			//84
 			int lastIdx = inputValue.lastIndexOf(')');
+			
+			//Demo Compare Value Script Testing>46>199
 			String inputParam2 = inputValue.substring(startIdx + 1, lastIdx);
-
+             //(Demo Compare Value Script Testing>46>198)>
 			inputValue = inputValue.substring(0, startIdx);
 
 			inputValue = inputValue.trim();
-
+            //0
 			startIdx = inputValue.indexOf('(');
-
+             //41
 			lastIdx = inputValue.indexOf(')');
-
+             //Demo Compare Value Script Testing>46>198
 			String inputParam1 = inputValue.substring(startIdx + 1, lastIdx);
+			//     )>
 			inputValue = inputValue.substring(lastIdx);
-
-			inputValue = inputValue.trim();
-
-			String operator = inputValue.contains("<=") ? "<="
-					: inputValue.contains("<") ? "<"
-							: inputValue.contains(">=") ? ">="
-									: inputValue.contains(">") ? ">"
-											: inputValue.contains("!=") ? "!=" : inputValue.contains("=") ? "=" : null;
+             inputValue = inputValue.trim();
+            
+             String operator = inputValue.contains("<=") ? "<=" :
+                inputValue.contains("<") ? "<" :
+                inputValue.contains(">=") ? ">=" :
+                inputValue.contains(">") ? ">" :
+                inputValue.contains("!=") ? "!=" :
+                inputValue.contains("=") ? "=" :
+                inputValue.contains("+") ? "+" :
+                inputValue.contains("-") ? "-" :
+                null;
 			String copynumberValue1;
+			//[Demo Compare Value Script Testing, 46, 198]
 			String[] arrOfStr1 = inputParam1.split(">", 5);
+			logger.info("arrOfStr1"+arrOfStr1.length);
+			
+			
 			String[] arrOfStr2 = inputParam2.split(">", 5);
+			logger.info("arrOfStr2"+arrOfStr2.length);
+			//[Demo Compare Value Script Testing, 46, 199]
 			if (arrOfStr1.length < 2) {
 				copynumberValue1 = inputParam1;
 			} else {
@@ -19224,23 +19274,45 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				String lineNumber = arrOfStr2[2];
 				copynumberValue2 = dynamicnumber.getCopynumber(testRunName, seq, lineNumber, testParamId, testSetId);
 			}
+			
+			
+			logger.info("copynumberValue1: " + copynumberValue1);
+			logger.info("copynumberValue2: " + copynumberValue2);
+			String replacedcopynumberValue1 = copynumberValue1.replaceAll("[,()]", "");
+		    String replacedcopynumberValue2 = copynumberValue2.replaceAll("[,()]", "");
 
-			if (NumberUtils.isParsable(copynumberValue1) && NumberUtils.isParsable(copynumberValue2)) {
-				if (!(ArithmeticUtils.numericComparision(Double.parseDouble(copynumberValue1),
-						Double.parseDouble(copynumberValue2), operator))) {
-					throw new Exception();
-				}
-			} else {
-				if (!ArithmeticUtils.stringComparision(copynumberValue1, copynumberValue2)) {
-					throw new Exception();
-				}
-			}
+		if (NumberUtils.isParsable(replacedcopynumberValue1) && NumberUtils.isParsable(replacedcopynumberValue2)) {
+		double value1 = Double.parseDouble(replacedcopynumberValue1);
+		double value2 = Double.parseDouble(replacedcopynumberValue2);
+		if (operator.equals(">")) {
+		 if (value1 > value2) {
+			logger.info("operator greater than symbol" );
+		}
+		} else if (operator.equals("<")) {
+		if (value1 < value2) {
+		logger.info("operator less than symbol" );
+		}
+		} else if (operator.equals("-")) {
+		double result = value1 - value2;
+		logger.info("operator subtraction  symbol"+result);
+		if (result != 0) {
+		 throw new Exception("Subtraction result is not equal to 0 ");
+		}
+		else {
+		logger.info("Success in subtraction"+result);
+		}
+		} 
+		
+		 else {
+		throw new Exception("Invalid operator: " + operator);
+		}
+		} 
 		} catch (Exception e) {
-			String scripNumber = fetchMetadataVO.getScriptNumber();
-			logger.error("Failed during compare value " + scripNumber);
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		logger.error("Failed during compare value " + scripNumber);
 //			screenshotFail(driver, fetchMetadataVO, customerDetails);
-			e.printStackTrace();
-			throw e;
+		e.printStackTrace();
+	  throw e;
 		}
 	}
 

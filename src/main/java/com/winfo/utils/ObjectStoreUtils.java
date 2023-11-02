@@ -1,5 +1,6 @@
 package com.winfo.utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,9 +24,11 @@ import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.model.BmcException;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.requests.GetObjectRequest;
+import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.GetObjectResponse;
 import com.winfo.config.MessageUtil;
 import com.winfo.exception.WatsEBSException;
+import com.winfo.vo.ResponseDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -110,5 +113,41 @@ public class ObjectStoreUtils {
 			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Exception occurred while reading pdf from Object Storage", e);
 
 		}
+	}
+	
+	public  ResponseDto putFileInObjectStore(String filePath,String fileName,MediaType mediaType,String ociConfigName,
+			String ociBucketName,String ociNamespace,byte[] fileBytes) throws IOException {
+
+		try {
+			final ConfigFileReader.ConfigFile configFile = ConfigFileReader
+					.parse(new FileInputStream(new File(ociConfigPath)), ociConfigName);
+			log.info("Successfully read the config file");
+			final AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+			log.info("Successfully authenticated to object store : "+configFile);
+			try (ObjectStorageClient client = new ObjectStorageClient(provider);) {
+				PutObjectRequest request = PutObjectRequest.builder()
+	                    .bucketName(ociBucketName)
+	                    .namespaceName(ociNamespace)
+	                    .objectName(filePath + fileName)
+	                    .contentType("application/octet-stream")
+	                    .contentLength((long) fileBytes.length)
+	                    .putObjectBody(new ByteArrayInputStream(fileBytes))
+	                    .build();
+				log.info("ociBucketName : "+configFile+" - ociNamespace : "+ociNamespace+" - filePath/fileName : "+filePath + fileName);
+				client.putObject(request);
+				log.info(fileName+ " successfully uploaded");
+				return new ResponseDto(HttpStatus.OK.value(), Constants.SUCCESS,
+						fileName+ " successfully uploaded");
+			}
+		} catch (BmcException e) {
+			log.error("Oracle Cloud service error: " + e.getServiceCode() + " - " + e.getMessage());
+			throw new WatsEBSException(e.getStatusCode(),"Oracle Cloud service error: " + e.getServiceCode() + " - " + e.getMessage(), e);
+        } catch (IOException e) {
+            log.error("Input/Output error: " + e.getMessage());
+            throw new WatsEBSException(403, "Input/Output error: " + e.getMessage(), e);
+        } catch (Exception e) {
+        	log.error("Failed to upload the file: " + e.getMessage());
+        	throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Failed to upload the file: " + e.getMessage(), e);
+        }
 	}
 }

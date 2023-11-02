@@ -64,4 +64,9 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	Integer deleteByTestSetLineId(Integer testSetLineId);
 	
 	TestSetScriptParam findByTestRunScriptParamId(Integer testRunScriptParamId);
+
+	@Modifying
+	@Transactional
+	@Query("UPDATE TestSetScriptParam  SET lineExecutionStatus=:status,startTime=:startTime,endTime=:endTime,updateDate=:updateDate,lineErrorMessage=:errorMessage WHERE testRunScriptParamId=:testRunScriptParamId")
+	int updateTestSetScriptParamStatusAndStartAndEndTimeWithoutCopyvalue(String status,Date startTime,Date endTime,Date updateDate,String errorMessage, int testRunScriptParamId);
 }
