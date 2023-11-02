@@ -36,6 +36,7 @@ import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
 import com.winfo.model.TestSetScriptParam;
+import com.winfo.repository.TestSetRepository;
 import com.winfo.utils.Constants;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CopytestrunVo;
@@ -52,11 +53,14 @@ public class CopyTestRunService {
 	CopyTestRunDao copyTestrunDao;
 	
 	@Autowired
+	TestSetRepository testSetRepository;
+	
+	@Autowired
 	MessageUtil messageUtil;
 
 	@Transactional
 	public int copyTestrun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
-		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());	
+		TestSet testSetObj = testSetRepository.findByTestRunId(copyTestrunvo.getTestScriptNo());	
 		TestSet newTestSetObj = new TestSet();
 		newTestSetObj.setTestRunDesc(testSetObj.getTestRunDesc());
 		newTestSetObj.setTestRunComments(testSetObj.getTestRunComments());
@@ -261,7 +265,7 @@ public class CopyTestRunService {
 				"clickRadiobutton", "clickCheckbox", "multipleSendKeys", "multiplelinestableSendKeys", "DatePicker",
 				"copynumber", "copytext", "paste", "apiValidationResponse" };
 		List<String> actionsList = new ArrayList<>(Arrays.asList(actios));
-		TestSet testSetObj = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+		TestSet testSetObj = testSetRepository.findByTestRunId(copyTestrunvo.getTestScriptNo());
 		if ("y".equalsIgnoreCase(copyTestrunvo.getIncrementValue())
 				&& (scriptParamObj.getUniqueMandatory() != null && !scriptParamObj.getUniqueMandatory().equals("NA"))
 				&& (scriptParamObj.getUniqueMandatory().equalsIgnoreCase("Unique")
@@ -462,7 +466,7 @@ public class CopyTestRunService {
 	@Transactional
 	public int reRun(@Valid CopytestrunVo copyTestrunvo) throws InterruptedException, JsonMappingException, JsonProcessingException {
 		try {
-			TestSet getTestrun = copyTestrunDao.getdata(copyTestrunvo.getTestScriptNo());
+			TestSet getTestrun = testSetRepository.findByTestRunId(copyTestrunvo.getTestScriptNo());
 			logger.info("Test Run Name : " + getTestrun.getTestRunName());
 			for (TestSetLine getScriptdata : getTestrun.getTestRunScriptDatalist()) {
 				String status = getScriptdata.getStatus();
@@ -492,7 +496,7 @@ public class CopyTestRunService {
 
 		List<String> listOfScriptNumberWrongProductVersion = new ArrayList<>();
 
-		TestSet testSetObj = copyTestrunDao.getdata(scriptVO.getTestSetId());
+		TestSet testSetObj = testSetRepository.findByTestRunId(scriptVO.getTestSetId());
 
 		Integer maxSeqNum = copyTestrunDao.findMaxSeqNumOfTestRun(scriptVO.getTestSetId());
 

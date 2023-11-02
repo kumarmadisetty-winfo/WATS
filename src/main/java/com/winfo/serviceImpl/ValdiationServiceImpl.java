@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,22 +75,30 @@ public class ValdiationServiceImpl implements ValidationService {
 			Optional<List<UserSchedulerJob>> listOfTestRuns = userSchedulerJobRepository.findByJobId(jobId);
 			if (listOfTestRuns.isPresent()) {
 				List<ResponseEntity<ResponseDto>> result=new ArrayList<>();
+				AtomicReference<Exception> exceptionReference = new AtomicReference<>(null);
 				listOfTestRuns.get().parallelStream().filter(Objects::nonNull).forEach((testRun) -> {
+					if (exceptionReference.get() != null) {
+				        return;
+				    }
 					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
 					if(testSet!=null) {
 						try {
 							result.add(validateTestRun(testSet.getTestRunId(), true));
 						} catch (Exception e) {
 							logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
-							throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-									Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage());
+							exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+									Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()));
 						}
 					}else {
 						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID +" - "+testRun.getComments());
-						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-								Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID+" - "+testRun.getComments());
+						exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+								Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID+" - "+testRun.getComments()));
 					}
 				});
+				Exception exception = exceptionReference.get();
+				if (exception != null) {
+				    throw exception;
+				}
 				Map<Boolean, List<ResponseEntity<ResponseDto>>>  partitionedMap = result.parallelStream()
 				        .collect(Collectors.partitioningBy(responseEntity -> responseEntity.getStatusCode().value() == Constants.SUCCESS_STATUS));
 				result.removeAll(partitionedMap.get(true));

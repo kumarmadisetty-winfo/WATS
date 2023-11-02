@@ -11,6 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.winfo.model.ExecuteStatus;
@@ -18,6 +19,7 @@ import com.winfo.model.ScriptMaster;
 import com.winfo.model.ScriptMetaData;
 import com.winfo.model.TestSet;
 import com.winfo.model.TestSetLine;
+import com.winfo.repository.TestSetLinesRepository;
 
 @SuppressWarnings({ "deprecation", "unchecked" })
 @Repository
@@ -27,10 +29,9 @@ public class CopyTestRunDao {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
-	public TestSet getdata(int testScriptNo) {
-		return entityManager.find(TestSet.class, testScriptNo);
-	}
+	
+	@Autowired
+	private TestSetLinesRepository testSetLinesRepository;
 
 	public TestSet saveTestrun(TestSet testSetObj) {
 		entityManager.persist(testSetObj);
@@ -163,7 +164,7 @@ public class CopyTestRunDao {
 
 	public TestSetLine getLineDtlByTestSetId(Integer testSetLineId) {
 		logger.info("TestSet Line ID  " + testSetLineId);
-		return entityManager.find(TestSetLine.class, testSetLineId);
+		return testSetLinesRepository.findByTestRunScriptId(testSetLineId);
 	}
 	
 	public String findProductVersionByTestSetId(Integer testSetId) {

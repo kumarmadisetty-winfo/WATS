@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.winfo.model.TestSetLine;
+import com.winfo.repository.TestSetLinesRepository;
 
 @Service
 public class ScriptDeletionService {
@@ -21,6 +22,9 @@ public class ScriptDeletionService {
 	@Autowired
 	private EntityManager em;
 
+	@Autowired
+	TestSetLinesRepository testSetLinesRepository;
+	
 	@Autowired
 	private PlatformTransactionManager transactionManager;
 
@@ -31,7 +35,7 @@ public class ScriptDeletionService {
 		lock.writeLock().lock();
 		try {
 			TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-			em.remove(em.find(TestSetLine.class, integer));
+			testSetLinesRepository.findByTestRunScriptId(integer);
 			transactionManager.commit(status);
 		} finally {
 			lock.writeLock().unlock();

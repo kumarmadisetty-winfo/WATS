@@ -123,8 +123,7 @@ public class DataBaseEntryDao {
 	private ExecutionHistoryRepository executionHistoryRepository;
 	
 	public TestSet getTestSetObjByTestSetId(Integer testSetId) {
-		Session session = em.unwrap(Session.class);
-		return session.find(TestSet.class, testSetId);
+		return testSetRepository.findByTestRunId(testSetId);
 	}
 	
 	public void updateStartAndEndTimeForTestSetTable(String testSetId, Date startTime, Date endTime) {
@@ -142,8 +141,7 @@ public class DataBaseEntryDao {
 	}
 
 	public TestSetLine getScriptDataByLineID(int lineId) {
-		Session session = em.unwrap(Session.class);
-		return session.find(TestSetLine.class, lineId);
+		return testSetLinesRepository.findByTestRunScriptId(lineId);
 	}
 
 	public LookUpCodeVO getLookupCode(String lookUpName, String lookupCode) {
@@ -216,7 +214,7 @@ public class DataBaseEntryDao {
 
 	public void updatePassedScriptLineStatus(String testScriptParamId, String status) {
 		try {
-			TestSetScriptParam testSetScriptParam = em.find(TestSetScriptParam.class, Integer.parseInt(testScriptParamId));
+			TestSetScriptParam testSetScriptParam = testSetScriptParamRepository.findByTestRunScriptParamId(Integer.parseInt(testScriptParamId));
 			testSetScriptParam.setUpdateDate(new Date());
 			testSetScriptParam.setLineExecutionStatus(status);
 			em.merge(testSetScriptParam);
@@ -262,7 +260,7 @@ public class DataBaseEntryDao {
 
 	public void updateInProgressScriptStatus(String testSetLineId) {
 		try {
-			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
+			TestSetLine testLines = testSetLinesRepository.findByTestRunScriptId(Integer.parseInt(testSetLineId));
 			if (testLines != null) {
 				testLines.setStatus(IN_PROGRESS.toUpperCase());
 				em.merge(testLines);
@@ -339,7 +337,7 @@ public class DataBaseEntryDao {
 		String sql = "from TestSetLine where testRun=:testSet";
 		Integer testRunId2 = Integer.parseInt(testRunId);
 		Query query = em.createQuery(sql);
-		query.setParameter("testSet", em.find(TestSet.class, testRunId2));
+		query.setParameter("testSet", testSetRepository.findByTestRunId(testRunId2));
 		List<TestSetLine> testSetLinesList = query.getResultList();
 		for (TestSetLine test_set_line : testSetLinesList) {
 			Map<String, TestSetScriptParam> map2 = getTestScriptMap(test_set_line);
@@ -363,7 +361,7 @@ public class DataBaseEntryDao {
 	}
 
 	public TestSetLine getTestSetLine(String testSetLineId) {
-		return em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
+		return testSetLinesRepository.findByTestRunScriptId(Integer.parseInt(testSetLineId));
 	}
 
 	public void getDependentScriptNumbers(Map<String, List<ScriptDetailsDto>> dependentScriptMap,
@@ -459,13 +457,13 @@ public class DataBaseEntryDao {
 	}
 
 	public String getPackage(String args) {
-		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(args));
+		TestSet testSet = testSetRepository.findByTestRunId(Integer.parseInt(args));
 		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
 		return project.getWatsPackage();
 	}
 
 	public Customer getCustomer(String args) {
-		TestSet testSet = em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(args));
+		TestSet testSet = testSetRepository.findByTestRunId(Integer.parseInt(args));
 		Project project = em.unwrap(Session.class).find(Project.class, testSet.getProjectId());
 		return em.unwrap(Session.class).find(Customer.class, project.getCustomerId());
 	}
@@ -1035,7 +1033,7 @@ public class DataBaseEntryDao {
 
 	public void updateInProgressScriptLineStatus(String testScriptParamId, String status) {
 		try {
-			TestSetScriptParam scriptParam = em.find(TestSetScriptParam.class, Integer.parseInt(testScriptParamId));
+			TestSetScriptParam scriptParam = testSetScriptParamRepository.findByTestRunScriptParamId(Integer.parseInt(testScriptParamId));
 			if (scriptParam != null) {
 				scriptParam.setLineExecutionStatus(status);
 				em.merge(scriptParam);
@@ -1047,7 +1045,7 @@ public class DataBaseEntryDao {
 
 	public void updateInProgressScriptStatus(String testSetLineId, Date startDate) {
 		try {
-			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
+			TestSetLine testLines = testSetLinesRepository.findByTestRunScriptId(Integer.parseInt(testSetLineId));
 
 			if (testLines != null) {
 				testLines.setStatus(IN_PROGRESS.toUpperCase());
@@ -1078,7 +1076,7 @@ public class DataBaseEntryDao {
 
 	public void updateStatusOfScript(String testSetLineId, String status) {
 		try {
-			TestSetLine testLines = em.find(TestSetLine.class, Integer.parseInt(testSetLineId));
+			TestSetLine testLines = testSetLinesRepository.findByTestRunScriptId(Integer.parseInt(testSetLineId));
 			if (testLines != null) {
 				testLines.setStatus(status);
 				em.merge(testLines);
@@ -1090,7 +1088,7 @@ public class DataBaseEntryDao {
 	}
 
 	public String getTrMode(String testSetId) throws SQLException {
-		TestSet testSet = em.find(TestSet.class, Integer.parseInt(testSetId));
+		TestSet testSet = testSetRepository.findByTestRunId(Integer.parseInt(testSetId));
 		if (testSet == null) {
 			throw new SQLException();
 		}
@@ -1540,7 +1538,7 @@ public class DataBaseEntryDao {
 	}
 
 	public TestSet getTestRunDetails(String testSetId) {
-		return em.unwrap(Session.class).find(TestSet.class, Integer.parseInt(testSetId));
+		return testSetRepository.findByTestRunId(Integer.parseInt(testSetId));
 	}
 
 

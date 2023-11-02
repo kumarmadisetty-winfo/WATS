@@ -196,7 +196,7 @@ public class WatsPluginDao {
 	}
 
 	public TestSet getTestrunData(int testSetId) {
-		return entityManager.find(TestSet.class, testSetId);
+		return testSetRepository.findByTestRunId(testSetId);
 	}
 
 	public int getTestSetId(String testsetName) {
