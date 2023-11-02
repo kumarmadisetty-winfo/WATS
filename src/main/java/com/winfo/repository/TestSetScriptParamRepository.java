@@ -62,4 +62,6 @@ public interface TestSetScriptParamRepository extends JpaRepository<TestSetScrip
 	@Transactional
 	@Query("delete from TestSetScriptParam where testSetLine.testRunScriptId = :testSetLineId")
 	Integer deleteByTestSetLineId(Integer testSetLineId);
+	
+	TestSetScriptParam findByTestRunScriptParamId(Integer testRunScriptParamId);
 }
