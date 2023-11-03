@@ -402,7 +402,6 @@ public class TestRunMigrationGetService {
 			executeStatusObj.setExecuteStatusPK(executeStatusPK);
 			executeStatusObj.setExecutionDate(new Date());
 			executeStatusObj.setFlag('I');
-			executeStatusObj.setTestRunName(testrundata.getTestRunName());
 			copyTestrunDao.updateExecuteStatusDtls(executeStatusObj);
 			if(count==1)
 			{

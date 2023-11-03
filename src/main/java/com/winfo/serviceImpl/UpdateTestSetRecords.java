@@ -66,7 +66,7 @@ public class UpdateTestSetRecords {
 			 TestSetExecutionStatus testSetExecutionStatus) {
 		try {
 			testSetRepo.updateTestRunExecution(executedBy, testSetId, new Date());
-			executeStatusRepo.updateTestRunExecutionStatus(executedBy, testSetName, testSetId);
+			executeStatusRepo.updateTestRunExecutionStatus(executedBy, testSetId);
 			testSetLinesRepository.updateStatusStartTimeEndTimeTetSetLines(testSetId);
 			testSetScriptParamRepository.updateLineExecutiStatusAndLineErrorMsg(testSetId);
 			testSetLinesRepository.updateTestRunScriptEnable(testSetId);
