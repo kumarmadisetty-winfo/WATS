@@ -250,7 +250,6 @@ public class CopyTestRunService {
 		executeStatusObj.setExecuteStatusPK(executeStatusPK);
 		executeStatusObj.setExecutionDate(new Date());
 		executeStatusObj.setFlag('I');
-		executeStatusObj.setTestRunName(copyTestrunvo.getNewtestrunname());
 		copyTestrunDao.updateExecuteStatusDtls(executeStatusObj);
 		logger.info("New test run id " + newtestrun.getTestRunId());
 		return newtestrun.getTestRunId();
