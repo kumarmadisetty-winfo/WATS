@@ -19,17 +19,11 @@ public class ExecuteStatus {
 	@EmbeddedId
 	private ExecuteStatusPK executeStatusPK;
 
-	@Column(name = "TEST_RUN_ID")
-	private String testSetId;
-
 	@Column(name = "STATUS_FLAG")
 	private Character flag;
 
 	@Column(name = "EXECUTION_DATE")
 	private Date executionDate;
-
-	@Column(name = "EXECUTE_STATUS")
-	private Integer executionStatus;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;

@@ -188,7 +188,7 @@ public class CopyTestRunDao {
 	
 	public void updateExecuteStatusDtls(ExecuteStatus executeStatus) {
 		entityManager.persist(executeStatus);
-		logger.info("Execute Status Test Run Name " + executeStatus.getTestSetId());
+		logger.info("Execute Status Test Run Name " + executeStatus.getExecuteStatusPK().getTestSetId());
 	}
 
 	public String getMeaningUsingValidationName(String validationName) {
