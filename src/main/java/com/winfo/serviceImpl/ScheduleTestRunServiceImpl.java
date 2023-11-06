@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -15,10 +18,12 @@ import javax.validation.ConstraintViolationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -44,7 +49,7 @@ import com.winfo.vo.ResponseDto;
 import com.winfo.vo.ScheduleJobVO;
 import com.winfo.vo.ScheduleSubJobVO;
 import com.winfo.vo.ScheduleTestRunVO;
-
+import javax.validation.ConstraintValidatorContext;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -52,6 +57,9 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 
 	public static final Logger logger = Logger.getLogger(ScheduleTestRunServiceImpl.class);
 
+	@Autowired
+	ThreadPoolTaskExecutor customTaskExecutor;
+	
 	@Value("${apex.webservice.basePath}")
 	private String basePath;
 
@@ -104,8 +112,12 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		} catch (WatsEBSException e) {
 			logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
 					+ scheduleJobVO.getSchedulerName());
+		        String errorMessage = e.getMessage();
+		        if (e.getMessage() != null && e.getMessage().contains(": ")) {
+		        	errorMessage = e.getMessage().substring(e.getMessage().lastIndexOf(": ") + 2);
+		        }
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR,
-					scheduleJobVO.getSchedulerName() + " is not created successfully - " + e.getMessage());
+					scheduleJobVO.getSchedulerName() + " is not created successfully - " + errorMessage);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.ERROR, e.getMessage());
@@ -152,69 +164,96 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		String jobName = scheduler.getJobName().replaceAll("\\s", "").toUpperCase();
 		int jobId = scheduler.getJobId();
 		logger.info(String.format("Schedule job name:" + jobName + " Schedule job id:" + jobId));
+		List<CompletableFuture<Void>> futures = listOfTestRunInJob.stream()
+				.map(testRunVO -> CompletableFuture.supplyAsync(() -> testRunVO))
+				.map(future -> future.thenAcceptAsync(testRunVO -> {
+					if (testRunVO.getTestRunName() != null && !"".equals(testRunVO.getTestRunName())) {
+						TestSet testRun = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+						logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s",
+								testRun.getTestRunId(), testRunVO.getTestRunName(), scheduleJobVO.getProjectId()));
+						CopytestrunVo copyTestrunvo = new CopytestrunVo();
+						copyTestrunvo.setConfiguration(scheduleJobVO.getConfigurationId());
+						copyTestrunvo.setCreatedBy(scheduleJobVO.getSchedulerEmail());
+						copyTestrunvo.setCreationDate(new Date());
+						copyTestrunvo.setIncrementValue(testRunVO.getAutoIncrement());
+						copyTestrunvo.setNewtestrunname(testRunVO.getTestRunName());
+						copyTestrunvo.setProject(scheduleJobVO.getProjectId());
+						copyTestrunvo.setRequestType("copyTestRun");
+						copyTestrunvo.setTestScriptNo(testRun.getTestRunId());
+						try {
+							testRunVO.setTemplateTestRun(testSetRepository
+									.findByTestRunId(copyTestRunService.copyTestrun(copyTestrunvo)).getTestRunName());
+						} catch (JsonMappingException e) {
+							logger.error(e.getMessage());
+							new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+						} catch (JsonProcessingException e) {
+							logger.error(e.getMessage());
+							new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+						} catch (InterruptedException e) {
+							logger.error(e.getMessage());
+							new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+						}
+					}
+					TestSet testRun = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
+					testRun.setCopyIncreamentFlag(testRunVO.getAutoIncrement());
+					testSetRepository.save(testRun);
+					String newSubSchedularName = Constants.PREFIX_SCHEDULE_NAME + jobName + Constants.ADDEDNUM
+							+ count.incrementAndGet();
+					ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
+					scheduleSubJobVO.setEmail(testRunVO.getNotification());
+					scheduleSubJobVO.setJobId(jobId);
+					scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
+					scheduleSubJobVO.setSubJobName(newSubSchedularName);
+					scheduleSubJobVO.setTestRunName(testRun.getTestRunName());
+					scheduleSubJobVO.setTestSetId(testRun.getTestRunId());
+					scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
+					scheduleSubJobVO.setType(testRunVO.getType());
+					scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
+					if (scheduleJobVO.isTemplate()) {
+						testRun.setTemplate(String.valueOf(scheduleJobVO.isTemplate()));
+						testSetRepository.save(testRun);
+						scheduleSubJobVO.setType(Constants.TEMPLATE);
+					}
+					logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s",
+							testRun.getTestRunId(), testRun.getTestRunName(), scheduleJobVO.getProjectId()));
+					logger.info("WebClient URL:" + (basePath + "/WATSservice/scheduleTestRun"));
+					try {
+						WebClient webClient = WebClient.create(basePath + "/WATSservice/scheduleTestRun");
+						Mono<String> response = webClient.post().syncBody(scheduleSubJobVO).retrieve()
+								.bodyToMono(String.class);
+						response.block();
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+								"Error occurred from APEX web service of create scheduled job", e);
+					}
+				}, customTaskExecutor)).collect(Collectors.toList());
+		CompletableFuture<Void> allOfFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 
-		listOfTestRunInJob.parallelStream().filter(Objects::nonNull).forEach(testRunVO -> {
-			if (testRunVO.getTestRunName() != null && !"".equals(testRunVO.getTestRunName())) {
-				TestSet testRun = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
-				logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s", testRun.getTestRunId(),
-						testRunVO.getTestRunName(), scheduleJobVO.getProjectId()));
-				CopytestrunVo copyTestrunvo = new CopytestrunVo();
-				copyTestrunvo.setConfiguration(scheduleJobVO.getConfigurationId());
-				copyTestrunvo.setCreatedBy(scheduleJobVO.getSchedulerEmail());
-				copyTestrunvo.setCreationDate(new Date());
-				copyTestrunvo.setIncrementValue(testRunVO.getAutoIncrement());
-				copyTestrunvo.setNewtestrunname(testRunVO.getTestRunName());
-				copyTestrunvo.setProject(scheduleJobVO.getProjectId());
-				copyTestrunvo.setRequestType("copyTestRun");
-				copyTestrunvo.setTestScriptNo(testRun.getTestRunId());
-				try {
-					testRunVO.setTemplateTestRun(testSetRepository
-							.findByTestRunId(copyTestRunService.copyTestrun(copyTestrunvo)).getTestRunName());
-				} catch (JsonMappingException e) {
-					logger.error(e.getMessage());
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-				} catch (JsonProcessingException e) {
-					logger.error(e.getMessage());
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-				} catch (InterruptedException e) {
-					logger.error(e.getMessage());
-					new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+		List<String> exceptionMessages = new ArrayList<>();
+		allOfFutures.exceptionally(ex -> {
+			futures.forEach(future -> {
+				if (future.isCompletedExceptionally()) {
+					future.whenComplete((result, throwable) -> {
+						if (throwable != null) {
+							exceptionMessages.add(throwable.getMessage());
+						}
+					});
 				}
-			}
-
-			TestSet testRun = testSetRepository.findByTestRunName(testRunVO.getTemplateTestRun());
-			testRun.setCopyIncreamentFlag(testRunVO.getAutoIncrement());
-			testSetRepository.save(testRun);
-			String newSubSchedularName = Constants.PREFIX_SCHEDULE_NAME + jobName + Constants.ADDEDNUM
-					+ count.incrementAndGet();
-			ScheduleSubJobVO scheduleSubJobVO = new ScheduleSubJobVO();
-			scheduleSubJobVO.setEmail(testRunVO.getNotification());
-			scheduleSubJobVO.setJobId(jobId);
-			scheduleSubJobVO.setStartDate(testRunVO.getStartDate());
-			scheduleSubJobVO.setSubJobName(newSubSchedularName);
-			scheduleSubJobVO.setTestRunName(testRun.getTestRunName());
-			scheduleSubJobVO.setTestSetId(testRun.getTestRunId());
-			scheduleSubJobVO.setUserName(scheduleJobVO.getSchedulerEmail());
-			scheduleSubJobVO.setType(testRunVO.getType());
-			scheduleSubJobVO.setSequenceNumber(testRunVO.getSequenceNumber());
-			if(scheduleJobVO.isTemplate()) {
-				testRun.setTemplate(String.valueOf(scheduleJobVO.isTemplate()));
-				testSetRepository.save(testRun);
-				scheduleSubJobVO.setType(Constants.TEMPLATE);
-			}
-			logger.info(String.format("TestRun Id : %s, TestRun Name : %s, Project Id : %s", testRun.getTestRunId(),
-					testRun.getTestRunName(), scheduleJobVO.getProjectId()));
-			logger.info("WebClient URL:" + (basePath + "/WATSservice/scheduleTestRun"));
-			try {
-				WebClient webClient = WebClient.create(basePath + "/WATSservice/scheduleTestRun");
-				Mono<String> response = webClient.post().syncBody(scheduleSubJobVO).retrieve().bodyToMono(String.class);
-				response.block();
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-						"Error occurred from APEX web service of create scheduled job", e);
-			}
+			});
+			return null;
 		});
+		try {
+			allOfFutures.get();
+		} catch (Exception e) {
+			logger.error("Error waiting for CompletableFuture: " + e.getMessage());
+		}
+		if (!exceptionMessages.isEmpty()) {
+			String jsonErrorMessage = exceptionMessages.stream().map(message -> message)
+					.collect(Collectors.joining(","));
+			String jsonResponse = String.format(jsonErrorMessage);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), jsonResponse);
+		}
 		return jobId;
 	}
 
@@ -244,39 +283,61 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 		return response;
 	}
 
-	private void validateScheduleTestRuns(String scheduleName, List<ScheduleTestRunVO> listOfTestRunInJob) throws Exception {
+	private void validateScheduleTestRuns(String scheduleName, List<ScheduleTestRunVO> listOfTestRunInJob)
+			throws Exception {
 		List<ResponseEntity<ResponseDto>> result = new ArrayList<>();
-		List<String> uniqueTemplateTestRuns=listOfTestRunInJob.parallelStream().map(ScheduleTestRunVO::getTemplateTestRun)
-                .distinct().collect(Collectors.toList());
-		AtomicReference<Exception> exceptionReference = new AtomicReference<>(null);
-		uniqueTemplateTestRuns.parallelStream().filter(Objects::nonNull).distinct().forEach(templateTestRun -> {
-		    if (exceptionReference.get() != null) {
-		        return;
-		    }
-		    TestSet testSet = testSetRepository.findByTestRunName(templateTestRun);
-		    if (testSet != null) {
-		        try {
-		            result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
-		        } catch (ConstraintViolationException e) {
-		            logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
-		                    + testSet.getTestRunId() + " - " + testSet.getTestRunName());
-		            exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-		                    Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE + " of " + testSet.getTestRunName()));
-		        } catch (Exception e) {
-		            logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
-		                    + testSet.getTestRunId() + " - " + testSet.getTestRunName());
-		            exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage()));
-		        }
-		    } else {
-		        logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
-		                + templateTestRun);
-		        exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), Constants.INTERNAL_SERVER_ERROR
-		                + " - " + Constants.INVALID_TEST_SET_ID + " - " + templateTestRun));
-		    }
+		List<String> uniqueTemplateTestRuns = listOfTestRunInJob.parallelStream()
+				.map(ScheduleTestRunVO::getTemplateTestRun).distinct().collect(Collectors.toList());
+		List<CompletableFuture<Void>> futures = uniqueTemplateTestRuns.stream()
+				.map(templateTestRun -> CompletableFuture.supplyAsync(() -> templateTestRun))
+				.map(future -> future.thenAcceptAsync(templateTestRun -> {
+					TestSet testSet = testSetRepository.findByTestRunName(templateTestRun);
+					if (testSet != null) {
+						try {
+							result.add(validationService.validateTestRun(testSet.getTestRunId(), true));
+						} catch (ConstraintViolationException e) {
+							logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+									+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
+							throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+									Constants.INVALID_CREDENTIALS_CONFIG_MESSAGE + " of " + testSet.getTestRunName());
+						} catch (Exception e) {
+							logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage() + " - "
+									+ testSet.getTestRunId() + " - " + testSet.getTestRunName());
+							throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+						}
+					} else {
+						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
+								+ templateTestRun);
+						throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+								Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID + " - "
+										+ templateTestRun);
+					}
+				}, customTaskExecutor)).collect(Collectors.toList());
+		CompletableFuture<Void> allOfFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+
+		List<String> exceptionMessages = new ArrayList<>();
+		allOfFutures.exceptionally(ex -> {
+			futures.forEach(future -> {
+				if (future.isCompletedExceptionally()) {
+					future.whenComplete((response, throwable) -> {
+						if (throwable != null) {
+							exceptionMessages.add(throwable.getMessage());
+						}
+					});
+				}
+			});
+			return null;
 		});
-		Exception exception = exceptionReference.get();
-		if (exception != null) {
-		    throw exception;
+		try {
+			allOfFutures.get();
+		} catch (Exception e) {
+			logger.error("Error waiting for CompletableFuture: " + e.getMessage());
+		}
+		if (!exceptionMessages.isEmpty()) {
+			String jsonErrorMessage = exceptionMessages.stream().map(message -> message)
+					.collect(Collectors.joining(","));
+			String jsonResponse = String.format(jsonErrorMessage);
+			throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), jsonResponse);
 		}
 
 		Map<Boolean, List<ResponseEntity<ResponseDto>>> partitionedMap = result.parallelStream().collect(Collectors

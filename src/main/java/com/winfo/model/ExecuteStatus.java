@@ -25,9 +25,6 @@ public class ExecuteStatus {
 	@Column(name = "EXECUTION_DATE")
 	private Date executionDate;
 
-	@Column(name = "EXECUTE_STATUS")
-	private Integer executionStatus;
-
 	@Column(name = "CREATED_BY")
 	private String createdBy;
 

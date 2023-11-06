@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -45,6 +47,9 @@ public class ValdiationServiceImpl implements ValidationService {
 	public static final Logger logger = Logger.getLogger(ValdiationServiceImpl.class);
 
 	@Autowired
+	ThreadPoolTaskExecutor customTaskExecutor;
+	
+	@Autowired
 	TestSetRepository testSetRepository;
 
 	@Autowired
@@ -75,30 +80,51 @@ public class ValdiationServiceImpl implements ValidationService {
 			Optional<List<UserSchedulerJob>> listOfTestRuns = userSchedulerJobRepository.findByJobId(jobId);
 			if (listOfTestRuns.isPresent()) {
 				List<ResponseEntity<ResponseDto>> result=new ArrayList<>();
-				AtomicReference<Exception> exceptionReference = new AtomicReference<>(null);
-				listOfTestRuns.get().parallelStream().filter(Objects::nonNull).forEach((testRun) -> {
-					if (exceptionReference.get() != null) {
-				        return;
-				    }
-					TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
-					if(testSet!=null) {
-						try {
-							result.add(validateTestRun(testSet.getTestRunId(), true));
-						} catch (Exception e) {
-							logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
-							exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-									Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()));
+				List<CompletableFuture<Void>> futures = listOfTestRuns.get().stream()
+						.map(testRun -> CompletableFuture.supplyAsync(() -> testRun))
+						.map(future -> future.thenAcceptAsync(testRun -> {
+							TestSet testSet = testSetRepository.findByTestRunName(testRun.getComments());
+							if(testSet!=null) {
+								try {
+									result.add(validateTestRun(testSet.getTestRunId(), true));
+								} catch (Exception e) {
+									logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage()+" - "+testSet.getTestRunId()+" - "+testSet.getTestRunName());
+									throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+											Constants.INTERNAL_SERVER_ERROR + " - " + e.getMessage());
+								}
+							}else {
+								logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID +" - "+testRun.getComments());
+								throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+										Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID+" - "+testRun.getComments());
+							}
+						}, customTaskExecutor)).collect(Collectors.toList());
+				CompletableFuture<Void> allOfFutures = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+
+				List<String> exceptionMessages = new ArrayList<>();
+				allOfFutures.exceptionally(ex -> {
+					futures.forEach(future -> {
+						if (future.isCompletedExceptionally()) {
+							future.whenComplete((response, throwable) -> {
+								if (throwable != null) {
+									exceptionMessages.add(throwable.getMessage());
+								}
+							});
 						}
-					}else {
-						logger.error(Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID +" - "+testRun.getComments());
-						exceptionReference.set(new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(),
-								Constants.INTERNAL_SERVER_ERROR + " - " + Constants.INVALID_TEST_SET_ID+" - "+testRun.getComments()));
-					}
+					});
+					return null;
 				});
-				Exception exception = exceptionReference.get();
-				if (exception != null) {
-				    throw exception;
+				try {
+					allOfFutures.get();
+				} catch (Exception e) {
+					logger.error("Error waiting for CompletableFuture: " + e.getMessage());
 				}
+				if (!exceptionMessages.isEmpty()) {
+					String jsonErrorMessage = exceptionMessages.stream().map(message -> message)
+							.collect(Collectors.joining(","));
+					String jsonResponse = String.format(jsonErrorMessage);
+					throw new WatsEBSException(HttpStatus.INTERNAL_SERVER_ERROR.value(), jsonResponse);
+				}
+				
 				Map<Boolean, List<ResponseEntity<ResponseDto>>>  partitionedMap = result.parallelStream()
 				        .collect(Collectors.partitioningBy(responseEntity -> responseEntity.getStatusCode().value() == Constants.SUCCESS_STATUS));
 				result.removeAll(partitionedMap.get(true));
