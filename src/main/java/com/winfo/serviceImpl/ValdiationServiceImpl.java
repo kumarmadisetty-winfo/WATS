@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -46,8 +47,12 @@ public class ValdiationServiceImpl implements ValidationService {
 
 	public static final Logger logger = Logger.getLogger(ValdiationServiceImpl.class);
 
+	private final ThreadPoolTaskExecutor customTaskExecutor;
+
 	@Autowired
-	ThreadPoolTaskExecutor customTaskExecutor;
+	public ValdiationServiceImpl(@Qualifier("customTaskExecutor") ThreadPoolTaskExecutor customTaskExecutor) {
+	        this.customTaskExecutor = customTaskExecutor;
+	}
 	
 	@Autowired
 	TestSetRepository testSetRepository;

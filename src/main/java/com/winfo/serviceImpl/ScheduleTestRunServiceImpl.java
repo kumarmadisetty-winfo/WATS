@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +58,12 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 
 	public static final Logger logger = Logger.getLogger(ScheduleTestRunServiceImpl.class);
 
+	private final ThreadPoolTaskExecutor customTaskExecutor;
+
 	@Autowired
-	ThreadPoolTaskExecutor customTaskExecutor;
+	public ScheduleTestRunServiceImpl(@Qualifier("customTaskExecutor") ThreadPoolTaskExecutor customTaskExecutor) {
+	        this.customTaskExecutor = customTaskExecutor;
+	}
 	
 	@Value("${apex.webservice.basePath}")
 	private String basePath;
