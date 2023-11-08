@@ -381,8 +381,8 @@ public class ValdiationServiceImpl implements ValidationService {
 	}
 
 	private void regularExpressionValidation(TestSetLine testSetLine, TestSetScriptParam testSetScriptParam) {
-		String targetCode = lookUpCodeRepository.getTargetCodeFromLookUpNameAndLookUpCode(testSetScriptParam.getValidationName(),
-				testSetScriptParam.getValidationType());
+		String targetCode = lookUpCodeRepository.getTargetCodeFromLookUpNameAndLookUpCode(testSetScriptParam.getValidationType()
+				,testSetScriptParam.getValidationName());
 		if (!StringUtils.isValidDate(testSetScriptParam.getInputValue(), targetCode)) {
 			logger.warn(Constants.INVALID_INPUT_DATA+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 			updateLineAndParamValidationStatus(testSetLine, testSetScriptParam, Constants.INVALID_INPUT_DATA);
