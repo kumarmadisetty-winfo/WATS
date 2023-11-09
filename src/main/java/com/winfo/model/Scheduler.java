@@ -52,5 +52,8 @@ public class Scheduler {
 	
 	@Column(name="STATUS")
 	private String status;
+	
+	@Column(name="TIMEZONE")
+	private String timeZone;
 
 }

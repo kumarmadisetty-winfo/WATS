@@ -109,6 +109,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 				scheduler.setEmail(scheduleJobVO.getSchedulerEmail());
 				scheduler.setJobName(scheduleJobVO.getSchedulerName().replaceAll("\\s+", " "));
 				scheduler.setStatus(Constants.YET_TO_START);
+				scheduler.setTimeZone(scheduleJobVO.getTimeZone());
 				scheduler = schedulerRepository.save(scheduler);
 			}
 			int jobId = createSchedule(scheduleJobVO, scheduleJobVO.getTestRuns(), count, scheduler, false);
@@ -146,6 +147,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 
 			editTestRunInSchedule(scheduleJobVO, listOfSubJob);
 
+			scheduler.setTimeZone(scheduleJobVO.getTimeZone());
 			scheduler.setStatus(Constants.YET_TO_START);
 			scheduler.setUpdatedBy(scheduleJobVO.getSchedulerEmail());
 			scheduler.setEmail(scheduleJobVO.getSchedulerEmail());

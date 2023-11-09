@@ -21,6 +21,8 @@ public class ScheduleJobVO {
 	private int jobId;
 	
 	private String status;
+
+	private String timeZone;
 	
 	private boolean template;
 }
