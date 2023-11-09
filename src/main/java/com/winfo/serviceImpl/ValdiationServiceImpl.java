@@ -361,7 +361,7 @@ public class ValdiationServiceImpl implements ValidationService {
 				if (itemsObject instanceof List) {
 					List<Map<String, Object>> itemsList = (List<Map<String, Object>>) itemsObject;
 					if (itemsList.isEmpty()
-							|| !itemsList.get(0).containsValue(testSetScriptParam.getInputValue().toUpperCase())) {
+							|| !itemsList.get(0).containsValue(testSetScriptParam.getInputValue())) {
 						logger.warn(Constants.INVALID_INPUT_DATA+" - "+ testSetScriptParam.getTestRunScriptParamId()+" - "+testSetScriptParam.getInputParameter());
 						updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
 								Constants.INVALID_INPUT_DATA);
