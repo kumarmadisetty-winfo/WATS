@@ -21,6 +21,6 @@ public class BugDetails {
 	private List<Integer> script_id = new ArrayList<Integer>();
 	
 	@JsonProperty("jobId")
-	private Integer jobId;
+	private int jobId;
 
 }
