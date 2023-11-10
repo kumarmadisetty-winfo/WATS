@@ -193,4 +193,5 @@ public class Constants {
 	public static final String SCHEDULE_TEST_RUN_ERROR_RESPONSE_STRING=SINGLE_QUOTE+QUMA+SINGLE_QUOTE+ERROR_MESSAGE+SINGLE_QUOTE+COLON+SINGLE_QUOTE;
 	public static final String ORACLE_FUSION="Oracle Fusion";
 	public static final String TEMPLATE="Template";	
+	public static final String LINE_EXECUTION_STATUS="New";	
 	}

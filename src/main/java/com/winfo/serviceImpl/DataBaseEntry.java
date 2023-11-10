@@ -699,6 +699,7 @@ public class DataBaseEntry {
 					testSetScriptParam.setCreationDate(updatedMetaData.getCreationDate());
 					testSetScriptParam.setScriptId(testSetLine.getScriptId());
 					testSetScriptParam.setTestSetLine(testSetLine);
+					testSetScriptParam.setLineExecutionStatus(Constants.LINE_EXECUTION_STATUS);
 					testSetScriptParamRepository.save(testSetScriptParam);
 				});
 			}
