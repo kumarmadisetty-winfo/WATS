@@ -280,7 +280,7 @@ public class ValdiationServiceImpl implements ValidationService {
 			//for checking if script step is mandatory or not
 			if ((Constants.MANDATORY.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory())
 					|| Constants.BOTH.equalsIgnoreCase(testSetScriptParam.getUniqueMandatory()))
-					&& ("".equals(testSetScriptParam.getInputValue()) || testSetScriptParam.getInputValue()!=null)) {
+					&& ("".equals(testSetScriptParam.getInputValue()) || testSetScriptParam.getInputValue()==null)) {
 				updateLineAndParamValidationStatus(testSetLine, testSetScriptParam,
 						Constants.INPUT_VALUE_MANDATORY);
 			}
