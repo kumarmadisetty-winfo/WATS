@@ -95,7 +95,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	@Transactional
 	public ResponseDto createNewScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
-			validateScheduleTestRuns(scheduleJobVO.getSchedulerName(), scheduleJobVO.getTestRuns());
+//			validateScheduleTestRuns(scheduleJobVO.getSchedulerName(), scheduleJobVO.getTestRuns());
 			AtomicInteger count = new AtomicInteger(0);
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			if (scheduler == null) {
@@ -133,7 +133,7 @@ public class ScheduleTestRunServiceImpl implements ScheduleTestRunService {
 	@Transactional
 	public ResponseDto editScheduledJob(ScheduleJobVO scheduleJobVO) {
 		try {
-			validateScheduleTestRuns(scheduleJobVO.getSchedulerName(), scheduleJobVO.getTestRuns());
+//			validateScheduleTestRuns(scheduleJobVO.getSchedulerName(), scheduleJobVO.getTestRuns());
 
 			Scheduler scheduler = schedulerRepository.findByJobName(scheduleJobVO.getSchedulerName());
 			logger.info(String
