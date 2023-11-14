@@ -25,6 +25,9 @@ public class KafkaConfig {
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
 
+	@Value("${spring.kafka.consumer.group-id}")
+	private String groupId;
+
 	@Bean
 	public Map<String, Object> producerConfigs() {
 		Map<String, Object> props = new HashMap<>();
@@ -51,7 +54,7 @@ public class KafkaConfig {
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "com.winfo.config.CustomDeserializer");
-		props.put(ConsumerConfig.GROUP_ID_CONFIG, "wats-group");
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
 		props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 		return props;
 	}
