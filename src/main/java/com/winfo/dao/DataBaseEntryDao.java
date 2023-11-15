@@ -1287,9 +1287,9 @@ public class DataBaseEntryDao {
 	@Transactional
 	public  Map<String, Integer> getPassAndFailCount(String testSetId) {
 		String passQry = "SELECT COUNT(1) FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID = " + testSetId
-				+ " AND UPPER(STATUS) = 'PASS'\r\n" + " AND ENABLED = 'Y'";
+				+ " AND UPPER(STATUS) = 'PASS'\r\n";
 		String failQry = "SELECT COUNT(1) FROM WIN_TA_TEST_SET_LINES WHERE TEST_SET_ID = " + testSetId
-				+ " AND UPPER(STATUS) = 'FAIL' AND ENABLED = 'Y'";
+				+ " AND UPPER(STATUS) = 'FAIL' ";
 
 		try {
 			Session session = em.unwrap(Session.class);
