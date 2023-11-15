@@ -19220,7 +19220,7 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
 			
-			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+			// renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
