@@ -4,6 +4,9 @@ import java.sql.Date;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -214,25 +217,33 @@ public class ScriptMaterVO {
 		            metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(),Constants.UNIQUE_MANDATORY));
 					//TODO- Get lookup code from meaning for validation type, datatype, unique mandatory.
 				});
-		if (role != null && role!="") {
+		if (StringUtils.isNotEmpty(role)&& StringUtils.isNotBlank(role)) {
 			role = dataBaseEntry.getLookUpCodeByMeaning(role, "ROLE");
 		}
-		if (subProcessArea != null && subProcessArea!="") {
-			subProcessArea = dataBaseEntry.getLookUpCodeByMeaning(subProcessArea, "SUB_PROCESS_AREA");
+		
+
+		if (StringUtils.isNotBlank(subProcessArea)&&StringUtils.isNotEmpty(subProcessArea)) {
+		  subProcessArea = dataBaseEntry.getLookUpCodeByMeaning(subProcessArea, "SUB_PROCESS_AREA");
 		}
-		if (processArea != null && processArea!="") {
+
+		
+		if (StringUtils.isNotBlank(processArea)&&  StringUtils.isNotEmpty(processArea)) {
 			processArea = dataBaseEntry.getLookUpCodeByMeaning(processArea, "PROCESS");
 		}
-		if (module != null && module!="") { 
+		if (StringUtils.isNotBlank(module)&&  StringUtils.isNotEmpty(module)) {
+		
 			module = dataBaseEntry.getLookUpCodeByMeaning(module, "MODULE");
 		}
-		if (targetApplication != null && targetApplication!="") {
+		if (StringUtils.isNotBlank(targetApplication)&&  StringUtils.isNotEmpty(targetApplication)) {
+
 			targetApplication = dataBaseEntry.getLookUpCodeByMeaning(targetApplication, "TARGET_APPLICATION");
 		}
-		if (productVersion != null && productVersion!="") {
+		if (StringUtils.isNotBlank(productVersion)&&  StringUtils.isNotEmpty(productVersion)) {
+
 			productVersion = dataBaseEntry.getLookUpCodeByMeaning(productVersion, "PRODUCT_VERSION");
 		}
-		if (attribute1 != null && attribute1!="") {
+		if (StringUtils.isNotBlank(attribute1)&&  StringUtils.isNotEmpty(attribute1)) {
+
 			attribute1 = dataBaseEntry.getScriptByScriptNumberAndProductVersion(attribute1, productVersion).getScriptId().toString();
 		}
 	}

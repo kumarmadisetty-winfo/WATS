@@ -295,7 +295,7 @@ public class SendMailServiceImpl {
 		            .append("</tr>\n");
 		    });
 
-		body = body + listOfTestRunsInTr + " \n"
+		body = body + listOfTestRunsInTr.toString() + " \n"
 				+ "</table>"
 				+ "<br><br>Thanks,<br><b>WinfoTest Automation</b></p>\n"
 				+ "</body></html>";

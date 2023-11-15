@@ -197,12 +197,12 @@ public class TemplateDownloadService {
 					? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get())
 					: null;
 			  String attribute1 = scriptMasterData.getAttribute1();
-		        System.out.println("attribute1: " + attribute1);
+		       
 		        
 		     
 		        ScriptMaster scriptMasterData1 =  dataBaseEntry.getScriptDetailsByScriptId(Integer.parseInt(attribute1));
 		        String scriptnum = scriptMasterData1.getScriptNumber();
-		        System.out.println("scriptnum: " + scriptnum);
+		       
 		        scriptMasterData.setAttribute1(scriptnum);
 			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns(userName, "PRODUCT_VERSION", "PROCESS",
 					"MODULE", "ROLE", "STATUS", "PRIORITY", "TYPE_OF_SCRIPT","CUSTOMER_ID");
@@ -300,7 +300,6 @@ public class TemplateDownloadService {
 					if (!row[i - 1].isEmpty() && scriptId.isPresent()) {
 			            Object result = null;
                        result = getValueByColumnName(scriptMasterData, key);
-				       System.out.println("getValueByColumnName"+result);
 						if ("PROCESS AREA".equalsIgnoreCase(row[i - 1]) || "MODULE".equalsIgnoreCase(row[i - 1])
 								|| "PRIORITY".equalsIgnoreCase(row[i - 1])) {
 							if ("PROCESS AREA".equalsIgnoreCase(row[i - 1])) {
@@ -311,7 +310,6 @@ public class TemplateDownloadService {
 						}
 						if("CUSTOMER ID".equalsIgnoreCase(row[i - 1])){
 							result = dataBaseEntry.getCustomerNameFromCustomerId(Integer.parseInt(result.toString()));
-							System.out.println("result="+result);
 						}
 						value = (result != null) ? result.toString() : "";
 					}
