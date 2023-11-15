@@ -2143,12 +2143,13 @@ public abstract class AbstractSeleniumKeywords {
 	}
 
 		public void renameDownloadedFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
-			CustomerProjectDto customerDetails) throws InterruptedException {
+		CustomerProjectDto customerDetails) throws InterruptedException {
 		// For getting the names of the downloaded files
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		jse.executeScript("window.open()");
 		ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
 		List<String> fileNames = new ArrayList<>();
+		List<String> pdfFilePaths = new ArrayList<>();
 
 		if (fetchConfigVO.getBROWSER().equalsIgnoreCase("chrome")) {
 			driver.switchTo().window(tabs.get(1)).get("chrome://downloads");
@@ -2186,9 +2187,19 @@ public abstract class AbstractSeleniumKeywords {
 			if (fileName != null) {
 				File oldFile = new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName);
 				StringBuffer newNameBuffer = new StringBuffer();
-				newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
-						.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
-						.append(customerDetails.getTestSetName()).append("_Passed");
+				newNameBuffer.append(fetchMetadataVO.getSeqNum())
+				.append("_")
+				.append(fetchMetadataVO.getLineNumber())
+				.append("_")
+				.append(fetchMetadataVO.getScenarioName())
+				.append("_")
+				.append(fetchMetadataVO.getScriptNumber())
+				.append("_")
+				.append(fileName.replace(".",""))
+				.append("_")
+				.append(customerDetails.getTestSetName())
+				.append("_Passed");
+				
 				String newName = newNameBuffer.toString();
 
 				boolean isExcel = fileName.toLowerCase().endsWith(".xls") || fileName.toLowerCase().endsWith(".xlsx");
@@ -2201,6 +2212,7 @@ public abstract class AbstractSeleniumKeywords {
 
 						// Create a PDF file path
 						String pdfFilePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf";
+						pdfFilePaths.add(pdfFilePath);
 
 						if (new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").exists())
 							new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf").delete();
@@ -2216,7 +2228,7 @@ public abstract class AbstractSeleniumKeywords {
 						logger.error("Error converting Excel to PDF using Aspose.Cells: " + e.getMessage());
 					}
 				}
-
+				
 				if (oldFile.exists()) {
 					if (oldFile.renameTo(new File(fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf"))) {
 						logger.info("File name changed successful");
@@ -2226,6 +2238,21 @@ public abstract class AbstractSeleniumKeywords {
 				}
 			}
 		}
+		StringBuffer newNameBuffer = new StringBuffer();
+		newNameBuffer.append(fetchMetadataVO.getSeqNum()).append("_").append(fetchMetadataVO.getScenarioName())
+				.append("_").append(fetchMetadataVO.getScriptNumber()).append("_")
+				.append(customerDetails.getTestSetName()).append("_Passed");
+		String newName = newNameBuffer.toString();
+		String combinedPdfFilePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + newName + ".pdf";
+		if (new File(combinedPdfFilePath).exists()){
+			new File(combinedPdfFilePath).delete();
+		}
+		try{
+			combinePDFs(pdfFilePaths, combinedPdfFilePath);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		// return pdfFilePaths;
 	}
 
 	public List<String> getListOfFileNamesPresentInObjectStore(String objectStorePdfPath) throws Exception {
