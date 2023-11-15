@@ -155,22 +155,7 @@ public class DynamicXpath extends AbstractSeleniumKeywords {
 			// }
 
 		} else if (fetchMetadataVO.getAction().equals("windowhandle")) {
-			try {
-				String parentWindowHandle = driver.getWindowHandle();
-				Set<String> windowHandles = driver.getWindowHandles();
-
-				for (String windowHandle : windowHandles) {
-					if (!windowHandle.equals(parentWindowHandle)) {
-						driver.switchTo().window(windowHandle);
-						break;
-					}
-				}
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				logger.error("Failed to exicute " + fetchMetadataVO.getScriptNumber() + " in Dynamic Xpath");
-				throw e;
-			}
-
+			throw new NullPointerException();
 		} else if (fetchMetadataVO.getAction().equals("switchParentWindow")) {
 			throw new NullPointerException();
 			// try {
