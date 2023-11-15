@@ -49,14 +49,34 @@ public class TemplateDownloadService {
 	@Autowired
 	private DataBaseEntry dataBaseEntry;
 
+//	private Object getValueByColumnName(Object object, String columnName)
+//			throws NoSuchFieldException, IllegalAccessException {
+//		Field field = Arrays.stream(object.getClass().getDeclaredFields())
+//				.filter(f -> f.isAnnotationPresent(Column.class))
+//				.filter(f -> f.getAnnotation(Column.class).name().equals(columnName)).findFirst()
+//				.orElseThrow(() -> new NoSuchFieldException("No such field found for column name: " + columnName));
+//		field.setAccessible(true);
+//		return field.get(object);
+//	}
+	
 	private Object getValueByColumnName(Object object, String columnName)
-			throws NoSuchFieldException, IllegalAccessException {
-		Field field = Arrays.stream(object.getClass().getDeclaredFields())
-				.filter(f -> f.isAnnotationPresent(Column.class))
-				.filter(f -> f.getAnnotation(Column.class).name().equals(columnName)).findFirst()
-				.orElseThrow(() -> new NoSuchFieldException("No such field found for column name: " + columnName));
-		field.setAccessible(true);
-		return field.get(object);
+	        throws NoSuchFieldException, IllegalAccessException {
+
+	    for (Field field : object.getClass().getDeclaredFields()) {
+	        if (field.isAnnotationPresent(Column.class)) {
+	            Column column = field.getAnnotation(Column.class);
+	           // System.out.println("Field: " + field.getName() + ", Column: " + column.name());
+	        }
+	    }
+
+	    Field field = Arrays.stream(object.getClass().getDeclaredFields())
+	            .filter(f -> f.isAnnotationPresent(Column.class))
+	            .filter(f -> f.getAnnotation(Column.class).name().equals(columnName))
+	            .findFirst()
+	            .orElseThrow(() -> new NoSuchFieldException("No such field found for column name: " + columnName));
+
+	    field.setAccessible(true);
+	    return field.get(object);
 	}
 
 	private void insertScriptMetaData(ScriptMaster scriptMaster, Sheet sheet) {
@@ -176,7 +196,14 @@ public class TemplateDownloadService {
 			ScriptMaster scriptMasterData = scriptId.isPresent()
 					? dataBaseEntry.getScriptDetailsByScriptId(scriptId.get())
 					: null;
-
+			  String attribute1 = scriptMasterData.getAttribute1();
+		        System.out.println("attribute1: " + attribute1);
+		        
+		     
+		        ScriptMaster scriptMasterData1 =  dataBaseEntry.getScriptDetailsByScriptId(Integer.parseInt(attribute1));
+		        String scriptnum = scriptMasterData1.getScriptNumber();
+		        System.out.println("scriptnum: " + scriptnum);
+		        scriptMasterData.setAttribute1(scriptnum);
 			List<List<String>> listOfScriptDetailsColumn = getScriptDetailsColumns(userName, "PRODUCT_VERSION", "PROCESS",
 					"MODULE", "ROLE", "STATUS", "PRIORITY", "TYPE_OF_SCRIPT","CUSTOMER_ID");
 
@@ -190,7 +217,7 @@ public class TemplateDownloadService {
 			Workbook workbook = new XSSFWorkbook();
 
 			List<String[]> listOfScriptColumnName = createScriptColumnNames();
-
+              System.out.println("listOfScriptColumnName"+listOfScriptColumnName);
 			List<String> scriptLineHeaders = Arrays.asList("LINE NUMBER", "STEP DESCRIPTION", "INPUT PARAMETER",
 					"ACTION", "UNIQUE/MANDATORY", "DATATYPES");
 
@@ -257,6 +284,7 @@ public class TemplateDownloadService {
 
 			int column = 0;
 			for (String[] row : listOfScriptColumnName) {
+
 				for (int i = 1; i <= row.length; i++) {
 					Cell keyCell = automationSheet.getRow(i).createCell(column);
 					setCellStyle(keyCell, font, FillPatternType.SOLID_FOREGROUND, IndexedColors.LEMON_CHIFFON,
@@ -270,7 +298,9 @@ public class TemplateDownloadService {
 					String value = "";
 					String key = row[i - 1].replace("TEST CASE", "SCENARIO").replace("TYPE OF SCRIPT", "STANDARD CUSTOM").replace(" ", "_");
 					if (!row[i - 1].isEmpty() && scriptId.isPresent()) {
-						Object result = getValueByColumnName(scriptMasterData, key);
+			            Object result = null;
+                       result = getValueByColumnName(scriptMasterData, key);
+				       System.out.println("getValueByColumnName"+result);
 						if ("PROCESS AREA".equalsIgnoreCase(row[i - 1]) || "MODULE".equalsIgnoreCase(row[i - 1])
 								|| "PRIORITY".equalsIgnoreCase(row[i - 1])) {
 							if ("PROCESS AREA".equalsIgnoreCase(row[i - 1])) {

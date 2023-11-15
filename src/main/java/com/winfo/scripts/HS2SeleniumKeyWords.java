@@ -16350,11 +16350,12 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			if (inputParam2.equalsIgnoreCase("Payables End Balancee")) {
 				Thread.sleep(2000);
 				Actions actions = new Actions(driver);
-				actions.sendKeys(Keys.ARROW_DOWN).perform();
                 WebElement webElement = driver.findElement(
 						By.xpath("//*[text()='Payables End Balance']/following::td[position() = number(//*[contains(text(),\"" + inputParam1 + "\")]/ancestor::td[@l]/@l)]"));
             Thread.sleep(2000);
-               actions.moveToElement(webElement).build().perform();
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].scrollIntoView();", webElement);
+              // actions.moveToElement(webElement).build().perform();
 				String stringToSearch = webElement.getText();
              	String scripNumber = fetchMetadataVO.getScriptNumber();
              	logger.info("Sucessfully Clicked copynumber" + scripNumber);

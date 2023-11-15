@@ -214,25 +214,25 @@ public class ScriptMaterVO {
 		            metaData.setUniqueMandatory(dataBaseEntry.getLookUpCodeByMeaning(metaData.getUniqueMandatory(),Constants.UNIQUE_MANDATORY));
 					//TODO- Get lookup code from meaning for validation type, datatype, unique mandatory.
 				});
-		if (role != null) {
+		if (role != null && role!="") {
 			role = dataBaseEntry.getLookUpCodeByMeaning(role, "ROLE");
 		}
-		if (subProcessArea != null) {
+		if (subProcessArea != null && subProcessArea!="") {
 			subProcessArea = dataBaseEntry.getLookUpCodeByMeaning(subProcessArea, "SUB_PROCESS_AREA");
 		}
-		if (processArea != null) {
+		if (processArea != null && processArea!="") {
 			processArea = dataBaseEntry.getLookUpCodeByMeaning(processArea, "PROCESS");
 		}
-		if (module != null) { 
+		if (module != null && module!="") { 
 			module = dataBaseEntry.getLookUpCodeByMeaning(module, "MODULE");
 		}
-		if (targetApplication != null) {
+		if (targetApplication != null && targetApplication!="") {
 			targetApplication = dataBaseEntry.getLookUpCodeByMeaning(targetApplication, "TARGET_APPLICATION");
 		}
-		if (productVersion != null) {
+		if (productVersion != null && productVersion!="") {
 			productVersion = dataBaseEntry.getLookUpCodeByMeaning(productVersion, "PRODUCT_VERSION");
 		}
-		if (attribute1 != null) {
+		if (attribute1 != null && attribute1!="") {
 			attribute1 = dataBaseEntry.getScriptByScriptNumberAndProductVersion(attribute1, productVersion).getScriptId().toString();
 		}
 	}
