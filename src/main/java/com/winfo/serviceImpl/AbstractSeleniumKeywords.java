@@ -2503,4 +2503,36 @@ public abstract class AbstractSeleniumKeywords {
 		logger.info("Sharepoint Access Token " +acessToken);
 		return acessToken;
 	}
+
+	public void combinePDFs(List<String> pdfFilePaths, String combinedFilePath) throws Exception {
+		if (pdfFilePaths.size() == 1) {
+			// If there is only one file, rename it.
+			File singlePdfFile = new File(pdfFilePaths.get(0));
+			File newFile = new File(combinedFilePath);
+			if (singlePdfFile.renameTo(newFile)) {
+				logger.info("Renamed the single PDF file.");
+			} else {
+				logger.error("Failed to rename the single PDF file.");
+			}
+			return;
+		}
+		Document combinedDocument = new Document();
+		PdfCopy writer = new PdfCopy(combinedDocument, new FileOutputStream(combinedFilePath));
+		combinedDocument.open();
+		try {
+			for (String pdfFilePath : pdfFilePaths) {
+				PdfReader pdfReader = new PdfReader(pdfFilePath);
+				pdfReader.consolidateNamedDestinations();
+				for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
+					PdfImportedPage importedPage = writer.getImportedPage(pdfReader, page);
+					writer.addPage(importedPage);
+				}
+				pdfReader.close();
+			}
+			combinedDocument.close();
+		} catch (IOException e) {
+			logger.error("Error combining PDF files: " + e.getMessage());
+			throw e;
+		}
+	}
 }
