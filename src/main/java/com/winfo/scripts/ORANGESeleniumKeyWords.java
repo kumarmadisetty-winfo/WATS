@@ -3168,6 +3168,77 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 
 	public void clickButton(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
+		
+		//multiple selection table row
+		try {
+			logger.info("param1"+param1);
+			//\"\" +param1+ \"\"
+ WebElement webElement = driver.findElement(By.xpath("//table[@summary='This table contains column headers corresponding to the data body table below']//th[@_d_index=\"0\"]"));
+ Actions actions = new Actions(driver);
+ actions.moveToElement(webElement).click().perform();
+			
+			}
+		catch(Exception e) {
+			logger.error(e);
+		}
+		
+	//search results with receive 	
+	try {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"Search Results\"]/following::*[normalize-space(text())=\"Receive\"])[1]")));
+		WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"Search Results\"]/following::*[normalize-space(text())=\"Receive\"])[1]"));
+		Actions actions = new Actions(driver);
+		
+		String javascript = "arguments[0].click()";      
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;        
+		jsExecutor.executeScript(javascript, waittext);  
+		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+		Thread.sleep(1000);
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		logger.info("Sucessfully Clicked clickButton" + scripNumber);
+		String xpath = "(//*[normalize-space(text())=\"Search Results\"]/following::*[normalize-space(text())=\"Receive\"])[1]";
+		String scriptID = fetchMetadataVO.getScriptId();
+		String lineNumber = fetchMetadataVO.getLineNumber();
+		service.saveXpathParams(scriptID, lineNumber, xpath);
+		return;
+	}
+	catch(Exception e) {
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		logger.error("Failed during clickButton" + scripNumber);
+		logger.error(e.getMessage());
+		screenshotFail(driver, fetchMetadataVO, customerDetails);	
+	}
+	//search results with autocreate shippment
+	try {
+		WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//*[normalize-space(text())=\"Search Results\"]/following::button[normalize-space(text())=\"Autocreate Shipment\"])[1]")));
+		WebElement waittext = driver.findElement(By.xpath("(//*[normalize-space(text())=\"Search Results\"]/following::button[normalize-space(text())=\"Autocreate Shipment\"])[1]"));
+		Actions actions = new Actions(driver);
+		
+		String javascript = "arguments[0].click()";      
+		JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;        
+		jsExecutor.executeScript(javascript, waittext);  
+		clickValidateXpath(driver, fetchMetadataVO, waittext, fetchConfigVO);
+//		screenshot(driver, "", fetchMetadataVO, fetchConfigVO, customerDetails);
+		Thread.sleep(1000);
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		logger.info("Sucessfully Clicked clickButton" + scripNumber);
+		String xpath = "(//*[normalize-space(text())=\"Search Results\"]/following::button[normalize-space(text())=\"Autocreate Shipment\"])[1]";
+		String scriptID = fetchMetadataVO.getScriptId();
+		String lineNumber = fetchMetadataVO.getLineNumber();
+		service.saveXpathParams(scriptID, lineNumber, xpath);
+		return;
+	}
+	catch(Exception e) {
+		String scripNumber = fetchMetadataVO.getScriptNumber();
+		logger.error("Failed during clickButton" + scripNumber);
+		logger.error(e.getMessage());
+		screenshotFail(driver, fetchMetadataVO, customerDetails);	
+	}
+		
+		
+		
 		try {
 			if (param1.equalsIgnoreCase("Continue")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());

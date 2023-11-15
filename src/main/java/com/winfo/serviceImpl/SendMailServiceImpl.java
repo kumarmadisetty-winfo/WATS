@@ -273,13 +273,29 @@ public class SendMailServiceImpl {
 				+ "<th class=\"test-run-name\">Test Run Name</th>\n"
 				+ "<th class=\"status\">Status</th>\n"
 				+ "</tr>\n";
-		String listOfTestRunsInTr = listOfTestRuns.get().parallelStream()
-				.sorted(Comparator.comparingInt(UserSchedulerJob::getSequenceNumber)).map(testRunName -> {
-			return "<tr>\n" + "<td class=\"serial-number\">" + testRunName.getSequenceNumber() + "</td>\n"
-		+ "<td class=\"test-run-name\">" + testRunName.getComments() + "</td>\n" 
-		+ "<td class=\"status\">" + testRunName.getStatus() + "</td>\n" + "</tr>\n";
-		}).collect(Collectors.joining(", "));
-		body = body + listOfTestRunsInTr + " \n"
+//		String listOfTestRunsInTr = listOfTestRuns.get().parallelStream()
+//				.sorted(Comparator.comparingInt(UserSchedulerJob::getSequenceNumber)).map(testRunName -> {
+//			return "<tr>\n" + "<td class=\"serial-number\">" + testRunName.getSequenceNumber() + "</td>\n"
+//		+ "<td class=\"test-run-name\">" + testRunName.getComments() + "</td>\n" 
+//		+ "<td class=\"status\">" + testRunName.getStatus() + "</td>\n" + "</tr>\n";
+//		}).collect(Collectors.joining(", "));
+//		body = body + listOfTestRunsInTr + " \n"
+//				+ "</table>"
+//				+ "<br><br>Thanks,<br><b>WinfoTest Automation</b></p>\n"
+//				+ "</body></html>";
+		
+		StringBuilder listOfTestRunsInTr = new StringBuilder();
+		listOfTestRuns.get().parallelStream()
+		    .sorted(Comparator.comparingInt(UserSchedulerJob::getSequenceNumber))
+		    .forEach(testRunName -> {
+		        listOfTestRunsInTr.append("<tr>\n")
+		            .append("<td class=\"serial-number\">").append(testRunName.getSequenceNumber()).append("</td>\n")
+		            .append("<td class=\"test-run-name\">").append(testRunName.getComments()).append("</td>\n")
+		            .append("<td class=\"status\">").append(testRunName.getStatus()).append("</td>\n")
+		            .append("</tr>\n");
+		    });
+
+		body = body + listOfTestRunsInTr.toString() + " \n"
 				+ "</table>"
 				+ "<br><br>Thanks,<br><b>WinfoTest Automation</b></p>\n"
 				+ "</body></html>";
