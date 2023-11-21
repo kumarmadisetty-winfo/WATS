@@ -19429,10 +19429,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				        driver.get("chrome://downloads/");
 				        JavascriptExecutor js = (JavascriptExecutor) driver;
 				        String fileName = (String) js.executeScript("return document.querySelector('downloads-manager').shadowRoot.querySelector('downloads-item').shadowRoot.querySelector('div#content #file-link').textContent");
-				        logger.info(fileName);
 				        String filePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName;	    	
-				        logger.info("File Name: " + fileName);
-				        logger.info("File Paths: " + filePath);
+				        
+				        logger.info("File Name & File Paths: "+ fileName +", " + filePath);
 				       try (FileInputStream file = new FileInputStream(new File(filePath))) {
 				            XSSFWorkbook workbook = new XSSFWorkbook(file);
 				            XSSFSheet sheet =  workbook.getSheetAt(1); 
@@ -19450,16 +19449,16 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 
 				    				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
 
-				                    System.out.println("Value of cell W14" + cellValue);
+				    				logger.info("Value of cell W14" + cellValue);
 				                    workbook.close();
 				                    file.close();
 				                    driver.navigate().back();
 				                   
 				                } else {
-				                    System.out.println("Cell W14 is not found");
+				                	logger.info("Cell W14 is not found");
 				                }
 				            } else {
-				                System.out.println("Row 14 is not found");
+				            	 logger.info("Row 14 is not found");
 				            }
 				        } 
 				        
