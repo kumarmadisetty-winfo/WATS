@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +37,11 @@ import org.apache.commons.lang3.math.NumberUtils;
 //import blank.OpenCVFrameConverter;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.bytedeco.javacpp.avcodec;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
@@ -72,7 +76,6 @@ import com.winfo.serviceImpl.DataBaseEntry;
 import com.winfo.serviceImpl.DynamicRequisitionNumber;
 import com.winfo.serviceImpl.LimitScriptExecutionService;
 import com.winfo.serviceImpl.ScriptXpathService;
-import com.winfo.utils.ArithmeticUtils;
 import com.winfo.utils.StringUtils;
 import com.winfo.vo.ApiValidationVO;
 import com.winfo.vo.CustomerProjectDto;
@@ -16336,6 +16339,69 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 
 		String value = null;
+		
+		try {
+			if (inputParam1.equalsIgnoreCase("openPdf")) {
+			openPdf(driver, value, fetchMetadataVO, fetchConfigVO, customerDetails);	
+			}
+			
+		}
+		catch( Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during open excel copynumber" + scripNumber);	
+		}
+		try {
+//			if (inputParam1.equalsIgnoreCase("Ending Balance(USD)")) {
+				Thread.sleep(2000);
+                WebElement webElement = driver.findElement(
+						By.xpath("//span[text()='Ending Balance                    (USD)']/following::td[position() = number(//span[text()='Ending Balance                    (USD)']/ancestor::th/@_d_index)+1]"));
+            Thread.sleep(2000);
+            Actions actions = new Actions(driver);
+
+			actions.moveToElement(webElement).build().perform();
+			String stringToSearch = webElement.getText();
+             	String scripNumber = fetchMetadataVO.getScriptNumber();
+             	logger.info("Sucessfully Clicked copynumber" + scripNumber);
+                String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
+				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+				logger.info("Sucessfully Clicked copynumber Payables Amount (USD)" + scripNumber);
+
+				return value;
+			//}
+             } 
+			catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during copynumber" + scripNumber);
+		}
+
+
+//added for receivables end balnce
+		try {
+			if (inputParam1.equalsIgnoreCase("Receivables End Balance")) {
+				Thread.sleep(2000);
+				Actions actions = new Actions(driver);
+                WebElement webElement = driver.findElement(
+						By.xpath("//*[text()='Receivables End Balance']/following::td[position() = number(//*[contains(text(),\"" + inputParam2 + "\")]/ancestor::td[@l]/@l)]"));
+            Thread.sleep(2000);
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].scrollIntoView();", webElement);
+              // actions.moveToElement(webElement).build().perform();
+				String stringToSearch = webElement.getText();
+             	String scripNumber = fetchMetadataVO.getScriptNumber();
+             	logger.info("Sucessfully Clicked copynumber" + scripNumber);
+                String testParamId = fetchMetadataVO.getTestScriptParamId();
+				String testSetId = fetchMetadataVO.getTestSetLineId();
+				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+				logger.info("Sucessfully Clicked copynumber Receivables End Balance" + scripNumber);
+
+				return value;
+			}
+             } 
+			catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during copynumber" + scripNumber);
+		}
 		try {
             if (inputParam1.equalsIgnoreCase("Attach Excel")) {
                     renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
@@ -19277,14 +19343,17 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			}
 			
 			
-			logger.info("copynumberValue1: " + copynumberValue1);
-			logger.info("copynumberValue2: " + copynumberValue2);
+			
 			String replacedcopynumberValue1 = copynumberValue1.replaceAll("[,()]", "");
-		    String replacedcopynumberValue2 = copynumberValue2.replaceAll("[,()]", "");
+			 String copynumber1 = replacedcopynumberValue1.replace("-", "");
 
-		if (NumberUtils.isParsable(replacedcopynumberValue1) && NumberUtils.isParsable(replacedcopynumberValue2)) {
-		double value1 = Double.parseDouble(replacedcopynumberValue1);
-		double value2 = Double.parseDouble(replacedcopynumberValue2);
+		    String replacedcopynumberValue2 = copynumberValue2.replaceAll("[,()]", "");
+		    String copynumber2 = replacedcopynumberValue2.replace("-", "");
+		    logger.info("replacedcopynumberValue1: " + copynumber1);
+			logger.info("replacedcopynumberValue2: " + copynumber2);
+		if (NumberUtils.isParsable(copynumber1) && NumberUtils.isParsable(copynumber2)) {
+		double value1 = Double.parseDouble(copynumber1);
+		double value2 = Double.parseDouble(copynumber2);
 		if (operator.equals(">")) {
 		 if (value1 > value2) {
 			logger.info("operator greater than symbol" );
@@ -19293,7 +19362,9 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		if (value1 < value2) {
 		logger.info("operator less than symbol" );
 		}
-		} else if (operator.equals("-")) {
+		} 
+		
+		else if (operator.equals("-")) {
 		double result = value1 - value2;
 		logger.info("operator subtraction  symbol"+result);
 		if (result != 0) {
@@ -19316,6 +19387,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	  throw e;
 		}
 	}
+
 
 	@Override
 	public void waitTillLoad(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
@@ -19349,12 +19421,58 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 		
 	}
 
-	@Override
-	public void openPdf(WebDriver driver, String input_value, ScriptDetailsDto fetchMetadataVO,
-			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
-		// TODO Auto-generated method stub
-		
-	}
+			@Override
+			public void openPdf(WebDriver driver, String input_value, ScriptDetailsDto fetchMetadataVO,
+					FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
+				// TODO Auto-generated method stub
+				  try {
+				        driver.get("chrome://downloads/");
+				        JavascriptExecutor js = (JavascriptExecutor) driver;
+				        String fileName = (String) js.executeScript("return document.querySelector('downloads-manager').shadowRoot.querySelector('downloads-item').shadowRoot.querySelector('div#content #file-link').textContent");
+				        logger.info(fileName);
+				        String filePath = fetchConfigVO.getDOWNLOD_FILE_PATH() + fileName;	    	
+				        logger.info("File Name: " + fileName);
+				        logger.info("File Paths: " + filePath);
+				       try (FileInputStream file = new FileInputStream(new File(filePath))) {
+				            XSSFWorkbook workbook = new XSSFWorkbook(file);
+				            XSSFSheet sheet =  workbook.getSheetAt(1); 
+				            XSSFRow row = sheet.getRow(13);
+				            if (row != null) {
+				                XSSFCell cell = row.getCell(22); 
+				                if (cell != null) {
+				                   
+				                    String cellValue = getCellValue(cell);
+				                	String stringToSearch = cellValue;
+				                 	String scripNumber = fetchMetadataVO.getScriptNumber();
+				                    String testParamId = fetchMetadataVO.getTestScriptParamId();
+
+				    				String testSetId = fetchMetadataVO.getTestSetLineId();
+
+				    				dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+
+				                    System.out.println("Value of cell W14" + cellValue);
+				                    workbook.close();
+				                    file.close();
+				                    driver.navigate().back();
+				                   
+				                } else {
+				                    System.out.println("Cell W14 is not found");
+				                }
+				            } else {
+				                System.out.println("Row 14 is not found");
+				            }
+				        } 
+				        
+				    } catch (Exception e) {
+				        logger.error("Failed during open PDF: " + e.getMessage());
+				    }
+				  driver.navigate().back();
+				}
+				 public  String getCellValue(XSSFCell cell) {
+				        DataFormatter formatter = new DataFormatter();
+				        return formatter.formatCellValue(cell);
+				    }
+				
 
 	@Override
 	public void openFile(WebDriver driver, ScriptDetailsDto fetchMetadataVO, FetchConfigVO fetchConfigVO,
