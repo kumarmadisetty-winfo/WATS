@@ -6339,6 +6339,16 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 	public void clickLink(WebDriver driver, String param1, String param2, ScriptDetailsDto fetchMetadataVO,
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) throws Exception {
 		try {
+			if (param1.equalsIgnoreCase("Attach Excel")) {
+					renameDownloadedFile(driver, fetchMetadataVO, fetchConfigVO, customerDetails);
+					return;
+				}
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during renaming downloaded file " + scripNumber);
+			logger.error(e.getMessage());
+		}
+		try {
 			if (param1.equalsIgnoreCase("AR Reconciliation")) {
 				WebDriverWait wait = new WebDriverWait(driver, fetchConfigVO.getWait_time());
 				wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
@@ -17281,7 +17291,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 				driver.switchTo().window(childWindow);
 			}
 			
-			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+			//renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			logger.error("Failed to Handle the window");
@@ -17311,7 +17321,7 @@ public class HS2SeleniumKeyWords extends AbstractSeleniumKeywords implements Sel
 			String scripNumber = fetchMetadataVO.getScriptNumber();
 			logger.info("Sucessfully Clicked switchToParentWindow" + scripNumber);
 			
-			renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
+			//renameDownloadedFile(driver,fetchMetadataVO, fetchConfigVO, customerDetails);
 
 		} catch (Exception e) {
 			String scripNumber = fetchMetadataVO.getScriptNumber();
