@@ -16135,7 +16135,25 @@ public class ORANGESeleniumKeyWords extends AbstractSeleniumKeywords implements 
 			FetchConfigVO fetchConfigVO, CustomerProjectDto customerDetails) {
 
 		String value = null;
+		try {
+			WebElement webElement = driver.findElement(By.xpath("//*[text()='Subscription Number']/following::td[1]"));
+         Actions actions = new Actions(driver);
 
+			actions.moveToElement(webElement).build().perform();
+			String stringToSearch = webElement.getText();
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			String testParamId = fetchMetadataVO.getTestScriptParamId();
+			String testSetId = fetchMetadataVO.getTestSetLineId();
+			logger.info("stringToSearch in Subscription number"+stringToSearch+","+scripNumber+","+testParamId+","+testSetId);
+			
+      dynamicnumber.saveCopyNumber(stringToSearch, testParamId, testSetId);
+			logger.info("Sucessfully Clicked copynumber" + scripNumber);
+			return value;
+		} catch (Exception e) {
+			String scripNumber = fetchMetadataVO.getScriptNumber();
+			logger.error("Failed during copy number" + scripNumber);
+			screenshotFail(driver, fetchMetadataVO, customerDetails);
+		}
 		try {
 			if (inputParam1.equalsIgnoreCase("copy number") && inputParam2.equalsIgnoreCase("excel")) {
 				Thread.sleep(5000);
